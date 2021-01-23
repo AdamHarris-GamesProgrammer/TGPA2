@@ -44,10 +44,10 @@ TagManager:
   - name: Floor
     uniqueID: 3494179495
     locked: 0
-  - name: Walls
+  - name: Colliders
     uniqueID: 740133573
     locked: 0
-  - name: Ceiling
+  - name: Triggers
     uniqueID: 3694563169
     locked: 0
   - name: Player
