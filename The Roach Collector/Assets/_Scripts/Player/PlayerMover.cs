@@ -18,6 +18,9 @@ namespace TGP.Player
 
         //State Variables
         private CharacterController _controller;
+
+        private Animator _animator;
+
         float _gravity = -9.81f;
         bool _isGrounded;
 
@@ -27,6 +30,7 @@ namespace TGP.Player
         {
             //Get the Character Controller
             _controller = GetComponent<CharacterController>();
+            _animator = GetComponent<Animator>();
         }
 
         void Update()
@@ -42,6 +46,15 @@ namespace TGP.Player
 
             //Gets the horizontal and vertical movement
             Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+            if(input != Vector2.zero)
+            {
+                _animator.SetBool("Walk", true);
+            }
+            else
+            {
+                _animator.SetBool("Walk", false);
+            }
 
             //Calculates the movement vector
             Vector3 move = transform.right * input.x + transform.forward * input.y;
