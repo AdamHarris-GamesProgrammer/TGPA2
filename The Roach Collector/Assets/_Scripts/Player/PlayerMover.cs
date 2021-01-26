@@ -16,6 +16,10 @@ namespace TGP.Player
         [SerializeField] private LayerMask _groundMask;
 
 
+        [Header("Crouch Settings")]
+        [SerializeField] private float _verticalOffet = -0.4f;
+        [Range(0.01f, 1.0f)][SerializeField] private float _crouchSpeedMultiplier = 0.5f;
+
         //State Variables
         private CharacterController _controller;
 
@@ -26,6 +30,11 @@ namespace TGP.Player
 
         Vector3 _velocity;
 
+        bool _isCrouched = false;
+
+
+        float _multiplier = 1.0f;
+
         private void Awake()
         {
             //Get the Character Controller
@@ -35,6 +44,7 @@ namespace TGP.Player
 
         void Update()
         {
+            
             //Check if we are grounded
             _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
 
@@ -43,6 +53,29 @@ namespace TGP.Player
             {
                 _velocity.y = -2f;
             }
+
+
+            //Crouching
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                Vector3 cameraPosition = Camera.main.transform.position;
+
+                if (_isCrouched)
+                {
+                    cameraPosition.y -= _verticalOffet;
+                    _multiplier = 1.0f;
+                }
+                else
+                {
+                    cameraPosition.y += _verticalOffet;
+                    _multiplier = _crouchSpeedMultiplier;
+                }
+
+                Camera.main.transform.position = cameraPosition;
+                _isCrouched = !_isCrouched;
+            }
+
+
 
             //Gets the horizontal and vertical movement
             Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -60,7 +93,7 @@ namespace TGP.Player
             Vector3 move = transform.right * input.x + transform.forward * input.y;
 
             //Moves us in the X and Z plane
-            _controller.Move(move * _movementSpeed * Time.deltaTime);
+            _controller.Move(move * (_movementSpeed * _multiplier) * Time.deltaTime);
 
             //Jump Controls
             if(Input.GetButtonDown("Jump") && _isGrounded)
