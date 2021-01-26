@@ -13,19 +13,16 @@ namespace TGP.Player
         void FixedUpdate()
         {
             //Gets the horizontal and vertical movement
-            float xMovement = Input.GetAxis("Horizontal");
-            float yMovement = Input.GetAxis("Vertical");
+            Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-            //Gets the current position
-            Vector3 currentPosition = transform.position;
+            if (input == Vector2.zero) return;
 
-            //Adds the movement to the current position
-            currentPosition += new Vector3(xMovement,0.0f, yMovement) * Time.deltaTime * _movementSpeed;
+            Vector3 movement = Camera.main.transform.forward * input.y + Camera.main.transform.right * input.x;
 
-            Debug.Log(string.Format("Movement ({0},{1})", xMovement, yMovement));
+            movement += transform.position;
 
             //Sets the new position
-            transform.position = currentPosition;
+            transform.position = movement;
         }
     }
 }
