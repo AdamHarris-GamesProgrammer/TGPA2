@@ -17,10 +17,10 @@ namespace TGP.Player
             float yMovement = Input.GetAxis("Vertical");
 
             //Gets the current position
-            Vector2 currentPosition = transform.position;
+            Vector3 currentPosition = transform.position;
 
             //Adds the movement to the current position
-            currentPosition += new Vector2(xMovement, yMovement) * Time.deltaTime * _movementSpeed;
+            currentPosition += new Vector3(xMovement,0.0f, yMovement) * Time.deltaTime * _movementSpeed;
 
             Debug.Log(string.Format("Movement ({0},{1})", xMovement, yMovement));
 
