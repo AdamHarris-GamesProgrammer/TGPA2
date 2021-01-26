@@ -33,7 +33,6 @@ namespace TGP.Player
             transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
         }
 
-
     }
 }
 
