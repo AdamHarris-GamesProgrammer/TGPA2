@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public GameObject LevelSelectorMenu;
+    public GameObject OptionsMenu;
+
     public void Play()
     {
-        //go to level menu
+        LevelSelectorMenu.SetActive(true);
     }
     public void Tutorial()
     {
@@ -16,7 +19,7 @@ public class MainMenu : MonoBehaviour
     }
     public void Setting()
     {
-        //do settings
+        OptionsMenu.SetActive(true);
     }
     public void Quit()
     {
