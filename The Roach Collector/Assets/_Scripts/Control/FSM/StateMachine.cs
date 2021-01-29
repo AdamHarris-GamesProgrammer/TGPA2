@@ -25,6 +25,13 @@ namespace TGP.Control
             states = new List<State>();
         }
 
+        //Sets the current state variable to the state passed in. 
+        public void SetState(State state)
+        {
+            currentState = state;
+        }
+
+
         //Adds the passed in state
         public void AddState(State state)
         {
