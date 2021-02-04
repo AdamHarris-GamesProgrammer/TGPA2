@@ -25,7 +25,8 @@ namespace TGP.Player
             Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
             //Calculates the movement vector
-            Vector3 move = transform.right * input.x + transform.forward * input.y;
+            //Vector3 move = transform.right * input.x + transform.forward * input.y;
+            Vector3 move = new Vector3(input.x, 0.0f, input.y);
 
             Vector3 position = transform.position + move;
 
