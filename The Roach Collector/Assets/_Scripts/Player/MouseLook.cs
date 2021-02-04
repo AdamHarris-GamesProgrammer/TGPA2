@@ -6,31 +6,29 @@ namespace TGP.Player
 {
     public class MouseLook : MonoBehaviour
     {
-        [Header("Mouse Settings")]
-        [SerializeField] float _mouseSensitivity = 100.0f;
+        [SerializeField] Texture2D _mouseCursor;
 
-        float _xRotation = 0.0f;
-
-        private Transform _playerBody;
-
-        private void Awake()
+        void Awake()
         {
-            _playerBody = transform.parent.GetComponent<Transform>();
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.SetCursor(_mouseCursor, Vector2.zero, CursorMode.Auto);
         }
 
         void Update()
         {
-            float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
+            Plane playerPlane = new Plane(Vector3.up, transform.position);
 
-            _playerBody.Rotate(Vector3.up * mouseX);
+            Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            _xRotation -= mouseY;
+            float hitDist = 0.0f;
 
-            _xRotation = Mathf.Clamp(_xRotation, -89.9f, 89.9f);
+            if(playerPlane.Raycast(ray, out hitDist))
+            {
+                Vector3 targetPoint = ray.GetPoint(hitDist);
 
-            transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
+                Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
+            }
         }
 
     }

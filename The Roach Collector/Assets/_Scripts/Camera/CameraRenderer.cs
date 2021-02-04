@@ -50,26 +50,11 @@ namespace TGP.Camera
 
                 _lastGo = hit.transform.gameObject;
             }
-
-
-
         }
 
         IEnumerator FadeOut(MeshRenderer renderer)
         {
             for(float ft = 1f; ft > 0.5f; ft -= 0.1f)
-            {
-                Color c = renderer.material.color;
-                c.a = ft;
-                renderer.material.color = c;
-
-                yield return new WaitForSeconds(0.05f);
-            }
-        }
-
-        IEnumerator FadeIn(MeshRenderer renderer)
-        {
-            for (float ft = 0.5f; ft <= 1.0f; ft = 0.1f)
             {
                 Color c = renderer.material.color;
                 c.a = ft;
