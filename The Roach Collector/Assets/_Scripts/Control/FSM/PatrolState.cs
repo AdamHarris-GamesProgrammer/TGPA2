@@ -11,9 +11,14 @@ namespace TGP.Control
         float distance = 10;
         NPCController Controller;
         NavMeshAgent navAgent;
+        Transform TController;
+        Vector3 targetVector;
+        Vector3 FinalTarget;
+        Transform DestTransform;
         public PatrolState(StateID id, NPCController controller) : base(StateID.Patrol)
         {
             Controller = controller;
+            TController = controller.transform;
             navAgent = controller.navAgent;
         }
 
@@ -34,18 +39,31 @@ namespace TGP.Control
         void SetDestination()
         {
             navAgent.isStopped = false;
-            if (destNumber == 2)
+            int pointNum = Controller.PatrolPoints.Length;
+
+            FinalTarget = new Vector3(Controller.PatrolPoints[(pointNum - 1)].position.x, TController.position.y, Controller.PatrolPoints[2].position.z);
+
+            if (destNumber < Controller.PatrolPoints.Length)
             {
-                destNumber = 0;
+
+                DestTransform = Controller.PatrolPoints[destNumber];
+                targetVector = new Vector3(DestTransform.position.x, TController.position.y, DestTransform.position.z);
+                
+                navAgent.SetDestination(targetVector);
+                distance = navAgent.remainingDistance;
+
             }
 
             if (distance == 0)
             {
-                distance = 10;
                 destNumber++;
             }
-            navAgent.SetDestination(Controller.PatrolPoints[destNumber].position);
-            distance = navAgent.remainingDistance;
+
+            if (FinalTarget == Controller.transform.position)
+            {
+                destNumber = 0;
+            }
+
 
         }
 
