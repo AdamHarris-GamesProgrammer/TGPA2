@@ -35,14 +35,7 @@ namespace TGP.Camera
                     //Get the mesh renderer from the hit object
                     MeshRenderer renderer = hit.transform.GetComponent<MeshRenderer>();
 
-                    //Set the hitColor variable to the hit objects colour
-                    hitColor = renderer.material.color;
-
-                    //Set the alpha value to .5
-                    hitColor.a = 0.5f;
-
-                    //Set the materials colour to our modified colour
-                    renderer.material.color = hitColor;
+                    StartCoroutine(FadeOut(renderer));
                 }
 
                 MeshRenderer render = _lastGo.GetComponent<MeshRenderer>();
@@ -57,9 +50,18 @@ namespace TGP.Camera
 
                 _lastGo = hit.transform.gameObject;
             }
+        }
 
+        IEnumerator FadeOut(MeshRenderer renderer)
+        {
+            for(float ft = 1f; ft > 0.5f; ft -= 0.1f)
+            {
+                Color c = renderer.material.color;
+                c.a = ft;
+                renderer.material.color = c;
 
-
+                yield return new WaitForSeconds(0.05f);
+            }
         }
     }
 }
