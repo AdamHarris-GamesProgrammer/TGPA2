@@ -29,7 +29,7 @@ namespace TGP.Control
 
         public override void Reason(Transform player, Transform npc)
         {
-            if(Vector3.Distance(player.position, npc.position) < 3f)
+            if(Vector3.Distance(player.position, npc.position) < 5f)
             {
                 navAgent.isStopped = true;
                 Controller.PerformTransition(Transition.PlayerWithinRange);
@@ -39,13 +39,13 @@ namespace TGP.Control
         void SetDestination()
         {
             navAgent.isStopped = false;
-            int pointNum = Controller.PatrolPoints.Length;
+            int pointNum = Controller.PatrolPoints.Length - 1;
 
-            FinalTarget = new Vector3(Controller.PatrolPoints[(pointNum - 1)].position.x, TController.position.y, Controller.PatrolPoints[2].position.z);
+            FinalTarget = new Vector3(Controller.PatrolPoints[pointNum].position.x, TController.position.y, Controller.PatrolPoints[pointNum].position.z);
 
             if (destNumber < Controller.PatrolPoints.Length)
             {
-
+                //Debug.Log("Dest Num: " + destNumber);
                 DestTransform = Controller.PatrolPoints[destNumber];
                 targetVector = new Vector3(DestTransform.position.x, TController.position.y, DestTransform.position.z);
                 
@@ -54,12 +54,18 @@ namespace TGP.Control
 
             }
 
-            if (distance == 0)
+            if (distance <= 0.5f)
             {
+                Debug.Log("NEXT " + destNumber);
+                distance = 100;
                 destNumber++;
             }
 
             if (FinalTarget == Controller.transform.position)
+            {
+                destNumber = 0;
+            }
+            else if(destNumber > pointNum)
             {
                 destNumber = 0;
             }

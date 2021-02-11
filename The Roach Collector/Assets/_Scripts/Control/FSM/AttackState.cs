@@ -6,7 +6,7 @@ namespace TGP.Control
 {
     public class AttackState : State
     {
-        float speed = 0.2f;
+        float speed = 2f;
 
         NPCController Controller;
         public AttackState(StateID id, NPCController controller) : base(StateID.Attack)
