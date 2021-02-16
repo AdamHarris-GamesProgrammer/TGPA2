@@ -14,31 +14,32 @@ namespace TGP.Player
 
         private void Awake()
         {
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         void FixedUpdate()
         {
             //Gets the horizontal and vertical movement
-            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            //Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-            if (input == Vector2.zero)
-            {
-                GetComponent<Animator>().SetFloat("movementSpeed", 0.0f);
-            }
+            //if (input == Vector2.zero)
+            //{
+            //    GetComponent<Animator>().SetFloat("movementSpeed", 0.0f);
+            //}
 
-            //Calculates the movement vector
-            //Vector3 move = transform.right * input.x + transform.forward * input.y;
-            Vector3 move = new Vector3(input.x, 0.0f, input.y);
+            ////Calculates the movement vector
+            ////Vector3 move = transform.right * input.x + transform.forward * input.y;
+            //Vector3 move = new Vector3(input.x, 0.0f, input.y);
 
 
 
-            Vector3 position = transform.position + (move * 5.4f * Time.deltaTime);
+            //Vector3 position = transform.position + (move * 5.4f * Time.deltaTime);
 
-            transform.position = position;
+            //transform.position = position;
 
             
 
-            GetComponent<Animator>().SetFloat("movementSpeed", move.magnitude * 6.0f);
+            //GetComponent<Animator>().SetFloat("movementSpeed", move.magnitude * 6.0f);
 
         }
     }
