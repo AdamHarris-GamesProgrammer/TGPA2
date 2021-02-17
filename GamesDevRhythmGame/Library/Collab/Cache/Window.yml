@@ -14,9 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SimpleSelectedItems:
     m_Keys:
+    - Assets/Animations.meta
+    - Assets/Animations/Lewis_AnimController.controller
+    - Assets/Animations/Lewis_AnimController.controller.meta
+    - Assets/Animations/MC_IdleAnim.anim
+    - Assets/Animations/MC_IdleAnim.anim.meta
+    - Assets/Animations/MC_RunLAnim.anim
+    - Assets/Animations/MC_RunLAnim.anim.meta
+    - Assets/Animations/MC_RunRAnim.anim
+    - Assets/Animations/MC_RunRAnim.anim.meta
+    - Assets/Animations/MC_UpAnim.anim
+    - Assets/Animations/MC_UpAnim.anim.meta
+    - Assets/Scripts/MC_Controller.cs
+    - Assets/Scripts/MC_Controller.cs.meta
+    - Assets/Sprites/MC_Sprites/people.png
+    - Assets/Sprites/MC_Sprites/people.png.meta
     - 
-    m_Values: 01
-  RevisionSummary: SimpleLevelExample
+    m_Values: 01010101010101010101010101010101
+  RevisionSummary: MCAnimations
   ChangesSearchValue: 
   SelectedHistoryRevision: 
   HistoryPageNumber: 0

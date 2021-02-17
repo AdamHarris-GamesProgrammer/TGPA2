@@ -61,7 +61,11 @@ namespace TGP.Control
                 destNumber++;
             }
 
-            if (FinalTarget == Controller.transform.position)
+            //if (FinalTarget == Controller.transform.position)
+            //{
+            //    destNumber = 0;
+            //}
+            if(Vector3.Distance(FinalTarget, Controller.transform.position) <= 0.5)
             {
                 destNumber = 0;
             }
