@@ -22,8 +22,6 @@ namespace TGP.Player
 
         public float _aimValue;
 
-        private Vector2 _look;
-        private Vector2 _move;
 
         public GameObject aimCam;
         public GameObject mainCam;
@@ -34,21 +32,6 @@ namespace TGP.Player
             GetComponent<NavMeshAgent>().speed = 5.4f;
         }
 
-        public void OnAim(InputValue value)
-        {
-            _aimValue = value.Get<float>();
-            
-        }
-
-        public void OnLook(InputValue value)
-        {
-            _look = value.Get<Vector2>();
-        }
-
-        public void OnMove(InputValue value)
-        {
-            _move = value.Get<Vector2>();
-        }
 
         void Update()
         {
@@ -56,45 +39,47 @@ namespace TGP.Player
 
             
 
-            if (Mouse.current.rightButton.isPressed && !aimCam.activeInHierarchy)
-            {
-                mainCam.SetActive(false);
-                aimCam.SetActive(true);
+            //if (Mouse.current.rightButton.isPressed && !aimCam.activeInHierarchy)
+            //{
+            //    mainCam.SetActive(false);
+            //    aimCam.SetActive(true);
 
-                //TODO: Show reticle
-                GetComponent<Animator>().SetBool("isAiming", true);
+            //    //TODO: Show reticle
+            //    GetComponent<Animator>().SetBool("isAiming", true);
 
-            }else if(!Mouse.current.rightButton.isPressed && !mainCam.activeInHierarchy)
-            {
-                mainCam.SetActive(true);
-                aimCam.SetActive(false);
+            //}else if(!Mouse.current.rightButton.isPressed && !mainCam.activeInHierarchy)
+            //{
+            //    mainCam.SetActive(true);
+            //    aimCam.SetActive(false);
 
-                //TODO: Disable reticle
-                GetComponent<Animator>().SetBool("isAiming", false);
-            }
+            //    //TODO: Disable reticle
+            //    GetComponent<Animator>().SetBool("isAiming", false);
+            //}
 
-            _followTarget.transform.rotation *= Quaternion.AngleAxis(_look.x * rotationPower, Vector3.up);
+           // _followTarget.transform.rotation *= Quaternion.AngleAxis(_look.x * rotationPower, Vector3.up);
 
 
-            _followTarget.transform.rotation *= Quaternion.AngleAxis(_look.y * rotationPower, Vector3.right);
+           // _followTarget.transform.rotation *= Quaternion.AngleAxis(_look.y * rotationPower, Vector3.right);
 
-            var angles = _followTarget.transform.localEulerAngles;
-            angles.z = 0;
+            //var angles = _followTarget.transform.localEulerAngles;
+            //angles.z = 0;
 
-            var angle = _followTarget.transform.localEulerAngles.x;
+            //var angle = _followTarget.transform.localEulerAngles.x;
 
-            if (angle > 180 && angle < 340)
-            {
-                angles.x = 340;
-            }
-            else if (angle < 180 && angle > 40)
-            {
-                angles.x = 40;
-            }
+            //if (angle > 180 && angle < 340)
+            //{
+            //    angles.x = 340;
+            //}
+            //else if (angle < 180 && angle > 40)
+            //{
+            //    angles.x = 40;
+            //}
 
-            _followTarget.transform.localEulerAngles = angles;
+           // _followTarget.transform.localEulerAngles = angles;
 
-            nextRotation = Quaternion.Lerp(_followTarget.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);
+            //nextRotation = Quaternion.Lerp(_followTarget.transform.rotation, nextRotation, Time.deltaTime * rotationLerp);
+
+            Vector2 _move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
 
             if(_move == Vector2.zero)
@@ -104,14 +89,8 @@ namespace TGP.Player
             }
             else
             {
-                float moveSpeed = speed / 100f;
-                Vector3 position = (transform.forward * _move.y * speed) + (transform.right * _move.x * speed);
+                Vector3 position = UnityEngine.Camera.main.transform.forward * _move.y + UnityEngine.Camera.main.transform.right * _move.x;
                 nextPosition = transform.position + position;
-
-                transform.rotation = Quaternion.Euler(0, _followTarget.transform.rotation.eulerAngles.y, 0);
-
-                _followTarget.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
-
             }
 
 
