@@ -10,6 +10,12 @@ namespace TGP.Control
         public StateID currentState;
         public Transform[] PatrolPoints;
         public NavMeshAgent navAgent;
+
+        AttackState attack;
+        PatrolState Patrol;
+
+        public float speed = 2.0f;
+        public float detectionRadius = 2.0f;
         
         private void Awake()
         {
@@ -23,10 +29,10 @@ namespace TGP.Control
 
         protected override void Initialize()
         {
-            AttackState attack = new AttackState(StateID.Attack, this);
+            attack = new AttackState(StateID.Attack, this, speed);
             attack.AddTransition(Transition.PlayerOutsideRange, StateID.Patrol);
 
-            PatrolState Patrol = new PatrolState(StateID.Patrol, this);
+            Patrol = new PatrolState(StateID.Patrol, this, detectionRadius);
             Patrol.AddTransition(Transition.PlayerDetected, StateID.Engage);
             Patrol.AddTransition(Transition.PlayerLost, StateID.Suspicious);
             Patrol.AddTransition(Transition.PlayerWithinRange, StateID.Attack);
@@ -44,5 +50,32 @@ namespace TGP.Control
 
         }
 
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.tag == "Waypoint")
+            {
+                Patrol.WaypointReached(true);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.tag == "Waypoint")
+            {
+                Patrol.WaypointReached(false);
+            }
+        }
+
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        }
+
     }
+
+    
+
 }
