@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TGP.Movement;
+using UnityEngine.AI;
 
 namespace TGP.Player
 {
@@ -9,37 +10,31 @@ namespace TGP.Player
     {
         [Header("Crouch Settings")]
         [SerializeField] private float _verticalOffet = -0.4f;
-        [Range(0.01f, 1.0f)][SerializeField] private float _crouchSpeedMultiplier = 0.5f;
+        [Range(0.01f, 1.0f)] [SerializeField] private float _crouchSpeedMultiplier = 0.5f;
 
+        Mover _mover;
 
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
+            _mover = GetComponent<Mover>();
         }
 
         void FixedUpdate()
         {
-            //Gets the horizontal and vertical movement
-            //Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
-            //if (input == Vector2.zero)
-            //{
-            //    GetComponent<Animator>().SetFloat("movementSpeed", 0.0f);
-            //}
-
-            ////Calculates the movement vector
-            ////Vector3 move = transform.right * input.x + transform.forward * input.y;
-            //Vector3 move = new Vector3(input.x, 0.0f, input.y);
+            Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
 
+            Vector3 newPos = transform.position;
 
-            //Vector3 position = transform.position + (move * 5.4f * Time.deltaTime);
+            Vector3 position = UnityEngine.Camera.main.transform.forward * input.y + UnityEngine.Camera.main.transform.right * input.x;
+            newPos += position;
 
-            //transform.position = position;
+            _mover.MoveTo(newPos);
 
-            
+            //GetComponent<NavMeshAgent>().destination = newPos;
 
-            //GetComponent<Animator>().SetFloat("movementSpeed", move.magnitude * 6.0f);
+            //GetComponent<Animator>().SetFloat("movementSpeed", GetComponent<NavMeshAgent>().velocity.magnitude);
 
         }
     }
