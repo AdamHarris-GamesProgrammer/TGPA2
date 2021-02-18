@@ -7,7 +7,7 @@ namespace Audio
 
     public enum AudioType
     {
-
+        None,
         ROOM_1,
         ROOM_2,
         ROOM_3,

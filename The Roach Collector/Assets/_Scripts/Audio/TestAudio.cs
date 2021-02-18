@@ -12,17 +12,18 @@ namespace Audio
        private void Update()
         
         {
+            //Test if audio works
             if (Input.GetKeyUp(KeyCode.T))
             {
-                audioController.PlayAudio(AudioType.ROOM_1);
+                audioController.PlayAudio(AudioType.ROOM_1, true);
             }
-            if (Input.GetKeyUp(KeyCode.G))
+            if (Input.GetKeyUp(KeyCode.Y))
             {
-                audioController.StopAudio(AudioType.ROOM_1);
+                audioController.StopAudio(AudioType.ROOM_1, true);
             }
-            if (Input.GetKeyUp(KeyCode.B))
+            if (Input.GetKeyUp(KeyCode.U))
             {
-                audioController.RestartAudio(AudioType.ROOM_1);
+                audioController.RestartAudio(AudioType.ROOM_1, true);
             }
 
         }
