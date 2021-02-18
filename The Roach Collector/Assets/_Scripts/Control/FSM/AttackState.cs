@@ -6,12 +6,13 @@ namespace TGP.Control
 {
     public class AttackState : State
     {
-        float speed = 0.2f;
+        float speed;
 
         NPCController Controller;
-        public AttackState(StateID id, NPCController controller) : base(StateID.Attack)
+        public AttackState(StateID id, NPCController controller, float chaseSpeed) : base(StateID.Attack)
         {
             Controller = controller;
+            speed = chaseSpeed;
         }
 
         public override void Reason(Transform player, Transform npc)
@@ -28,6 +29,9 @@ namespace TGP.Control
                 Controller.PerformTransition(Transition.PlayerOutsideRange);
             }
         }
+
+
+        
 
     }
 }
