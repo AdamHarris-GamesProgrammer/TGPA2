@@ -7,19 +7,26 @@ namespace TGP.Control
 {
     public class PatrolState : State
     {
+        float detectionRadius;
         int destNumber = 0;
         float distance = 10;
+
         NPCController Controller;
         NavMeshAgent navAgent;
+
         Transform TController;
         Vector3 targetVector;
         Vector3 FinalTarget;
         Transform DestTransform;
-        public PatrolState(StateID id, NPCController controller) : base(StateID.Patrol)
+
+        bool targetReached = false;
+
+        public PatrolState(StateID id, NPCController controller, float detectionRange) : base(StateID.Patrol)
         {
             Controller = controller;
             TController = controller.transform;
             navAgent = controller.navAgent;
+            detectionRadius = detectionRange;
         }
 
         public override void Act(Transform player, Transform npc)
@@ -29,7 +36,7 @@ namespace TGP.Control
 
         public override void Reason(Transform player, Transform npc)
         {
-            if(Vector3.Distance(player.position, npc.position) < 5f)
+            if(Vector3.Distance(player.position, npc.position) < detectionRadius)
             {
                 navAgent.isStopped = true;
                 Controller.PerformTransition(Transition.PlayerWithinRange);
@@ -51,21 +58,24 @@ namespace TGP.Control
                 
                 navAgent.SetDestination(targetVector);
                 distance = navAgent.remainingDistance;
+                
 
             }
 
-            if (distance <= 0.5f)
+
+            if (targetReached)
             {
                 Debug.Log("NEXT " + destNumber);
                 distance = 100;
                 destNumber++;
+                targetReached = false;
             }
 
             //if (FinalTarget == Controller.transform.position)
             //{
             //    destNumber = 0;
             //}
-            if(Vector3.Distance(FinalTarget, Controller.transform.position) <= 0.5)
+            if (Vector3.Distance(FinalTarget, Controller.transform.position) <= 0.5)
             {
                 destNumber = 0;
             }
@@ -73,8 +83,15 @@ namespace TGP.Control
             {
                 destNumber = 0;
             }
+            navAgent.SetDestination(targetVector);
+            distance = navAgent.remainingDistance;
 
 
+        }
+
+        public void WaypointReached(bool reached)
+        {
+            targetReached = reached;
         }
 
     }
