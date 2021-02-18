@@ -7,6 +7,11 @@ namespace TGP.Control
     public enum StateID
     {
         None = 0,
+        Patrol,
+        Engage,
+        Attack,
+        Guard,
+        Suspicious,
         Dead
     }
 }

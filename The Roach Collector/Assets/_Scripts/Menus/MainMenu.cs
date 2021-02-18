@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         LevelSelectorMenu.SetActive(true);
+        Debug.Log("aaaa");
     }
     public void Tutorial()
     {
