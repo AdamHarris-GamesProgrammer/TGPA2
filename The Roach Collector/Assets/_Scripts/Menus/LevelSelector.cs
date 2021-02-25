@@ -25,10 +25,6 @@ public class LevelSelector : MonoBehaviour
         UpdateUI();
     }
 
-    private void Update()
-    {
-    }
-
     //exits menu
     public void ExitMenu()
     {
