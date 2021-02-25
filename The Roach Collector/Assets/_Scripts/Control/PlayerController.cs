@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -34,12 +34,13 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
 
         Vector3 movement = Camera.main.transform.forward * vertical + Camera.main.transform.right * horizontal;
+        
 
         // Moving
         if (movement.magnitude > 0)
         {
             _animator.SetBool("isMoving", true);
-            movement.Normalize();
+            movement = Vector3.ClampMagnitude(movement, 1);
             movement *= _speed * Time.deltaTime;
             transform.Translate(movement, Space.World);
 
