@@ -14,6 +14,8 @@ namespace TGP.Player
 
         Mover _mover;
 
+
+
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -31,11 +33,6 @@ namespace TGP.Player
             newPos += position;
 
             _mover.MoveTo(newPos);
-
-            //GetComponent<NavMeshAgent>().destination = newPos;
-
-            //GetComponent<Animator>().SetFloat("movementSpeed", GetComponent<NavMeshAgent>().velocity.magnitude);
-
         }
     }
 }
