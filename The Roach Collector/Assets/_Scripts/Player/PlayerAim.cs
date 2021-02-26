@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
 {
-    [SerializeField] GameObject mainCam;
-    [SerializeField] GameObject aimCam;
-    [SerializeField] Texture2D crosshair;
+    [SerializeField] GameObject _mainCam;
+    [SerializeField] GameObject _aimCam;
+    [SerializeField] Texture2D _crosshairTexture;
+
+    [SerializeField] private LayerMask _aimLayerMask;
 
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _bulletSpawnLocation;
+
+    private Animator _animator;
 
     bool _isAiming = false;
 
@@ -19,7 +23,9 @@ public class PlayerAim : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.SetCursor(crosshair, new Vector2(crosshair.width / 2, crosshair.height / 2), CursorMode.Auto);
+        Cursor.SetCursor(_crosshairTexture, new Vector2(_crosshairTexture.width / 2, _crosshairTexture.height / 2), CursorMode.Auto);
+
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -27,8 +33,8 @@ public class PlayerAim : MonoBehaviour
     {
         if (Input.GetMouseButton(1) && !_isAiming)
         {
-            mainCam.SetActive(false);
-            aimCam.SetActive(true);
+            _mainCam.SetActive(false);
+            _aimCam.SetActive(true);
             Cursor.visible = true;
             GetComponent<Animator>().SetBool("isAiming", true);
             _isAiming = true;
@@ -39,8 +45,8 @@ public class PlayerAim : MonoBehaviour
         {
             _isAiming = false;
             Cursor.visible = false;
-            mainCam.SetActive(true);
-            aimCam.SetActive(false);
+            _mainCam.SetActive(true);
+            _aimCam.SetActive(false);
             GetComponent<Animator>().SetBool("isAiming", false);
         }
 
@@ -48,8 +54,31 @@ public class PlayerAim : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                //TODO: Shoot projectile
+                //TODO: Shoot projectile from correct position
                 Instantiate(_bulletPrefab, _bulletSpawnLocation.position, transform.rotation);
+            }
+        }
+
+    }
+
+    private void FixedUpdate()
+    {
+        //Checks we are moving in some way
+        if(_animator.GetFloat("velocityX") != 0.0f || _animator.GetFloat("velocityZ") != 0.0f)
+        {
+            if (!_isAiming)
+            {
+                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
+                {
+                    var destination = hitInfo.point;
+                    destination.y = transform.position.y;
+
+                    var _direction = destination - transform.position;
+                    _direction.y = 0f;
+                    _direction.Normalize();
+                    transform.rotation = Quaternion.LookRotation(_direction, transform.up);
+                }
             }
         }
 
