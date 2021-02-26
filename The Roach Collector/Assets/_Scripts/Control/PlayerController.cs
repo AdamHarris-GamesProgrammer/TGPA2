@@ -15,11 +15,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _speed = 5.0f;
 
     [SerializeField] private float _crouchSpeedFactor = 0.5f;
-
+    [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
 
     float _movmentSpeed;
     bool _isCrouched = false;
+    bool _isSprinting = false;
 
     private void Awake()
     {
@@ -38,14 +39,33 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("Crouched");
                 _movmentSpeed = _speed * _crouchSpeedFactor;
-                _animator.SetBool("isCrouched", true);
             }
             else
             {
                 Debug.Log("Uncrouched");
                 _movmentSpeed = _speed;
-                _animator.SetBool("isCrouched", false);
             }
+            _animator.SetBool("isCrouched", _isCrouched);
+
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _isSprinting = !_isSprinting;
+
+            if (_isSprinting)
+            {
+                Debug.Log("Sprinting");
+                _isCrouched = false;
+                _movmentSpeed = _speed * _sprintSpeedFactor;
+            }
+            else
+            {
+                Debug.Log("Not sprinting");
+                _movmentSpeed = _speed;
+            }
+
+            _animator.SetBool("isSprinting", _isSprinting);
+            _animator.SetBool("isCrouched", _isCrouched);
         }
     }
 
