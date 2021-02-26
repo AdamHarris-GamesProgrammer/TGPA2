@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour
                 _direction.Normalize();
                 transform.rotation = Quaternion.LookRotation(_direction, transform.up);
             }
-
         }
         else
         {
@@ -67,8 +66,11 @@ public class PlayerController : MonoBehaviour
         float velocityZ = Vector3.Dot(movement.normalized, transform.forward);
         float velocityX = Vector3.Dot(movement.normalized, transform.right);
 
-        _animator.SetFloat("VelocityZ", velocityZ, 0.1f, Time.deltaTime);
-        _animator.SetFloat("VelocityX", velocityX, 0.1f, Time.deltaTime);
+
+        Debug.Log("Velocity {X: " + velocityX + ", Z: " + velocityZ + "}");
+
+        _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
+        _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
 
     }
 }
