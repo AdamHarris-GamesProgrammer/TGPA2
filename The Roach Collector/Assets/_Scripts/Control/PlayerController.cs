@@ -10,25 +10,47 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _bulletSpawnLocation;
     [SerializeField] private LayerMask _aimLayerMask;
 
-    private Mover _mover;
     private Animator _animator;
 
     [SerializeField] private float _speed = 5.0f;
 
+    [SerializeField] private float _crouchSpeedFactor = 0.5f;
+
+
+
+    float _movmentSpeed;
+    bool _isCrouched = false;
+
     private void Awake()
     {
-        _mover = GetComponent<Mover>();
         _animator = GetComponent<Animator>();
+        _movmentSpeed = _speed;
 
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            _isCrouched = !_isCrouched;
+
+            if (_isCrouched)
+            {
+                Debug.Log("Crouched");
+                _movmentSpeed = _speed * _crouchSpeedFactor;
+                _animator.SetBool("isCrouched", true);
+            }
+            else
+            {
+                Debug.Log("Uncrouched");
+                _movmentSpeed = _speed;
+                _animator.SetBool("isCrouched", false);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            _mover.SetCrouched(!_mover.GetCrouched());
-        }
-
         // Reading the Input
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -41,7 +63,7 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetBool("isMoving", true);
             movement = Vector3.ClampMagnitude(movement, 1);
-            movement *= _speed * Time.deltaTime;
+            movement *= _movmentSpeed * Time.deltaTime;
             transform.Translate(movement, Space.World);
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -67,7 +89,8 @@ public class PlayerController : MonoBehaviour
         float velocityX = Vector3.Dot(movement.normalized, transform.right);
 
 
-        Debug.Log("Velocity {X: " + velocityX + ", Z: " + velocityZ + "}");
+        //Debug.Log("Velocity {X: " + velocityX + ", Z: " + velocityZ + "}");
+
 
         _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
         _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
