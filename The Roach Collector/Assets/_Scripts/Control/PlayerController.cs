@@ -6,8 +6,6 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private GameObject _bulletPrefab;
-    [SerializeField] private Transform _bulletSpawnLocation;
     [SerializeField] private LayerMask _aimLayerMask;
 
     private Animator _animator;
@@ -18,54 +16,69 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
 
+    private PlayerAim _playerAim;
+
     float _movmentSpeed;
     bool _isCrouched = false;
     bool _isSprinting = false;
-
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _movmentSpeed = _speed;
 
+        _playerAim = GetComponent<PlayerAim>();
+    }
+
+    private void OnCrouch()
+    {
+        _isCrouched = !_isCrouched;
+
+        if (_isCrouched)
+        {
+            Debug.Log("Crouched");
+            _movmentSpeed = _speed * _crouchSpeedFactor;
+        }
+        else
+        {
+            Debug.Log("Uncrouched");
+            _movmentSpeed = _speed;
+        }
+        _animator.SetBool("isCrouched", _isCrouched);
+    }
+
+    private void OnSprint()
+    {
+        _isSprinting = !_isSprinting;
+
+        if (_isSprinting)
+        {
+            Debug.Log("Sprinting");
+            _isCrouched = false;
+            _movmentSpeed = _speed * _sprintSpeedFactor;
+        }
+        else
+        {
+            Debug.Log("Not sprinting");
+            _movmentSpeed = _speed;
+        }
+
+        _animator.SetBool("isSprinting", _isSprinting);
+        _animator.SetBool("isCrouched", _isCrouched);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            _isCrouched = !_isCrouched;
-
-            if (_isCrouched)
-            {
-                Debug.Log("Crouched");
-                _movmentSpeed = _speed * _crouchSpeedFactor;
-            }
-            else
-            {
-                Debug.Log("Uncrouched");
-                _movmentSpeed = _speed;
-            }
-            _animator.SetBool("isCrouched", _isCrouched);
-
+            OnCrouch();
         }
         else if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            _isSprinting = !_isSprinting;
-
-            if (_isSprinting)
-            {
-                Debug.Log("Sprinting");
-                _isCrouched = false;
-                _movmentSpeed = _speed * _sprintSpeedFactor;
-            }
-            else
-            {
-                Debug.Log("Not sprinting");
-                _movmentSpeed = _speed;
-            }
-
-            _animator.SetBool("isSprinting", _isSprinting);
-            _animator.SetBool("isCrouched", _isCrouched);
+            OnSprint();
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            OnSprint();
         }
     }
 
@@ -75,8 +88,18 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = Camera.main.transform.forward * vertical + Camera.main.transform.right * horizontal;
-        
+
+        Vector3 movement;
+
+        if (_playerAim.GetAiming())
+        {
+            movement = transform.forward * vertical + transform.right * horizontal;
+        }
+        else
+        {
+            movement = Camera.main.transform.forward * vertical + Camera.main.transform.right * horizontal;
+        }
+
 
         // Moving
         if (movement.magnitude > 0)
@@ -86,21 +109,25 @@ public class PlayerController : MonoBehaviour
             movement *= _movmentSpeed * Time.deltaTime;
             transform.Translate(movement, Space.World);
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
+            if(!_playerAim.GetAiming())
             {
-                var destination = hitInfo.point;
-                destination.y = transform.position.y;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
+                {
+                    var destination = hitInfo.point;
+                    destination.y = transform.position.y;
 
-                var _direction = destination - transform.position;
-                _direction.y = 0f;
-                _direction.Normalize();
-                transform.rotation = Quaternion.LookRotation(_direction, transform.up);
+                    var _direction = destination - transform.position;
+                    _direction.y = 0f;
+                    _direction.Normalize();
+                    transform.rotation = Quaternion.LookRotation(_direction, transform.up);
+                }
             }
         }
         else
         {
             _animator.SetBool("isMoving", false);
+            _animator.SetBool("isSprinting", false);
         }
 
 
