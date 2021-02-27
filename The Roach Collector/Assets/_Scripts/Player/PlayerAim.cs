@@ -18,7 +18,7 @@ public class PlayerAim : MonoBehaviour
     private Animator _animator;
 
 
-    Vector2 _look;
+    [SerializeField] private float _aimRotationSpeedFactor = 0.2f;  
 
     bool _isAiming = false;
 
@@ -29,26 +29,24 @@ public class PlayerAim : MonoBehaviour
 
     void Awake()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.SetCursor(_crosshairTexture, new Vector2(_crosshairTexture.width / 2, _crosshairTexture.height / 2), CursorMode.Auto);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
 
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
-
-        _look = Input.mousePosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 mouseDelta = new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _look;
-        _look = Input.mousePosition;
+        Vector2 mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
         Debug.Log(mouseDelta);
 
-        _follow.rotation *= Quaternion.AngleAxis(mouseDelta.x * 1.0f, Vector3.up);
+        _follow.rotation *= Quaternion.AngleAxis(mouseDelta.x * _aimRotationSpeedFactor, Vector3.up);
 
-        _follow.rotation *= Quaternion.AngleAxis(mouseDelta.y * 1.0f, Vector3.right);
+        _follow.rotation *= Quaternion.AngleAxis(mouseDelta.y * _aimRotationSpeedFactor, Vector3.right);
 
         var angles = _follow.localEulerAngles;
         angles.z = 0;
@@ -90,12 +88,12 @@ public class PlayerAim : MonoBehaviour
 
         if (_isAiming)
         {
-            _follow.localEulerAngles = new Vector3(angles.x, 0, 0);
+            _follow.localEulerAngles = new Vector3(angles.x, angles.y, 0);
 
             if (Input.GetMouseButtonDown(0))
             {
                 //TODO: Shoot projectile from correct position
-                Instantiate(_bulletPrefab, _bulletSpawnLocation.position, transform.rotation);
+                Instantiate(_bulletPrefab, _bulletSpawnLocation.position, Camera.main.transform.rotation);
             }
         }
 
@@ -108,7 +106,7 @@ public class PlayerAim : MonoBehaviour
         {
             if (!_isAiming)
             {
-                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
                 if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
                 {
                     var destination = hitInfo.point;

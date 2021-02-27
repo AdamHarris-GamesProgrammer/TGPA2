@@ -42,12 +42,10 @@ namespace TGP.Player
 
             if (_isCrouched)
             {
-                Debug.Log("Crouched");
                 _movmentSpeed = _speed * _crouchSpeedFactor;
             }
             else
             {
-                Debug.Log("Uncrouched");
                 _movmentSpeed = _speed;
             }
             _animator.SetBool("isCrouched", _isCrouched);
@@ -59,13 +57,11 @@ namespace TGP.Player
 
             if (_isSprinting)
             {
-                Debug.Log("Sprinting");
                 _isCrouched = false;
                 _movmentSpeed = _speed * _sprintSpeedFactor;
             }
             else
             {
-                Debug.Log("Not sprinting");
                 _movmentSpeed = _speed;
             }
 
@@ -98,15 +94,16 @@ namespace TGP.Player
 
             Vector3 movement;
 
-            if (_playerAim.GetAiming())
-            {
-                movement = transform.forward * vertical + transform.right * horizontal;
-            }
-            else
-            {
-                movement = _camera.forward * vertical + _camera.right * horizontal;
-            }
+            //if (_playerAim.GetAiming())
+            //{
+            //    movement = transform.forward * vertical + transform.right * horizontal;
+            //}
+            //else
+            //{
+            //    movement = _camera.forward * vertical + _camera.right * horizontal;
+            //}
 
+            movement = _camera.forward * vertical + _camera.right * horizontal;
 
             // Moving
             if (movement.magnitude > 0)
