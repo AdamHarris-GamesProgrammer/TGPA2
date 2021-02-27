@@ -26,7 +26,7 @@ namespace TGP.Player
 
         private void Awake()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             _animator = GetComponent<Animator>();
             _movmentSpeed = _speed;
 
