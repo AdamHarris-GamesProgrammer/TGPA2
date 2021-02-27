@@ -15,7 +15,7 @@ namespace TGP.Player
         [SerializeField] private float _crouchSpeedFactor = 0.5f;
         [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
-        UnityEngine.Camera _camera;
+        Transform _camera;
 
 
         private PlayerAim _playerAim;
@@ -32,7 +32,7 @@ namespace TGP.Player
 
             _playerAim = GetComponent<PlayerAim>();
 
-            _camera = UnityEngine.Camera.main;
+            _camera = UnityEngine.Camera.main.transform;
         }
 
 
@@ -104,7 +104,7 @@ namespace TGP.Player
             }
             else
             {
-                movement = _camera.transform.forward * vertical + _camera.transform.right * horizontal;
+                movement = _camera.forward * vertical + _camera.right * horizontal;
             }
 
 

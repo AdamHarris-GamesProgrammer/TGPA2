@@ -17,20 +17,26 @@ public class PlayerAim : MonoBehaviour
 
     bool _isAiming = false;
 
+
     public bool GetAiming() { return _isAiming; }
 
-    // Start is called before the first frame update
-    void Start()
+    private Camera _camera;
+
+    void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.SetCursor(_crosshairTexture, new Vector2(_crosshairTexture.width / 2, _crosshairTexture.height / 2), CursorMode.Auto);
 
         _animator = GetComponent<Animator>();
+        _camera = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vector2 look = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+
         if (Input.GetMouseButton(1) && !_isAiming)
         {
             _mainCam.SetActive(false);
@@ -68,7 +74,7 @@ public class PlayerAim : MonoBehaviour
         {
             if (!_isAiming)
             {
-                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
                 {
                     var destination = hitInfo.point;
