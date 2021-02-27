@@ -94,15 +94,6 @@ namespace TGP.Player
 
             Vector3 movement;
 
-            //if (_playerAim.GetAiming())
-            //{
-            //    movement = transform.forward * vertical + transform.right * horizontal;
-            //}
-            //else
-            //{
-            //    movement = _camera.forward * vertical + _camera.right * horizontal;
-            //}
-
             movement = _camera.forward * vertical + _camera.right * horizontal;
 
             // Moving
