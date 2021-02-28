@@ -12,7 +12,11 @@ namespace TGP.Player
 
         [SerializeField] private float _speed = 5.0f;
 
+        [Range(0.01f, 1.0f)]
+        [Tooltip("The crouch speed multiplier which is used in calculating the final speed of the player")]
         [SerializeField] private float _crouchSpeedFactor = 0.5f;
+        [Range(1.0f, 3.0f)]
+        [Tooltip("The sprint speed multiplier which is used to calculate the speed of the player while sprinting")]
         [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
         Transform _camera;
