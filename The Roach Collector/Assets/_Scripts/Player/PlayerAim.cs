@@ -94,8 +94,10 @@ public class PlayerAim : MonoBehaviour
 
             if (mouseDelta.x != 0.0f)
             {
+                //Rotate Vertically
                 _follow.rotation *= Quaternion.AngleAxis(mouseDelta.y * _aimRotationSpeedFactor, Vector3.right);
-                //Rotate the X axis
+                
+                //Rotate Horizontally
                 _follow.rotation *= Quaternion.AngleAxis(mouseDelta.x * _aimRotationSpeedFactor, Vector3.up);
 
                 
@@ -118,11 +120,13 @@ public class PlayerAim : MonoBehaviour
                 }
 
 
-                _follow.localEulerAngles = new Vector3(angles.x, angles.y, 0);
+                _follow.localEulerAngles = angles;
             }
 
             //Aim the player in the direction of the follow target
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, _follow.rotation.eulerAngles.y, 0), _aimRotationSpeedFactor * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0, _follow.rotation.eulerAngles.y, 0);
+            _follow.localEulerAngles = new Vector3(_follow.localEulerAngles.x, 0, 0);
+
 
             //shoot
             if (Input.GetMouseButtonDown(0))
