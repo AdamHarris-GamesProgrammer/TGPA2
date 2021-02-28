@@ -18,11 +18,10 @@ public class PlayerAim : MonoBehaviour
     private Animator _animator;
 
 
-    [SerializeField] private float _aimRotationSpeedFactor = 0.2f;  
+    [SerializeField] private float _aimRotationSpeedFactor = 0.2f;
 
     bool _isAiming = false;
 
-    private Vector2 _mouseDelta;
 
     CinemachineFreeLook _freeLook;
 
@@ -39,10 +38,8 @@ public class PlayerAim : MonoBehaviour
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
 
-        _mouseDelta = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
-
         _freeLook = _mainCam.GetComponent<CinemachineFreeLook>();
-        
+
     }
 
     // Update is called once per frame
@@ -74,37 +71,58 @@ public class PlayerAim : MonoBehaviour
         if (_isAiming)
         {
             //Get the amount the mouse has changed in the last frame
-            _mouseDelta.x = Input.GetAxisRaw("Mouse X");
-            _mouseDelta.y = Input.GetAxisRaw("Mouse Y");
-            _mouseDelta.y = -_mouseDelta.y;
+            Vector2 mouseDelta = Vector2.zero;
+            mouseDelta.x = Input.GetAxisRaw("Mouse X");
+            mouseDelta.y = Input.GetAxisRaw("Mouse Y");
+
+            //invert y axis
+            mouseDelta.y = -mouseDelta.y;
+
 
             //Rotate the X axis
-            _follow.rotation *= Quaternion.AngleAxis(_mouseDelta.x * _aimRotationSpeedFactor, Vector3.up);
 
-            //Rotate the Y axis
-            _follow.rotation *= Quaternion.AngleAxis(_mouseDelta.y * _aimRotationSpeedFactor, Vector3.right);
+                //Rotate the Y axis
 
-            //Get the angles of the follow target
-            var angles = _follow.localEulerAngles;
-            angles.z = 0;
-
-            //get the x angle
-            var angle = _follow.localEulerAngles.x;
-
-            //Clamp it
-            if (angle > 180 && angle < 340)
+            if (mouseDelta.x < .2f && mouseDelta.x > -0.2f)
             {
-                angles.x = 340;
-            }
-            else if (angle < 180 && angle > 40)
-            {
-                angles.x = 40.0f;
+                mouseDelta.x = 0.0f;
             }
 
-            //Set the follow targets rotation
-            _follow.localEulerAngles = angles;
+            Debug.Log("Mouse Delta: " + mouseDelta);
 
-            _follow.localEulerAngles = new Vector3(angles.x, angles.y, 0);
+           
+
+            if (mouseDelta.x != 0.0f)
+            {
+                _follow.rotation *= Quaternion.AngleAxis(mouseDelta.y * _aimRotationSpeedFactor, Vector3.right);
+                //Rotate the X axis
+                _follow.rotation *= Quaternion.AngleAxis(mouseDelta.x * _aimRotationSpeedFactor, Vector3.up);
+
+                
+
+                //Get the angles of the follow target
+                var angles = _follow.localEulerAngles;
+                angles.z = 0;
+
+                //get the x angle
+                var angle = _follow.localEulerAngles.x;
+
+                //Clamp it
+                if (angle > 180 && angle < 340)
+                {
+                    angles.x = 340;
+                }
+                else if (angle < 180 && angle > 40)
+                {
+                    angles.x = 40.0f;
+                }
+
+
+                _follow.localEulerAngles = new Vector3(angles.x, angles.y, 0);
+            }
+
+            //Aim the player in the direction of the follow target
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, _follow.rotation.eulerAngles.y, 0), _aimRotationSpeedFactor * Time.deltaTime);
 
             //shoot
             if (Input.GetMouseButtonDown(0))
@@ -135,28 +153,6 @@ public class PlayerAim : MonoBehaviour
                     _direction.Normalize();
                     transform.rotation = Quaternion.LookRotation(_direction, transform.up);
                 }
-            }
-            else
-            {
-                //if(_mouseDelta.x > .1f || _mouseDelta.x < -.1f || _mouseDelta.y > .1f || _mouseDelta.y < .1f)
-                //{
-                //    Vector3 euler = _follow.localEulerAngles;
-                //    euler.y = -_follow.rotation.y;
-                //    _follow.localEulerAngles = euler;
-
-
-                //    Ray ray = _camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
-                //    if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
-                //    {
-                //        var destination = hitInfo.point;
-                //        destination.y = transform.position.y;
-
-                //        var _direction = destination - transform.position;
-                //        _direction.y = 0f;
-                //        _direction.Normalize();
-                //        transform.rotation = Quaternion.LookRotation(_direction, transform.up);
-                //    }
-                //}
             }
         }
     }
