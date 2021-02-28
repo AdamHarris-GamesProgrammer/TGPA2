@@ -32,29 +32,80 @@ namespace TGP.Movement
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
 
-            
+
 
             _navMeshAgent.speed = _movementSpeed;
         }
 
         private void FixedUpdate()
         {
+            _navMeshAgent.speed = _movementSpeed;
+
             if (_isCrouched)
             {
                 _navMeshAgent.speed = _movementSpeed * _crouchSpeedFactor;
             }
-            else
+
+            
+
+
+            float velocityX = 0.0f;
+            float velocityZ = 0.0f;
+
+            Vector3 destination = _navMeshAgent.destination;
+            Vector3 position = transform.position;
+
+            Vector3 movement = destination - position;
+
+
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance)
             {
-                _navMeshAgent.speed = _movementSpeed;
+
+                movement = Vector3.zero;
+                Debug.Log("finished path");
+                _animator.SetBool("isMoving", false);
             }
 
-            _animator.SetFloat("movementSpeed", _navMeshAgent.velocity.magnitude);
+            if (movement.magnitude > 0)
+            {
+
+                movement = Vector3.ClampMagnitude(movement, 1);
+                movement *= _movementSpeed * Time.deltaTime;
+
+                velocityZ = Vector3.Dot(movement.normalized, transform.forward);
+                velocityX = Vector3.Dot(movement.normalized, transform.right);
+            }
+            else
+            {
+
+            }
+
+            _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
+            _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
+
+        }
+
+        private void Update()
+        {
+
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                RaycastHit hit;
+                if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f))
+                {
+                    MoveTo(hit.point);
+                }
+            }
         }
 
 
         public void MoveTo(Vector3 target)
         {
             _navMeshAgent.SetDestination(target);
+            _animator.SetBool("isMoving", true);
 
         }
 

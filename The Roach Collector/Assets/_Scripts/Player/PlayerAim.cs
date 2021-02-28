@@ -118,7 +118,7 @@ public class PlayerAim : MonoBehaviour
             //get the x angle
             var angle = _follow.localEulerAngles.x;
 
-            //Clamp it
+            //Clamps the x angle to a suitable range
             if (angle > 180 && angle < 340)
             {
                 angles.x = 340;
