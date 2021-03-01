@@ -15,16 +15,35 @@ namespace TGP.Movement
         [SerializeField] private float _crouchSpeedFactor = .5f;
 
         bool _isCrouched = false;
+        bool _isSprinting = false;
 
-        public bool GetCrouched()
+        public bool IsCrouching()
         {
             return _isCrouched;
         }
 
-        public void SetCrouched(bool val)
+        public bool IsSprinting()
+        {
+            return _isSprinting;
+        }
+
+        public void SetCrouching(bool val)
         {
             _isCrouched = val;
             _animator.SetBool("isCrouched", _isCrouched);
+        }
+
+        public void SetSprinting(bool val)
+        {
+            _isSprinting = val;
+            _animator.SetBool("isSprinting", _isSprinting);
+
+            //character will stand when switching to sprinting
+            if (_isCrouched)
+            {
+                _isCrouched = false;
+                _animator.SetBool("isCrouched", _isCrouched);
+            }
         }
 
         private void Awake()
