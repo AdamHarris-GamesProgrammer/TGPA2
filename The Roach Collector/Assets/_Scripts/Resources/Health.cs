@@ -12,6 +12,27 @@ public class Health : MonoBehaviour
     public UnityEvent OnHealthChanged;
     public UnityEvent OnDeath;
 
+    private void Awake()
+    {
+        OnDeath.AddListener(OnDie);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TakeDamage(10.0f);
+        }
+    }
+
+    private void OnDie()
+    {
+        if (_isDead) return;
+
+        _isDead = true;
+        GetComponent<Animator>().SetBool("isDead", true);
+    }
+
     public bool IsDead()
     {
         return _isDead;
@@ -24,13 +45,16 @@ public class Health : MonoBehaviour
 
     void TakeDamage(float damageIn)
     {
+        if (_isDead) return;
+
         _health -= damageIn;
+
+        Debug.Log("Health: " + _health);
 
         OnHealthChanged.Invoke();
 
         if(_health <= 0.0f)
         {
-            _isDead = true;
             OnDeath.Invoke();
         }
     }

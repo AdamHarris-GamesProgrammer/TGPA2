@@ -9,7 +9,7 @@ namespace TGP.Movement
     {
         private NavMeshAgent _navMeshAgent;
         private Animator _animator;
-
+        private Health _health;
 
         [SerializeField] private float _movementSpeed = 2.5f;
         [SerializeField] private float _crouchSpeedFactor = .5f;
@@ -32,13 +32,19 @@ namespace TGP.Movement
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
 
-
+            _health = GetComponent<Health>();
 
             _navMeshAgent.speed = _movementSpeed;
         }
 
         private void FixedUpdate()
         {
+            if (_health.IsDead())
+            {
+                _navMeshAgent.isStopped = true;
+                return;
+            }
+
             _navMeshAgent.speed = _movementSpeed;
 
             if (_isCrouched)
@@ -62,7 +68,7 @@ namespace TGP.Movement
             {
 
                 movement = Vector3.zero;
-                Debug.Log("finished path");
+                //Debug.Log("finished path");
                 _animator.SetBool("isMoving", false);
             }
 
@@ -104,6 +110,8 @@ namespace TGP.Movement
 
         public void MoveTo(Vector3 target)
         {
+            if (_health.IsDead()) return;
+
             _navMeshAgent.SetDestination(target);
             _animator.SetBool("isMoving", true);
 
