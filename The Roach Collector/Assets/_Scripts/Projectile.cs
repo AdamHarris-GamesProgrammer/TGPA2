@@ -22,15 +22,9 @@ public class Projectile : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("Entered");
-        Destroy(gameObject);
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Entered");
+
         Destroy(gameObject);
     }
 }

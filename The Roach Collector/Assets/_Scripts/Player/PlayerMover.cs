@@ -12,7 +12,11 @@ namespace TGP.Player
 
         [SerializeField] private float _speed = 5.0f;
 
+        [Range(0.01f, 1.0f)]
+        [Tooltip("The crouch speed multiplier which is used in calculating the final speed of the player")]
         [SerializeField] private float _crouchSpeedFactor = 0.5f;
+        [Range(1.0f, 3.0f)]
+        [Tooltip("The sprint speed multiplier which is used to calculate the speed of the player while sprinting")]
         [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
         Transform _camera;
@@ -92,9 +96,16 @@ namespace TGP.Player
             float vertical = Input.GetAxis("Vertical");
 
 
-            Vector3 movement;
+            Vector3 movement = new Vector3();
 
-            movement = _camera.forward * vertical + _camera.right * horizontal;
+
+            if(horizontal != 0.0f || vertical != 0.0f)
+            {
+                movement = _camera.forward * vertical + _camera.right * horizontal;
+            }
+
+            float velocityZ = 0.0f;
+            float velocityX = 0.0f;
 
             // Moving
             if (movement.magnitude > 0)
@@ -104,16 +115,19 @@ namespace TGP.Player
                 movement *= _movmentSpeed * Time.deltaTime;
                 transform.Translate(movement, Space.World);
 
+                velocityZ = Vector3.Dot(movement.normalized, transform.forward);
+                velocityX = Vector3.Dot(movement.normalized, transform.right);
             }
             else
             {
                 _animator.SetBool("isMoving", false);
                 _animator.SetBool("isSprinting", false);
+                velocityZ = 0.0f;
+                velocityX = 0.0f;
             }
 
             // Animating
-            float velocityZ = Vector3.Dot(movement.normalized, transform.forward);
-            float velocityX = Vector3.Dot(movement.normalized, transform.right);
+            
 
             _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
             _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
