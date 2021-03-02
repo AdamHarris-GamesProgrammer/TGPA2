@@ -43,7 +43,7 @@ public class Health : MonoBehaviour
         return _health;
     }
 
-    void TakeDamage(float damageIn)
+    public void TakeDamage(float damageIn)
     {
         if (_isDead) return;
 

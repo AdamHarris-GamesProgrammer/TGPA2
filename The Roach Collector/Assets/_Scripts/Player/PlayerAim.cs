@@ -140,8 +140,9 @@ public class PlayerAim : MonoBehaviour
             //shoot
             if (Input.GetMouseButtonDown(0))
             {
-                //TODO: Shoot projectile from correct position
-                Instantiate(_bulletPrefab, _bulletSpawnLocation.position, Camera.main.transform.rotation);
+                GetComponent<Fighter>().Shoot();
+
+
             }
         }
 
