@@ -17,17 +17,21 @@ public class Health : MonoBehaviour
         OnDeath.AddListener(OnDie);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TakeDamage(10.0f);
-        }
-    }
-
     private void OnDie()
     {
         if (_isDead) return;
+
+        //Disables the collider
+        Collider col = GetComponent<Collider>();
+        col.enabled = false;
+
+        //Stops the rigid body from moving
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.angularVelocity = Vector3.zero;
+            rb.velocity = Vector3.zero;
+        }
 
         _isDead = true;
         GetComponent<Animator>().SetBool("isDead", true);
@@ -48,8 +52,6 @@ public class Health : MonoBehaviour
         if (_isDead) return;
 
         _health -= damageIn;
-
-        Debug.Log("Health: " + _health);
 
         OnHealthChanged.Invoke();
 

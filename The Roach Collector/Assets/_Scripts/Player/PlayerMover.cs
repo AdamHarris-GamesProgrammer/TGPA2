@@ -101,9 +101,7 @@ namespace TGP.Player
 
             if(horizontal != 0.0f || vertical != 0.0f)
             {
-                
                 movement = _camera.forward * vertical + _camera.right * horizontal;
-                
             }
 
             float velocityZ = 0.0f;
