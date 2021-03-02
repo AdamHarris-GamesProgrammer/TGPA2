@@ -101,7 +101,9 @@ namespace TGP.Player
 
             if(horizontal != 0.0f || vertical != 0.0f)
             {
+                
                 movement = _camera.forward * vertical + _camera.right * horizontal;
+                
             }
 
             float velocityZ = 0.0f;
@@ -113,7 +115,13 @@ namespace TGP.Player
                 _animator.SetBool("isMoving", true);
                 movement = Vector3.ClampMagnitude(movement, 1);
                 movement *= _movmentSpeed * Time.deltaTime;
+
+                float yPos = transform.position.y;
                 transform.Translate(movement, Space.World);
+
+                Vector3 pos = transform.position;
+                pos.y = yPos;
+                transform.position = pos;
 
                 velocityZ = Vector3.Dot(movement.normalized, transform.forward);
                 velocityX = Vector3.Dot(movement.normalized, transform.right);
