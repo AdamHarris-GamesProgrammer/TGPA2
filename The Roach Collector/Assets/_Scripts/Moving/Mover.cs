@@ -13,6 +13,7 @@ namespace TGP.Movement
 
         [SerializeField] private float _movementSpeed = 2.5f;
         [SerializeField] private float _crouchSpeedFactor = .5f;
+        [SerializeField] private float _sprintSpeedFactor = 1.5f;
 
         bool _isCrouched = false;
         bool _isSprinting = false;
@@ -71,6 +72,10 @@ namespace TGP.Movement
                 _navMeshAgent.speed = _movementSpeed * _crouchSpeedFactor;
             }
 
+            if(_isSprinting)
+            {
+                _navMeshAgent.speed = _movementSpeed * _sprintSpeedFactor;
+            }
             
 
 
