@@ -2,36 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using TGP.Combat;
+
 namespace TGP.Control
 {
     public class AttackState : State
     {
         float speed;
+        float detectionRadius;
 
         NPCController Controller;
-        public AttackState(StateID id, NPCController controller, float chaseSpeed) : base(StateID.Attack)
+
+        Fighter _fighter;
+
+        Health _health;
+
+        public AttackState(StateID id, NPCController controller, float chaseSpeed, float detectionradius) : base(StateID.Attack)
         {
             Controller = controller;
             speed = chaseSpeed;
+            detectionRadius = detectionradius;
+            _fighter = Controller.transform.GetComponent<Fighter>();
+            _health = Controller.transform.GetComponent<Health>();
+        }
+
+        public override void OnEntry()
+        {
         }
 
         public override void Reason(Transform player, Transform npc)
         {
+            if (Vector3.Distance(player.position, npc.position) > detectionRadius)
+            {
+                Controller.PerformTransition(Transition.PlayerOutsideRange);
+            }
 
-            npc.position = Vector3.MoveTowards(npc.position, player.position, speed * Time.deltaTime);
+
 
         }
 
         public override void Act(Transform player, Transform npc)
         {
-            if(Vector3.Distance(player.position, npc.position) > 3)
-            {
-                Controller.PerformTransition(Transition.PlayerOutsideRange);
-            }
+            //TODO: Add cover, move while shooting logic etc.
+            if (_health.IsDead()) return;
+
+
+            _fighter.Shoot();
         }
 
 
-        
+
 
     }
 }

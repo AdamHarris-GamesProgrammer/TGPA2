@@ -112,18 +112,6 @@ namespace TGP.Movement
 
         private void Update()
         {
-
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                RaycastHit hit;
-                if (Physics.Raycast(ray.origin, ray.direction, out hit, 100.0f))
-                {
-                    MoveTo(hit.point);
-                }
-            }
         }
 
 
