@@ -5,12 +5,17 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float _movementSpeed = 10.0f;
+    float _damage;
 
     private void Awake()
     {
         Destroy(gameObject, 5.0f);
     }
 
+    public void SetDamage(float damage)
+    {
+        _damage = damage;
+    }
 
     private void FixedUpdate()
     {
@@ -24,6 +29,13 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Health collisionHealth = collision.gameObject.GetComponent<Health>();
+
+        if(collisionHealth != null)
+        {
+            collisionHealth.TakeDamage(_damage);
+        }
+
 
         Destroy(gameObject);
     }

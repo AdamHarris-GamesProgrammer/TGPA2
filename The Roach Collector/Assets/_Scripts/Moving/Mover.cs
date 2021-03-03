@@ -92,7 +92,6 @@ namespace TGP.Movement
             {
 
                 movement = Vector3.zero;
-                //Debug.Log("finished path");
                 _animator.SetBool("isMoving", false);
             }
 
@@ -105,14 +104,10 @@ namespace TGP.Movement
                 velocityZ = Vector3.Dot(movement.normalized, transform.forward);
                 velocityX = Vector3.Dot(movement.normalized, transform.right);
             }
-            else
-            {
 
-            }
 
             _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
             _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
-
         }
 
         private void Update()
