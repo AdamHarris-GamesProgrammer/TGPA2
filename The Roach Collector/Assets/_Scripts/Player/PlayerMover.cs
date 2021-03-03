@@ -4,7 +4,7 @@ using UnityEngine;
 using TGP.Movement;
 using UnityEngine.AI;
 
-namespace TGP.Player
+namespace TGP.Movement
 {
     public class PlayerMover : MonoBehaviour
     {

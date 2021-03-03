@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using TGP.Combat;
 public class PlayerAim : MonoBehaviour
 {
     [Header("Camera Properties")]

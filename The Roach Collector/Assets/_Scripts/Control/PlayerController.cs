@@ -4,19 +4,21 @@ using TGP.Movement;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviour
+namespace TGP.Control
 {
-
-
-    private void Awake()
+    public class PlayerController : MonoBehaviour
     {
-    }
+        private void Awake()
+        {
+        }
 
-    private void Update()
-    {
-    }
+        private void Update()
+        {
+        }
 
-    private void FixedUpdate()
-    {
+        private void FixedUpdate()
+        {
+        }
     }
 }
+
