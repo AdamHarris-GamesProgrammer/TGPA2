@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using TGP.Resources;
+
 namespace TGP.Combat
 {
     public class Projectile : MonoBehaviour

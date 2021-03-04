@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+
 using TGP.Combat;
+using TGP.Resources;
+
 public class PlayerAim : MonoBehaviour
 {
     [Header("Camera Properties")]
@@ -18,12 +21,6 @@ public class PlayerAim : MonoBehaviour
     [Tooltip("This stores the layer that the player will look for in the direction checks.")]
     [SerializeField] private LayerMask _aimLayerMask;
 
-    [Header("Bullet Properties")]
-    [Tooltip("The bullet object that will spawn from the gun")]
-    [SerializeField] private GameObject _bulletPrefab;
-    [Tooltip("The spawn location for bullets, this should be the end of the gun")]
-    [SerializeField] private Transform _bulletSpawnLocation;
-
     [Header("Follow Properties")]
     [SerializeField] private Transform _follow;
 
@@ -35,6 +32,8 @@ public class PlayerAim : MonoBehaviour
 
     //Stores a reference to the animator controller for the player
     private Animator _animator;
+
+    private Health _health;
 
     //Stores a reference to the free look follow camera from the player
     CinemachineFreeLook _freeLook;
@@ -64,11 +63,18 @@ public class PlayerAim : MonoBehaviour
         //Gets the freelook component from the main camera
         _freeLook = _mainCam.GetComponent<CinemachineFreeLook>();
 
+        _health = GetComponent<Health>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_health.IsDead())
+        {
+            Debug.Log("Player Dead");
+            return;
+        }
+
         //On Aim
         if (Input.GetMouseButton(1) && !_isAiming)
         {
@@ -142,8 +148,6 @@ public class PlayerAim : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 GetComponent<Fighter>().Shoot();
-
-
             }
         }
 

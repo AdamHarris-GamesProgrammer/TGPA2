@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TGP.Combat;
+using TGP.Resources;
 
 namespace TGP.Control
 {
@@ -46,6 +47,9 @@ namespace TGP.Control
             //TODO: Add cover, move while shooting logic etc.
             if (_health.IsDead()) return;
 
+            if (player.GetComponent<Health>().IsDead()) return;
+
+            npc.LookAt(player, Vector3.up);
 
             _fighter.Shoot();
         }
