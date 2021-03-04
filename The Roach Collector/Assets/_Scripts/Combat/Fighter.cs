@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using tgpAudio;
+
 namespace TGP.Combat
 {
     public class Fighter : MonoBehaviour
     {
+        public AudioController audioController;
+        
+ 
+
         [Header("Bullet Properties")]
         [Tooltip("The bullet object that will spawn from the gun")]
         [SerializeField] private GameObject _bulletPrefab;
@@ -32,6 +38,8 @@ namespace TGP.Combat
 
                 GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, transform.rotation);
                 bullet.GetComponent<Projectile>().SetDamage(_weaponDamage);
+                audioController.PlayAudio(tgpAudio.AudioType.SFX_Shoot, false);
+
             }
             
         }
