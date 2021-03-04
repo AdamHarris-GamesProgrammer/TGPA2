@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using TGP.Resources;
+
 public class DeathMenu : MonoBehaviour
 {
     private bool isDead;
