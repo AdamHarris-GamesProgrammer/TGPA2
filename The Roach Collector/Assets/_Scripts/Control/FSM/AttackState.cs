@@ -18,7 +18,7 @@ namespace TGP.Control
 
         Health _health;
 
-        public AttackState(StateID id, NPCController controller, float chaseSpeed, float detectionradius) : base(StateID.Attack)
+        public AttackState(StateID id, NPCController controller, float chaseSpeed, float detectionradius) : base(id)
         {
             Controller = controller;
             speed = chaseSpeed;

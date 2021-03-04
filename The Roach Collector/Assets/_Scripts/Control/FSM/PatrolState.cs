@@ -25,7 +25,7 @@ namespace TGP.Control
 
         bool targetReached = false;
 
-        public PatrolState(StateID id, NPCController controller, float detectionRange, FieldOfView fov) : base(StateID.Patrol)
+        public PatrolState(StateID id, NPCController controller, float detectionRange, FieldOfView fov) : base(id)
         {
             Controller = controller;
             TController = controller.transform;

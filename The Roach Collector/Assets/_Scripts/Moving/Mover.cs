@@ -111,12 +111,6 @@ namespace TGP.Movement
             _animator.SetFloat("velocityZ", velocityZ, 0.1f, Time.deltaTime);
             _animator.SetFloat("velocityX", velocityX, 0.1f, Time.deltaTime);
         }
-
-        private void Update()
-        {
-        }
-
-
         public void MoveTo(Vector3 target)
         {
             if (_health.IsDead()) return;

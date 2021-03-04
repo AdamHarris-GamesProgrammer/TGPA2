@@ -33,6 +33,7 @@ namespace TGP.Control
             attack = new AttackState(StateID.Attack, this, speed, detectionRadius);
             attack.AddTransition(Transition.PlayerOutsideRange, StateID.Patrol);
 
+
             Patrol = new PatrolState(StateID.Patrol, this, detectionRadius, FOV);
             Patrol.AddTransition(Transition.PlayerDetected, StateID.Engage);
             Patrol.AddTransition(Transition.PlayerLost, StateID.Suspicious);
@@ -54,7 +55,7 @@ namespace TGP.Control
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Waypoint")
+            if (other.CompareTag("Waypoint"))
             {
                 Patrol.WaypointReached(true);
             }
@@ -62,7 +63,7 @@ namespace TGP.Control
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "Waypoint")
+            if (other.CompareTag("Waypoint"))
             {
                 Patrol.WaypointReached(false);
             }
