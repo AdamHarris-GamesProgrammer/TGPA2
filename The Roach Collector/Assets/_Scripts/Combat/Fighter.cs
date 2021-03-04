@@ -37,7 +37,14 @@ namespace TGP.Combat
                 GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, transform.rotation);
                 bullet.GetComponent<Projectile>().SetDamage(_weaponDamage);
 
-                if(audioController != null)
+                Rigidbody rb = GetComponent<Rigidbody>();
+                if (rb)
+                {
+                    rb.angularVelocity = Vector3.zero;
+                    rb.velocity = Vector3.zero;
+                }
+
+                if (audioController != null)
                 {
                     audioController.PlayAudio(tgpAudio.AudioType.SFX_Shoot, false);
                 }

@@ -83,8 +83,6 @@ namespace TGP.Resources
 
             OnHealthChanged.Invoke();
 
-            Debug.Log(gameObject.name + " health: " + _currentHealth);
-
             if (_currentHealth == 0.0f)
             {
                 OnDeath.Invoke();
