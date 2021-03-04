@@ -9,9 +9,8 @@ namespace TGP.Control
     {
         public StateID currentState;
         public Transform[] PatrolPoints;
-        public NavMeshAgent navAgent;
 
-        public FieldOfView FOV;
+        private FieldOfView _FOV;
 
         AttackState attack;
         PatrolState Patrol;
@@ -23,18 +22,19 @@ namespace TGP.Control
         {
             GameObject playerGo = GameObject.Find("Player");
             playerTransform = playerGo.transform;
-
+            _FOV = GetComponent<FieldOfView>();
         }
 
         public bool WithinRange;
 
         protected override void Initialize()
         {
+
             attack = new AttackState(StateID.Attack, this, speed, detectionRadius);
             attack.AddTransition(Transition.PlayerOutsideRange, StateID.Patrol);
 
 
-            Patrol = new PatrolState(StateID.Patrol, this, detectionRadius, FOV);
+            Patrol = new PatrolState(StateID.Patrol, this, detectionRadius, _FOV);
             Patrol.AddTransition(Transition.PlayerDetected, StateID.Engage);
             Patrol.AddTransition(Transition.PlayerLost, StateID.Suspicious);
             Patrol.AddTransition(Transition.PlayerWithinRange, StateID.Attack);
