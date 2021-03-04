@@ -34,11 +34,14 @@ namespace TGP.Combat
             if(timer > _timeBetweenAttacks)
             {
                 timer = 0.0f;
-
-
                 GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, transform.rotation);
                 bullet.GetComponent<Projectile>().SetDamage(_weaponDamage);
-                audioController.PlayAudio(tgpAudio.AudioType.SFX_Shoot, false);
+
+                if(audioController != null)
+                {
+                    audioController.PlayAudio(tgpAudio.AudioType.SFX_Shoot, false);
+                }
+
 
             }
             

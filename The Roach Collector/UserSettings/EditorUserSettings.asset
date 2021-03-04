@@ -6,34 +6,34 @@ EditorUserSettings:
   serializedVersion: 4
   m_ConfigSettings:
     RecentlyUsedScenePath-0:
-      value: 22424703114646680c031c2e153010331f191d272d2b2e39232c5261acb67a6badc43fe7e2373e3f310be139441b193eff1a050eb638090e1f0bee4122fc151d14d6579608cc2f19d90a13c0fa14c5ebf4dfd9c7d7efe2978dcda4c2f1e2fdf7fbc6acefa289f5cd87a0fab4e1d7c9cdd5d3
-      flags: 0
-    RecentlyUsedScenePath-1:
       value: 22424703114646680c031c2e153010331f191d272d2b2e39232c5261acb67a6badc43fe7e2373e3f310be139441b193eff1a050eb638090e1f0bee4122fc151d14d657e413c51612cc2b15c9823cd8eedcd8d3d8d1eca9cdd0d6b4eb
       flags: 0
-    RecentlyUsedScenePath-2:
+    RecentlyUsedScenePath-1:
       value: 22424703114646643e0d092c153010311f5735253a2d2b35233d5d27e7f32076f7e93ffdfe
       flags: 0
-    RecentlyUsedScenePath-3:
+    RecentlyUsedScenePath-2:
       value: 22424703114646643e0d1e2b00374c5f3516152f3e29690f1e2a183de7f37b15e3ee38c4e2342a722c0ce6281d
       flags: 0
-    RecentlyUsedScenePath-4:
+    RecentlyUsedScenePath-3:
       value: 22424703114646680e0b0227036c73150012147a7d66333e243d04
       flags: 0
-    RecentlyUsedScenePath-5:
+    RecentlyUsedScenePath-4:
       value: 22424703114646680e0b0227036c73150012147a7d68777e38271427fb
       flags: 0
-    RecentlyUsedScenePath-6:
+    RecentlyUsedScenePath-5:
       value: 22424703114646643e0d092c1530103d171e16072926337e38271427fb
       flags: 0
-    RecentlyUsedScenePath-7:
+    RecentlyUsedScenePath-6:
       value: 22424703114646643e0d092c1530103413160c221f2b343528275326ece92021
+      flags: 0
+    RecentlyUsedScenePath-7:
+      value: 22424703114646643e0d092c1530102f32120e6a1f2b233e28662217e7f67a2decee22f0
       flags: 0
     RecentlyUsedScenePath-8:
       value: 22424703114646643e0d092c1530103c13011d267c7968252320092a
       flags: 0
     RecentlyUsedScenePath-9:
-      value: 22424703114646643e0d092c1530102f32120e6a1f2b233e28662217e7f67a2decee22f0
+      value: 22424703114646643e0d092c153010362624581e293b327e38271427fb
       flags: 0
     vcSharedLogLevel:
       value: 0d5e400f0650
