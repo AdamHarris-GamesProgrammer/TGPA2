@@ -10,15 +10,11 @@ namespace TGP.Control
     public class PatrolState : State
     {
         float detectionRadius;
-        float detectionAngle;
-        LayerMask targetLayer;
-
         int destNumber = 0;
         float distance = 10;
 
         NPCController Controller;
         NavMeshAgent navAgent;
-        FieldOfView FOV;
 
         Mover _mover;
 
@@ -29,16 +25,19 @@ namespace TGP.Control
 
         bool targetReached = false;
 
-        public PatrolState(StateID id, NPCController controller, float detectionRange, FieldOfView fov) : base(id)
+        public PatrolState(StateID id, NPCController controller, float detectionRange) : base(StateID.Patrol)
         {
             Controller = controller;
             TController = controller.transform;
             navAgent = controller.gameObject.GetComponent<NavMeshAgent>();
             detectionRadius = detectionRange;
+<<<<<<< HEAD
 
             FOV = fov;
 
             _mover = controller.gameObject.GetComponent<Mover>();
+=======
+>>>>>>> parent of 11fb5c8d (Merge branch 'main' of https://github.com/AdamHarris-GamesProgrammer/TGPA2 into main)
         }
 
         public override void Act(Transform player, Transform npc)
@@ -48,7 +47,7 @@ namespace TGP.Control
 
         public override void Reason(Transform player, Transform npc)
         {
-            if (FOV.IsEnemyInFOV())
+            if(Vector3.Distance(player.position, npc.position) < detectionRadius)
             {
                 navAgent.isStopped = true;
                 Controller.PerformTransition(Transition.PlayerWithinRange);
@@ -57,8 +56,6 @@ namespace TGP.Control
 
         void SetDestination()
         {
-            if (Controller.PatrolPoints.Length == 0) return;
-
             navAgent.isStopped = false;
             int pointNum = Controller.PatrolPoints.Length - 1;
 
@@ -66,12 +63,20 @@ namespace TGP.Control
 
             if (destNumber < Controller.PatrolPoints.Length)
             {
-
+                //Debug.Log("Dest Num: " + destNumber);
                 DestTransform = Controller.PatrolPoints[destNumber];
                 targetVector = new Vector3(DestTransform.position.x, TController.position.y, DestTransform.position.z);
+<<<<<<< HEAD
 
                 _mover.MoveTo(targetVector);
                 distance = navAgent.remainingDistance;
+=======
+                
+                navAgent.SetDestination(targetVector);
+                distance = navAgent.remainingDistance;
+                
+
+>>>>>>> parent of 11fb5c8d (Merge branch 'main' of https://github.com/AdamHarris-GamesProgrammer/TGPA2 into main)
             }
 
 
@@ -83,11 +88,15 @@ namespace TGP.Control
                 targetReached = false;
             }
 
+            //if (FinalTarget == Controller.transform.position)
+            //{
+            //    destNumber = 0;
+            //}
             if (Vector3.Distance(FinalTarget, Controller.transform.position) <= 0.5)
             {
                 destNumber = 0;
             }
-            else if (destNumber > pointNum)
+            else if(destNumber > pointNum)
             {
                 destNumber = 0;
             }
