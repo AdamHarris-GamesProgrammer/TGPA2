@@ -24,6 +24,8 @@ public class PlayerFPS : MonoBehaviour
 
     float xRotation = 0f;
 
+    [SerializeField] Transform _gun;
+
     /// <summary>
     /// Returns if the player is aiming or not
     /// </summary>
@@ -47,6 +49,8 @@ public class PlayerFPS : MonoBehaviour
         _camera = Camera.main;
 
         _health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+
+        GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
     }
 
     // Update is called once per frame
@@ -61,6 +65,7 @@ public class PlayerFPS : MonoBehaviour
         //On Aim
         if (Input.GetMouseButton(1) && !_isAiming)
         {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.RightHand);
             _animator.SetBool("isAiming", true);
             _isAiming = true;
             _crosshairTexture.SetActive(true);
@@ -69,6 +74,7 @@ public class PlayerFPS : MonoBehaviour
         //Off Aim
         else if (!Input.GetMouseButton(1) && _isAiming)
         {
+            GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
             _isAiming = false;
             _animator.SetBool("isAiming", false);
             _crosshairTexture.SetActive(false);

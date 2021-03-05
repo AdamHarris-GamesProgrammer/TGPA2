@@ -22,7 +22,21 @@ namespace TGP.Combat
         [Tooltip("The time between each shot, acts as a basic fire rate property")]
         [Min(0f)][SerializeField] float _timeBetweenAttacks = 0.2f;
 
+        [SerializeField] Transform _gun;
+       
+
         float timer = 10000f;
+
+        private void Awake()
+        {
+            
+        }
+
+
+        private void Start()
+        {
+            GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
+        }
 
         private void Update()
         {
