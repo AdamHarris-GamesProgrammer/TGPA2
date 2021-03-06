@@ -26,6 +26,7 @@ public class MeshSockets : MonoBehaviour
 
     public void Attach(Transform objectTransform, SocketId socketId)
     {
+        Debug.Log("Attaching " + objectTransform.name + " to " + socketId.ToString());
         socketMap[socketId].Attach(objectTransform);
     }
 
