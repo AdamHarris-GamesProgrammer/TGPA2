@@ -7,7 +7,8 @@ public class MeshSockets : MonoBehaviour
     public enum SocketId
     {
         Spine,
-        RightHand
+        RightHand,
+        RightShoulder
     }
 
     Dictionary<SocketId, MeshSocket> socketMap = new Dictionary<SocketId, MeshSocket>();
@@ -20,7 +21,7 @@ public class MeshSockets : MonoBehaviour
         foreach(var socket in sockets)
         {
             socketMap.Add(socket.socketType, socket);
-            //socketMap[socket.socketType] = socket;
+            
         }
     }
 

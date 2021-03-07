@@ -13,10 +13,10 @@ namespace TGP.Combat
 
         public override void Shoot()
         {
-            if(timer > _timeBetweenAttacks)
+            if(_timer > _timeBetweenAttacks)
             {
                 FireProjectile(Camera.main.transform.rotation);
-                timer = 0.0f;
+                _timer = 0.0f;
             }
         }
     }

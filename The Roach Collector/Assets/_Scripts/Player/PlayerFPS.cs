@@ -14,6 +14,10 @@ public class PlayerFPS : MonoBehaviour
     [SerializeField] float _mouseXSensitivity = 25.0f;
     [SerializeField] float _mouseYSensitivity = 25.0f;
 
+    [Header("Clamp Settings")]
+    [SerializeField] float _topAngle = -75f;
+    [SerializeField] float _bottomAngle = 50f;
+
     //Stores whether the player is aiming or not
     bool _isAiming = false;
 
@@ -22,6 +26,9 @@ public class PlayerFPS : MonoBehaviour
 
     private Health _health;
 
+    private Fighter _fighter;
+    private MeshSockets _sockets;
+
     float xRotation = 0f;
 
     [SerializeField] Transform _gun;
@@ -29,7 +36,7 @@ public class PlayerFPS : MonoBehaviour
     /// <summary>
     /// Returns if the player is aiming or not
     /// </summary>
-    public bool GetAiming() { return _isAiming; }
+    public bool IsAiming() { return _isAiming; }
 
     private Camera _camera;
 
@@ -43,42 +50,32 @@ public class PlayerFPS : MonoBehaviour
         _crosshairTexture.SetActive(false);
 
         //gets the animator component
-        _animator = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
 
         //Stores a reference to the main camera 
         _camera = Camera.main;
 
-        _health = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        _health = GetComponent<Health>();
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
+        _fighter = GetComponent<Fighter>();
+        _sockets = GetComponent<MeshSockets>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_health.IsDead())
-        {
-            Debug.Log("Player Dead");
-            return;
-        }
+        if (_health.IsDead()) return;
+
 
         //On Aim
         if (Input.GetMouseButton(1) && !_isAiming)
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.RightHand);
-            _animator.SetBool("isAiming", true);
-            _isAiming = true;
-            _crosshairTexture.SetActive(true);
-
+            AimOn();
         }
         //Off Aim
         else if (!Input.GetMouseButton(1) && _isAiming)
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
-            _isAiming = false;
-            _animator.SetBool("isAiming", false);
-            _crosshairTexture.SetActive(false);
-
+            AimOff();
         }
 
 
@@ -86,17 +83,33 @@ public class PlayerFPS : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * _mouseYSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -75f, 50f);
+        xRotation = Mathf.Clamp(xRotation, _topAngle, _bottomAngle);
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        GameObject.FindGameObjectWithTag("Player").transform.Rotate(Vector3.up * mouseX);
+        _camera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
 
 
         //shoot
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Fighter>().Shoot();
+            _fighter.Shoot();
         }
 
+    }
+
+    private void AimOn()
+    {
+        _sockets.Attach(_gun, MeshSockets.SocketId.RightShoulder);
+        _animator.SetBool("isAiming", true);
+        _isAiming = true;
+        _crosshairTexture.SetActive(true);
+    }
+
+    private void AimOff()
+    {
+        _sockets.Attach(_gun, MeshSockets.SocketId.RightHand);
+        _isAiming = false;
+        _animator.SetBool("isAiming", false);
+        _crosshairTexture.SetActive(false);
     }
 }

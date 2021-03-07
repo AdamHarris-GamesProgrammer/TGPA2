@@ -23,9 +23,16 @@ namespace TGP.Combat
         [Min(0f)][SerializeField] protected float _timeBetweenAttacks = 0.2f;
 
         [SerializeField] Transform _gun;
+
+        private MeshSockets _sockets;
        
 
-        protected float timer = 10000f;
+        protected float _timer = 10000f;
+
+        private void Awake()
+        {
+            _sockets = GetComponent<MeshSockets>();
+        }
 
         private void Start()
         {
@@ -34,17 +41,17 @@ namespace TGP.Combat
 
         private void Update()
         {
-            timer += Time.deltaTime;
+            _timer += Time.deltaTime;
         }
 
         public void EquipWeapon()
         {
-            GetComponent<MeshSockets>().Attach(_gun, MeshSockets.SocketId.Spine);
+            _sockets.Attach(_gun, MeshSockets.SocketId.RightShoulder);
         }
 
         protected void FireProjectile(Quaternion bulletRotation)
         {
-            timer = 0.0f;
+            _timer = 0.0f;
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, bulletRotation);
             bullet.GetComponent<Projectile>().SetDamage(_weaponDamage);
 
@@ -63,7 +70,7 @@ namespace TGP.Combat
 
         public virtual void Shoot()
         {
-            if(timer > _timeBetweenAttacks)
+            if(_timer > _timeBetweenAttacks)
             {
                 FireProjectile(transform.rotation);
             }
