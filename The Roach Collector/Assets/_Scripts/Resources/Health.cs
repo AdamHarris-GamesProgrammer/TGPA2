@@ -50,6 +50,11 @@ namespace TGP.Resources
                 //Disables the collider
                 Collider col = GetComponent<Collider>();
                 col.enabled = false;
+            }else
+            {
+                //Reenable cursor for use in the menu systems.
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
 
             //Stops the rigid body from moving

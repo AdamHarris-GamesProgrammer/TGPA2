@@ -8,13 +8,11 @@ namespace TGP.Combat
     {
         private void Start()
         {
-            Debug.Log("Equipping Weapon");
             EquipWeapon();
         }
 
         public override void Shoot()
         {
-            Debug.Log("Player Fighter");
             if(timer > _timeBetweenAttacks)
             {
                 FireProjectile(Camera.main.transform.rotation);

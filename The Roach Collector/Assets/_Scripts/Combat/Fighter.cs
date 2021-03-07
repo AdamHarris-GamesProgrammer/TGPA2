@@ -27,14 +27,6 @@ namespace TGP.Combat
 
         protected float timer = 10000f;
 
-        private void Awake()
-        {
-            
-        }
-
-
-
-
         private void Start()
         {
             EquipWeapon();
