@@ -3,7 +3,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Audio
+namespace tgpAudio
 {
     public class AudioController : MonoBehaviour
     {

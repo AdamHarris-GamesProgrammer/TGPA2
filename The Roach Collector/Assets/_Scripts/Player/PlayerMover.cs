@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TGP.Movement;
 using UnityEngine.AI;
+using TGP.Resources;
 
 namespace TGP.Movement
 {
@@ -24,6 +25,8 @@ namespace TGP.Movement
 
         private PlayerAim _playerAim;
 
+        private Health _health;
+
         float _movmentSpeed;
         bool _isCrouched = false;
         bool _isSprinting = false;
@@ -37,6 +40,8 @@ namespace TGP.Movement
             _playerAim = GetComponent<PlayerAim>();
 
             _camera = UnityEngine.Camera.main.transform;
+
+            _health = GetComponent<Health>();
         }
 
 
@@ -75,6 +80,8 @@ namespace TGP.Movement
 
         private void Update()
         {
+            if (_health.IsDead()) return;
+
             if (Input.GetKeyDown(KeyCode.C))
             {
                 OnCrouch();
@@ -91,6 +98,8 @@ namespace TGP.Movement
 
         void FixedUpdate()
         {
+            if (_health.IsDead()) return;
+
             // Reading the Input
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");

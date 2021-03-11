@@ -20,7 +20,7 @@ namespace TGP.Control
 
         private void Awake()
         {
-            GameObject playerGo = GameObject.Find("Player");
+            GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
             playerTransform = playerGo.transform;
             _FOV = GetComponent<FieldOfView>();
         }

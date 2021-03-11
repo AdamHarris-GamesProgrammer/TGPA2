@@ -19,18 +19,26 @@ namespace TGP.Resources
         public UnityEvent OnHealthChanged;
         public UnityEvent OnDeath;
 
+        public float GetCurrentHealth()
+        {
+            return _currentHealth;
+        }
+
+        public float GetMaxHealth()
+        {
+            return _maxHealth;
+        }
+
+
         private void Awake()
         {
             OnDeath.AddListener(OnDie);
 
             _currentHealth = _maxHealth;
 
-            _healthUI = GetComponent<HealthUI>();
+            
 
-            if(_healthUI != null)
-            {
-                _healthUI.UpdateUI(_currentHealth, _maxHealth);
-            }
+            _healthUI = GetComponent<HealthUI>();
         }
 
         private void OnDie()
@@ -42,6 +50,11 @@ namespace TGP.Resources
                 //Disables the collider
                 Collider col = GetComponent<Collider>();
                 col.enabled = false;
+            }else
+            {
+                //Reenable cursor for use in the menu systems.
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
 
             //Stops the rigid body from moving
@@ -71,20 +84,20 @@ namespace TGP.Resources
             if (_isDead) return;
 
 
-            _currentHealth = Mathf.Clamp(_currentHealth - damageIn, 0, _maxHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth -= damageIn, 0, _maxHealth);
 
             OnHealthChanged.Invoke();
-
-            
 
             if (_currentHealth == 0.0f)
             {
                 OnDeath.Invoke();
             }
 
-            if (_healthUI != null)
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if(rb)
             {
-                _healthUI.UpdateUI(_currentHealth, _maxHealth);
+                rb.angularVelocity = Vector3.zero;
+                rb.velocity = Vector3.zero;
             }
 
         }
