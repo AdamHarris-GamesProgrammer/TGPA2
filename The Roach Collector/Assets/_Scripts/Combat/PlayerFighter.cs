@@ -8,7 +8,7 @@ namespace TGP.Combat
     {
         private void Start()
         {
-            EquipWeapon();
+            EquipWeapon(_startingWeapon);
         }
 
         public override void Shoot()

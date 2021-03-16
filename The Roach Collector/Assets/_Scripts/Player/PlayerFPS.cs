@@ -31,8 +31,6 @@ public class PlayerFPS : MonoBehaviour
 
     float xRotation = 0f;
 
-    [SerializeField] Transform _gun;
-
     /// <summary>
     /// Returns if the player is aiming or not
     /// </summary>
@@ -99,7 +97,7 @@ public class PlayerFPS : MonoBehaviour
 
     private void AimOn()
     {
-        _sockets.Attach(_gun, MeshSockets.SocketId.RightShoulder);
+        //_sockets.Attach(_gun, MeshSockets.SocketId.RightShoulder);
         _animator.SetBool("isAiming", true);
         _isAiming = true;
         _crosshairTexture.SetActive(true);
@@ -107,7 +105,7 @@ public class PlayerFPS : MonoBehaviour
 
     private void AimOff()
     {
-        _sockets.Attach(_gun, MeshSockets.SocketId.RightHand);
+        //_sockets.Attach(_gun, MeshSockets.SocketId.RightHand);
         _isAiming = false;
         _animator.SetBool("isAiming", false);
         _crosshairTexture.SetActive(false);

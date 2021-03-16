@@ -22,10 +22,17 @@ namespace TGP.Combat
         [Tooltip("The time between each shot, acts as a basic fire rate property")]
         [Min(0f)][SerializeField] protected float _timeBetweenAttacks = 0.2f;
 
-        [SerializeField] Transform _gun;
+        [SerializeField] protected Weapon _startingWeapon = null;
+
+
+
+        Weapon _equippedWeapon;
+        
+        //[SerializeField] Transform _gun;
 
         private MeshSockets _sockets;
-       
+
+        GameObject _currentGunGO;
 
         protected float _timer = 10000f;
 
@@ -36,7 +43,7 @@ namespace TGP.Combat
 
         private void Start()
         {
-            EquipWeapon();
+            EquipWeapon(_startingWeapon);
         }
 
         private void Update()
@@ -44,16 +51,23 @@ namespace TGP.Combat
             _timer += Time.deltaTime;
         }
 
-        public void EquipWeapon()
+        public void EquipWeapon(Weapon newWeapon)
         {
-            _sockets.Attach(_gun, MeshSockets.SocketId.RightShoulder);
+            _equippedWeapon = newWeapon;
+            //converts from bullets per minute to bullets per second
+            _timeBetweenAttacks = _equippedWeapon.GetFirerate() / 60.0f;
+            _timeBetweenAttacks = 1.0f / _timeBetweenAttacks;
+
+            _currentGunGO = Instantiate(_equippedWeapon.GetGunObject(), transform);
+
+            _sockets.Attach(_currentGunGO.transform, MeshSockets.SocketId.RightShoulder);
         }
 
         protected void FireProjectile(Quaternion bulletRotation)
         {
             _timer = 0.0f;
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, bulletRotation);
-            bullet.GetComponent<Projectile>().SetDamage(_weaponDamage);
+            bullet.GetComponent<Projectile>().SetDamage(_equippedWeapon.GetDamage());
 
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb)
