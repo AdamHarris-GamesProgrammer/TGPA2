@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using tgpAudio;
 
 public class CharacterLocomotion : MonoBehaviour
 {
-    
+
+    public AudioController audioController;
 
     [Min(0f)][SerializeField] private float _jumpHeight;
     [Min(0f)][SerializeField] private float _gravity;
@@ -33,6 +35,7 @@ public class CharacterLocomotion : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        audioController.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
     }
 
     void Update()

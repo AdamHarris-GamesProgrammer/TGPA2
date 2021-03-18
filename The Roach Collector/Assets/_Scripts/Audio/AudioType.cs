@@ -8,7 +8,9 @@ namespace tgpAudio
     public enum AudioType
     {
         None,
+        ROOM_OUTSIDE,
         ROOM_1,
+        ROOM_BUZZ,
         ROOM_2,
         ROOM_3,
         SFX_walk,
