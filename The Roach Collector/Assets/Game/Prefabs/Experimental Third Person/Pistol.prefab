@@ -107,6 +107,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4405606805659837572}
   - component: {fileID: 4409922794463935971}
+  - component: {fileID: -8316289093368860852}
+  - component: {fileID: 4073967462537938912}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -152,7 +154,70 @@ MonoBehaviour:
   _raycastOrigin: {fileID: 4409922794996227054}
   _weaponAnimation: {fileID: 7400000, guid: b67c92d244ba9474fbfc2177a1fab35d, type: 2}
   _tracerEffect: {fileID: 6931725180986630961, guid: 4d4fd141eaf7e0c43b4b61554d1c7a07, type: 3}
+  _weaponRecoil: {fileID: 0}
   _maxLifeTime: 3
+--- !u!114 &-8316289093368860852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409249915552324510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f7c3da26ca7c24eb5ebb904521e2a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
+  _cameraShake: {fileID: 0}
+  _recoilPattern:
+  - {x: 10, y: 10}
+  - {x: -10, y: 10}
+  _verticalRecoil: 10
+  _horizontalRecoil: 0
+  _duration: 0.1
+--- !u!114 &4073967462537938912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409249915552324510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_RawSignal: {fileID: 11400000, guid: f369512c609b2714aacc2a00162ccc9d, type: 2}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
 --- !u!1 &4409922794996227055
 GameObject:
   m_ObjectHideFlags: 0

@@ -33,6 +33,8 @@ public class RaycastWeapon : MonoBehaviour
 
     [SerializeField] private TrailRenderer _tracerEffect;
 
+    public WeaponRecoil _weaponRecoil;
+
     private Transform _raycastTarget;
 
     public AnimationClip GetAnimationClip()
@@ -40,11 +42,17 @@ public class RaycastWeapon : MonoBehaviour
         return _weaponAnimation;
     }
 
-
     public bool IsFiring()
     {
         return _isFiring;
     }
+
+
+    private void Awake()
+    {
+        _weaponRecoil = GetComponent<WeaponRecoil>();
+    }
+
 
     public void SetRaycastTarget(Transform newTransform)
     {
@@ -91,12 +99,15 @@ public class RaycastWeapon : MonoBehaviour
         Vector3 velocity = (_raycastTarget.position - _raycastOrigin.position).normalized * _bulletSpeed;
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
+
+        _weaponRecoil.GenerateRecoil();
     }
 
     public void StartFiring()
     {
         _accumulatedTime = 0.0f;
         _isFiring = true;
+        _weaponRecoil.Reset();
         Fire();
     }
 
@@ -140,8 +151,16 @@ public class RaycastWeapon : MonoBehaviour
         if (Physics.Raycast(_ray, out _hitInfo, distance))
         {
             _hitEffect.transform.position = _hitInfo.point;
+            _hitEffect.transform.parent = _hitInfo.transform;
             _hitEffect.transform.forward = _hitInfo.normal;
             _hitEffect.Emit(1);
+
+
+            Rigidbody hitRb = _hitInfo.transform.gameObject.GetComponent<Rigidbody>();
+            if (hitRb)
+            {
+                hitRb.AddForceAtPosition(new Vector3(0.0f, 0.0f, 5.0f), _hitInfo.point, ForceMode.Impulse);
+            }
 
             bullet._tracer.transform.position = _hitInfo.point;
             bullet._time = _maxLifeTime;

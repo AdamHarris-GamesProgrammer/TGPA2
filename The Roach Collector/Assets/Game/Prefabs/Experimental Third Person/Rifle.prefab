@@ -5193,6 +5193,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5372763406899085111}
   - component: {fileID: 3231021131240279632}
+  - component: {fileID: 1500117013015183244}
+  - component: {fileID: 3991653801608710259}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -5238,7 +5240,84 @@ MonoBehaviour:
   _raycastOrigin: {fileID: 3379645388017167684}
   _weaponAnimation: {fileID: 7400000, guid: 3ebe3a7649ca61544b523d39e8825371, type: 2}
   _tracerEffect: {fileID: 6931725180986630961, guid: 4d4fd141eaf7e0c43b4b61554d1c7a07, type: 3}
+  _weaponRecoil: {fileID: 0}
   _maxLifeTime: 3
+--- !u!114 &1500117013015183244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372763406898586391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f7c3da26ca7c24eb5ebb904521e2a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 0}
+  _cameraShake: {fileID: 0}
+  _recoilPattern:
+  - {x: 10, y: 10}
+  - {x: 7, y: 10}
+  - {x: 5, y: 10}
+  - {x: 2, y: 10}
+  - {x: 1, y: 10}
+  - {x: -2, y: 10}
+  - {x: -5, y: 10}
+  - {x: -7, y: 10}
+  - {x: -10, y: 10}
+  - {x: -7, y: 10}
+  - {x: -5, y: 10}
+  - {x: -2, y: 10}
+  - {x: -1, y: 10}
+  - {x: 2, y: 10}
+  - {x: 5, y: 10}
+  - {x: 7, y: 10}
+  _verticalRecoil: 10
+  _horizontalRecoil: 0
+  _duration: 0.1
+--- !u!114 &3991653801608710259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372763406898586391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_RawSignal: {fileID: 11400000, guid: 5b82003ff7da06140a203e822f5f90d6, type: 2}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 1000
+    m_PropagationSpeed: 343
 --- !u!1 &6610091038082807851
 GameObject:
   m_ObjectHideFlags: 0
@@ -20049,14 +20128,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e14fc438dc2d7294da761ea394e2682f, type: 3}
---- !u!198 &3645871142482040728 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7367264560403224085, guid: e14fc438dc2d7294da761ea394e2682f, type: 3}
-  m_PrefabInstance: {fileID: 6099409266162385293}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3482711587596371006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7273427565958940083, guid: e14fc438dc2d7294da761ea394e2682f, type: 3}
+  m_PrefabInstance: {fileID: 6099409266162385293}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3645871142482040728 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7367264560403224085, guid: e14fc438dc2d7294da761ea394e2682f, type: 3}
   m_PrefabInstance: {fileID: 6099409266162385293}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9197338849187121029

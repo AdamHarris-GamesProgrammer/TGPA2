@@ -17,6 +17,8 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip;
     [SerializeField] private Transform _weaponRightGrip;
 
+    public Cinemachine.CinemachineFreeLook _camera;
+
     Animator _anim;
     AnimatorOverrideController _overrides;
     RaycastWeapon _weapon;
@@ -91,6 +93,8 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.localRotation = Quaternion.identity;
             _handIK.weight = 1.0f;
             _anim.SetLayerWeight(1, 1.0f);
+
+            _weapon._weaponRecoil._camera = _camera;
 
             //Crash in current version of the Rigging package, this line fixes it
             Invoke(nameof(SetAnimationDelayed), 0.0001f);
