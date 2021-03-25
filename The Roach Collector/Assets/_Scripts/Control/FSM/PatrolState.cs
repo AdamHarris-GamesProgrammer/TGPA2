@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-using TGP.Movement;
-
 namespace TGP.Control
 {
     public class PatrolState : State
@@ -20,7 +18,7 @@ namespace TGP.Control
         NavMeshAgent navAgent;
         FieldOfView FOV;
 
-        Mover _mover;
+        AILocomotion _mover;
 
         Transform TController;
         Vector3 targetVector;
@@ -38,7 +36,7 @@ namespace TGP.Control
 
             FOV = fov;
 
-            _mover = controller.gameObject.GetComponent<Mover>();
+            _mover = controller.gameObject.GetComponent<AILocomotion>();
         }
 
         public override void Act(Transform player, Transform npc)

@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using TGP.Combat;
-using TGP.Resources;
-
 namespace TGP.Control
 {
     public class AttackState : State
@@ -14,7 +11,7 @@ namespace TGP.Control
 
         NPCController Controller;
 
-        Fighter _fighter;
+        AIWeapons _fighter;
 
         Health _health;
 
@@ -23,7 +20,7 @@ namespace TGP.Control
             Controller = controller;
             speed = chaseSpeed;
             detectionRadius = detectionradius;
-            _fighter = Controller.transform.GetComponent<Fighter>();
+            _fighter = Controller.transform.GetComponent<AIWeapons>();
             _health = Controller.transform.GetComponent<Health>();
         }
 
@@ -38,7 +35,10 @@ namespace TGP.Control
                 Controller.PerformTransition(Transition.PlayerOutsideRange);
             }
 
-
+            if(_health.IsDead())
+            {
+                Controller.PerformTransition(Transition.Dead);
+            }
 
         }
 
@@ -47,11 +47,10 @@ namespace TGP.Control
             //TODO: Add cover, move while shooting logic etc.
             if (_health.IsDead()) return;
 
-            if (player.GetComponent<Health>().IsDead()) return;
 
             npc.LookAt(player, Vector3.up);
 
-            _fighter.Shoot();
+            _fighter.SetFiring(true);
         }
 
 
