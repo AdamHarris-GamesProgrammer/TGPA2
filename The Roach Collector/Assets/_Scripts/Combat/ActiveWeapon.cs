@@ -70,9 +70,6 @@ public class ActiveWeapon : MonoBehaviour
             _handIK.weight = 0.0f;
             _anim.SetLayerWeight(1, 0.0f);
         }
-
-
-
     }
 
     public void DropWeapon()

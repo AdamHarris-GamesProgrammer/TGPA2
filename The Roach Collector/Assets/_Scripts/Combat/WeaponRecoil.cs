@@ -12,11 +12,11 @@ public class WeaponRecoil : MonoBehaviour
         _cameraShake = GetComponent<Cinemachine.CinemachineImpulseSource>();
     }
 
-    public Vector2[] _recoilPattern;
+    [SerializeField] Vector2[] _recoilPattern;
     float _verticalRecoil;
     float _horizontalRecoil;
 
-    public float _duration;
+    [SerializeField] float _duration;
 
     float _time;
 
@@ -35,7 +35,7 @@ public class WeaponRecoil : MonoBehaviour
 
     public void GenerateRecoil()
     {
-        if (!CompareTag("Player")) return;
+        if (!gameObject.transform.IsChildOf(GameObject.FindGameObjectWithTag("Player").transform)) return;
 
         _time = _duration;
 

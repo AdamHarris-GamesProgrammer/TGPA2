@@ -27,7 +27,7 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _aiWeapon = GetComponent<AIWeapons>();
+        
 
         stateMachine = new AIStateMachine(this);
 
@@ -46,6 +46,7 @@ public class AIAgent : MonoBehaviour
         {
             RaycastWeapon weapon = Instantiate(_startingWeapon);
 
+            _aiWeapon = GetComponent<AIWeapons>();
             _aiWeapon.EquipWeapon(weapon);
             stateMachine.ChangeState(AiStateId.Idle);
         }
