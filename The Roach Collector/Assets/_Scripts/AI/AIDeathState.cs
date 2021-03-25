@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class AIDeathState : AIState
 {
+    UIHealthBar _healthBar;
+    Ragdoll _ragdoll;
+    AIWeapons _aiWeapon;
+
+    public AIDeathState(AIAgent agent)
+    {
+        _healthBar = agent.GetComponent<UIHealthBar>();
+        _ragdoll = agent.GetComponent<Ragdoll>();
+        _aiWeapon = agent.GetComponent<AIWeapons>();
+    }
+
     public void Enter(AIAgent agent)
     {
-        agent._healthBar.gameObject.SetActive(false);
-        agent._ragdoll.ActivateRagdoll();
-        agent._aiWeapon.DropWeapon();
+        _healthBar.gameObject.SetActive(false);
+        _ragdoll.ActivateRagdoll();
+        _aiWeapon.DropWeapon();
     }
 
     public void Exit(AIAgent agent)

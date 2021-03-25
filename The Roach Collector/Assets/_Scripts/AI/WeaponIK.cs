@@ -17,7 +17,7 @@ public class WeaponIK : MonoBehaviour
 
     public Vector3 _offset;
 
-    AIAgent _agent;
+    AIWeapons _aiWeapon;
 
     public HumanBone[] _humanBones;
     Transform[] _boneTransforms;
@@ -34,9 +34,9 @@ public class WeaponIK : MonoBehaviour
             _boneTransforms[i] = anim.GetBoneTransform(_humanBones[i].bone);
         }
 
-        _agent = GetComponent<AIAgent>();
+        _aiWeapon = GetComponent<AIWeapons>();
 
-        if (_agent._aiWeapon.HasWeapon())
+        if (_aiWeapon.HasWeapon())
         {
             _weaponTransform = GetComponentInChildren<RaycastWeapon>().transform;
         }

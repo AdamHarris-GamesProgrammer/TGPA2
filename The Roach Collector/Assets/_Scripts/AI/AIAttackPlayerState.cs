@@ -1,25 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIAttackPlayerState : AIState
 {
     Health _playerHealth;
 
+    AIWeapons _aiWeapon;
+    NavMeshAgent _agent;
+    Transform _player;
+
+    public AIAttackPlayerState(AIAgent agent)
+    {
+        _aiWeapon = agent.GetComponent<AIWeapons>();
+        _agent = agent.GetComponent<NavMeshAgent>();
+        _player = agent.GetPlayer();
+        _playerHealth = _player.GetComponent<Health>();
+    }
+
     public void Enter(AIAgent agent)
     {
-        agent._aiWeapon.SetTarget(agent._player.transform);
-        agent._agent.stoppingDistance = 5.0f;
-        agent._aiWeapon.SetFiring(true);
-
-        _playerHealth = agent._player.GetComponent<Health>();
+       _aiWeapon.SetTarget(_player);
+       _agent.stoppingDistance = 5.0f;
+       _aiWeapon.SetFiring(true);
     }
 
     public void Exit(AIAgent agent)
     {
-        agent._agent.stoppingDistance = 1.0f;
-        agent._aiWeapon.SetFiring(false);
-        agent._aiWeapon.SetTarget(null);
+        _agent.stoppingDistance = 1.0f;
+        _aiWeapon.SetFiring(false);
+        _aiWeapon.SetTarget(null);
     }
 
     public AiStateId GetID()
@@ -29,7 +40,7 @@ public class AIAttackPlayerState : AIState
 
     public void Update(AIAgent agent)
     {
-        agent._agent.SetDestination(agent._player.transform.position);
+        _agent.SetDestination(_player.position);
 
         if (_playerHealth.IsDead())
         {

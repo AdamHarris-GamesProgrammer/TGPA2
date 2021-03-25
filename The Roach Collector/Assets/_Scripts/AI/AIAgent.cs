@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,32 +11,31 @@ public class AIAgent : MonoBehaviour
     public AiStateId _initialState;
     public AIAgentConfig _config;
 
-    [HideInInspector] public NavMeshAgent _agent;
-    [HideInInspector] public UIHealthBar _healthBar;
-    [HideInInspector] public Ragdoll _ragdoll;
-    [HideInInspector] public Transform _player;
-    [HideInInspector] public AIWeapons _aiWeapon;
-    [HideInInspector] public MeshSockets _sockets;
+    Transform _player;
+    AIWeapons _aiWeapon;
+
+
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
+
+    public Transform GetPlayer()
+    {
+        return _player;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
-        _ragdoll = GetComponent<Ragdoll>();
-        _healthBar = GetComponentInChildren<UIHealthBar>();
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _aiWeapon = GetComponent<AIWeapons>();
-        _sockets = GetComponent<MeshSockets>();
 
         stateMachine = new AIStateMachine(this);
 
-        stateMachine.RegisterState(new AIChasePlayerState());
-        stateMachine.RegisterState(new AIDeathState());
-        stateMachine.RegisterState(new AIIdleState());
-        stateMachine.RegisterState(new AIFindWeaponState());
-        stateMachine.RegisterState(new AIAttackPlayerState());
+        stateMachine.RegisterState(new AIChasePlayerState(this));
+        stateMachine.RegisterState(new AIDeathState(this));
+        stateMachine.RegisterState(new AIIdleState(this));
+        stateMachine.RegisterState(new AIFindWeaponState(this));
+        stateMachine.RegisterState(new AIAttackPlayerState(this));
         
 
         if(_startingWeapon == null)
@@ -49,9 +49,6 @@ public class AIAgent : MonoBehaviour
             _aiWeapon.EquipWeapon(weapon);
             stateMachine.ChangeState(AiStateId.Idle);
         }
-
-
-
     }
 
     // Update is called once per frame
