@@ -24,18 +24,29 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private float _bulletSpeed = 1000.0f;
     [SerializeField] private float _bulletDrop = 0.0f;
     [SerializeField] private ParticleSystem _muzzleFlash;
-    [SerializeField] private ParticleSystem _hitEffect;
-    [SerializeField] private Transform _raycastOrigin;
+    [SerializeField] private ParticleSystem _metalHitEffect;
+    [SerializeField] private ParticleSystem _fleshHitEffect;
 
+    [SerializeField] private Transform _raycastOrigin;
+    [SerializeField] private float _damage = 10.0f;
     [SerializeField] private AnimationClip _weaponAnimation;
-    
+
+    public LayerMask _layerMask;
 
 
     [SerializeField] private TrailRenderer _tracerEffect;
 
     public WeaponRecoil _weaponRecoil;
 
-    private Transform _raycastTarget;
+    public Transform GetRaycastOrigin()
+    {
+        return _raycastOrigin;
+    }
+
+    public float GetDamage()
+    {
+        return _damage;
+    }
 
     public AnimationClip GetAnimationClip()
     {
@@ -53,11 +64,6 @@ public class RaycastWeapon : MonoBehaviour
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
-
-    public void SetRaycastTarget(Transform newTransform)
-    {
-        _raycastTarget = newTransform;
-    }
 
     Ray _ray;
     RaycastHit _hitInfo;
@@ -92,11 +98,11 @@ public class RaycastWeapon : MonoBehaviour
     }
 
 
-    private void Fire()
+    private void Fire(Vector3 target)
     {
         _muzzleFlash.Emit(1);
 
-        Vector3 velocity = (_raycastTarget.position - _raycastOrigin.position).normalized * _bulletSpeed;
+        Vector3 velocity = (target - _raycastOrigin.position).normalized * _bulletSpeed;
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
 
@@ -108,7 +114,7 @@ public class RaycastWeapon : MonoBehaviour
         _accumulatedTime = 0.0f;
         _isFiring = true;
         _weaponRecoil.Reset();
-        Fire();
+        //Fire();
     }
 
     public void StopFiring()
@@ -148,18 +154,32 @@ public class RaycastWeapon : MonoBehaviour
         _ray.origin = start;
         _ray.direction = direction;
 
-        if (Physics.Raycast(_ray, out _hitInfo, distance))
+        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
         {
-            _hitEffect.transform.position = _hitInfo.point;
-            _hitEffect.transform.parent = _hitInfo.transform;
-            _hitEffect.transform.forward = _hitInfo.normal;
-            _hitEffect.Emit(1);
-
-
             Rigidbody hitRb = _hitInfo.transform.gameObject.GetComponent<Rigidbody>();
             if (hitRb)
             {
-                hitRb.AddForceAtPosition(new Vector3(0.0f, 0.0f, 5.0f), _hitInfo.point, ForceMode.Impulse);
+                hitRb.AddForceAtPosition(_ray.direction * 20.0f, _hitInfo.point, ForceMode.Impulse);
+            }
+
+            var hitbox = _hitInfo.transform.gameObject.GetComponent<Hitbox>();
+            if(hitbox)
+            {
+                _fleshHitEffect.transform.position = _hitInfo.point;
+                _fleshHitEffect.transform.parent = _hitInfo.transform;
+                _fleshHitEffect.transform.forward = _hitInfo.normal;
+                _fleshHitEffect.Emit(1);
+
+
+                hitbox.OnRaycastHit(this, _ray.direction);
+            }
+            else
+            {
+                _metalHitEffect.transform.position = _hitInfo.point;
+                _metalHitEffect.transform.parent = _hitInfo.transform;
+                _metalHitEffect.transform.forward = _hitInfo.normal;
+                _metalHitEffect.Emit(1);
+
             }
 
             bullet._tracer.transform.position = _hitInfo.point;
@@ -171,14 +191,23 @@ public class RaycastWeapon : MonoBehaviour
         }
     }
 
-    public void UpdateFiring(float deltaTime)
+    public void UpdateWeapon(float deltaTime, Vector3 target)
     {
-        _accumulatedTime += deltaTime;
+        if(_isFiring)
+        {
+            UpdateFiring(deltaTime, target);
+        }
 
+        _accumulatedTime += deltaTime;
+        UpdateBullets(deltaTime);
+    }
+
+    public void UpdateFiring(float deltaTime, Vector3 target)
+    {
         float fireInterval = 1.0f / _fireRate;
         while(_accumulatedTime > 0.0f)
         {
-            Fire();
+            Fire(target);
             _accumulatedTime -= fireInterval;
         }
     }

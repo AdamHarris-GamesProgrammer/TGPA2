@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 318991457252226084}
   - component: {fileID: 318991457252226085}
   - component: {fileID: 318991457252226081}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: WeaponPickup_Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponPrefab: {fileID: 4409922794463935971, guid: 5e7f4c5ba4ae68d478977f4796266048, type: 3}
+  destroyPickup: 1
 --- !u!1001 &318991457089555648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,6 +121,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 1d2d5f0a598df4e4d833227a0b9dd82d, type: 3}
       propertyPath: m_Name
       value: SM_Wep_WaterPistol_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 1d2d5f0a598df4e4d833227a0b9dd82d, type: 3}
+      propertyPath: m_Layer
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 1d2d5f0a598df4e4d833227a0b9dd82d, type: 3}
+      propertyPath: m_Layer
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 1d2d5f0a598df4e4d833227a0b9dd82d, type: 3}
       propertyPath: m_RootOrder

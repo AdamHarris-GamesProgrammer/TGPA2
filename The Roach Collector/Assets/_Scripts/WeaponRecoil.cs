@@ -35,6 +35,8 @@ public class WeaponRecoil : MonoBehaviour
 
     public void GenerateRecoil()
     {
+        if (!CompareTag("Player")) return;
+
         _time = _duration;
 
         _cameraShake.GenerateImpulse(Camera.main.transform.forward);
@@ -49,6 +51,7 @@ public class WeaponRecoil : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_camera) return;
         if(_time > 0)
         {
             _camera.m_YAxis.Value -= ((_verticalRecoil/1000) * Time.deltaTime) / _duration;

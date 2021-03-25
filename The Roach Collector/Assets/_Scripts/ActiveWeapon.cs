@@ -49,7 +49,7 @@ public class ActiveWeapon : MonoBehaviour
 
             if (_weapon.IsFiring())
             {
-                _weapon.UpdateFiring(Time.deltaTime);
+                _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
             }
 
             _weapon.UpdateBullets(Time.deltaTime);
@@ -75,6 +75,16 @@ public class ActiveWeapon : MonoBehaviour
 
     }
 
+    public void DropWeapon()
+    {
+        if (_weapon)
+        {
+            _weapon.transform.SetParent(null);
+            _weapon.gameObject.GetComponent<BoxCollider>().enabled = true;
+            _weapon.gameObject.AddComponent<Rigidbody>();
+            _weapon = null;
+        }
+    }
     public void Equip(RaycastWeapon newWeapon)
     {
         if(_weapon)
@@ -86,8 +96,6 @@ public class ActiveWeapon : MonoBehaviour
 
         if (newWeapon)
         {
-            
-            _weapon.SetRaycastTarget(_crosshairTarget);
             _weapon.transform.parent = _weaponParent;
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;

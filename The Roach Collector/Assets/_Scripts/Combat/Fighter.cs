@@ -60,7 +60,7 @@ namespace TGP.Combat
 
             _currentGunGO = Instantiate(_equippedWeapon.GetGunObject(), transform);
 
-            _sockets.Attach(_currentGunGO.transform, MeshSockets.SocketId.RightShoulder);
+            _sockets.Attach(_currentGunGO.transform, MeshSockets.SocketID.RightShoulder);
         }
 
         protected void FireProjectile(Quaternion bulletRotation)

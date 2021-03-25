@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class MeshSockets : MonoBehaviour
 {
-    public enum SocketId
+    public enum SocketID
     {
         Spine,
         RightHand,
         RightShoulder
     }
 
-    Dictionary<SocketId, MeshSocket> socketMap = new Dictionary<SocketId, MeshSocket>();
+    Dictionary<SocketID, MeshSocket> socketMap = new Dictionary<SocketID, MeshSocket>();
 
     // Start is called before the first frame update
     void Awake()
@@ -20,12 +20,12 @@ public class MeshSockets : MonoBehaviour
 
         foreach(var socket in sockets)
         {
-            socketMap.Add(socket.socketType, socket);
+            socketMap.Add(socket.socketID, socket);
             
         }
     }
 
-    public void Attach(Transform objectTransform, SocketId socketId)
+    public void Attach(Transform objectTransform, SocketID socketId)
     {
         socketMap[socketId].Attach(objectTransform);
     }
