@@ -10,7 +10,7 @@ public class AIDeathState : AIState
 
     public AIDeathState(AIAgent agent)
     {
-        _healthBar = agent.GetComponent<UIHealthBar>();
+        _healthBar = agent.GetComponentInChildren<UIHealthBar>();
         _ragdoll = agent.GetComponent<Ragdoll>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
     }
