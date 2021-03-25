@@ -28,15 +28,23 @@ public class CharacterLocomotion : MonoBehaviour
 
     CharacterController _controller;
     Animator _animator;
-
+    
+   
 
     #region UNITY MESSAGES
+
+    private void Start()
+    {
+        audioController.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
+        
+    }
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
-        audioController.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
+        
     }
+
 
     void Update()
     {

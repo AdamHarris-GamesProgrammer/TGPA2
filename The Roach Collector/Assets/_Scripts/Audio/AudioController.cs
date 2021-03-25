@@ -108,6 +108,7 @@ namespace tgpAudio
         #region Private Functions
         private void Configure()
         {
+            Debug.Log("Configuring Audio Controller");
             instance = this;
             m_AudioTable = new Hashtable();
             m_JobTable = new Hashtable();
@@ -206,6 +207,7 @@ namespace tgpAudio
         {
             if (m_JobTable.ContainsKey(_type))
             {
+                Debug.Log("Remove Conflicting Jobs Call");
                 RemoveConflictingJobs(_type);
             }
 

@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using tgpAudio;
 
+
 public class AmbientSoundTrigger : MonoBehaviour
 {
     public AudioController audiocontroller;
-    string currentlyPlaying;
+    private string currentlyPlaying;
+    bool firstDoorEnter;
+
+    private void Start()
+    {
+        currentlyPlaying = "RoomOutside";
+        Debug.Log("Initial Outside Audio");
+    }
 
     void OnTriggerEnter(Collider collider)
     {
@@ -14,57 +22,100 @@ public class AmbientSoundTrigger : MonoBehaviour
         string collisionName = gameObject.name;
         Debug.Log(collisionName);
 
-       
-
-        switch (collisionName)
+        if (collisionName == "PLAY_ROOM1")
         {
+            Debug.Log("Playing ON Trigger: " + currentlyPlaying);
 
-            case "PLAY_ROOM_OUTSIDE":
-
+            if (currentlyPlaying == "Room1")
+            {
                 audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
-                Debug.Log("Playing Outside SFX");
-                break;
 
-            case "PLAY_ROOM1":
-                Debug.Log("Currently Playing: " + currentlyPlaying);
-                if (currentlyPlaying == "PLAY_ROOM1")
-                {
-                    audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
-                    Debug.Log("Playing Outside SFX");
-                    currentlyPlaying = "RoomOutside";
-                }
-                else
-                {
-                    audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
-                    Debug.Log("Playing Main room SFX");
-                    currentlyPlaying = "Room1";
-                }
+                currentlyPlaying = "RoomOutside";
+                Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+            }
+            else
+            {
+                audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
+                Debug.Log("Playing Main room SFX");
+                currentlyPlaying = "Room1";
+                Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+            }
+        }
 
-       
-                    break;
+        else if (collisionName == "PLAY_BUZZ_ROOM")
+        {
+            Debug.Log("Playing ON Trigger: " + currentlyPlaying);
 
-            case "PLAY_BUZZ_ROOM":
-                Debug.Log("Currently Playing: " + currentlyPlaying);
+            if (currentlyPlaying == "Room1")
+            {
+                audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_BUZZ, true);
+                Debug.Log("Playing Buzz room");
+                currentlyPlaying = "RoomBuzz";
+                Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+            }
+            else
+            {
+                audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
+                Debug.Log("Playing Main room SFX");
+                currentlyPlaying = "Room1";
+                Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+            }
+        }
 
-                if(currentlyPlaying == "Room1")
-                {
-                     audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_BUZZ, true);
-                    Debug.Log("Playing Buzz room");
-                    currentlyPlaying = "RoomBuzz";
-                }
-                else
-                {
-                    audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
-                    Debug.Log("Playing Main room SFX");
-                    currentlyPlaying = "Room1";
-                }
-                break;
+        //switch (collisionName)
+        //{
 
-            default:
-                break;
+        //    //case "PLAY_ROOM_OUTSIDE":
+
+        //    //    audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
+        //    //    currentlyPlaying = "RoomOutside";
+        //    //    Debug.Log("Playing Outside SFX");
+
+        //    //    break;
+
+        //    case "PLAY_ROOM1":
+        //        Debug.Log("Playing ON Trigger: " + currentlyPlaying);
+        //        if (currentlyPlaying == "Room1")
+        //        {
+        //            audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_OUTSIDE, true);
+                    
+        //            currentlyPlaying = "RoomOutside";
+        //            Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+        //        }
+        //        else
+        //        {
+        //            audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
+        //            Debug.Log("Playing Main room SFX");
+        //            currentlyPlaying = "Room1";
+        //            Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+        //        }
+
+        //            break;
+
+        //    case "PLAY_BUZZ_ROOM":
+        //        Debug.Log("Playing ON Trigger: " + currentlyPlaying);
+
+        //        if(currentlyPlaying == "Room1")
+        //        {
+        //             audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_BUZZ, true);
+        //            Debug.Log("Playing Buzz room");
+        //            currentlyPlaying = "RoomBuzz";
+        //            Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+        //        }
+        //        else
+        //        {
+        //            audiocontroller.PlayAudio(tgpAudio.AudioType.ROOM_1, true);
+        //            Debug.Log("Playing Main room SFX");
+        //            currentlyPlaying = "Room1";
+        //            Debug.Log("Playing AFTER Trigger: " + currentlyPlaying);
+        //        }
+        //        break;
+
+        //    default:
+        //        break;
 
            
-        }
+        //}
 
 
     }
