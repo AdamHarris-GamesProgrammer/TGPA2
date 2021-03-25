@@ -23,7 +23,7 @@ public class AILocomotion : MonoBehaviour
         _animator.SetFloat("movementSpeed", _agent.velocity.magnitude);
     }
 
-    void MoveTo(Vector3 pos)
+    public void MoveTo(Vector3 pos)
     {
         _agent.destination = pos;
     }
