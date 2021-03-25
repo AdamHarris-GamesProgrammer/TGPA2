@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-using TGP.Resources;
-
 namespace TGP.Movement
 {
     public class Mover : MonoBehaviour

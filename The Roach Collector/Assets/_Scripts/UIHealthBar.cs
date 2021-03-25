@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class UIHealthBar : MonoBehaviour
 {
-    public Transform _target;
-    public Vector3 _offset;
-    public Image _foregroundImage;
-    public Image _backgroundImage;
+    [SerializeField] private Transform _target;
+    [SerializeField] private Vector3 _offset;
+    [SerializeField] private Image _foregroundImage;
+    [SerializeField] private Image _backgroundImage;
 
 
     private void LateUpdate()

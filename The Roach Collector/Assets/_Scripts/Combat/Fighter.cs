@@ -67,7 +67,6 @@ namespace TGP.Combat
         {
             _timer = 0.0f;
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnLocation.position, bulletRotation);
-            bullet.GetComponent<Projectile>().SetDamage(_equippedWeapon.GetDamage());
 
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb)

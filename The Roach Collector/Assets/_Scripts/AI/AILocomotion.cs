@@ -23,6 +23,11 @@ public class AILocomotion : MonoBehaviour
         _animator.SetFloat("movementSpeed", _agent.velocity.magnitude);
     }
 
+    void MoveTo(Vector3 pos)
+    {
+        _agent.destination = pos;
+    }
+
     public void DisableNavAgent()
     {
         _agent.enabled = false;

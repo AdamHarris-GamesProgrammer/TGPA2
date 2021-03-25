@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using TGP.Combat;
-using TGP.Resources;
 
 namespace TGP.Control
 {
