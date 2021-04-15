@@ -42,7 +42,6 @@ public class Health : MonoBehaviour
         {
             _isDead = true;
             _OnDie.Invoke();
-            _ragDoll.ActivateRagdoll();
         }
 
         OnDamage();
