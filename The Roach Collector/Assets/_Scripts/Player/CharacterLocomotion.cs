@@ -24,19 +24,24 @@ public class CharacterLocomotion : MonoBehaviour
     Vector3 _velocity;
     Vector3 _rootMotion;
 
+
+
     CharacterController _controller;
     Animator _animator;
-
+    PlayerHealth _health;
 
     #region UNITY MESSAGES
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
+        _health = GetComponent<PlayerHealth>();
     }
 
     void Update()
     {
+        if (_health.IsDead()) return;
+
         //Disables crouching if we are crouching enables crouching if I am standing
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -71,6 +76,8 @@ public class CharacterLocomotion : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (_health.IsDead()) return;
+
         if (_isJumping) //In Air state
         {
             UpdateInAir();
@@ -85,12 +92,15 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void OnAnimatorMove()
     {
+        if (_health.IsDead()) return;
+
         //Accumulates our root motion this frame
         _rootMotion += _animator.deltaPosition;
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if (_health.IsDead()) return;
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody

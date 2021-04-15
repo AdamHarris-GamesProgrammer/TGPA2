@@ -11,6 +11,12 @@ public class UIHealthBar : MonoBehaviour
     [SerializeField] private Image _backgroundImage;
 
 
+    private void Start()
+    {
+        _foregroundImage.gameObject.SetActive(true);
+        _backgroundImage.gameObject.SetActive(true);
+    }
+
     private void LateUpdate()
     {
         Vector3 direction = (_target.position - Camera.main.transform.position).normalized;

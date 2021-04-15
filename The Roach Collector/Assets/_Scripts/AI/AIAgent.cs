@@ -50,6 +50,7 @@ public class AIAgent : MonoBehaviour
             _aiWeapon.EquipWeapon(weapon);
             stateMachine.ChangeState(AiStateId.Idle);
         }
+
     }
 
     // Update is called once per frame
