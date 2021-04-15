@@ -52,5 +52,10 @@ public class AIChasePlayerState : AIState
             }
             _timer = agent._config._maxTime;
         }
+
+        if(Vector3.Distance(_player.position, _agent.transform.position) < agent._config._attackDistance)
+        {
+            agent.stateMachine.ChangeState(AiStateId.AttackPlayer);
+        }
     }
 }

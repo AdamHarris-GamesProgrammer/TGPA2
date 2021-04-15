@@ -46,6 +46,11 @@ public class AIAttackPlayerState : AIState
         {
             agent.stateMachine.ChangeState(AiStateId.Idle);
         }
+
+        if(Vector3.Distance(_agent.transform.position, _player.position) > agent._config._attackDistance)
+        {
+            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+        }
     }
 
 }
