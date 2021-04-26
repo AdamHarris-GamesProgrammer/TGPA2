@@ -27,6 +27,8 @@ public class AICombatState : AIState
 
     public void Update(AIAgent agent)
     {
+        _enemiesInRange.Clear();
+
 
         int scoreFromCover = CoverEvaluator(agent);
         int scoreFromAdvance = AdvanceEvaluator(agent);
@@ -34,6 +36,8 @@ public class AICombatState : AIState
         int scoreFromSetAlarm = SetAlarmEvaluator(agent);
         int scoreFromRetreat = RetreatEvaluator(agent);
         int scoreFromBackup = BackupEvaluator(agent);
+
+        Debug.Log("Scores:\nCover: " + scoreFromCover + "\nAdvance: " + scoreFromAdvance + "\nReload: " + scoreFromReload + "\nSet Alarm: " + scoreFromSetAlarm + "\nRetreat: " + scoreFromRetreat + "\nBackup: " + scoreFromBackup);
 
         //Debug.Log("Health Ratio: " + _aiHealth.GetHealthRatio());
         //TODO: Switch this to a much better system using BehaviourSnippets, this will do for now
@@ -43,17 +47,16 @@ public class AICombatState : AIState
             scoreFromCover > scoreFromRetreat &&
             scoreFromCover > scoreFromBackup)
         {
-            //Debug.Log("Cover Action");
-
+            Debug.Log("Cover Action");
             CoverAction(agent);
         }
         else if (scoreFromAdvance > scoreFromCover &&
             scoreFromAdvance > scoreFromReload &&
             scoreFromAdvance > scoreFromSetAlarm &&
             scoreFromAdvance > scoreFromRetreat &&
-            scoreFromCover > scoreFromBackup)
+            scoreFromAdvance > scoreFromBackup)
         {
-            //Debug.Log("Advance Action");
+            Debug.Log("Advance Action");
             AdvanceAction(agent);
         }
         else if(scoreFromReload > scoreFromCover &&
@@ -62,6 +65,7 @@ public class AICombatState : AIState
             scoreFromReload > scoreFromRetreat &&
             scoreFromReload > scoreFromBackup)
         {
+            Debug.Log("Reload Action");
             ReloadAction(agent);
         }
         else if(scoreFromSetAlarm > scoreFromCover &&
@@ -70,6 +74,7 @@ public class AICombatState : AIState
             scoreFromSetAlarm > scoreFromRetreat &&
             scoreFromSetAlarm > scoreFromBackup)
         {
+            Debug.Log("Set Alarm Action");
             SetAlarmAction(agent);
         }
         else if(scoreFromRetreat > scoreFromCover &&
@@ -78,6 +83,7 @@ public class AICombatState : AIState
             scoreFromRetreat > scoreFromSetAlarm &&
             scoreFromRetreat > scoreFromBackup)
         {
+            Debug.Log("Call for backup Action");
             RetreatAction(agent);
         }
         else if(scoreFromBackup > scoreFromCover &&
@@ -132,8 +138,6 @@ public class AICombatState : AIState
             returnScore = 100;
         }
 
-        //Debug.Log("Cover evaluator returning: " + returnScore);
-
         return returnScore;
     }
 
@@ -147,8 +151,6 @@ public class AICombatState : AIState
         {
             returnScore = 100;
         }
-
-        //Debug.Log("Advance evaluator returning: " + returnScore);
 
         return returnScore;
     }
