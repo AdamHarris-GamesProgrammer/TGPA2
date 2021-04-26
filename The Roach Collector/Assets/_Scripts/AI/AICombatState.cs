@@ -11,11 +11,18 @@ public class AICombatState : AIState
     Health _aiHealth;
     AIWeapons _aiWeapon;
 
+
+    GameObject[] _enemiesInScene;
+    List<AIAgent> _enemiesInRange;
+
     public AICombatState(AIAgent agent)
     {
         _agent = agent.GetComponent<NavMeshAgent>();
         _aiHealth = agent.GetComponent<Health>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
+
+        _enemiesInScene = GameObject.FindGameObjectsWithTag("Enemy");
+        _enemiesInRange = new List<AIAgent>();
     }
 
     public void Update(AIAgent agent)
@@ -170,31 +177,59 @@ public class AICombatState : AIState
     {
         int returnScore = 0;
 
+        bool shouldRetreat = (UnityEngine.Random.Range(0.0f, 1.0f) < agent._config._retreatChance);
+
+        //We will retreat if our health ratio is less than 0.1f and we pass the retreat check
+        if(_aiHealth.GetHealthRatio() < 0.1f && shouldRetreat)
+        {
+            //Until I figure out how to build a retreat the ai will just never succeed the retreat check
+            //returnScore = 110;
+        }
 
         return returnScore;
     }
 
     private void RetreatAction(AIAgent agent)
     {
-        
+        //TODO: Research retreat systems
+
+        Vector3 desiredVelocity = Vector3.Normalize(agent.transform.position - agent.GetPlayer().position) * 15.0f;
     }
 
     private int BackupEvaluator(AIAgent agent)
     {
         int returnScore = 0;
 
+        foreach(GameObject enemy in _enemiesInScene)
+        {
+            if(Vector3.Distance(agent.transform.position, enemy.transform.position) < 25.0f)
+            {
+                //Added the enemy
+                _enemiesInRange.Add(enemy.GetComponent<AIAgent>());
+            }
+        }
+
+        if (_enemiesInRange.Count > 3) 
+        {
+            return 100;
+        }
 
         return returnScore;
     }
 
     private void BackupAction(AIAgent agent)
     {
-
+        foreach(AIAgent enemy in _enemiesInRange)
+        {
+            //TOOD: Implement aggro method on the agents.
+        }
     }
 
     private int SetAlarmEvaluator(AIAgent agent)
     {
         int returnScore = 0;
+
+        //TODO Implement an alarm 
 
 
         return returnScore;
@@ -209,6 +244,8 @@ public class AICombatState : AIState
     private int ReloadEvaluator(AIAgent agent)
     {
         int returnScore = 0;
+
+        //Implement the concept of ammo usage
 
 
         return returnScore;
