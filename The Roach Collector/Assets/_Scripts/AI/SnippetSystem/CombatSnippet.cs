@@ -11,4 +11,6 @@ public interface CombatSnippet
     public void Action(AIAgent agent);
 
     public bool IsFinished();
+
+    public void EnterSnippet();
 }

@@ -13,6 +13,11 @@ public class CallForBackupSnippet : CombatSnippet
 
     }
 
+    public void EnterSnippet()
+    {
+
+    }
+
     public int Evaluate(AIAgent agent)
     {
         int returnScore = 0;

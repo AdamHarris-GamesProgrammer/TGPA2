@@ -27,6 +27,8 @@ public class AICombatState : AIState
         {
             int highestScore = 0;
 
+            CombatSnippet newSnippet = null;
+
             foreach (CombatSnippet behavior in _combatBehaviours)
             {
                 int score = behavior.Evaluate(agent);
@@ -35,14 +37,22 @@ public class AICombatState : AIState
                 if (score > highestScore)
                 {
                     highestScore = score;
-                    _currentSnippet = behavior;
+                    newSnippet = behavior;
                 }
             }
+
+            SwitchSnippets(newSnippet);
         }
         else
         {
             _currentSnippet.Action(agent);
         }
+    }
+
+    private void SwitchSnippets(CombatSnippet newSnippet)
+    {
+        _currentSnippet = newSnippet;
+        _currentSnippet.EnterSnippet();
     }
 
     private void RegisterSnippet(AIAgent agent, CombatSnippet snippet)
@@ -58,8 +68,6 @@ public class AICombatState : AIState
 
     public void Enter(AIAgent agent)
     {
-        Debug.Log("Entering Combat state");
-
         //Decide starting snippet
         int highestScore = 0;
         foreach (CombatSnippet behavior in _combatBehaviours)
@@ -77,6 +85,6 @@ public class AICombatState : AIState
 
     public void Exit(AIAgent agent)
     {
-        Debug.Log("Exiting Combat state");
+
     }
 }

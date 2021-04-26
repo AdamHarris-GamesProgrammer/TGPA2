@@ -9,6 +9,11 @@ public class ReloadSnippet : CombatSnippet
 
     }
 
+    public void EnterSnippet()
+    {
+
+    }
+
     public int Evaluate(AIAgent agent)
     {
         int returnScore = 0;
