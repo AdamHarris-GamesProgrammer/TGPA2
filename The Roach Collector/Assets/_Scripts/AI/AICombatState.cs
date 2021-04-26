@@ -148,7 +148,7 @@ public class AICombatState : AIState
             returnScore = 100;
         }
 
-        Debug.Log("Advance evaluator returning: " + returnScore);
+        //Debug.Log("Advance evaluator returning: " + returnScore);
 
         return returnScore;
     }
