@@ -213,7 +213,7 @@ public class AICombatState : AIState
 
         if (_enemiesInRange.Count > 3) 
         {
-            return 100;
+            return 30;
         }
 
         return returnScore;

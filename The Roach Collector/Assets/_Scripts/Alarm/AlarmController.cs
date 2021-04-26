@@ -40,7 +40,7 @@ public class AlarmController : MonoBehaviour
         }
         else if(other.CompareTag("Enemy"))
         {
-
+            //TODO: Send signal to Enemies that they can signal the alarm or that they can fix the alarm
         }
 
 
