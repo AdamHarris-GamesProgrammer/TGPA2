@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class AICombatState : AIState
 {
     NavMeshAgent _agent;
-    bool _inCover = false;
 
     Health _aiHealth;
     AIWeapons _aiWeapon;
@@ -24,28 +23,63 @@ public class AICombatState : AIState
 
         int scoreFromCover = CoverEvaluator(agent);
         int scoreFromAdvance = AdvanceEvaluator(agent);
-        int scoreFromReload = 0;
-        int scoreFromSetAlarm = 0;
-        int scoreFromRetreat = 0;
+        int scoreFromReload = ReloadEvaluator(agent);
+        int scoreFromSetAlarm = SetAlarmEvaluator(agent);
+        int scoreFromRetreat = RetreatEvaluator(agent);
+        int scoreFromBackup = BackupEvaluator(agent);
 
-        Debug.Log("Health Ratio: " + _aiHealth.GetHealthRatio());
-
+        //Debug.Log("Health Ratio: " + _aiHealth.GetHealthRatio());
+        //TODO: Switch this to a much better system using BehaviourSnippets, this will do for now
         if (scoreFromCover > scoreFromAdvance &&
             scoreFromCover > scoreFromReload &&
             scoreFromCover > scoreFromSetAlarm &&
-            scoreFromCover > scoreFromRetreat)
+            scoreFromCover > scoreFromRetreat &&
+            scoreFromCover > scoreFromBackup)
         {
-            Debug.Log("Cover Action");
+            //Debug.Log("Cover Action");
 
             CoverAction(agent);
         }
         else if (scoreFromAdvance > scoreFromCover &&
             scoreFromAdvance > scoreFromReload &&
             scoreFromAdvance > scoreFromSetAlarm &&
-            scoreFromAdvance > scoreFromRetreat)
+            scoreFromAdvance > scoreFromRetreat &&
+            scoreFromCover > scoreFromBackup)
         {
-            Debug.Log("Advance Action");
+            //Debug.Log("Advance Action");
             AdvanceAction(agent);
+        }
+        else if(scoreFromReload > scoreFromCover &&
+            scoreFromReload > scoreFromAdvance &&
+            scoreFromReload > scoreFromSetAlarm &&
+            scoreFromReload > scoreFromRetreat &&
+            scoreFromReload > scoreFromBackup)
+        {
+            ReloadAction(agent);
+        }
+        else if(scoreFromSetAlarm > scoreFromCover &&
+            scoreFromSetAlarm > scoreFromAdvance &&
+            scoreFromSetAlarm > scoreFromReload &&
+            scoreFromSetAlarm > scoreFromRetreat &&
+            scoreFromSetAlarm > scoreFromBackup)
+        {
+            SetAlarmAction(agent);
+        }
+        else if(scoreFromRetreat > scoreFromCover &&
+            scoreFromRetreat > scoreFromAdvance &&
+            scoreFromRetreat > scoreFromReload &&
+            scoreFromRetreat > scoreFromSetAlarm &&
+            scoreFromRetreat > scoreFromBackup)
+        {
+            RetreatAction(agent);
+        }
+        else if(scoreFromBackup > scoreFromCover &&
+            scoreFromBackup > scoreFromAdvance &&
+            scoreFromBackup > scoreFromSetAlarm && 
+            scoreFromBackup > scoreFromReload && 
+            scoreFromBackup > scoreFromRetreat)
+        {
+            BackupAction(agent);
         }
         
     }
@@ -91,7 +125,7 @@ public class AICombatState : AIState
             returnScore = 100;
         }
 
-        Debug.Log("Cover evaluator returning: " + returnScore);
+        //Debug.Log("Cover evaluator returning: " + returnScore);
 
         return returnScore;
     }
@@ -130,6 +164,59 @@ public class AICombatState : AIState
         {
             _aiWeapon.SetFiring(false);
         }
+    }
+
+    private int RetreatEvaluator(AIAgent agent)
+    {
+        int returnScore = 0;
+
+
+        return returnScore;
+    }
+
+    private void RetreatAction(AIAgent agent)
+    {
+        
+    }
+
+    private int BackupEvaluator(AIAgent agent)
+    {
+        int returnScore = 0;
+
+
+        return returnScore;
+    }
+
+    private void BackupAction(AIAgent agent)
+    {
+
+    }
+
+    private int SetAlarmEvaluator(AIAgent agent)
+    {
+        int returnScore = 0;
+
+
+        return returnScore;
+
+    }
+
+    private void SetAlarmAction(AIAgent agent)
+    {
+
+    }
+
+    private int ReloadEvaluator(AIAgent agent)
+    {
+        int returnScore = 0;
+
+
+        return returnScore;
+    }
+
+    private void ReloadAction(AIAgent agent)
+    {
+
     }
 
     public AiStateId GetID()
