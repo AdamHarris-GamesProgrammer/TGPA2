@@ -72,4 +72,11 @@ public class AIAgent : MonoBehaviour
     {
         stateMachine.Update();
     }
+
+    public void Aggrevate()
+    {
+        if (_aiHealth.IsDead()) return;
+
+        stateMachine.ChangeState(AiStateId.CombatState);
+    }
 }

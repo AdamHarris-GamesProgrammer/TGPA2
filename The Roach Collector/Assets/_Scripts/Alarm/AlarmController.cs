@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AlarmController : MonoBehaviour
 {
-    List<AlarmController> _alarmsInScene;
+    AlarmController[] _alarmsInScene;
 
     bool _isDisabled = false;
     bool _isActivated = false;
@@ -14,10 +14,12 @@ public class AlarmController : MonoBehaviour
     [SerializeField] Material _standbyMaterial;
     [SerializeField] Material _activatedMaterial;
 
+
+
     // Start is called before the first frame update
     void Awake()
     {
-        
+        _alarmsInScene = FindObjectsOfType<AlarmController>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -42,6 +44,14 @@ public class AlarmController : MonoBehaviour
         }
 
 
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            EnableAlarm();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -99,5 +109,10 @@ public class AlarmController : MonoBehaviour
     {
         _isActivated = true;
         GetComponent<MeshRenderer>().material = _activatedMaterial;
+
+        foreach(AIAgent enemy in GameObject.FindObjectsOfType<AIAgent>())
+        {
+            enemy.Aggrevate();
+        }
     }
 }
