@@ -14,13 +14,24 @@ public class AIAgent : MonoBehaviour
     Transform _player;
     AIWeapons _aiWeapon;
 
+    Health _aiHealth;
 
+
+    public Health GetHealth()
+    {
+        return _aiHealth;
+    }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
 
     public Transform GetPlayer()
     {
         return _player;
+    }
+
+    private void Awake()
+    {
+        _aiHealth = GetComponent<Health>();
     }
 
     // Start is called before the first frame update
@@ -30,17 +41,18 @@ public class AIAgent : MonoBehaviour
         
 
         stateMachine = new AIStateMachine(this);
-
         stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AIAttackPlayerState(this));
+        stateMachine.RegisterState(new AICombatState(this));
         
 
         if(_startingWeapon == null)
         {
-            stateMachine.ChangeState(AiStateId.FindWeapon);
+            //TODO: Decide on finding weapon state
+            //stateMachine.ChangeState(AiStateId.FindWeapon);
         }
         else
         {
@@ -48,8 +60,10 @@ public class AIAgent : MonoBehaviour
 
             _aiWeapon = GetComponent<AIWeapons>();
             _aiWeapon.EquipWeapon(weapon);
-            stateMachine.ChangeState(AiStateId.Idle);
+            //stateMachine.ChangeState(AiStateId.Idle);
         }
+
+        stateMachine.ChangeState(_initialState);
 
     }
 
