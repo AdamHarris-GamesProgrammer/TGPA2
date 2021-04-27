@@ -76,6 +76,7 @@ public class CoverSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
+        Debug.Log("Cover Snippet");
         _hasFoundCover = false;
     }
 

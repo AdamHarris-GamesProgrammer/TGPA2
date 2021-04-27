@@ -14,12 +14,26 @@ public class AlarmController : MonoBehaviour
     [SerializeField] Material _standbyMaterial;
     [SerializeField] Material _activatedMaterial;
 
+    Transform _activationPoint;
 
+    public Transform ActivationPoint
+    {
+        get
+        {
+            return _activationPoint;
+        }
+    }
+
+    static bool _isSet = false;
+    public bool IsSet { get { return _isSet; } }
+
+    public bool IsDisabled { get { return _isDisabled; } set { _isDisabled = value; } }
 
     // Start is called before the first frame update
     void Awake()
     {
         _alarmsInScene = FindObjectsOfType<AlarmController>();
+        _activationPoint = transform.GetChild(0);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -40,6 +54,8 @@ public class AlarmController : MonoBehaviour
         }
         else if(other.CompareTag("Enemy"))
         {
+            other.GetComponent<AIAgent>().CanActivateAlarm = true;
+
             //TODO: Send signal to Enemies that they can signal the alarm or that they can fix the alarm
         }
 
@@ -69,7 +85,7 @@ public class AlarmController : MonoBehaviour
         }
         else if (other.CompareTag("Enemy"))
         {
-            
+            other.GetComponent<AIAgent>().CanActivateAlarm = false;
         }
     }
 
@@ -96,13 +112,15 @@ public class AlarmController : MonoBehaviour
         //activate all alarms
     }
 
-    public void ActivateAlarm()
+    public bool ActivateAlarm()
     {
         //If the alarm is not disabled, then enable the alarm
         if(!_isDisabled)
         {
             ActivationBehaviour();
+            return true;
         }
+        return false;
     }
 
     private void ActivationBehaviour()
@@ -114,5 +132,7 @@ public class AlarmController : MonoBehaviour
         {
             enemy.Aggrevate();
         }
+
+        _isSet = true;
     }
 }

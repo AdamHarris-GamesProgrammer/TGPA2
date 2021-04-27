@@ -11,7 +11,7 @@ public class ReloadSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-
+        Debug.Log("Reload Snippet");
     }
 
     public int Evaluate(AIAgent agent)

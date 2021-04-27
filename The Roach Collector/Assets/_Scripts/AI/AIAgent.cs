@@ -16,6 +16,10 @@ public class AIAgent : MonoBehaviour
 
     Health _aiHealth;
 
+    bool _canActivateAlarm = false;
+
+    public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
+
 
     public Health GetHealth()
     {

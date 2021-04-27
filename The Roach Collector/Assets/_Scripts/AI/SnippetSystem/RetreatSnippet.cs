@@ -13,7 +13,7 @@ public class RetreatSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-
+        Debug.Log("Retreat Snippet");
     }
 
     public int Evaluate(AIAgent agent)

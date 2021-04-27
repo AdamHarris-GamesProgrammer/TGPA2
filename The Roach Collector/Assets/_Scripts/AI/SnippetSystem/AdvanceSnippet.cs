@@ -9,8 +9,13 @@ public class AdvanceSnippet : CombatSnippet
     AIWeapons _aiWeapon;
     AIHealth _aiHealth;
 
+    float _duration = 1.5f;
+    float _timer = 0.0f;
+
     public void Action(AIAgent agent)
     {
+        _timer += Time.deltaTime;
+
         Vector3 playerPos = agent.GetPlayer().position;
 
         _agent.stoppingDistance = 10.0f;
@@ -31,7 +36,11 @@ public class AdvanceSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
+        Debug.Log("Advance Snippet");
 
+        _timer = 0.0f;
+
+        _agent.stoppingDistance = 10.0f;
     }
 
     public int Evaluate(AIAgent agent)
@@ -42,7 +51,7 @@ public class AdvanceSnippet : CombatSnippet
 
         if (healthRatio > 0.5f)
         {
-            returnScore = 100;
+            returnScore = 20;
         }
 
         return returnScore;
@@ -57,7 +66,8 @@ public class AdvanceSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        return (_aiHealth.GetHealthRatio() < 0.5f);
+        //Checks if the enemy is low on health or if the state duration is up
+        return (_aiHealth.GetHealthRatio() < 0.5f || _timer >= _duration);
 
     }
 }

@@ -15,7 +15,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-
+        Debug.Log("Backup Snippet");
     }
 
     public int Evaluate(AIAgent agent)
@@ -33,7 +33,8 @@ public class CallForBackupSnippet : CombatSnippet
 
         if (_enemiesInRange.Count > 3)
         {
-            return 30;
+            //TODO: Implement backup action
+            return 0;
         }
 
         return returnScore;
