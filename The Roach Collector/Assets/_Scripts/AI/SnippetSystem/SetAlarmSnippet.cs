@@ -79,7 +79,7 @@ public class SetAlarmSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        Debug.Log("Alarm Snippet");
+        //Debug.Log("Alarm Snippet");
 
         _isFinished = false;
         _isTrying = false;

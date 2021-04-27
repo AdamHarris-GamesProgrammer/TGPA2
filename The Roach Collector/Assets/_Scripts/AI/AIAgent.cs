@@ -17,9 +17,11 @@ public class AIAgent : MonoBehaviour
     Health _aiHealth;
 
     bool _canActivateAlarm = false;
+    bool _isAggrevated = false;
+
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
-
+    public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
 
     public Health GetHealth()
     {
@@ -68,6 +70,10 @@ public class AIAgent : MonoBehaviour
         }
 
         stateMachine.ChangeState(_initialState);
+        if(_initialState == AiStateId.CombatState)
+        {
+            Aggrevate();
+        }
 
     }
 
@@ -80,7 +86,7 @@ public class AIAgent : MonoBehaviour
     public void Aggrevate()
     {
         if (_aiHealth.IsDead()) return;
-
+        _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
     }
 }

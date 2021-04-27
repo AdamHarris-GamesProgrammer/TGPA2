@@ -7,10 +7,21 @@ public class CallForBackupSnippet : CombatSnippet
     GameObject[] _enemiesInScene;
     List<AIAgent> _enemiesInRange;
 
+    bool _hasBackup = false;
+
     public void Action(AIAgent agent)
     {
-        _enemiesInRange.Clear();
+        //_enemiesInRange.Clear();
 
+
+        Debug.Log("Backup Action");
+        foreach(AIAgent enemy in _enemiesInRange)
+        {
+            Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
+            enemy.Aggrevate();
+            
+        }
+        _hasBackup = true;
     }
 
     public void EnterSnippet()
@@ -20,21 +31,25 @@ public class CallForBackupSnippet : CombatSnippet
 
     public int Evaluate(AIAgent agent)
     {
+        if (_hasBackup) return 0;
+
         int returnScore = 0;
 
         foreach (GameObject enemy in _enemiesInScene)
         {
             if (Vector3.Distance(agent.transform.position, enemy.transform.position) < 25.0f)
             {
-                //Added the enemy
+                //Check if this enemy is dead or not 
+                if (enemy.GetComponent<AIAgent>().GetHealth().IsDead() || enemy.GetComponent<AIAgent>().Aggrevated) continue;
+
+                Debug.Log(agent.transform.name + " is adding enemy to range list");
                 _enemiesInRange.Add(enemy.GetComponent<AIAgent>());
             }
         }
 
         if (_enemiesInRange.Count > 3)
         {
-            //TODO: Implement backup action
-            return 0;
+            return 80;
         }
 
         return returnScore;
@@ -48,7 +63,6 @@ public class CallForBackupSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        //TODO: Implement behaviored
-        return true;
+        return _hasBackup;
     }
 }
