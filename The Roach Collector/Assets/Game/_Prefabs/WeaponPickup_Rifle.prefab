@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8304411103233315815}
   - component: {fileID: 8304411103233315816}
   - component: {fileID: 8304411103233315812}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: WeaponPickup_Rifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponPrefab: {fileID: 3231021131240279632, guid: 18eb28a483c4b5a40bdf4e7844c15e8f, type: 3}
+  destroyPickup: 1
 --- !u!1001 &8304411103415127607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120,6 +121,22 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Watergun_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
+      propertyPath: m_Layer
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
+      propertyPath: m_Layer
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
+      propertyPath: m_Layer
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
+      propertyPath: m_Layer
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 27d85ed0b41b13e4b931011bd61b932b, type: 3}
       propertyPath: m_RootOrder
