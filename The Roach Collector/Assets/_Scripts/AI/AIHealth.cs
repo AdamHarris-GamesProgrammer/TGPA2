@@ -21,5 +21,8 @@ public class AIHealth : Health
     protected override void OnDamage()
     {
         _healthBar.SetHealthBarPercentage(_currentHealth / _maxHealth);
+
+        //Aggrevate Enemies on hit.
+        _aiAgent.Aggrevate();
     }
 }

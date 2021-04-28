@@ -14,6 +14,8 @@ namespace TGP.Control
 
         public AlarmController Alarm { set { _alarm = value; } }
 
+
+
         private void Awake()
         {
         }
