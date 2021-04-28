@@ -21,6 +21,8 @@ public class RaycastWeapon : MonoBehaviour
 
     private bool _isFiring = false;
     [SerializeField] private int _fireRate = 25;
+    [SerializeField] private float _weaponSpread = 0;
+    [SerializeField] private int _bulletCount = 1;
     [SerializeField] private float _bulletSpeed = 1000.0f;
     [SerializeField] private float _bulletDrop = 0.0f;
     [SerializeField] private ParticleSystem _muzzleFlash;
@@ -210,7 +212,10 @@ public class RaycastWeapon : MonoBehaviour
         float fireInterval = 1.0f / _fireRate;
         while(_accumulatedTime > 0.0f)
         {
-            Fire(target);
+            for(int i = 0; i < _bulletCount; ++i) {
+                Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
+            }
+            
             _accumulatedTime -= fireInterval;
         }
     }
