@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 
 public class AIAgent : MonoBehaviour
@@ -23,6 +24,9 @@ public class AIAgent : MonoBehaviour
     bool _canActivateAlarm = false;
     bool _isAggrevated = false;
 
+    List<AIAgent> _agentsInScene;
+    List<AlarmController> _alarmsInScene;
+    List<CoverController> _coversInScene;
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
@@ -43,6 +47,12 @@ public class AIAgent : MonoBehaviour
     {
         _aiHealth = GetComponent<Health>();
         _audioSource = GetComponent<AudioSource>();
+
+        _agentsInScene = new List<AIAgent>();
+        _alarmsInScene = new List<AlarmController>();
+
+        _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
+        _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
     }
 
     // Start is called before the first frame update
@@ -98,5 +108,68 @@ public class AIAgent : MonoBehaviour
     {
         Debug.Log("Play Alarm Prompt");
         _audioSource.PlayOneShot(_alarmPrompt);
+    }
+
+    public List<AlarmController> GetAlarmsInRange(float distance)
+    {
+        List<AlarmController> alarmsInDistance = new List<AlarmController>();
+
+        foreach (AlarmController alarm in _alarmsInScene)
+        {
+            if (Vector3.Distance(transform.position, alarm.transform.position) < distance)
+            {
+                alarmsInDistance.Add(alarm);
+            }
+        }
+
+        return alarmsInDistance;
+    }
+
+    public List<AIAgent> GetEnemiesInRange(float distance, bool includeDead = false)
+    {
+        List<AIAgent> agentsInDistance = new List<AIAgent>();
+
+        if(includeDead)
+        {
+            foreach (AIAgent enemy in _agentsInScene)
+            {
+                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
+                {
+                    agentsInDistance.Add(enemy);
+                }
+            }
+        }
+        else
+        {
+            foreach (AIAgent enemy in _agentsInScene)
+            {
+                //Don't add the enemy if the there dead
+                if (enemy.GetHealth().IsDead()) continue;
+
+                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
+                {
+                    agentsInDistance.Add(enemy);
+                }
+            }
+        }
+
+
+
+        return agentsInDistance;
+    }
+
+    public List<CoverController> GetCoversInRange(float distance)
+    {
+        List<CoverController> coversInDistance = new List<CoverController>();
+
+        foreach(CoverController cover in _coversInScene)
+        {
+            if(Vector3.Distance(transform.position, cover.transform.position) < distance)
+            {
+                coversInDistance.Add(cover);
+            }
+        }
+
+        return coversInDistance;
     }
 }

@@ -10,7 +10,6 @@ public class SetAlarmSnippet : CombatSnippet
     AlarmController _closestAlarm;
 
     List<AIAgent> _enemiesInUsableRange;
-    AIAgent[] _enemiesInScene;
 
     NavMeshAgent _navAgent;
 
@@ -106,8 +105,8 @@ public class SetAlarmSnippet : CombatSnippet
         if (_alarmsInScene[0].IsSet) return 0;
         if (!_alarmsLeft) return 0;
 
-        TestAlarmsInUsableRange();
-        TestEnemiesInUsableRange();
+        _alarmsInUsableRange = _agent.GetAlarmsInRange(_agent._config._alarmUsableRange);
+        _enemiesInUsableRange = _agent.GetEnemiesInRange(_agent._config._alarmUsableEnemyRange);
 
         //No alarms in usable range
         if (_alarmsInUsableRange.Count == 0) return 0;
@@ -126,7 +125,6 @@ public class SetAlarmSnippet : CombatSnippet
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>();
         _alarmsInUsableRange = new List<AlarmController>();
 
-        _enemiesInScene = GameObject.FindObjectsOfType<AIAgent>();
         _enemiesInUsableRange = new List<AIAgent>();
 
         _closestAlarm = null;
@@ -154,38 +152,6 @@ public class SetAlarmSnippet : CombatSnippet
         }
 
         _navAgent = agent.GetComponent<NavMeshAgent>();
-    }
-
-    void TestAlarmsInUsableRange()
-    {
-        _alarmsInUsableRange.Clear();
-
-        foreach(AlarmController alarm in _alarmsInScene)
-        {
-            //Finds the alarms which are in the AIs range
-            if(Vector3.Distance(_agent.transform.position, alarm.transform.position) < _agent._config._alarmUsableRange)
-            {
-                _alarmsInUsableRange.Add(alarm);
-            }
-        }
-    }
-
-    void TestEnemiesInUsableRange()
-    {
-        _enemiesInUsableRange.Clear();
-
-        //Cycle through each enemy in the scene and see if any are in a usable range. 
-        foreach(AIAgent enemy in _enemiesInScene)
-        {
-            //Any dead enemies won't get added
-            if (enemy.GetHealth().IsDead()) continue;
-
-            if(Vector3.Distance(_agent.transform.position, enemy.transform.position) < _agent._config._alarmUsableEnemyRange) {
-                //Add any enemies that are in usable range to this list
-                _enemiesInUsableRange.Add(enemy);
-            }
-        }
-
     }
 
     public bool IsFinished()
