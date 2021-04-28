@@ -21,6 +21,8 @@ public class SetAlarmSnippet : CombatSnippet
 
     bool _isFinished = false;
 
+    bool _alarmsLeft = true;
+
     AlarmController _currentAlarm;
 
     public void Action(AIAgent agent)
@@ -33,11 +35,23 @@ public class SetAlarmSnippet : CombatSnippet
 
             if (_agent.remainingDistance <= 1.5f)
             {
+                _isTrying = false;
                 if (_currentAlarm.IsDisabled)
                 {
-                    _isTrying = false;
                     //Removes the front of the element
+                    Debug.Log("Alarms in usable range before deletion: ");
+                    foreach(AlarmController alarm in _alarmsInUsableRange)
+                    {
+                        Debug.Log("Alarm Name: " + alarm.gameObject.name);
+                    }
+
                     _alarmsInUsableRange.RemoveAt(0);
+
+                    Debug.Log("Alarms in usable range after deletion: ");
+                    foreach (AlarmController alarm in _alarmsInUsableRange)
+                    {
+                        Debug.Log("Alarm Name: " + alarm.gameObject.name);
+                    }
                 }
                 else
                 {
@@ -49,10 +63,6 @@ public class SetAlarmSnippet : CombatSnippet
                         {
                             _isFinished = true;
                         }
-                        else
-                        {
-                            _isTrying = false;
-                        }
                     }
                 }
             }
@@ -61,14 +71,15 @@ public class SetAlarmSnippet : CombatSnippet
         {
             if(_alarmsInUsableRange.Count == 0)
             {
-                _isFinished = true;
+                //_isFinished = true;
+                _alarmsLeft = false;
             }
             else
             {
-                Debug.Log("Alarms: ");
+                //Debug.Log("Alarms: ");
                 foreach(AlarmController alarm in _alarmsInUsableRange)
                 {
-                    Debug.Log("Alarm Name: " + alarm.transform.name);
+                    //Debug.Log("Alarm Name: " + alarm.transform.name);
                 }
 
                 _currentAlarm = _alarmsInUsableRange[0];
@@ -77,8 +88,10 @@ public class SetAlarmSnippet : CombatSnippet
         }
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
+        agent.PlayAlarmPrompt();
+
         //Debug.Log("Alarm Snippet");
 
         _isFinished = false;
@@ -92,6 +105,7 @@ public class SetAlarmSnippet : CombatSnippet
         int returnScore = 0;
 
         if (_alarmsInScene[0].IsSet) return 0;
+        if (!_alarmsLeft) return 0;
 
         TestAlarmsInUsableRange(agent);
         TestEnemiesInUsableRange(agent);
@@ -135,7 +149,6 @@ public class SetAlarmSnippet : CombatSnippet
             {
                 closestDistance = distance;
                 _closestAlarm = alarm;
-                Debug.Log("Closest alarm is set");
             }
         }
 
@@ -176,6 +189,6 @@ public class SetAlarmSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        return _isFinished;
+        return !_alarmsLeft;
     }
 }

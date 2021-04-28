@@ -48,7 +48,7 @@ public class Ragdoll : MonoBehaviour
         foreach (var rb in _rigidbodies)
         {
             //TODO: This is a hacky solution, GetComponentsInChildren also returns the parent objects component, remove this from the hash set however breaks the AI
-            if (rb.gameObject.name == "AI") continue;
+            if (rb.gameObject.CompareTag("Enemy")) continue;
             rb.isKinematic = false;
         }
     }

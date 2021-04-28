@@ -11,6 +11,10 @@ public class AIAgent : MonoBehaviour
     public AiStateId _initialState;
     public AIAgentConfig _config;
 
+    AudioSource _audioSource;
+    [SerializeField] private AudioClip _backupPrompt;
+    [SerializeField] private AudioClip _alarmPrompt;
+
     Transform _player;
     AIWeapons _aiWeapon;
 
@@ -38,6 +42,7 @@ public class AIAgent : MonoBehaviour
     private void Awake()
     {
         _aiHealth = GetComponent<Health>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -53,22 +58,15 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AIAttackPlayerState(this));
         stateMachine.RegisterState(new AICombatState(this));
-        
 
-        if(_startingWeapon == null)
-        {
-            //TODO: Decide on finding weapon state
-            //stateMachine.ChangeState(AiStateId.FindWeapon);
-        }
-        else
+        if (_startingWeapon)
         {
             RaycastWeapon weapon = Instantiate(_startingWeapon);
 
             _aiWeapon = GetComponent<AIWeapons>();
             _aiWeapon.EquipWeapon(weapon);
-            //stateMachine.ChangeState(AiStateId.Idle);
         }
-
+        
         stateMachine.ChangeState(_initialState);
         if(_initialState == AiStateId.CombatState)
         {
@@ -88,5 +86,17 @@ public class AIAgent : MonoBehaviour
         if (_aiHealth.IsDead()) return;
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
+    }
+
+    public void PlayBackupSound()
+    {
+        Debug.Log("Play Backup Prompt");
+        _audioSource.PlayOneShot(_backupPrompt);
+    }
+
+    public void PlayAlarmPrompt()
+    {
+        Debug.Log("Play Alarm Prompt");
+        _audioSource.PlayOneShot(_alarmPrompt);
     }
 }

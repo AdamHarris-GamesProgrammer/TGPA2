@@ -34,9 +34,9 @@ public class AdvanceSnippet : CombatSnippet
         }
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
-        Debug.Log("Advance Snippet");
+        //Debug.Log("Advance Snippet");
 
         _timer = 0.0f;
 

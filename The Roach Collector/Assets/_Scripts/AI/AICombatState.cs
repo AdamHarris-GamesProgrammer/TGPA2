@@ -41,7 +41,7 @@ public class AICombatState : AIState
                 }
             }
 
-            SwitchSnippets(newSnippet);
+            SwitchSnippets(agent, newSnippet);
         }
         else
         {
@@ -49,10 +49,10 @@ public class AICombatState : AIState
         }
     }
 
-    private void SwitchSnippets(CombatSnippet newSnippet)
+    private void SwitchSnippets(AIAgent agent, CombatSnippet newSnippet)
     {
         _currentSnippet = newSnippet;
-        _currentSnippet.EnterSnippet();
+        _currentSnippet.EnterSnippet(agent);
     }
 
     private void RegisterSnippet(AIAgent agent, CombatSnippet snippet)

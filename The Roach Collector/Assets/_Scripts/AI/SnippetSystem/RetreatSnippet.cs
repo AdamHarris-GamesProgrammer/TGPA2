@@ -11,7 +11,7 @@ public class RetreatSnippet : CombatSnippet
 
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
         Debug.Log("Retreat Snippet");
     }

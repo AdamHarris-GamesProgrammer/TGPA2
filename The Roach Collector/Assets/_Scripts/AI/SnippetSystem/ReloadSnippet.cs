@@ -9,7 +9,7 @@ public class ReloadSnippet : CombatSnippet
 
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
         Debug.Log("Reload Snippet");
     }

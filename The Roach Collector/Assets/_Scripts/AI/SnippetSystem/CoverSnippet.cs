@@ -16,6 +16,9 @@ public class CoverSnippet : CombatSnippet
 
     public void Action(AIAgent agent)
     {
+        //TODO: Implement AI popping their head over cover
+        //TODO: Implement AI crouching and un-crouching animation
+
         if(!_hasFoundCover)
         {
             _aiWeapon.SetTarget(null);
@@ -74,7 +77,7 @@ public class CoverSnippet : CombatSnippet
         }
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
         Debug.Log("Cover Snippet");
         _hasFoundCover = false;
@@ -105,8 +108,6 @@ public class CoverSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        //TODO: Implement finish logic
-
         bool result = (_aiHealth.GetHealthRatio() > 0.5f);
 
         if(result)

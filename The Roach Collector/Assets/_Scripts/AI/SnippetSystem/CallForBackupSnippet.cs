@@ -17,16 +17,16 @@ public class CallForBackupSnippet : CombatSnippet
         Debug.Log("Backup Action");
         foreach(AIAgent enemy in _enemiesInRange)
         {
-            Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
+            //Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
             enemy.Aggrevate();
             
         }
         _hasBackup = true;
     }
 
-    public void EnterSnippet()
+    public void EnterSnippet(AIAgent agent)
     {
-        Debug.Log("Backup Snippet");
+        agent.PlayBackupSound();
     }
 
     public int Evaluate(AIAgent agent)
@@ -42,7 +42,7 @@ public class CallForBackupSnippet : CombatSnippet
                 //Check if this enemy is dead or not 
                 if (enemy.GetComponent<AIAgent>().GetHealth().IsDead() || enemy.GetComponent<AIAgent>().Aggrevated) continue;
 
-                Debug.Log(agent.transform.name + " is adding enemy to range list");
+                //Debug.Log(agent.transform.name + " is adding enemy to range list");
                 _enemiesInRange.Add(enemy.GetComponent<AIAgent>());
             }
         }
