@@ -6,10 +6,11 @@ public class CallForBackupSnippet : CombatSnippet
 {
     GameObject[] _enemiesInScene;
     List<AIAgent> _enemiesInRange;
+    AIAgent _agent;
 
     bool _hasBackup = false;
 
-    public void Action(AIAgent agent)
+    public void Action()
     {
         //_enemiesInRange.Clear();
 
@@ -24,12 +25,12 @@ public class CallForBackupSnippet : CombatSnippet
         _hasBackup = true;
     }
 
-    public void EnterSnippet(AIAgent agent)
+    public void EnterSnippet()
     {
-        agent.PlayBackupSound();
+        _agent.PlayBackupSound();
     }
 
-    public int Evaluate(AIAgent agent)
+    public int Evaluate()
     {
         if (_hasBackup) return 0;
 
@@ -37,7 +38,7 @@ public class CallForBackupSnippet : CombatSnippet
 
         foreach (GameObject enemy in _enemiesInScene)
         {
-            if (Vector3.Distance(agent.transform.position, enemy.transform.position) < 25.0f)
+            if (Vector3.Distance(_agent.transform.position, enemy.transform.position) < _agent._config._backupEnemyDistance)
             {
                 //Check if this enemy is dead or not 
                 if (enemy.GetComponent<AIAgent>().GetHealth().IsDead() || enemy.GetComponent<AIAgent>().Aggrevated) continue;

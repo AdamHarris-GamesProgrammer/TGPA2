@@ -12,10 +12,7 @@ public class SetAlarmSnippet : CombatSnippet
     List<AIAgent> _enemiesInUsableRange;
     AIAgent[] _enemiesInScene;
 
-    float _enemyUsableRange = 10.0f;
-    float _alarmUsableRange = 15.0f;
-
-    NavMeshAgent _agent;
+    NavMeshAgent _navAgent;
 
     bool _isTrying = false;
 
@@ -25,15 +22,17 @@ public class SetAlarmSnippet : CombatSnippet
 
     AlarmController _currentAlarm;
 
-    public void Action(AIAgent agent)
+    AIAgent _agent;
+
+    public void Action()
     {
         if (_alarmsInScene[0].IsSet) _isFinished = true;
 
         if(_isTrying)
         {
-            _agent.SetDestination(_currentAlarm.ActivationPoint.position);
+            _navAgent.SetDestination(_currentAlarm.ActivationPoint.position);
 
-            if (_agent.remainingDistance <= 1.5f)
+            if (_navAgent.remainingDistance <= 1.5f)
             {
                 _isTrying = false;
                 if (_currentAlarm.IsDisabled)
@@ -57,7 +56,7 @@ public class SetAlarmSnippet : CombatSnippet
                 {
                     //TODO: Trigger a animation here
 
-                    if (agent.CanActivateAlarm)
+                    if (_agent.CanActivateAlarm)
                     {
                         if (_currentAlarm.ActivateAlarm())
                         {
@@ -88,27 +87,27 @@ public class SetAlarmSnippet : CombatSnippet
         }
     }
 
-    public void EnterSnippet(AIAgent agent)
+    public void EnterSnippet()
     {
-        agent.PlayAlarmPrompt();
+        _agent.PlayAlarmPrompt();
 
         //Debug.Log("Alarm Snippet");
 
         _isFinished = false;
         _isTrying = false;
 
-        _agent.stoppingDistance = 1.0f;
+        _navAgent.stoppingDistance = 1.0f;
     }
 
-    public int Evaluate(AIAgent agent)
+    public int Evaluate()
     {
         int returnScore = 0;
 
         if (_alarmsInScene[0].IsSet) return 0;
         if (!_alarmsLeft) return 0;
 
-        TestAlarmsInUsableRange(agent);
-        TestEnemiesInUsableRange(agent);
+        TestAlarmsInUsableRange();
+        TestEnemiesInUsableRange();
 
         //No alarms in usable range
         if (_alarmsInUsableRange.Count == 0) return 0;
@@ -122,6 +121,8 @@ public class SetAlarmSnippet : CombatSnippet
 
     public void Initialize(AIAgent agent)
     {
+        _agent = agent;
+
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>();
         _alarmsInUsableRange = new List<AlarmController>();
 
@@ -136,7 +137,7 @@ public class SetAlarmSnippet : CombatSnippet
             float distance = Vector3.Distance(agent.transform.position, alarm.transform.position);
 
             //We only care about alarms that are in the enemies usable area
-            if (distance < _alarmUsableRange)
+            if (distance < agent._config._alarmUsableRange)
             {
                 _alarmsInUsableRange.Add(alarm);
             }
@@ -152,24 +153,24 @@ public class SetAlarmSnippet : CombatSnippet
             }
         }
 
-        _agent = agent.GetComponent<NavMeshAgent>();
+        _navAgent = agent.GetComponent<NavMeshAgent>();
     }
 
-    void TestAlarmsInUsableRange(AIAgent agent)
+    void TestAlarmsInUsableRange()
     {
         _alarmsInUsableRange.Clear();
 
         foreach(AlarmController alarm in _alarmsInScene)
         {
             //Finds the alarms which are in the AIs range
-            if(Vector3.Distance(agent.transform.position, alarm.transform.position) < _alarmUsableRange)
+            if(Vector3.Distance(_agent.transform.position, alarm.transform.position) < _agent._config._alarmUsableRange)
             {
                 _alarmsInUsableRange.Add(alarm);
             }
         }
     }
 
-    void TestEnemiesInUsableRange(AIAgent agent)
+    void TestEnemiesInUsableRange()
     {
         _enemiesInUsableRange.Clear();
 
@@ -179,7 +180,7 @@ public class SetAlarmSnippet : CombatSnippet
             //Any dead enemies won't get added
             if (enemy.GetHealth().IsDead()) continue;
 
-            if(Vector3.Distance(agent.transform.position, enemy.transform.position) < _enemyUsableRange) {
+            if(Vector3.Distance(_agent.transform.position, enemy.transform.position) < _agent._config._alarmUsableEnemyRange) {
                 //Add any enemies that are in usable range to this list
                 _enemiesInUsableRange.Add(enemy);
             }

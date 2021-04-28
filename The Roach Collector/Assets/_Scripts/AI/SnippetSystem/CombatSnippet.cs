@@ -6,11 +6,11 @@ public interface CombatSnippet
 {
     public void Initialize(AIAgent agent);
 
-    public int Evaluate(AIAgent agent);
+    public int Evaluate();
 
-    public void Action(AIAgent agent);
+    public void Action();
 
     public bool IsFinished();
 
-    public void EnterSnippet(AIAgent agent);
+    public void EnterSnippet();
 }

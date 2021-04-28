@@ -31,7 +31,7 @@ public class AICombatState : AIState
 
             foreach (CombatSnippet behavior in _combatBehaviours)
             {
-                int score = behavior.Evaluate(agent);
+                int score = behavior.Evaluate();
 
                 //Checks which snippet is optimal 
                 if (score > highestScore)
@@ -45,14 +45,14 @@ public class AICombatState : AIState
         }
         else
         {
-            _currentSnippet.Action(agent);
+            _currentSnippet.Action();
         }
     }
 
     private void SwitchSnippets(AIAgent agent, CombatSnippet newSnippet)
     {
         _currentSnippet = newSnippet;
-        _currentSnippet.EnterSnippet(agent);
+        _currentSnippet.EnterSnippet();
     }
 
     private void RegisterSnippet(AIAgent agent, CombatSnippet snippet)
@@ -72,7 +72,7 @@ public class AICombatState : AIState
         int highestScore = 0;
         foreach (CombatSnippet behavior in _combatBehaviours)
         {
-            int score = behavior.Evaluate(agent);
+            int score = behavior.Evaluate();
 
             //Checks which snippet is optimal 
             if (score > highestScore)

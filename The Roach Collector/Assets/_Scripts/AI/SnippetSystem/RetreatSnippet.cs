@@ -5,22 +5,23 @@ using UnityEngine;
 public class RetreatSnippet : CombatSnippet
 {
     AIHealth _aiHealth;
+    AIAgent _agent;
 
-    public void Action(AIAgent agent)
+    public void Action()
     {
 
     }
 
-    public void EnterSnippet(AIAgent agent)
+    public void EnterSnippet()
     {
         Debug.Log("Retreat Snippet");
     }
 
-    public int Evaluate(AIAgent agent)
+    public int Evaluate()
     {
         int returnScore = 0;
 
-        bool shouldRetreat = (UnityEngine.Random.Range(0.0f, 1.0f) < agent._config._retreatChance);
+        bool shouldRetreat = (UnityEngine.Random.Range(0.0f, 1.0f) < _agent._config._retreatChance);
 
         //We will retreat if our health ratio is less than 0.1f and we pass the retreat check
         if (_aiHealth.GetHealthRatio() < 0.1f && shouldRetreat)
@@ -34,6 +35,7 @@ public class RetreatSnippet : CombatSnippet
 
     public void Initialize(AIAgent agent)
     {
+        _agent = agent;
         _aiHealth = agent.GetComponent<AIHealth>();
     }
 

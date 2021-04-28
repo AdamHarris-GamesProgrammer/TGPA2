@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class ReloadSnippet : CombatSnippet
 {
-    public void Action(AIAgent agent)
+    public void Action()
     {
 
     }
 
-    public void EnterSnippet(AIAgent agent)
+    public void EnterSnippet()
     {
         Debug.Log("Reload Snippet");
     }
 
-    public int Evaluate(AIAgent agent)
+    public int Evaluate()
     {
         int returnScore = 0;
 
