@@ -37,14 +37,7 @@ public class AlarmController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        //if player
-        //send signal that player can disable alarm
-        //if enemy
-        //if alarm is disabled 
-        //make enemy enable it
-
         //send signal that enemy can enable the alarm
-
         if (other.CompareTag("Player"))
         {
             if (_isDisabled) return;
@@ -55,8 +48,6 @@ public class AlarmController : MonoBehaviour
         else if(other.CompareTag("Enemy"))
         {
             other.GetComponent<AIAgent>().CanActivateAlarm = true;
-
-            //TODO: Send signal to Enemies that they can signal the alarm or that they can fix the alarm
         }
 
 
@@ -72,11 +63,6 @@ public class AlarmController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        //if player
-            //send signal that player can no longer disable alarm
-        //if enemy
-            //send signal that enemy can no longer enable the alarm
-
         if(other.CompareTag("Player"))
         {
             other.SendMessage("DisplayAlarm", false);
@@ -107,9 +93,6 @@ public class AlarmController : MonoBehaviour
                 alarm.ActivateAlarm();
             }
         }
-        //enable alarm
-        //change material
-        //activate all alarms
     }
 
     public bool ActivateAlarm()

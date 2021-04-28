@@ -50,6 +50,7 @@ public class CoverSnippet : CombatSnippet
                 }
             }
 
+            
             _currentCover = closestCover;
 
             //Move the agent to the cover
