@@ -57,7 +57,13 @@ public class CoverSnippet : CombatSnippet
                 }
             }
 
-            
+            Debug.Log(_currentCover?.transform.name);
+
+            if(_currentCover != closestCover)
+            {
+                Debug.Log("Switched to cover: " + closestCover?.transform.name);
+            }
+
             _currentCover = closestCover;
 
             //Move the agent to the cover
