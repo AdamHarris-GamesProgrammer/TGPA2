@@ -8,6 +8,8 @@ public class CoverSnippet : CombatSnippet
     AIWeapons _aiWeapon;
     NavMeshAgent _navAgent;
     AIHealth _aiHealth;
+    Animator _anim;
+
     CoverController[] _coversInScene;
 
     CoverController _currentCover;
@@ -25,6 +27,43 @@ public class CoverSnippet : CombatSnippet
         //TODO: Implement AI popping their head over cover
         //TODO: Implement AI crouching and un-crouching animation
         //TODO: Make enemy actively decide when to leave cover based on factors(?)
+
+        if(_currentCover)
+        {
+            _agent.transform.LookAt(_agent.GetPlayer());
+            _hasFoundCover = true;
+
+            //Implement Ducking
+
+            //Shooting logic
+
+            //Get direction from player to enemy
+
+            //use dot product to determine the angle of the player
+            //if the player is facing the enemy, duck
+            //if the player is not facing the enemy then stand and shoot
+
+            Transform _player = _agent.GetPlayer();
+
+            float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
+
+            if(angle < 2.7f)
+            {
+                //TODO: Stop enemy from shooting until they stand up.
+
+                _anim.SetBool("isCrouching", false);
+                _aiWeapon.SetTarget(_player);
+                _aiWeapon.SetFiring(true);
+            }
+            else
+            {
+                _anim.SetBool("isCrouching", true);
+                _aiWeapon.SetTarget(null);
+                _aiWeapon.SetFiring(false);
+            }
+
+            //Debug.Log(angle);
+        }
 
         if(!_hasFoundCover)
         {
@@ -46,6 +85,7 @@ public class CoverSnippet : CombatSnippet
 
                 //Calculate the distance between the agent and the cover
                 float distance = Vector3.Distance(_agent.transform.position, cover.transform.position);
+
 
                 //if the distance from this cover is less than the distance from the closest cover
                 if (distance < closestDistance)
@@ -85,6 +125,7 @@ public class CoverSnippet : CombatSnippet
             }
 
             _navAgent.SetDestination(furthestCoverPoint.position);
+            
             _navAgent.stoppingDistance = 1.0f;
 
             _hasFoundCover = true;
@@ -93,10 +134,12 @@ public class CoverSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        Debug.Log("Cover Snippet");
+        //Debug.Log("Cover Snippet");
         _hasFoundCover = false;
 
         _timer = _agent._config._coverDuration;
+
+        //_anim.SetBool("isCrouching", true);
 
     }
 
@@ -121,6 +164,7 @@ public class CoverSnippet : CombatSnippet
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>();
+        _anim = agent.GetComponent<Animator>();
         _agent = agent;
     }
 
