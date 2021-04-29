@@ -8,6 +8,8 @@ public class CoverSnippet : CombatSnippet
     AIWeapons _aiWeapon;
     NavMeshAgent _navAgent;
     AIHealth _aiHealth;
+    Animator _anim;
+
     CoverController[] _coversInScene;
 
     CoverController _currentCover;
@@ -73,16 +75,13 @@ public class CoverSnippet : CombatSnippet
 
             if(angle < 2.7f)
             {
-                Debug.Log("Infront");
-                
-
+                _anim.SetBool("isCrouching", false);
                 _aiWeapon.SetTarget(_player);
                 _aiWeapon.SetFiring(true);
             }
             else
             {
-                Debug.Log("Looking at AI");
-
+                _anim.SetBool("isCrouching", true);
                 _aiWeapon.SetTarget(null);
                 _aiWeapon.SetFiring(false);
             }
@@ -164,6 +163,8 @@ public class CoverSnippet : CombatSnippet
 
         _timer = _agent._config._coverDuration;
 
+        //_anim.SetBool("isCrouching", true);
+
     }
 
     public int Evaluate()
@@ -187,6 +188,7 @@ public class CoverSnippet : CombatSnippet
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>();
+        _anim = agent.GetComponent<Animator>();
         _agent = agent;
     }
 
