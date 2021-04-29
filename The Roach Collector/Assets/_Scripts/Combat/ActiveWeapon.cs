@@ -91,6 +91,10 @@ public class ActiveWeapon : MonoBehaviour
 
                 _anim.SetBool("isReloading", true);
             }
+            if (_weapon._isReloading == false)
+            {
+                _anim.SetBool("isReloading", false);
+            }
         }
         else
         {
