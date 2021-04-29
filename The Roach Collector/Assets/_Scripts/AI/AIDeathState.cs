@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIDeathState : AIState
 {
@@ -8,11 +9,14 @@ public class AIDeathState : AIState
     Ragdoll _ragdoll;
     AIWeapons _aiWeapon;
 
+    NavMeshAgent _navAgent;
+
     public AIDeathState(AIAgent agent)
     {
         _healthBar = agent.GetComponentInChildren<UIHealthBar>();
         _ragdoll = agent.GetComponent<Ragdoll>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
+        _navAgent = agent.GetComponent<NavMeshAgent>();
     }
 
     public void Enter(AIAgent agent)
@@ -20,10 +24,15 @@ public class AIDeathState : AIState
         _healthBar.gameObject.SetActive(false);
         _ragdoll.ActivateRagdoll();
         _aiWeapon.DropWeapon();
+
+        //Stops the AI from moving to it's target
+        _navAgent.isStopped = true;
+        
     }
 
     public void Exit(AIAgent agent)
     {
+
     }
 
     public AiStateId GetID()

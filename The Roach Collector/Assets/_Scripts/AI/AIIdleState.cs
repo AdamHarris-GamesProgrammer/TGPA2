@@ -41,7 +41,8 @@ public class AIIdleState : AIState
         float dotProduct = Vector3.Dot(playerDirection, agentDirection);
         if(dotProduct > 0.0f)
         {
-            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+            //TODO Change this to a proper detection system
+            agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
 
     }

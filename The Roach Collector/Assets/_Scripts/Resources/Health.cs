@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     public float _maxHealth;
-    [HideInInspector]public float _currentHealth;
+    public float _currentHealth;
 
     Ragdoll _ragDoll;
     
@@ -15,6 +15,16 @@ public class Health : MonoBehaviour
     private bool _isDead = false;
 
     public UnityEvent _OnDie;
+
+    public float GetCurrentHealth()
+    {
+        return _currentHealth;
+    }
+
+    public float GetHealthRatio()
+    {
+        return _currentHealth / _maxHealth;
+    }
 
     public bool IsDead()
     {

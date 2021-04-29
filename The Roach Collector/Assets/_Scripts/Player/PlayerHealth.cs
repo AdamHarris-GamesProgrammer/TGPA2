@@ -9,13 +9,14 @@ public class PlayerHealth : Health
     CharacterAiming _aiming;
     CinemachineFreeLook _camera;
     Animator _animator;
-
+    PlayerHealthEffectController _healthEffectController;
     protected override void OnStart()
     {
         _weapon = GetComponent<ActiveWeapon>();
         _aiming = GetComponent<CharacterAiming>();
         _camera = FindObjectOfType<CinemachineFreeLook>();
         _animator = GetComponent<Animator>();
+        _healthEffectController = GetComponent<PlayerHealthEffectController>();
     }
 
     protected override void OnDeath()
@@ -28,6 +29,7 @@ public class PlayerHealth : Health
 
     protected override void OnDamage()
     {
-
+        float healthPercentage = _currentHealth / _maxHealth;
+        _healthEffectController.CalculateEffect(healthPercentage);
     }
 }

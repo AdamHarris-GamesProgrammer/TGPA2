@@ -16,6 +16,7 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponParent;
     [SerializeField] private Transform _weaponLeftGrip;
     [SerializeField] private Transform _weaponRightGrip;
+    [SerializeField] private RaycastWeapon _startingWeapon;
 
     public Cinemachine.CinemachineFreeLook _camera;
 
@@ -30,10 +31,17 @@ public class ActiveWeapon : MonoBehaviour
         _anim = GetComponent<Animator>();
         _overrides = _anim.runtimeAnimatorController as AnimatorOverrideController;
 
-        RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
-        if(existingWeapon)
+        //RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
+        //if(existingWeapon)
+        //{
+        //    Equip(existingWeapon);
+        //}
+
+        if (_startingWeapon)
         {
-            Equip(existingWeapon);
+            RaycastWeapon weapon = Instantiate(_startingWeapon);
+
+            Equip(weapon);
         }
     }
 
@@ -82,6 +90,10 @@ public class ActiveWeapon : MonoBehaviour
                 }
 
                 _anim.SetBool("isReloading", _weapon._isReloading);
+            }
+            if (_weapon._isReloading == false)
+            {
+                _anim.SetBool("isReloading", false);
             }
             if (_weapon._isReloading == false)
             {
