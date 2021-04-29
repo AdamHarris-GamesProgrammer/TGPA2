@@ -36,20 +36,7 @@ public class SetAlarmSnippet : CombatSnippet
                 _isTrying = false;
                 if (_currentAlarm.IsDisabled)
                 {
-                    //Removes the front of the element
-                    Debug.Log("Alarms in usable range before deletion: ");
-                    foreach(AlarmController alarm in _alarmsInUsableRange)
-                    {
-                        Debug.Log("Alarm Name: " + alarm.gameObject.name);
-                    }
-
                     _alarmsInUsableRange.RemoveAt(0);
-
-                    Debug.Log("Alarms in usable range after deletion: ");
-                    foreach (AlarmController alarm in _alarmsInUsableRange)
-                    {
-                        Debug.Log("Alarm Name: " + alarm.gameObject.name);
-                    }
                 }
                 else
                 {
@@ -74,12 +61,6 @@ public class SetAlarmSnippet : CombatSnippet
             }
             else
             {
-                //Debug.Log("Alarms: ");
-                foreach(AlarmController alarm in _alarmsInUsableRange)
-                {
-                    //Debug.Log("Alarm Name: " + alarm.transform.name);
-                }
-
                 _currentAlarm = _alarmsInUsableRange[0];
                 _isTrying = true;
             }

@@ -182,10 +182,7 @@ public class CoverSnippet : CombatSnippet
 
        _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
 
-        if (_needToReload)
-        {
-            int i = 5;
-        }
+
 
         float healthRatio = _aiHealth.GetHealthRatio();
 

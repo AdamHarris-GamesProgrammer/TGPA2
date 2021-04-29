@@ -24,15 +24,7 @@ public class AdvanceSnippet : CombatSnippet
         //Set the player as the target
         _aiWeapon.SetTarget(_agent.GetPlayer());
 
-        //if (_navAgent.remainingDistance < _agent._config._attackDistance)
-        //{
-        //    _aiWeapon.SetFiring(true);
-        //}
-        //else
-        //{
-        //    _aiWeapon.SetFiring(false);
-        //}
-
+        //Start firing
         _aiWeapon.SetFiring(true);
     }
 
