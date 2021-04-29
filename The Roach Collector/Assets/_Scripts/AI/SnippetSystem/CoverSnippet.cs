@@ -20,6 +20,10 @@ public class CoverSnippet : CombatSnippet
 
     float _timer = 0.0f;
 
+    float _crouchDuration = 1.5f;
+
+    float _crouchTimer = 0.0f;
+
     public void Action()
     {
         _timer -= Time.deltaTime;
@@ -47,19 +51,32 @@ public class CoverSnippet : CombatSnippet
 
             float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
 
-            if(angle < 2.7f)
+            if(angle < 2.9f)
             {
                 //TODO: Stop enemy from shooting until they stand up.
-
                 _anim.SetBool("isCrouching", false);
                 _aiWeapon.SetTarget(_player);
+
+                
                 _aiWeapon.SetFiring(true);
+                _crouchTimer = _crouchDuration;
             }
             else
             {
+                _crouchTimer -= Time.deltaTime;
                 _anim.SetBool("isCrouching", true);
                 _aiWeapon.SetTarget(null);
                 _aiWeapon.SetFiring(false);
+            }
+
+            //_crouchTimer -= Time.deltaTime;
+
+            if(_crouchTimer <= 0.0f)
+            {
+                _crouchTimer = _crouchDuration;
+                _anim.SetBool("isCrouching", false);
+                _aiWeapon.SetTarget(_player);
+                _aiWeapon.SetFiring(true);
             }
 
             //Debug.Log(angle);
