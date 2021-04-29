@@ -25,6 +25,7 @@ public class AIAgentConfig : ScriptableObject
 
     [Header("Cover Settings")]
     public float _coverExitHealthThreashold = 0.5f;
+    public float _coverDuration = 2.0f;
 
     [Header("Backup Settings")]
     public float _backupEnemyDistance = 25.0f;

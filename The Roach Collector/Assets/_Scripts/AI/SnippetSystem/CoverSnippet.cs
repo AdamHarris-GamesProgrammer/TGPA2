@@ -16,8 +16,12 @@ public class CoverSnippet : CombatSnippet
 
     bool _hasFoundCover = false;
 
+    float _timer = 0.0f;
+
     public void Action()
     {
+        _timer -= Time.deltaTime;
+
         //TODO: Implement AI popping their head over cover
         //TODO: Implement AI crouching and un-crouching animation
         //TODO: Make enemy actively decide when to leave cover based on factors(?)
@@ -85,6 +89,9 @@ public class CoverSnippet : CombatSnippet
     {
         Debug.Log("Cover Snippet");
         _hasFoundCover = false;
+
+        _timer = _agent._config._coverDuration;
+
     }
 
     public int Evaluate()
@@ -113,11 +120,12 @@ public class CoverSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        bool result = (_aiHealth.GetHealthRatio() > _agent._config._coverExitHealthThreashold);
+        //If the ais health is above the threshold or the timer is less than 0 then exit the snippet.
+        bool result = (_aiHealth.GetHealthRatio() > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
 
         if(result)
         {
-            _currentCover.RemoveUser();
+            _currentCover?.RemoveUser();
         }
 
         return result;
