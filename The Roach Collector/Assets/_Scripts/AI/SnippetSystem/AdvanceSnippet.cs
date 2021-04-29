@@ -24,14 +24,16 @@ public class AdvanceSnippet : CombatSnippet
         //Set the player as the target
         _aiWeapon.SetTarget(_agent.GetPlayer());
 
-        if (_navAgent.remainingDistance < _agent._config._attackDistance)
-        {
-            _aiWeapon.SetFiring(true);
-        }
-        else
-        {
-            _aiWeapon.SetFiring(false);
-        }
+        //if (_navAgent.remainingDistance < _agent._config._attackDistance)
+        //{
+        //    _aiWeapon.SetFiring(true);
+        //}
+        //else
+        //{
+        //    _aiWeapon.SetFiring(false);
+        //}
+
+        _aiWeapon.SetFiring(true);
     }
 
     public void EnterSnippet()
@@ -40,6 +42,7 @@ public class AdvanceSnippet : CombatSnippet
 
         _timer = 0.0f;
 
+        //TODO: Change this so some AI will rush the player
         _navAgent.stoppingDistance = 10.0f;
     }
 

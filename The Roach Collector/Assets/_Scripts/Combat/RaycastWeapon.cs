@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
+    
 
     private bool _isFiring = false;
     [SerializeField] private int _fireRate = 25;
@@ -43,6 +45,10 @@ public class RaycastWeapon : MonoBehaviour
 
     public LayerMask _layerMask;
 
+    public bool NeedToReload()
+    {
+        return (_clipAmno <= 0);
+    }
 
     [SerializeField] private TrailRenderer _tracerEffect;
 
@@ -67,6 +73,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         return _isFiring;
     }
+
 
 
     private void Awake()

@@ -9,6 +9,10 @@ public class Health : MonoBehaviour
     public float _maxHealth;
     public float _currentHealth;
 
+    [SerializeField] bool _canBeHarmed = true;
+
+    public bool CanBeHarmed {  get { return _canBeHarmed; } set { _canBeHarmed = value; } }
+
     Ragdoll _ragDoll;
     
 
@@ -44,7 +48,10 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        //Stops the Character from taking damage if they don't need to.
+        if (!_canBeHarmed) return;
         if (_isDead) return;
+
 
         _currentHealth -= amount;
 

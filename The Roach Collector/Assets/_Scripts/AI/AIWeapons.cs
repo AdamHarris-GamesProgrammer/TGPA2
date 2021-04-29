@@ -76,4 +76,9 @@ public class AIWeapons : MonoBehaviour
         return _currentWeapon != null;
     }
 
+    public RaycastWeapon GetEquippedWeapon()
+    {
+        return _currentWeapon;
+    }
+
 }

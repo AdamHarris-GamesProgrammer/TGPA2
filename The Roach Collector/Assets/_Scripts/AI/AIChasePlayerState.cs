@@ -55,7 +55,7 @@ public class AIChasePlayerState : AIState
 
         if(Vector3.Distance(_player.position, _agent.transform.position) < agent._config._attackDistance)
         {
-            agent.stateMachine.ChangeState(AiStateId.AttackPlayer);
+            agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
     }
 }

@@ -10,6 +10,8 @@ public class CoverSnippet : CombatSnippet
     AIHealth _aiHealth;
     Animator _anim;
 
+    
+
     CoverController[] _coversInScene;
 
     CoverController _currentCover;
@@ -24,6 +26,8 @@ public class CoverSnippet : CombatSnippet
 
     float _crouchTimer = 0.0f;
 
+    bool _needToReload = false;
+
     public void Action()
     {
         _timer -= Time.deltaTime;
@@ -34,6 +38,18 @@ public class CoverSnippet : CombatSnippet
 
         if(_currentCover)
         {
+            if (_needToReload)
+            {
+                _crouchTimer -= Time.deltaTime;
+                _anim.SetBool("isCrouching", true);
+                _aiWeapon.SetTarget(null);
+                _aiWeapon.SetFiring(false);
+
+                Debug.Log("RELOADING");
+
+                _aiWeapon.GetEquippedWeapon()._isReloading = true;
+            }
+
             _agent.transform.LookAt(_agent.GetPlayer());
             _hasFoundCover = true;
 
@@ -164,10 +180,14 @@ public class CoverSnippet : CombatSnippet
     {
         int returnScore = 0;
 
+       _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
+
+
+
         float healthRatio = _aiHealth.GetHealthRatio();
 
         //TODO: Implement or ammo is less than 35%
-        if (healthRatio <= 0.5f)
+        if (healthRatio <= 0.5f || _needToReload)
         {
             returnScore = 100;
         }
