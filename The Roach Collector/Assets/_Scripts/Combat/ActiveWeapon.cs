@@ -45,7 +45,6 @@ public class ActiveWeapon : MonoBehaviour
             if (Input.GetButtonDown("Fire1") && _weapon._clipAmno > 0 && _weapon._isReloading == false)
             {
                 _weapon.StartFiring();
-                Debug.Log("clip left: "+_weapon._clipAmno);
             }
 
             if (_weapon.IsFiring())
@@ -67,6 +66,7 @@ public class ActiveWeapon : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._TotalAmno > 0)
             {
+                
                 _weapon._isReloading = true;
                 _weapon._TotalAmno += _weapon._clipAmno;
 
@@ -80,6 +80,8 @@ public class ActiveWeapon : MonoBehaviour
                     _weapon._clipAmno = _weapon._clipSize;
                     _weapon._TotalAmno -= _weapon._clipSize;
                 }
+
+                _anim.SetBool("isReloading", true);
             }
         }
         else
