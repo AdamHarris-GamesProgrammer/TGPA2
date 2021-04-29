@@ -102,6 +102,8 @@ public class SetAlarmSnippet : CombatSnippet
     {
         int returnScore = 0;
 
+
+        if (_alarmsInScene.Length == 0) return 0;
         if (_alarmsInScene[0].IsSet) return 0;
         if (!_alarmsLeft) return 0;
 
