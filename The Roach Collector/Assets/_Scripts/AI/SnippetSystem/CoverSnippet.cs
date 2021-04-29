@@ -45,36 +45,12 @@ public class CoverSnippet : CombatSnippet
 
             Transform _player = _agent.GetPlayer();
 
-            Vector3 playerDirection = _player.position - _agent.transform.position;
-            //if (playerDirection.sqrMagnitude > _agent._config._maxSightDistance * _agent._config._maxSightDistance)
-            //{
-            //    //Player is too far away
-            //    return;
-            //}
-
-            Vector3 agentDirection = _agent.transform.forward;
-
-            playerDirection.Normalize();
-
-            float dotProduct = Vector3.Dot(playerDirection, agentDirection);
-            //Straight on dont shoot
-            //if (dotProduct > 0.0f)
-            //{
-            //    //TODO Change this to a proper detection system
-            //    //_agent.stateMachine.ChangeState(AiStateId.CombatState);
-
-            //}
-            //else
-            //{
-            //    Debug.Log("Not infront");
-            //    //Shoot
-
-            //}
-
             float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
 
             if(angle < 2.7f)
             {
+                //TODO: Stop enemy from shooting until they stand up.
+
                 _anim.SetBool("isCrouching", false);
                 _aiWeapon.SetTarget(_player);
                 _aiWeapon.SetFiring(true);
@@ -86,7 +62,7 @@ public class CoverSnippet : CombatSnippet
                 _aiWeapon.SetFiring(false);
             }
 
-            Debug.Log(angle);
+            //Debug.Log(angle);
         }
 
         if(!_hasFoundCover)
