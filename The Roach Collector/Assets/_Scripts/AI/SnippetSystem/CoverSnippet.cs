@@ -182,14 +182,17 @@ public class CoverSnippet : CombatSnippet
 
        _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
 
-
+        if (_needToReload)
+        {
+            int i = 5;
+        }
 
         float healthRatio = _aiHealth.GetHealthRatio();
 
         //TODO: Implement or ammo is less than 35%
         if (healthRatio <= 0.5f || _needToReload)
         {
-            returnScore = 100;
+            returnScore = 80;
         }
 
         return returnScore;

@@ -36,7 +36,7 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private AnimationClip _weaponAnimation;
 
 
-    [SerializeField] public int _clipAmno = 30;
+    [SerializeField] public int _clipAmno = 5;
     [SerializeField] public int _clipSize = 30;
     [SerializeField] public int _TotalAmno = 90;
     [SerializeField] public float _reloadDuration = 1.0f;
@@ -93,6 +93,20 @@ public class RaycastWeapon : MonoBehaviour
             {
                 _reloadTimeLeft = _reloadDuration;
                 _isReloading = false;
+
+                //Add in the new bullets
+                _TotalAmno += _clipAmno;
+
+                if (_TotalAmno < _clipSize)
+                {
+                    _clipAmno = _TotalAmno;
+                    _TotalAmno = 0;
+                }
+                else
+                {
+                    _clipAmno = _clipSize;
+                    _TotalAmno -= _clipSize;
+                }
             }
         }
         
@@ -171,9 +185,14 @@ public class RaycastWeapon : MonoBehaviour
     {
         _bullets.ForEach(bullet =>
         {
+            //p0 origin position
             Vector3 p0 = GetPosition(bullet);
             bullet._time += dt;
+
+            //p1 new position
             Vector3 p1 = GetPosition(bullet);
+
+            //Calculate the raycast between the origin and new position and see if we collide with anything
             RayCastSegment(p0, p1, bullet);
 
         });
