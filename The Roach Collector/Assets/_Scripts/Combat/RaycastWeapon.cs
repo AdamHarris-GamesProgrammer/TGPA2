@@ -33,6 +33,14 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private float _damage = 10.0f;
     [SerializeField] private AnimationClip _weaponAnimation;
 
+
+    [SerializeField] public int _clipAmno = 30;
+    [SerializeField] public int _clipSize = 30;
+    [SerializeField] public int _TotalAmno = 90;
+    [SerializeField] public float _reloadDuration = 1.0f;
+    [SerializeField] private float _reloadTimeLeft = 1.0f;
+    [SerializeField] public bool _isReloading = false;
+
     public LayerMask _layerMask;
 
 
@@ -66,6 +74,22 @@ public class RaycastWeapon : MonoBehaviour
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
+    public void Update()
+    {
+        if (_isReloading == true)
+        {
+            if (_reloadTimeLeft > 0)
+            {
+                _reloadTimeLeft -= Time.deltaTime;
+            }
+            else
+            {
+                _reloadTimeLeft = _reloadDuration;
+                _isReloading = false;
+            }
+        }
+        
+    }
 
     Ray _ray;
     RaycastHit _hitInfo;
@@ -205,6 +229,7 @@ public class RaycastWeapon : MonoBehaviour
 
         _accumulatedTime += deltaTime;
         UpdateBullets(deltaTime);
+        
     }
 
     public void UpdateFiring(float deltaTime, Vector3 target)
@@ -215,7 +240,11 @@ public class RaycastWeapon : MonoBehaviour
             for(int i = 0; i < _bulletCount; ++i) {
                 Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
             }
-            
+            _clipAmno--;
+            if (_clipAmno <= 0)
+            {
+                StopFiring();
+            }
             _accumulatedTime -= fireInterval;
         }
     }
