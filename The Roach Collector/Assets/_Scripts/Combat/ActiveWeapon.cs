@@ -81,7 +81,11 @@ public class ActiveWeapon : MonoBehaviour
                     _weapon._TotalAmno -= _weapon._clipSize;
                 }
 
-                _anim.SetBool("isReloading", true);
+                _anim.SetBool("isReloading", _weapon._isReloading);
+            }
+            if (_weapon._isReloading == false)
+            {
+                _anim.SetBool("isReloading", false);
             }
         }
         else
