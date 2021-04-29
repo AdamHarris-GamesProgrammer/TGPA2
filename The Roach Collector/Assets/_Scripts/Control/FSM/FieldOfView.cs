@@ -14,6 +14,7 @@ public class FieldOfView : MonoBehaviour
     [HideInInspector()]
     public List<Transform> visibleTargets = new List<Transform>();
 
+    public float DetectionTimer = 0;
 
     private void Update()
     {
@@ -34,20 +35,23 @@ public class FieldOfView : MonoBehaviour
     {
         visibleTargets.Clear();
         Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-
         foreach (Collider target in TargetsInRadius)
         {
             Transform targetTransform = target.transform;
             Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
+            
             if (Vector3.Angle(transform.forward, targetDirection) < viewAngle / 2)
             {
                 float DistanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                 RaycastHit hitInfo;
-                if (Physics.Raycast(transform.position, targetDirection, out hitInfo, DistanceToTarget))
+         
+                if (Physics.Raycast((transform.position + new Vector3(0, 1, 0)), targetDirection, out hitInfo, DistanceToTarget))
                 {
+                    Debug.DrawRay((transform.position + new Vector3(0,1,0)), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
                     {
+                        DetectionTimer = Mathf.Lerp(0, 1, 0.1f);
                         visibleTargets.Add(targetTransform);
                     }
                 }
@@ -73,3 +77,4 @@ public class FieldOfView : MonoBehaviour
     }
 
 }
+
