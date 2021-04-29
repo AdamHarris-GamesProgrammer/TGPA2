@@ -17,7 +17,6 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private AudioClip _alarmPrompt;
     [SerializeField] private AiStateId _CurrentState;
 
-    
     public FieldOfView _FOV;
 
     Transform _player;
