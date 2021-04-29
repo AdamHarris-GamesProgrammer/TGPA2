@@ -202,5 +202,9 @@ public class CharacterLocomotion : MonoBehaviour
 
     #endregion
 
+    public bool GetisCrouching()
+    {
+        return _isCrouching;
+    }
 
 }

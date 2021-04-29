@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
+    public GameObject Player;
+    CharacterLocomotion CharLocomotion;
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
@@ -15,8 +17,18 @@ public class FieldOfView : MonoBehaviour
     public List<Transform> visibleTargets = new List<Transform>();
 
     public float DetectionTimer = 0;
+    public float DetectedStand = 1;
+    public float DetectedCrouch = 3;
+    public float DetectedValue = 1;
+    bool StartTimer = false;
 
-    private void Update()
+    private void Start()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player");
+        CharLocomotion = Player.GetComponent<CharacterLocomotion>();
+    }
+
+    void Update()
     {
         findVisibleTargets();
 
@@ -27,6 +39,15 @@ public class FieldOfView : MonoBehaviour
         else
         {
             enemyinFOV = false;
+        }
+
+        if(StartTimer && DetectionTimer <= DetectedValue)
+        {
+            DetectionTimer += Time.deltaTime;
+        }
+        else
+        {
+            DetectionTimer = 0;
         }
 
     }
@@ -51,8 +72,32 @@ public class FieldOfView : MonoBehaviour
                     Debug.DrawRay((transform.position + new Vector3(0,1,0)), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
                     {
-                        DetectionTimer = Mathf.Lerp(0, 1, 0.1f);
-                        visibleTargets.Add(targetTransform);
+                        if(CharLocomotion.GetisCrouching())
+                        {
+                            DetectedValue = DetectedCrouch;
+                        }
+                        else
+                        {
+                            DetectedValue = DetectedStand;
+                        }
+
+
+                        if(DistanceToTarget <= (viewRadius / 2))
+                        {
+                            visibleTargets.Add(targetTransform);
+                            return;
+                        }
+
+                        StartTimer = true;
+
+                        if (DetectionTimer > DetectedValue)
+                        {
+                            visibleTargets.Add(targetTransform);
+                        }
+                    }
+                    else
+                    {
+                        StartTimer = false;
                     }
                 }
 
