@@ -153,6 +153,8 @@ public class RaycastWeapon : MonoBehaviour
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
 
+        Debug.Log("Added Bullet");
+
         _weaponRecoil.GenerateRecoil();
     }
 
@@ -261,9 +263,13 @@ public class RaycastWeapon : MonoBehaviour
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
         float fireInterval = 1.0f / _fireRate;
+        //Debug.Log("Fire Interval: " + fireInterval);
+        _accumulatedTime += deltaTime;
         while(_accumulatedTime > 0.0f)
         {
-            for(int i = 0; i < _bulletCount; ++i) {
+            Debug.Log("Shot fired");
+            for (int i = 0; i < _bulletCount; i++) {
+                
                 Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
             }
             _clipAmno--;
