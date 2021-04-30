@@ -17,11 +17,8 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponRightGrip;
     [SerializeField] private RaycastWeapon _startingWeapon;
 
-    [SerializeField] private AnimatorOverrideController _weaponAnimController = null;
-
     public Cinemachine.CinemachineFreeLook _camera;
 
-    AnimatorOverrideController _controller;
     Animator _anim;
     AnimatorOverrideController _overrides;
     RaycastWeapon _weapon;
@@ -30,12 +27,8 @@ public class ActiveWeapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
-
         _anim = GetComponent<Animator>();
         _overrides = _anim.runtimeAnimatorController as AnimatorOverrideController;
-
-        _controller = _anim.runtimeAnimatorController as AnimatorOverrideController;
 
         //RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
         //if(existingWeapon)
@@ -48,12 +41,6 @@ public class ActiveWeapon : MonoBehaviour
             RaycastWeapon weapon = Instantiate(_startingWeapon);
 
             Equip(weapon);
-
-            _anim.runtimeAnimatorController = _weaponAnimController;
-        }
-        else
-        {
-            _anim.runtimeAnimatorController = _controller;
         }
     }
 
@@ -82,7 +69,7 @@ public class ActiveWeapon : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.G))
             {
                 Equip(null);
-                //_overrides["Weapon_Anim_Empty"] = null;
+                _overrides["Weapon_Anim_Empty"] = null;
             }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._TotalAmno > 0)
             {
@@ -121,7 +108,7 @@ public class ActiveWeapon : MonoBehaviour
     }
     public void Equip(RaycastWeapon newWeapon)
     {
-        if (_weapon)
+        if(_weapon)
         {
             Destroy(_weapon.gameObject);
         }
@@ -136,20 +123,14 @@ public class ActiveWeapon : MonoBehaviour
 
             _weapon._weaponRecoil._camera = _camera;
 
-            _anim.runtimeAnimatorController = _weaponAnimController;
-
             //Crash in current version of the Rigging package, this line fixes it
             Invoke(nameof(SetAnimationDelayed), 0.0001f);
-        }
-        else
-        {
-            _anim.runtimeAnimatorController = _controller;
         }
     }
 
     void SetAnimationDelayed()
     {
-        //_overrides["Weapon_Anim_Empty"] = _weapon.GetAnimationClip();
+        _overrides["Weapon_Anim_Empty"] = _weapon.GetAnimationClip();
     }
 
 
