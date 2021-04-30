@@ -14,8 +14,6 @@ public class CharacterLocomotion : MonoBehaviour
     [SerializeField] private float _playerSpeed = 1.0f;
     [SerializeField] private float _pushPower = 2.0F;
     [SerializeField] private float _airControl;
-    [SerializeField] Rig _kneeLayer;
-
 
     bool _isJumping;
     bool _isCrouching = false;
@@ -53,11 +51,10 @@ public class CharacterLocomotion : MonoBehaviour
         //Checks we are crouching
         if (_isCrouching)
         {
-            _kneeLayer.weight += 0.2f;
+            //TODO: Reimplemnt crouching
         }
         else
         {
-            _kneeLayer.weight -= 0.2f;
         }
 
         //Handles our root motion

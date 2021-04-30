@@ -10,7 +10,6 @@ public class ActiveWeapon : MonoBehaviour
 
     public Transform _crosshairTarget;
     [Header("Animation Settings")]
-    [SerializeField] private UnityEngine.Animations.Rigging.Rig _handIK;
 
     [Header("Weapon Settings")]
     [SerializeField] private Transform _weaponParent;
@@ -94,8 +93,6 @@ public class ActiveWeapon : MonoBehaviour
         }
         else
         {
-            _handIK.weight = 0.0f;
-            _anim.SetLayerWeight(1, 0.0f);
         }
     }
 
@@ -123,8 +120,6 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.parent = _weaponParent;
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
-            _handIK.weight = 1.0f;
-            _anim.SetLayerWeight(1, 1.0f);
 
             _weapon._weaponRecoil._camera = _camera;
 
