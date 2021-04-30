@@ -45,16 +45,17 @@ public class CharacterLocomotion : MonoBehaviour
         {
             _isCrouching = !_isCrouching;
 
-            _controller.height = _isCrouching ? 0.9f : 1.6f;
+            _controller.height = _isCrouching ? 1.5f : 1.6f;
         }
 
         //Checks we are crouching
         if (_isCrouching)
         {
-            //TODO: Reimplemnt crouching
+            _animator.SetBool("isCrouching", true);
         }
         else
         {
+            _animator.SetBool("isCrouching", false);
         }
 
         //Handles our root motion
