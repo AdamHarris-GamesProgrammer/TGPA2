@@ -240,8 +240,13 @@ public class RaycastWeapon : MonoBehaviour
 
             }
 
+            //TODO: Error triggered here by Tracer being destroyed before this code
+            //This is very efficient as it will be done each bullet update per bullet per frame
+            if(bullet._tracer != null)
+            {
+                bullet._tracer.transform.position = _hitInfo.point;
+            }
 
-            bullet._tracer.transform.position = _hitInfo.point;
             bullet._time = _maxLifeTime;
         }
         else

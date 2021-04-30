@@ -53,16 +53,6 @@ public class CoverSnippet : CombatSnippet
             _agent.transform.LookAt(_agent.GetPlayer());
             _hasFoundCover = true;
 
-            //Implement Ducking
-
-            //Shooting logic
-
-            //Get direction from player to enemy
-
-            //use dot product to determine the angle of the player
-            //if the player is facing the enemy, duck
-            //if the player is not facing the enemy then stand and shoot
-
             Transform _player = _agent.GetPlayer();
 
             float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
@@ -103,6 +93,8 @@ public class CoverSnippet : CombatSnippet
             _aiWeapon.SetTarget(null);
 
 
+
+            //Debug.Log(_coversInScene.Length);
             CoverController closestCover = _coversInScene[0];
             float closestDistance = 10000.0f;
 
@@ -151,6 +143,7 @@ public class CoverSnippet : CombatSnippet
             }
 
             _navAgent.SetDestination(furthestCoverPoint.position);
+            Debug.Log("Set Destination to: " + furthestCoverPoint.position);
             
             _navAgent.stoppingDistance = 1.0f;
 
@@ -198,6 +191,9 @@ public class CoverSnippet : CombatSnippet
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>();
+
+        //Debug.Log(_coversInScene.Length);
+
         _anim = agent.GetComponent<Animator>();
         _agent = agent;
     }
