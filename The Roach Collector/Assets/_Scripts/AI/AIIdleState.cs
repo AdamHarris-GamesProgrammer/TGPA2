@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIIdleState : AIState
 {
@@ -14,6 +15,10 @@ public class AIIdleState : AIState
 
     public void Enter(AIAgent agent)
     {
+        agent.GetComponent<AIWeapons>().SetTarget(null);
+        agent.GetComponent<AIWeapons>().SetFiring(false);
+        agent.GetComponent<NavMeshAgent>().isStopped = true;
+
     }
 
     public void Exit(AIAgent agent)
