@@ -240,6 +240,7 @@ public class RaycastWeapon : MonoBehaviour
 
             }
 
+
             bullet._tracer.transform.position = _hitInfo.point;
             bullet._time = _maxLifeTime;
         }

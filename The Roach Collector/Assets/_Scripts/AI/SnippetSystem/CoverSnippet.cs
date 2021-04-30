@@ -45,7 +45,7 @@ public class CoverSnippet : CombatSnippet
                 _aiWeapon.SetTarget(null);
                 _aiWeapon.SetFiring(false);
 
-                Debug.Log("RELOADING");
+                //Debug.Log("RELOADING");
 
                 _aiWeapon.GetEquippedWeapon()._isReloading = true;
             }
