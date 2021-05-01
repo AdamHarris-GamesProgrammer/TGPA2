@@ -42,7 +42,9 @@ namespace Harris.Core.UI.Dragging
         // PRIVATE
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
+            
             startPosition = transform.position;
+            Debug.Log(startPosition);
             originalParent = transform.parent;
             // Else won't get the drop event.
             GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -208,16 +210,18 @@ namespace Harris.Core.UI.Dragging
 
             InventorySlotUI inventorySlot = GetComponentInParent<InventorySlotUI>();
 
-
+            Debug.Log("Pointer Click");
 
             if (inventorySlot)
             {
+                Debug.Log("Inventory Slot");
                 int indexOfItem = inventorySlot.index;
                 playerInventory.SelectItem(indexOfItem);
                 inventorySlot.SetSelected(true);
             }
             else
             {
+                Debug.Log("Equipment Slot");
                 EquipmentSlotUI equipmentSlot = GetComponentInParent<EquipmentSlotUI>();
                 EquipLocation location = equipmentSlot.GetEquipLocation();
                 playerEquipment.Select(location);

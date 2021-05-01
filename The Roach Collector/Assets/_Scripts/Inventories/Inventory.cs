@@ -173,6 +173,8 @@ namespace Harris.Inventories
 
             _slots[i].item = item;
             _slots[i].number += number;
+
+            Debug.Log(item.GetDisplayName() + " is placed in the " + i + "th slot");
             if (InventoryUpdated != null)
             {
                 InventoryUpdated();

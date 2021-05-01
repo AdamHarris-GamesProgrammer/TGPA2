@@ -6,11 +6,9 @@ using UnityEngine;
 namespace Harris.Inventories
 {
     [RequireComponent(typeof(Pickup))]
-    public class KeyboardPickup : MonoBehaviour, IInteractive
+    public class KeyboardPickup : MonoBehaviour
     {
         Pickup pickup;
-
-        [SerializeField] GameObject pickupPrompt;
 
         public void Interact()
         {
@@ -23,14 +21,17 @@ namespace Harris.Inventories
             }
         }
 
-        public void ShowUI(bool isActive)
-        {
-            pickupPrompt.SetActive(isActive);
-        }
-
         void Awake()
         {
             pickup = GetComponent<Pickup>();
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if(other.CompareTag("Player"))
+            {
+                Interact();
+            }
         }
     }
 }

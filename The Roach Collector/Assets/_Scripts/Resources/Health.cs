@@ -35,6 +35,12 @@ public class Health : MonoBehaviour
         return _isDead;
     }
 
+    public void Heal(float amount) {
+        //Stops the health from going above maximum.
+        _currentHealth = Mathf.Clamp(_currentHealth + amount, 0.0f, _maxHealth);
+    }
+
+
     void Start()
     {
         
