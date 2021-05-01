@@ -7,7 +7,6 @@ public class CharacterAiming : MonoBehaviour
 {
     public float _turnSpeed = 15.0f;
     public float _aimDuration = 0.3f;
-    public Rig aimLayer;
 
     Camera _mainCamera;
     
@@ -31,14 +30,5 @@ public class CharacterAiming : MonoBehaviour
 
     private void LateUpdate()
     {
-        //if (Input.GetMouseButton(1))
-        //{
-        //    aimLayer.weight += Time.deltaTime / _aimDuration;
-        //}
-        //else
-        //{
-        //    aimLayer.weight -= Time.deltaTime / _aimDuration;
-        //}
-        aimLayer.weight = 1.0f;
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Harris.Saving;
 using Harris.UI.Inventories;
-using TMPro;
 using Harris.Inventories;
+using UnityEngine.UI;
 
 namespace Harris.Inventories
 {
@@ -23,7 +23,7 @@ namespace Harris.Inventories
 
         private int _totalArmor;
 
-        [SerializeField] private TMP_Text _armorText;
+        [SerializeField] private Text _armorText;
         
 
         /// <summary>

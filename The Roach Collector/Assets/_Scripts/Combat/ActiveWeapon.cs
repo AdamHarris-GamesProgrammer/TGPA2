@@ -10,7 +10,6 @@ public class ActiveWeapon : MonoBehaviour
 
     public Transform _crosshairTarget;
     [Header("Animation Settings")]
-    [SerializeField] private UnityEngine.Animations.Rigging.Rig _handIK;
 
     [Header("Weapon Settings")]
     [SerializeField] private Transform _weaponParent;
@@ -50,7 +49,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         if(_weapon)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && _weapon._clipAmno > 0 && _weapon._isReloading == false)
             {
                 _weapon.StartFiring();
             }
@@ -72,11 +71,32 @@ public class ActiveWeapon : MonoBehaviour
                 Equip(null);
                 _overrides["Weapon_Anim_Empty"] = null;
             }
+            if (Input.GetKeyDown(KeyCode.R) && _weapon._TotalAmno > 0)
+            {
+                
+                _weapon._isReloading = true;
+                _weapon._TotalAmno += _weapon._clipAmno;
+
+                if (_weapon._TotalAmno < _weapon._clipSize)
+                {
+                    _weapon._clipAmno = _weapon._TotalAmno;
+                    _weapon._TotalAmno = 0;
+                }
+                else
+                {
+                    _weapon._clipAmno = _weapon._clipSize;
+                    _weapon._TotalAmno -= _weapon._clipSize;
+                }
+
+                _anim.SetBool("isReloading", true);
+            }
+            if (_weapon._isReloading == false)
+            {
+                _anim.SetBool("isReloading", false);
+            }
         }
         else
         {
-            _handIK.weight = 0.0f;
-            _anim.SetLayerWeight(1, 0.0f);
         }
     }
 
@@ -104,8 +124,6 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.parent = _weaponParent;
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
-            _handIK.weight = 1.0f;
-            _anim.SetLayerWeight(1, 1.0f);
 
             _weapon._weaponRecoil._camera = _camera;
 

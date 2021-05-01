@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
+    
 
     private bool _isFiring = false;
     [SerializeField] private int _fireRate = 25;
@@ -33,8 +35,26 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private float _damage = 10.0f;
     [SerializeField] private AnimationClip _weaponAnimation;
 
+
+    [SerializeField] public int _clipAmno = 5;
+    [SerializeField] public int _clipSize = 30;
+    [SerializeField] public int _TotalAmno = 90;
+    [SerializeField] public float _reloadDuration = 1.0f;
+    [SerializeField] private float _reloadTimeLeft = 1.0f;
+    [SerializeField] public bool _isReloading = false;
+    private float _damageMultiplier = 1.0f;
+
     public LayerMask _layerMask;
 
+    public void SetDamageMultiplier(float val)
+    {
+        _damageMultiplier = val;
+    }
+
+    public bool NeedToReload()
+    {
+        return (_clipAmno <= 0);
+    }
 
     [SerializeField] private TrailRenderer _tracerEffect;
 
@@ -47,7 +67,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public float GetDamage()
     {
-        return _damage;
+        return _damage * _damageMultiplier;
     }
 
     public AnimationClip GetAnimationClip()
@@ -61,11 +81,42 @@ public class RaycastWeapon : MonoBehaviour
     }
 
 
+
     private void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
+    public void Update()
+    {
+        if (_isReloading == true)
+        {
+            if (_reloadTimeLeft > 0)
+            {
+                _reloadTimeLeft -= Time.deltaTime;
+            }
+            else
+            {
+                _reloadTimeLeft = _reloadDuration;
+                _isReloading = false;
+
+                //Add in the new bullets
+                _TotalAmno += _clipAmno;
+
+                if (_TotalAmno < _clipSize)
+                {
+                    _clipAmno = _TotalAmno;
+                    _TotalAmno = 0;
+                }
+                else
+                {
+                    _clipAmno = _clipSize;
+                    _TotalAmno -= _clipSize;
+                }
+            }
+        }
+        
+    }
 
     Ray _ray;
     RaycastHit _hitInfo;
@@ -140,9 +191,14 @@ public class RaycastWeapon : MonoBehaviour
     {
         _bullets.ForEach(bullet =>
         {
+            //p0 origin position
             Vector3 p0 = GetPosition(bullet);
             bullet._time += dt;
+
+            //p1 new position
             Vector3 p1 = GetPosition(bullet);
+
+            //Calculate the raycast between the origin and new position and see if we collide with anything
             RayCastSegment(p0, p1, bullet);
 
         });
@@ -184,7 +240,13 @@ public class RaycastWeapon : MonoBehaviour
 
             }
 
-            bullet._tracer.transform.position = _hitInfo.point;
+            //TODO: Error triggered here by Tracer being destroyed before this code
+            //This is very efficient as it will be done each bullet update per bullet per frame
+            if(bullet._tracer != null)
+            {
+                bullet._tracer.transform.position = _hitInfo.point;
+            }
+
             bullet._time = _maxLifeTime;
         }
         else
@@ -205,17 +267,25 @@ public class RaycastWeapon : MonoBehaviour
 
         _accumulatedTime += deltaTime;
         UpdateBullets(deltaTime);
+        
     }
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
         float fireInterval = 1.0f / _fireRate;
+        //Debug.Log("Fire Interval: " + fireInterval);
+        _accumulatedTime += deltaTime;
         while(_accumulatedTime > 0.0f)
         {
-            for(int i = 0; i < _bulletCount; ++i) {
+            for (int i = 0; i < _bulletCount; i++) {
+                
                 Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
             }
-            
+            _clipAmno--;
+            if (_clipAmno <= 0)
+            {
+                StopFiring();
+            }
             _accumulatedTime -= fireInterval;
         }
     }

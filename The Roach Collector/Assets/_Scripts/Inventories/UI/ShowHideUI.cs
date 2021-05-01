@@ -10,13 +10,15 @@ namespace Harris.UI
         [SerializeField] KeyCode toggleKey = KeyCode.Escape;
         [SerializeField] GameObject uiContainer = null;
 
-        public event Action showUI;
-        public event Action closeUI;
-
         // Start is called before the first frame update
         void Start()
         {
             uiContainer.SetActive(false);
+        }
+
+        private void Awake()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         // Update is called once per frame
@@ -37,7 +39,7 @@ namespace Harris.UI
                 {
                     //closeUI.Invoke();
                     Time.timeScale = 0;
-                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
                 }
 

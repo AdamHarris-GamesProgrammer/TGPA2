@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 using Harris.Inventories;
 
 namespace Harris.UI.Inventories
@@ -10,8 +10,8 @@ namespace Harris.UI.Inventories
     public class ItemTooltip : MonoBehaviour
     {
         // CONFIG DATA
-        [SerializeField] TextMeshProUGUI titleText = null;
-        [SerializeField] TextMeshProUGUI bodyText = null;
+        [SerializeField] Text titleText = null;
+        [SerializeField] Text bodyText = null;
 
         // PUBLIC
 

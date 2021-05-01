@@ -14,8 +14,6 @@ public class CharacterLocomotion : MonoBehaviour
     [SerializeField] private float _playerSpeed = 1.0f;
     [SerializeField] private float _pushPower = 2.0F;
     [SerializeField] private float _airControl;
-    [SerializeField] Rig _kneeLayer;
-
 
     bool _isJumping;
     bool _isCrouching = false;
@@ -47,17 +45,17 @@ public class CharacterLocomotion : MonoBehaviour
         {
             _isCrouching = !_isCrouching;
 
-            _controller.height = _isCrouching ? 0.9f : 1.6f;
+            _controller.height = _isCrouching ? 1.5f : 1.6f;
         }
 
         //Checks we are crouching
         if (_isCrouching)
         {
-            _kneeLayer.weight += 0.2f;
+            _animator.SetBool("isCrouching", true);
         }
         else
         {
-            _kneeLayer.weight -= 0.2f;
+            _animator.SetBool("isCrouching", false);
         }
 
         //Handles our root motion

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Harris.Inventories;
-using TMPro;
+
 
 namespace Harris.UI.Inventories
 {
@@ -16,7 +16,7 @@ namespace Harris.UI.Inventories
     {
         // CONFIG DATA
         [SerializeField] GameObject textContainer = null;
-        [SerializeField] TextMeshProUGUI itemNumber = null;
+        [SerializeField] Text itemNumber = null;
 
         // PUBLIC
 
