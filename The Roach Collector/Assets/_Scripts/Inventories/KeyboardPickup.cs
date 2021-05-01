@@ -10,9 +10,13 @@ namespace Harris.Inventories
     {
         Pickup pickup;
 
+        [SerializeField] KeyCode _pickupKey = KeyCode.E;
+
+        bool _inRange = false;
+
         public void Interact()
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(_pickupKey))
             {
                 if (pickup.CanBePickedUp())
                 {
@@ -26,11 +30,27 @@ namespace Harris.Inventories
             pickup = GetComponent<Pickup>();
         }
 
-        private void OnTriggerStay(Collider other)
+        private void Update()
         {
-            if(other.CompareTag("Player"))
+            if(_inRange)
             {
                 Interact();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _inRange = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _inRange = false;
             }
         }
     }
