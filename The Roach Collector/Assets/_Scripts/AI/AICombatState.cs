@@ -88,6 +88,8 @@ public class AICombatState : AIState
                 _currentSnippet = behavior;
             }
         }
+
+        agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
     public void Exit(AIAgent agent)
