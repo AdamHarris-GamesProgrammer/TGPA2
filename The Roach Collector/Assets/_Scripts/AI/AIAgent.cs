@@ -28,6 +28,10 @@ public class AIAgent : MonoBehaviour
     List<AlarmController> _alarmsInScene;
     List<CoverController> _coversInScene;
 
+    bool _beingKilled = false;
+
+    public bool BeingKilled { set { _beingKilled = value; } }
+
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
 
@@ -87,6 +91,8 @@ public class AIAgent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_beingKilled) return;
+
         stateMachine.Update();
     }
 
@@ -188,5 +194,12 @@ public class AIAgent : MonoBehaviour
             Debug.Log("Player not in range");
             _player.GetComponent<PlayerController>().AgentInRange = null;
         }
+    }
+
+    void DeathAnimEvent()
+    {
+        Debug.Log("Death event");
+
+        stateMachine.ChangeState(AiStateId.Death);
     }
 }

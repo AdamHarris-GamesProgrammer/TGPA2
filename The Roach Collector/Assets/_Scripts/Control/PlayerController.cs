@@ -12,6 +12,10 @@ namespace TGP.Control
 
         AIAgent _agentInRange = null;
 
+        bool _inKillAnimation = false;
+
+        public bool InKillAnimation { get { return _inKillAnimation; } }
+
         public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
@@ -23,7 +27,7 @@ namespace TGP.Control
 
         Animator _animator;
 
-        
+        [SerializeField] Vector3 _assassinOffset = Vector3.back;
 
         private void Awake()
         {
@@ -52,16 +56,23 @@ namespace TGP.Control
                     //TODO: Check player is currently hidden 
                     //TODO: Check player is behind enemy
                     //TODO: Check enemy has not detected the player
+                    //TODO: Somehow make the animation look good?
+
+                    Vector3 offSetPos = _agentInRange.transform.position - _assassinOffset;
+
+                    transform.position = offSetPos;
 
                     _animator.SetTrigger("stealthAssassinate");
 
+                    _agentInRange.BeingKilled = true;
 
-
-
+                    _inKillAnimation = true;
+                    
+                    
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
-                }
+                    
 
-                
+                }
             }
 
         }
@@ -93,6 +104,13 @@ namespace TGP.Control
                 _actionSlots.Use(5, this.gameObject);
             }
         }
+
+        void OutOfKillAnim()
+        {
+            _inKillAnimation = false;
+        }
     }
+
+
 }
 
