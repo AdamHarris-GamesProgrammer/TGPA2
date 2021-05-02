@@ -195,7 +195,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     Vector3 CalculateAirControl()
     {
-        return ((transform.forward * _input.y) + (transform.right * _input.x)) *(_airControl / 100);
+        return ((transform.forward * _input.y) + (transform.right * _input.x)) * (_airControl / 100);
     }
 
     #endregion
