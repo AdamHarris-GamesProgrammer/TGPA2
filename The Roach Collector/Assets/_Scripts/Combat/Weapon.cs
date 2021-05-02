@@ -1,9 +1,10 @@
+using Harris.Inventories;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="TGP/Weapons/Create New Weapon")]
-public class Weapon : ScriptableObject
+[CreateAssetMenu(menuName ="InventorySystem/Weapon Config")]
+public class Weapon : EquipableItem
 {
     [Header("General")]
     [SerializeField] string _weaponName = "Gun";

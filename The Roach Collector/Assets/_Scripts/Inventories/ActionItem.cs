@@ -10,7 +10,7 @@ namespace Harris.Inventories
     /// This class should be used as a base. Subclasses must implement the `Use`
     /// method.
     /// </remarks>
-    [CreateAssetMenu(menuName = ("Harris/InventorySystem/Action Item"))]
+    [CreateAssetMenu(menuName = ("InventorySystem/Action Item"))]
     public class ActionItem : InventoryItem
     {
         // CONFIG DATA

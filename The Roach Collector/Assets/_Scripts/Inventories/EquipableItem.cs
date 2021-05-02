@@ -6,7 +6,7 @@ namespace Harris.Inventories
     /// An inventory item that can be equipped to the player. Weapons could be a
     /// subclass of this.
     /// </summary>
-    [CreateAssetMenu(menuName = ("Harris/InventorySystem/Equipable Item"))]
+    [CreateAssetMenu(menuName = ("InventorySystem/Equipable Item"))]
     public class EquipableItem : InventoryItem
     {
         // CONFIG DATA

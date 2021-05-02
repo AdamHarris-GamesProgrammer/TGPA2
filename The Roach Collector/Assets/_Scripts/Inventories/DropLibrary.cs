@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Harris.Inventories
 {
-    [CreateAssetMenu(menuName = ("Harris/Inventory/Drop Library"))]
+    [CreateAssetMenu(menuName = ("InventorySystem/Drop Library"))]
     public class DropLibrary : ScriptableObject
     {
         [System.Serializable]
