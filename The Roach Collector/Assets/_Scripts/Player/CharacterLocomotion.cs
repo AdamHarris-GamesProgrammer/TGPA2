@@ -94,6 +94,7 @@ public class CharacterLocomotion : MonoBehaviour
 
         //Accumulates our root motion this frame
         _rootMotion += _animator.deltaPosition;
+        Debug.Log(_rootMotion);
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)

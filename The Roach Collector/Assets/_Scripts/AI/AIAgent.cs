@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
-
+using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
@@ -170,5 +170,23 @@ public class AIAgent : MonoBehaviour
         }
 
         return coversInDistance;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player in range");
+            _player.GetComponent<PlayerController>().AgentInRange = this;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player not in range");
+            _player.GetComponent<PlayerController>().AgentInRange = null;
+        }
     }
 }

@@ -10,7 +10,9 @@ namespace TGP.Control
     {
         bool _canDisableAlarm = false;
 
+        AIAgent _agentInRange = null;
 
+        public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm;
@@ -19,9 +21,13 @@ namespace TGP.Control
 
         ActionStore _actionSlots;
 
+        Animator _animator;
+
+        
 
         private void Awake()
         {
+            _animator = GetComponent<Animator>();
             _actionSlots = GetComponent<ActionStore>();
         }
 
@@ -38,6 +44,25 @@ namespace TGP.Control
             }
 
             InteractWithActionBar();
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if(_agentInRange != null)
+                {
+                    //TODO: Check player is currently hidden 
+                    //TODO: Check player is behind enemy
+                    //TODO: Check enemy has not detected the player
+
+                    _animator.SetTrigger("stealthAssassinate");
+
+
+
+
+                    _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
+                }
+
+                
+            }
 
         }
 
