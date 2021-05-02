@@ -52,6 +52,7 @@ namespace TGP.Control
                     //TODO: Check player is currently hidden 
                     //TODO: Check player is behind enemy
                     //TODO: Check enemy has not detected the player
+                    //TODO: Add system to AIAgent so that they wont go into other states when being stealthed.
 
                     _animator.SetTrigger("stealthAssassinate");
 
