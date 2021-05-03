@@ -15,6 +15,10 @@ public class AIAgent : MonoBehaviour
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt;
     [SerializeField] private AudioClip _alarmPrompt;
+    [SerializeField] private AiStateId _CurrentState;
+
+    
+    public FieldOfView _FOV;
 
     Transform _player;
     AIWeapons _aiWeapon;
@@ -59,12 +63,12 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        
+        _FOV = GetComponent<FieldOfView>();
 
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
-        stateMachine.RegisterState(new AIIdleState(this));
+        stateMachine.RegisterState(new AIIdleState(this, _FOV));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
 
@@ -88,6 +92,7 @@ public class AIAgent : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
+        _CurrentState = stateMachine._currentState;
     }
 
     public void Aggrevate()
