@@ -44,7 +44,6 @@ namespace Harris.Core.UI.Dragging
         {
             
             startPosition = transform.position;
-            Debug.Log(startPosition);
             originalParent = transform.parent;
             // Else won't get the drop event.
             GetComponent<CanvasGroup>().blocksRaycasts = false;

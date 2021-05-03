@@ -11,6 +11,12 @@ public class MedicalUsable : UsableItem
 
     float _applyTimer = 0.0f;
     float _fullEffectTimer = 0.0f;
+
+    float _timeBetweenHeals = 0.0f;
+
+    float _accumulatedTime = 0.0f;
+
+    int _steps = 5;
     
 
     public MedicalUsable(GameObject user, float timeToApply, float timeForFullEffect, float healingAmount)
@@ -19,6 +25,8 @@ public class MedicalUsable : UsableItem
         _applyDuration = timeToApply;
         _timeForFullEffect = timeForFullEffect;
         _healingAmount = healingAmount;
+
+        _timeBetweenHeals = _timeForFullEffect / _steps;
     }
 
     public override void Update(float deltaTime)
@@ -31,14 +39,23 @@ public class MedicalUsable : UsableItem
         {
             _fullEffectTimer += deltaTime;
 
-            if(_fullEffectTimer > _timeForFullEffect)
+            if(_fullEffectTimer > _timeBetweenHeals)
             {
-                _user.GetComponent<Health>().Heal(_healingAmount);
+                _fullEffectTimer = 0.0f;
+                _accumulatedTime += _timeBetweenHeals;
 
-                //TODO: Can enemies use these medkits or not?
-                //TODO: if they can this whole system will need to be reworked including the PlayerController/AIAgent classes
+                _user.GetComponent<Health>().Heal(_healingAmount / _steps);
 
-                _user.GetComponent<PlayerController>().RemoveUsable(this);
+                if (_accumulatedTime >= _timeForFullEffect)
+                {
+                    
+
+                    //TODO: Can enemies use these medkits or not?
+                    //TODO: if they can this whole system will need to be reworked including the PlayerController/AIAgent classes
+
+                    _user.GetComponent<PlayerController>().RemoveUsable(this);
+                }
+
             }
         }
     }
