@@ -8,10 +8,10 @@ public class AIIdleState : AIState
     Transform _player;
     FieldOfView _FOV;
 
-    public AIIdleState(AIAgent agent, FieldOfView fov)
+    public AIIdleState(AIAgent agent)
     {
         _player = agent.GetPlayer();
-        _FOV = fov;
+        _FOV = agent.GetComponent<FieldOfView>();
     }
 
     public void Enter(AIAgent agent)
@@ -33,26 +33,10 @@ public class AIIdleState : AIState
 
     public void Update(AIAgent agent)
     {
-        //Vector3 playerDirection = _player.position - agent.transform.position;
-        //if (playerDirection.sqrMagnitude > agent._config._maxSightDistance * agent._config._maxSightDistance)
-        //{
-        //    //Player is too far away
-        //    return;
-        //}
-
-        //Vector3 agentDirection = agent.transform.forward;
-
-        //playerDirection.Normalize();
-
-        //float dotProduct = Vector3.Dot(playerDirection, agentDirection);
-        //if(dotProduct > 0.0f)
-        //{
-        //    //TODO Change this to a proper detection system
-        //    agent.stateMachine.ChangeState(AiStateId.CombatState);
-        //}
-
+        //Check if player is in the AI's field of view
         if(_FOV.IsEnemyInFOV())
         {
+            //Player is in view, change to chase state
             Debug.Log("Player in FOV");
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
         }

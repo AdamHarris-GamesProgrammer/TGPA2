@@ -17,9 +17,6 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private AudioClip _alarmPrompt;
     [SerializeField] private AiStateId _CurrentState;
 
-    
-    public FieldOfView _FOV;
-
     Transform _player;
     AIWeapons _aiWeapon;
 
@@ -67,12 +64,11 @@ public class AIAgent : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _FOV = GetComponent<FieldOfView>();
 
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
-        stateMachine.RegisterState(new AIIdleState(this, _FOV));
+        stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
 
@@ -183,6 +179,7 @@ public class AIAgent : MonoBehaviour
         return coversInDistance;
     }
 
+    //Used for telling the player when they are in range for assassination attack
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -192,6 +189,7 @@ public class AIAgent : MonoBehaviour
         }
     }
 
+    //Used for telling the player when they are no longer in range for assassination attack
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -201,6 +199,7 @@ public class AIAgent : MonoBehaviour
         }
     }
 
+    //Called by Unity Animator in the StealthAttackResponse and BrutalAttackResponse animations
     void DeathAnimEvent()
     {
         Debug.Log("Death event");

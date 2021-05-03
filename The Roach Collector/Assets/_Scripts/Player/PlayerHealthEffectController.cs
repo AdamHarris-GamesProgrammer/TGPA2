@@ -20,6 +20,11 @@ public class PlayerHealthEffectController : MonoBehaviour
     {
         percentageOfHealth = Mathf.Clamp(percentageOfHealth, 0.0f, 1.0f);
 
+        foreach(Image image in _splatterImages)
+        {
+            image.gameObject.SetActive(false);
+        }
+
         float damagePercentage = 1.0f - percentageOfHealth;
 
         _healthShader._greyScaleAmount = damagePercentage;

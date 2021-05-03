@@ -32,4 +32,10 @@ public class PlayerHealth : Health
         float healthPercentage = _currentHealth / _maxHealth;
         _healthEffectController.CalculateEffect(healthPercentage);
     }
+
+    protected override void OnHeal()
+    {
+        float healthPercentage = _currentHealth / _maxHealth;
+        _healthEffectController.CalculateEffect(healthPercentage);
+    }
 }

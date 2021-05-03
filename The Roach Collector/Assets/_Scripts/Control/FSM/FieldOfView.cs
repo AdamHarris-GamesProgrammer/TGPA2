@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    public GameObject Player;
+    private GameObject Player;
     CharacterLocomotion CharLocomotion;
+    [Min(0f)]
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
@@ -34,6 +36,7 @@ public class FieldOfView : MonoBehaviour
 
         if (visibleTargets.Count > 0)
         {
+            Player.GetComponent<PlayerController>().IsDetected = true;
             enemyinFOV = true;
         }
         else
@@ -51,7 +54,7 @@ public class FieldOfView : MonoBehaviour
         }
 
     }
-
+    
     void findVisibleTargets()
     {
         visibleTargets.Clear();
@@ -67,9 +70,9 @@ public class FieldOfView : MonoBehaviour
 
                 RaycastHit hitInfo;
          
-                if (Physics.Raycast((transform.position + new Vector3(0, 1, 0)), targetDirection, out hitInfo, DistanceToTarget))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, DistanceToTarget))
                 {
-                    Debug.DrawRay((transform.position + new Vector3(0,1,0)), (targetDirection * DistanceToTarget), Color.green);
+                    Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
                     {
                         if(CharLocomotion.GetisCrouching())
@@ -84,6 +87,7 @@ public class FieldOfView : MonoBehaviour
 
                         if(DistanceToTarget <= (viewRadius / 2))
                         {
+                            //Debug.Log("Player is too close");
                             visibleTargets.Add(targetTransform);
                             return;
                         }
@@ -92,6 +96,7 @@ public class FieldOfView : MonoBehaviour
 
                         if (DetectionTimer > DetectedValue)
                         {
+                            //Debug.Log("Player is detected through time");
                             visibleTargets.Add(targetTransform);
                         }
                     }

@@ -56,10 +56,9 @@ namespace TGP.Control
             {
                 if(_agentInRange != null && !_detected)
                 {
-                    //TODO: Check player is currently hidden 
-                    //TODO: Check player is behind enemy
-                    //TODO: Check enemy has not detected the player
-                    //TODO: Somehow make the animation look good?
+                    if (_agentInRange.GetHealth().IsDead()) return;
+                    //TODO: Somehow make the animation look better 
+
 
                     Vector3 offSetPos = _agentInRange.transform.position - _assassinOffset;
 
@@ -73,7 +72,8 @@ namespace TGP.Control
                     
                     
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
-                    
+
+                    _agentInRange = null;
 
                 }
             }
