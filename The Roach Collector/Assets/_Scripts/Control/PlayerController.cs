@@ -24,19 +24,18 @@ namespace TGP.Control
         AlarmController _alarm;
 
 
+
         LockedDoor _doorInRange;
         public LockedDoor DoorInRange { get { return _doorInRange; } 
             set {
                 _doorInRange = value; 
                 if(value == null)
                 {
-                    //TODO: Display UI prompt
                     _unlockDoorPrompt.SetActive(false);
                 }
                 else
                 {
                     _unlockDoorPrompt.SetActive(true);
-                    //TODO: Disable UI prompt
                 }
             } }
 
@@ -57,11 +56,26 @@ namespace TGP.Control
 
         Inventory _playerInventory;
 
+        List<UsableItem> _usables;
+        List<UsableItem> _itemsToRemoveThisFrame;
+
+        public void AddUsable(UsableItem item)
+        {
+            _usables.Add(item);
+        }
+
+        public void RemoveUsable(UsableItem item)
+        {
+            _itemsToRemoveThisFrame.Add(item);
+        }
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             _actionSlots = GetComponent<ActionStore>();
             _playerInventory = GetComponent<Inventory>();
+            _usables = new List<UsableItem>();
+            _itemsToRemoveThisFrame = new List<UsableItem>();
         }
 
 
@@ -117,6 +131,19 @@ namespace TGP.Control
             }
 
             InteractWithLockedDoor();
+
+
+            foreach(UsableItem item in _usables)
+            {
+                item.Update(Time.deltaTime);
+            }
+
+            foreach(UsableItem item in _itemsToRemoveThisFrame)
+            {
+                _usables.Remove(item);
+            }
+
+            _itemsToRemoveThisFrame.Clear();
         }
 
         private void InteractWithLockedDoor()
@@ -127,7 +154,6 @@ namespace TGP.Control
                 {
                     LockedDoorID doorID = _doorInRange.GetLockID();
 
-                    //TODO Search through inventory for a matching key
                     InventorySlot[] slots = _playerInventory.GetFilledSlots();
 
                     foreach(InventorySlot slot in slots)

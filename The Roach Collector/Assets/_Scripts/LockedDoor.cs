@@ -49,7 +49,6 @@ public class LockedDoor : MonoBehaviour
         //TODO: Trigger door opening animation
         //TODO: Activate meshlinks for AI
         //TODO: Play unlocking sound
-        //TODO: Disable Player Prompt for unlocking door
 
         _player.DoorInRange = null;
 

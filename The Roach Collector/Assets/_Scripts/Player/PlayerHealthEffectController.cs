@@ -34,7 +34,7 @@ public class PlayerHealthEffectController : MonoBehaviour
         for(float f = 0; f < 1.0; f += increment)
         {
             
-            if (damagePercentage < f) return;
+            if (damagePercentage <= f) return;
 
             _splatterImages[i]?.gameObject.SetActive(true);
             i++;

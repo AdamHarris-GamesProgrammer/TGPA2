@@ -42,6 +42,7 @@ public class Health : MonoBehaviour
     }
 
     public void Heal(float amount) {
+        Debug.Log("Healing by: " + amount);
         //Stops the health from going above maximum.
         _currentHealth = Mathf.Min(_currentHealth += amount, _maxHealth);
         OnHeal();
