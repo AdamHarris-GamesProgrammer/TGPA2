@@ -21,6 +21,9 @@ namespace TGP.Control
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm;
 
+        bool _detected = false;
+        public bool IsDetected { get { return _detected; } set { _detected = value; } }
+
         public AlarmController Alarm { set { _alarm = value; } }
 
         ActionStore _actionSlots;
@@ -51,7 +54,7 @@ namespace TGP.Control
 
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if(_agentInRange != null)
+                if(_agentInRange != null && !_detected)
                 {
                     //TODO: Check player is currently hidden 
                     //TODO: Check player is behind enemy
