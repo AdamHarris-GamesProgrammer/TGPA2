@@ -1,8 +1,10 @@
 using Harris.Inventories;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static Harris.Inventories.Inventory;
 
 namespace TGP.Control
 {
@@ -21,6 +23,23 @@ namespace TGP.Control
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm;
 
+
+        LockedDoor _doorInRange;
+        public LockedDoor DoorInRange { get { return _doorInRange; } 
+            set {
+                _doorInRange = value; 
+                if(value == null)
+                {
+                    //TODO: Display UI prompt
+                }
+                else
+                {
+                    //TODO: Disable UI prompt
+                }
+            } }
+
+
+
         bool _detected = false;
         public bool IsDetected { get { return _detected; } set { _detected = value; } }
 
@@ -32,10 +51,13 @@ namespace TGP.Control
 
         [SerializeField] Vector3 _assassinOffset = Vector3.back;
 
+        Inventory _playerInventory;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             _actionSlots = GetComponent<ActionStore>();
+            _playerInventory = GetComponent<Inventory>();
         }
 
 
@@ -89,6 +111,40 @@ namespace TGP.Control
             {
                 InteractWithActionBar();
             }
+
+            InteractWithLockedDoor();
+        }
+
+        private void InteractWithLockedDoor()
+        {
+            if(_doorInRange != null)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    LockedDoorID doorID = _doorInRange.GetLockID();
+
+                    //TODO Search through inventory for a matching key
+                    InventorySlot[] slots = _playerInventory.GetFilledSlots();
+
+                    foreach(InventorySlot slot in slots)
+                    {
+                        KeycardItem keycard = slot.item as KeycardItem;
+
+                        if (keycard)
+                        {
+                            Debug.Log("Keycard");
+
+                            if(keycard.GetUnlockables() == doorID)
+                            {
+                                _doorInRange.Unlock();
+                            }
+                        }
+
+                    }
+
+                }
+            }
+         
         }
 
         private void InteractWithEquipment()
