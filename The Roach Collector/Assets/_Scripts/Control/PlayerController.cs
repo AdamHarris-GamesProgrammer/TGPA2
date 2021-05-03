@@ -24,6 +24,11 @@ namespace TGP.Control
         AlarmController _alarm;
 
 
+        [SerializeField] GameObject _applyingHealthText;
+        [SerializeField] GameObject _applyingDamageText;
+        [SerializeField] GameObject _applyingResistanceText;
+        [SerializeField] GameObject _applyingSpeedText;
+
 
         LockedDoor _doorInRange;
         public LockedDoor DoorInRange { get { return _doorInRange; } 
@@ -62,11 +67,43 @@ namespace TGP.Control
         public void AddUsable(UsableItem item)
         {
             _usables.Add(item);
+
+            switch (item.GetID())
+            {
+                case UsableID.MEDKIT:
+                    _applyingHealthText.SetActive(true);
+                    break;
+                case UsableID.DAMAGE:
+                    _applyingDamageText.SetActive(true);
+                    break;
+                case UsableID.RESISTANCE:
+                    _applyingResistanceText.SetActive(true);
+                    break;
+                case UsableID.SPEED:
+                    _applyingSpeedText.SetActive(true);
+                    break;
+            }
         }
 
         public void RemoveUsable(UsableItem item)
         {
             _itemsToRemoveThisFrame.Add(item);
+
+            switch (item.GetID())
+            {
+                case UsableID.MEDKIT:
+                    _applyingHealthText.SetActive(false);
+                    break;
+                case UsableID.DAMAGE:
+                    _applyingDamageText.SetActive(false);
+                    break;
+                case UsableID.RESISTANCE:
+                    _applyingResistanceText.SetActive(false);
+                    break;
+                case UsableID.SPEED:
+                    _applyingSpeedText.SetActive(false);
+                    break;
+            }
         }
 
         private void Awake()
@@ -136,6 +173,33 @@ namespace TGP.Control
             foreach(UsableItem item in _usables)
             {
                 item.Update(Time.deltaTime);
+
+                TimerText _timer = null;
+                switch (item.GetID())
+                {
+                    case UsableID.MEDKIT:
+                        _timer = _applyingHealthText.GetComponentInChildren<TimerText>();
+                        break;
+                    case UsableID.DAMAGE:
+                        _timer = _applyingDamageText.GetComponentInChildren<TimerText>();
+                        break;
+                    case UsableID.RESISTANCE:
+                        _timer = _applyingResistanceText.GetComponentInChildren<TimerText>();
+                        break;
+                    case UsableID.SPEED:
+                        _timer = _applyingSpeedText.GetComponentInChildren<TimerText>();
+                        break;
+                }
+
+                float remainingTime = item.GetApplyTimeRemaining();
+
+                _timer.SetTimer(remainingTime);
+
+                if(remainingTime <= 0.0f)
+                {
+                    _timer.gameObject.transform.parent.gameObject.SetActive(false);
+                }
+
             }
 
             foreach(UsableItem item in _itemsToRemoveThisFrame)

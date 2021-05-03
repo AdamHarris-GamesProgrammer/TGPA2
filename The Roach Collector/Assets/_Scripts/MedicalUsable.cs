@@ -27,6 +27,8 @@ public class MedicalUsable : UsableItem
         _healingAmount = healingAmount;
 
         _timeBetweenHeals = _timeForFullEffect / _steps;
+
+        _id = UsableID.MEDKIT;
     }
 
     public override void Update(float deltaTime)
@@ -60,4 +62,8 @@ public class MedicalUsable : UsableItem
         }
     }
 
+    public override float GetApplyTimeRemaining()
+    {
+        return _applyDuration - _applyTimer;
+    }
 }
