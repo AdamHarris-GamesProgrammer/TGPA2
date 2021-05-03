@@ -38,23 +38,13 @@ namespace TGP.Control
             _actionSlots = GetComponent<ActionStore>();
         }
 
- 
 
-        private void Update()
+
+        private void InteractWithAssassination()
         {
-            if(_canDisableAlarm && _alarm)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    _alarm.DisableAlarm();
-                }
-            }
-
-            InteractWithActionBar();
-
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if(_agentInRange != null && !_detected)
+                if (_agentInRange != null && !_detected)
                 {
                     if (_agentInRange.GetHealth().IsDead()) return;
                     //TODO: Somehow make the animation look better 
@@ -69,15 +59,52 @@ namespace TGP.Control
                     _agentInRange.BeingKilled = true;
 
                     _inKillAnimation = true;
-                    
-                    
+
+
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
 
                     _agentInRange = null;
 
                 }
             }
+        }
 
+        private void Update()
+        {
+            if (_canDisableAlarm && _alarm)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    _alarm.DisableAlarm();
+                }
+            }
+            InteractWithAssassination();
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                InteractWithEquipment();
+
+            }
+            else
+            {
+                InteractWithActionBar();
+            }
+        }
+
+        private void InteractWithEquipment()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                //Debug.Log("Shift + 1");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                //Debug.Log("Shift + 2");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                //Debug.Log("Shift + 3");
+            }
         }
 
         private void InteractWithActionBar()
@@ -108,6 +135,7 @@ namespace TGP.Control
             }
         }
 
+        //Animation event from the StealthAttack animation 
         void OutOfKillAnim()
         {
             _inKillAnimation = false;
