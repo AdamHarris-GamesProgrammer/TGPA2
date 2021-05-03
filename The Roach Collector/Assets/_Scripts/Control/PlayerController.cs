@@ -31,9 +31,11 @@ namespace TGP.Control
                 if(value == null)
                 {
                     //TODO: Display UI prompt
+                    _unlockDoorPrompt.SetActive(false);
                 }
                 else
                 {
+                    _unlockDoorPrompt.SetActive(true);
                     //TODO: Disable UI prompt
                 }
             } }
@@ -50,6 +52,8 @@ namespace TGP.Control
         Animator _animator;
 
         [SerializeField] Vector3 _assassinOffset = Vector3.back;
+
+        [SerializeField] GameObject _unlockDoorPrompt;
 
         Inventory _playerInventory;
 
