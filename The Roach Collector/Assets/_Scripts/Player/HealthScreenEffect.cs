@@ -28,12 +28,6 @@ public class HealthScreenEffect : MonoBehaviour
 
     private void Start()
     {
-        if(!SystemInfo.supportsImageEffects)
-        {
-            enabled = false;
-            return;
-        }
-
         if(_currentShader && !_currentShader.isSupported)
         {
             enabled = false;

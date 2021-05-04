@@ -25,7 +25,7 @@ public class AICombatState : AIState
 
     public void Update(AIAgent agent)
     {
-        if (_playerHealth.IsDead())
+        if (_playerHealth.IsDead)
         {
             agent.stateMachine.ChangeState(AiStateId.Idle);
         }

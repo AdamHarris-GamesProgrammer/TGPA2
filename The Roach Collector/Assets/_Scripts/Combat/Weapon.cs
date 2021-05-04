@@ -9,7 +9,7 @@ public class Weapon : EquipableItem
     [Header("General")]
     [SerializeField] string _weaponName = "Gun";
     [SerializeField] string _weaponDescription = "Shoots things";
-    [SerializeField] GameObject _gunPrefab;
+    [SerializeField] GameObject _gunPrefab = null;
 
     [Header("Gun")]
     [SerializeField] int _magzineCapacity = 12;

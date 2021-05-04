@@ -21,30 +21,24 @@ namespace TGP.Control
         public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
-        AlarmController _alarm;
+        AlarmController _alarm = null;
 
 
-        [SerializeField] GameObject _applyingHealthText;
-        [SerializeField] GameObject _applyingDamageText;
-        [SerializeField] GameObject _applyingResistanceText;
-        [SerializeField] GameObject _applyingSpeedText;
+        [SerializeField] GameObject _applyingHealthText = null;
+        [SerializeField] GameObject _applyingDamageText = null;
+        [SerializeField] GameObject _applyingResistanceText = null;
+        [SerializeField] GameObject _applyingSpeedText = null;
 
 
-        LockedDoor _doorInRange;
+        LockedDoor _doorInRange = null;
         public LockedDoor DoorInRange
         {
             get { return _doorInRange; }
             set
             {
                 _doorInRange = value;
-                if (value == null)
-                {
-                    _unlockDoorPrompt.SetActive(false);
-                }
-                else
-                {
-                    _unlockDoorPrompt.SetActive(true);
-                }
+                if (value == null) _unlockDoorPrompt.SetActive(false);
+                else _unlockDoorPrompt.SetActive(true);
             }
         }
 
@@ -147,7 +141,7 @@ namespace TGP.Control
             {
                 if (_agentInRange != null && !_detected)
                 {
-                    if (_agentInRange.GetHealth().IsDead()) return;
+                    if (_agentInRange.GetHealth().IsDead) return;
                     //TODO: Somehow make the animation look better 
 
 
@@ -242,7 +236,7 @@ namespace TGP.Control
 
         private void InteractWithLockedDoor()
         {
-            if (_doorInRange != null)
+            if (_doorInRange != null && !_doorInRange.IsUnlocked)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {

@@ -7,6 +7,7 @@ using UnityEngine;
 public class LockedDoor : MonoBehaviour
 {
     bool _isUnlocked = false;
+    public bool IsUnlocked { get { return _isUnlocked; } }
 
     [SerializeField] LockedDoorID _id;
     

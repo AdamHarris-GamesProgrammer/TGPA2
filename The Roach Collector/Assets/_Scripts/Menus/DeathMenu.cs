@@ -14,7 +14,7 @@ public class DeathMenu : MonoBehaviour
     }
     private void Update()
     {
-        if (_health.IsDead())
+        if (_health.IsDead)
         {
             SceneManager.LoadScene("DeathScreen");
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnableObjectOnTrigger : MonoBehaviour
 {
-    [SerializeField] GameObject _objectToShow;
+    [SerializeField] GameObject _objectToShow = null;
 
     private void OnTriggerEnter(Collider other)
     {

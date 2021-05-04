@@ -19,13 +19,9 @@ public class Health : MonoBehaviour
     public float HealthRatio { get { return _currentHealth / _maxHealth; } }
 
     protected bool _isDead = false;
+    public bool IsDead { get { return _isDead; } }
 
     public UnityEvent _OnDie;
-
-    public bool IsDead()
-    {
-        return _isDead;
-    }
 
     public void Heal(float amount) {
         Debug.Log("Healing by: " + amount);

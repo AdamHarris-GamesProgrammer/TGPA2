@@ -7,7 +7,7 @@ using UnityEngine;
 public class KeycardItem : InventoryItem
 {
     [Tooltip("This field relates to the type of door this key can unlock")]
-    [SerializeField] private LockedDoorID _unlocksDoor;
+    [SerializeField] private LockedDoorID _unlocksDoor = LockedDoorID.ROACH;
 
     public LockedDoorID GetUnlockables()
     {

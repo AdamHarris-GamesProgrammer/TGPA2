@@ -13,7 +13,7 @@ public class PlayerUI : MonoBehaviour
     public Text ammoTxt;
     public GameObject[] hearts;
 
-    [SerializeField] GameObject _alarmText;
+    [SerializeField] GameObject _alarmText = null;
 
     //update number of lives whenever player is hurt or healed. lives is for the number of lives left
     public void UpdateLivesUI(int lives)

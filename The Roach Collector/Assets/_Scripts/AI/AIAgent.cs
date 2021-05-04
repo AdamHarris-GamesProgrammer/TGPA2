@@ -13,9 +13,9 @@ public class AIAgent : MonoBehaviour
     public AIAgentConfig _config;
 
     AudioSource _audioSource;
-    [SerializeField] private AudioClip _backupPrompt;
-    [SerializeField] private AudioClip _alarmPrompt;
-    [SerializeField] private AiStateId _CurrentState;
+    [SerializeField] private AudioClip _backupPrompt = null;
+    [SerializeField] private AudioClip _alarmPrompt = null;
+    [SerializeField] private AiStateId _currentState = AiStateId.Idle;
 
     Transform _player;
     AIWeapons _aiWeapon;
@@ -55,9 +55,11 @@ public class AIAgent : MonoBehaviour
 
         _agentsInScene = new List<AIAgent>();
         _alarmsInScene = new List<AlarmController>();
+        _coversInScene = new List<CoverController>();
 
         _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
+        _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
     }
 
     // Start is called before the first frame update
@@ -94,12 +96,12 @@ public class AIAgent : MonoBehaviour
         if (_beingKilled) return;
 
         stateMachine.Update();
-        _CurrentState = stateMachine._currentState;
+        _currentState = stateMachine._currentState;
     }
 
     public void Aggrevate()
     {
-        if (_aiHealth.IsDead()) return;
+        if (_aiHealth.IsDead) return;
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
     }
@@ -150,7 +152,7 @@ public class AIAgent : MonoBehaviour
             foreach (AIAgent enemy in _agentsInScene)
             {
                 //Don't add the enemy if the there dead
-                if (enemy.GetHealth().IsDead()) continue;
+                if (enemy.GetHealth().IsDead) continue;
 
                 if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
                 {

@@ -27,18 +27,18 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private int _bulletCount = 1;
     [SerializeField] private float _bulletSpeed = 1000.0f;
     [SerializeField] private float _bulletDrop = 0.0f;
-    [SerializeField] private ParticleSystem _muzzleFlash;
-    [SerializeField] private ParticleSystem _metalHitEffect;
-    [SerializeField] private ParticleSystem _fleshHitEffect;
+    [SerializeField] private ParticleSystem _muzzleFlash = null;
+    [SerializeField] private ParticleSystem _metalHitEffect = null;
+    [SerializeField] private ParticleSystem _fleshHitEffect = null;
 
-    [SerializeField] private Transform _raycastOrigin;
+    [SerializeField] private Transform _raycastOrigin = null;
     [SerializeField] private float _damage = 10.0f;
     [SerializeField] private AnimationClip _weaponAnimation;
 
 
-    [SerializeField] public int _clipAmno = 5;
+    [SerializeField] public int _clipAmmo = 5;
     [SerializeField] public int _clipSize = 30;
-    [SerializeField] public int _TotalAmno = 90;
+    [SerializeField] public int _totalAmmo = 90;
     [SerializeField] public float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
     [SerializeField] public bool _isReloading = false;
@@ -59,12 +59,13 @@ public class RaycastWeapon : MonoBehaviour
 
     public bool NeedToReload()
     {
-        return (_clipAmno <= 0);
+        return (_clipAmmo <= 0);
     }
 
-    [SerializeField] private TrailRenderer _tracerEffect;
+    [SerializeField] private TrailRenderer _tracerEffect = null;
 
-    public WeaponRecoil _weaponRecoil;
+    private WeaponRecoil _weaponRecoil;
+    public WeaponRecoil Recoil { get { return _weaponRecoil; } }
 
     public Transform GetRaycastOrigin()
     {
@@ -86,8 +87,6 @@ public class RaycastWeapon : MonoBehaviour
         return _isFiring;
     }
 
-
-
     private void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
@@ -107,17 +106,17 @@ public class RaycastWeapon : MonoBehaviour
                 _isReloading = false;
 
                 //Add in the new bullets
-                _TotalAmno += _clipAmno;
+                _totalAmmo += _clipAmmo;
 
-                if (_TotalAmno < _clipSize)
+                if (_totalAmmo < _clipSize)
                 {
-                    _clipAmno = _TotalAmno;
-                    _TotalAmno = 0;
+                    _clipAmmo = _totalAmmo;
+                    _totalAmmo = 0;
                 }
                 else
                 {
-                    _clipAmno = _clipSize;
-                    _TotalAmno -= _clipSize;
+                    _clipAmmo = _clipSize;
+                    _totalAmmo -= _clipSize;
                 }
             }
         }
@@ -287,8 +286,8 @@ public class RaycastWeapon : MonoBehaviour
                 
                 Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
             }
-            _clipAmno--;
-            if (_clipAmno <= 0)
+            _clipAmmo--;
+            if (_clipAmmo <= 0)
             {
                 StopFiring();
             }

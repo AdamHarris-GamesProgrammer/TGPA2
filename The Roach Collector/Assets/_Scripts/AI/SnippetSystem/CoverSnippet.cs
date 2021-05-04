@@ -55,9 +55,9 @@ public class CoverSnippet : CombatSnippet
 
             Transform _player = _agent.GetPlayer();
 
-            float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
+            float angle = Vector3.Angle(_agent.transform.forward, _player.forward);
 
-            if(angle < 2.9f)
+            if(angle < 166.0f)
             {
                 //TODO: Stop enemy from shooting until they stand up.
                 _anim.SetBool("isCrouching", false);

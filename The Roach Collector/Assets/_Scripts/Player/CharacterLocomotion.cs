@@ -8,18 +8,20 @@ public class CharacterLocomotion : MonoBehaviour
 {
     
 
-    [Min(0f)][SerializeField] private float _jumpHeight;
-    [Min(0f)][SerializeField] private float _gravity;
-    [SerializeField] private float _stepDown;
-    [SerializeField] private float _jumpDamping;
+    [Min(0f)][SerializeField] private float _jumpHeight = 2.0f;
+    [Min(0f)][SerializeField] private float _gravity = -9.81f;
+    [SerializeField] private float _stepDown = 0.1f;
+    [SerializeField] private float _jumpDamping = 0.1f;
     [SerializeField] private float _playerSpeed = 1.0f;
     [SerializeField] private float _pushPower = 2.0F;
-    [SerializeField] private float _airControl;
+    [SerializeField] private float _airControl = 0.1f;
 
     
 
     bool _isJumping;
     bool _isCrouching = false;
+
+    public bool IsCrouching { get { return _isCrouching; } }
 
     Vector2 _input;
     Vector3 _velocity;
@@ -42,7 +44,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     void Update()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         //Disables crouching if we are crouching enables crouching if I am standing
         if (Input.GetKeyDown(KeyCode.C))
@@ -52,7 +54,7 @@ public class CharacterLocomotion : MonoBehaviour
             _controller.height = _isCrouching ? 1.5f : 1.6f;
         }
 
-        //Checks we are crouching
+        //Checks we are crouching and sets the bool in the animator
         if (_isCrouching)
         {
             _animator.SetBool("isCrouching", true);
@@ -78,7 +80,7 @@ public class CharacterLocomotion : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         if (_isJumping) //In Air state
         {
@@ -94,7 +96,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         //Accumulates our root motion this frame
         _rootMotion += _animator.deltaPosition;
@@ -103,7 +105,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody
@@ -200,10 +202,4 @@ public class CharacterLocomotion : MonoBehaviour
     }
 
     #endregion
-
-    public bool GetisCrouching()
-    {
-        return _isCrouching;
-    }
-
 }
