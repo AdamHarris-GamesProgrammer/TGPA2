@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -15,6 +16,8 @@ public class CharacterLocomotion : MonoBehaviour
     [SerializeField] private float _pushPower = 2.0F;
     [SerializeField] private float _airControl;
 
+    
+
     bool _isJumping;
     bool _isCrouching = false;
 
@@ -23,7 +26,7 @@ public class CharacterLocomotion : MonoBehaviour
     Vector3 _rootMotion;
 
 
-
+    PlayerController _player;
     CharacterController _controller;
     Animator _animator;
     PlayerHealth _health;
@@ -34,6 +37,7 @@ public class CharacterLocomotion : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _health = GetComponent<PlayerHealth>();
+        _player = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -151,8 +155,9 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void UpdateOnGround()
     {
-        //Moving along X and Z
-        Vector3 stepForward = _rootMotion * _playerSpeed;
+        //Moving along X and Z, and then scale move speed by the players move speed stat. (Modified by equipped armor)
+        Vector3 stepForward = (_rootMotion * _playerSpeed) * (1 + _player.GetStat(StatID.MOVE_SPEED)._value);
+        Debug.Log(stepForward);
         Vector3 stepDown = Vector3.down * _stepDown;
 
         _controller.Move(stepForward + stepDown);

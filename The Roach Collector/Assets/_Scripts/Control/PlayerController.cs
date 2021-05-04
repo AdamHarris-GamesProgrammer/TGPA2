@@ -87,7 +87,7 @@ namespace TGP.Control
                     //Add the value to this value
                     _stats[i]._value += stat._value;
 
-                    Debug.Log(_stats[i]._id + " is now " + _stats[i]._value);
+                    //Debug.Log(_stats[i]._id + " is now " + _stats[i]._value);
                 }
             }
         }
@@ -102,11 +102,7 @@ namespace TGP.Control
             return new StatValues(StatID.NONE, 1.0f);
         }
 
-        //TODO: Equipping armor needs to modify the stats
-        //TODO: Unequipping armor needs to modify the stats
-        //TODO: to do this armor needs stats
         //TODO: Implement these into damage calculations, movement calculations etc. 
-        //TODO: Get stats from the player
 
         public void AddUsable(UsableItem item)
         {
