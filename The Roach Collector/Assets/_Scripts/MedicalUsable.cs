@@ -5,18 +5,17 @@ using UnityEngine;
 
 public class MedicalUsable : UsableItem
 {
-    float _applyDuration;
-    float _timeForFullEffect;
-    float _healingAmount;
+    readonly float _applyDuration;
+    readonly float _timeForFullEffect;
+    readonly float _healingAmount;
 
     float _applyTimer = 0.0f;
     float _fullEffectTimer = 0.0f;
 
-    float _timeBetweenHeals = 0.0f;
+    readonly float _timeBetweenHeals = 0.0f;
 
     float _accumulatedTime = 0.0f;
-
-    int _steps = 5;
+    readonly int _steps = 5;
     
 
     public MedicalUsable(GameObject user, float timeToApply, float timeForFullEffect, float healingAmount)

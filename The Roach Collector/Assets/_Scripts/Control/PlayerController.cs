@@ -53,12 +53,6 @@ namespace TGP.Control
             for(int i = 0; i < _stats.Length; i++) {
                 _stats[i]._value = 0.0f;
             }
-
-            StatValues moveSpeed = GetStat(StatID.MOVE_SPEED);
-            if(moveSpeed._id != StatID.NONE)
-            {
-                moveSpeed._value = 0.0f;
-            }
         }
 
         bool _detected = false;
@@ -97,23 +91,6 @@ namespace TGP.Control
                 }
             }
         }
-
-        public void UnqeuipStat(StatValues stat)
-        {
-            //Cycle through each stat
-            for (int i = 0; i < _stats.Length; i++)
-            {
-                //Check if the stat id is equal to the passed in stat id
-                if (_stats[i]._id == stat._id)
-                {
-                    //Add the value to this value
-                    _stats[i]._value -= stat._value;
-
-                    Debug.Log(_stats[i]._id + " is now " + _stats[i]._value);
-                }
-            }
-        }
-
 
         public StatValues GetStat(StatID id)
         {
@@ -343,7 +320,9 @@ namespace TGP.Control
         }
 
         //Animation event from the StealthAttack animation 
+#pragma warning disable IDE0051 // Remove unused private members
         void OutOfKillAnim()
+#pragma warning restore IDE0051 // Remove unused private members
         {
             _inKillAnimation = false;
         }

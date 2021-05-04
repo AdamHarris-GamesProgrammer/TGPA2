@@ -45,7 +45,7 @@ namespace Harris.Inventories
 
             //TODO: Better way of doing this as this couples the player to the equipment
             PlayerController player = GetComponent<PlayerController>();
-
+            //Reset the stats of the player
             player.ResetStats();
 
             foreach(EquipLocation location in GetAllPopulatedSlots())
@@ -78,16 +78,6 @@ namespace Harris.Inventories
             RemoveItem(_currentlySelectedLocation);
 
             GetComponent<Inventory>().AddToFirstEmptySlot(item, 1);
-
-            ArmorConfig armor = item as ArmorConfig;
-            if(armor)
-            {
-                PlayerController controller = GetComponent<PlayerController>();
-                foreach(StatValues stat in armor.GetStatValues())
-                {
-                    controller.UnqeuipStat(stat);
-                }
-            }
 
             FindObjectOfType<ItemTooltip>().Close();
 
@@ -149,10 +139,7 @@ namespace Harris.Inventories
 
             _equippedItems[slot] = item;
 
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
         public int GetIndexOfType(EquipLocation location)
@@ -173,10 +160,7 @@ namespace Harris.Inventories
         public void RemoveItem(EquipLocation slot)
         {
             _equippedItems.Remove(slot);
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
         /// <summary>

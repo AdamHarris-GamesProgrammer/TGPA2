@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Use this enum to add different types of stats to the player 
+//Use this enum to add different types of stats to the player, Add a stat to the array on PlayerController component when this is expanded
 public enum StatID
 {
     DAMAGE_RESISTANCE,
