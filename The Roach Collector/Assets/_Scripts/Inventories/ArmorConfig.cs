@@ -11,6 +11,11 @@ public class ArmorConfig : EquipableItem
 
     [SerializeField] StatValues[] _stats;
 
+    public StatValues[] GetStatValues()
+    {
+        return _stats;
+    }
+
     public int GetArmor()
     {
         return _armor;

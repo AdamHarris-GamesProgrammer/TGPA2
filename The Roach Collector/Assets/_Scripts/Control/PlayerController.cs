@@ -48,7 +48,18 @@ namespace TGP.Control
             }
         }
 
+        public void ResetStats()
+        {
+            for(int i = 0; i < _stats.Length; i++) {
+                _stats[i]._value = 0.0f;
+            }
 
+            StatValues moveSpeed = GetStat(StatID.MOVE_SPEED);
+            if(moveSpeed._id != StatID.NONE)
+            {
+                moveSpeed._value = 0.0f;
+            }
+        }
 
         bool _detected = false;
         public bool IsDetected { get { return _detected; } set { _detected = value; } }
@@ -81,6 +92,8 @@ namespace TGP.Control
                 {
                     //Add the value to this value
                     _stats[i]._value += stat._value;
+
+                    Debug.Log(_stats[i]._id + " is now " + _stats[i]._value);
                 }
             }
         }
@@ -95,6 +108,8 @@ namespace TGP.Control
                 {
                     //Add the value to this value
                     _stats[i]._value -= stat._value;
+
+                    Debug.Log(_stats[i]._id + " is now " + _stats[i]._value);
                 }
             }
         }
