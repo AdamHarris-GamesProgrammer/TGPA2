@@ -31,10 +31,13 @@ namespace TGP.Control
 
 
         LockedDoor _doorInRange;
-        public LockedDoor DoorInRange { get { return _doorInRange; } 
-            set {
-                _doorInRange = value; 
-                if(value == null)
+        public LockedDoor DoorInRange
+        {
+            get { return _doorInRange; }
+            set
+            {
+                _doorInRange = value;
+                if (value == null)
                 {
                     _unlockDoorPrompt.SetActive(false);
                 }
@@ -42,7 +45,8 @@ namespace TGP.Control
                 {
                     _unlockDoorPrompt.SetActive(true);
                 }
-            } }
+            }
+        }
 
 
 
@@ -63,6 +67,54 @@ namespace TGP.Control
 
         List<UsableItem> _usables;
         List<UsableItem> _itemsToRemoveThisFrame;
+
+
+        [SerializeField] StatValues[] _stats;
+
+        public void EquipStat(StatValues stat)
+        {
+            //Cycle through each stat
+            for (int i = 0; i < _stats.Length; i++)
+            {
+                //Check if the stat id is equal to the passed in stat id
+                if (_stats[i]._id == stat._id)
+                {
+                    //Add the value to this value
+                    _stats[i]._value += stat._value;
+                }
+            }
+        }
+
+        public void UnqeuipStat(StatValues stat)
+        {
+            //Cycle through each stat
+            for (int i = 0; i < _stats.Length; i++)
+            {
+                //Check if the stat id is equal to the passed in stat id
+                if (_stats[i]._id == stat._id)
+                {
+                    //Add the value to this value
+                    _stats[i]._value -= stat._value;
+                }
+            }
+        }
+
+
+        public StatValues GetStat(StatID id)
+        {
+            foreach(StatValues stat in _stats)
+            {
+                if (stat._id == id) return stat;
+            }
+
+            return new StatValues(StatID.NONE, 1.0f);
+        }
+
+        //TODO: Equipping armor needs to modify the stats
+        //TODO: Unequipping armor needs to modify the stats
+        //TODO: to do this armor needs stats
+        //TODO: Implement these into damage calculations, movement calculations etc. 
+        //TODO: Get stats from the player
 
         public void AddUsable(UsableItem item)
         {
@@ -88,22 +140,6 @@ namespace TGP.Control
         public void RemoveUsable(UsableItem item)
         {
             _itemsToRemoveThisFrame.Add(item);
-
-            switch (item.GetID())
-            {
-                case UsableID.MEDKIT:
-                    _applyingHealthText.SetActive(false);
-                    break;
-                case UsableID.DAMAGE:
-                    _applyingDamageText.SetActive(false);
-                    break;
-                case UsableID.RESISTANCE:
-                    _applyingResistanceText.SetActive(false);
-                    break;
-                case UsableID.SPEED:
-                    _applyingSpeedText.SetActive(false);
-                    break;
-            }
         }
 
         private void Awake()
@@ -146,31 +182,9 @@ namespace TGP.Control
             }
         }
 
-        private void Update()
+        private void InteractWithUsables()
         {
-            if (_canDisableAlarm && _alarm)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    _alarm.DisableAlarm();
-                }
-            }
-            InteractWithAssassination();
-
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                InteractWithEquipment();
-
-            }
-            else
-            {
-                InteractWithActionBar();
-            }
-
-            InteractWithLockedDoor();
-
-
-            foreach(UsableItem item in _usables)
+            foreach (UsableItem item in _usables)
             {
                 item.Update(Time.deltaTime);
 
@@ -195,14 +209,14 @@ namespace TGP.Control
 
                 _timer.SetTimer(remainingTime);
 
-                if(remainingTime <= 0.0f)
+                if (remainingTime <= 0.0f)
                 {
                     _timer.gameObject.transform.parent.gameObject.SetActive(false);
                 }
 
             }
 
-            foreach(UsableItem item in _itemsToRemoveThisFrame)
+            foreach (UsableItem item in _itemsToRemoveThisFrame)
             {
                 _usables.Remove(item);
             }
@@ -210,9 +224,37 @@ namespace TGP.Control
             _itemsToRemoveThisFrame.Clear();
         }
 
+        private void Update()
+        {
+            if (_canDisableAlarm && _alarm)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    _alarm.DisableAlarm();
+                }
+            }
+            InteractWithAssassination();
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                InteractWithEquipment();
+
+            }
+            else
+            {
+                InteractWithActionBar();
+            }
+
+            InteractWithLockedDoor();
+
+
+            InteractWithUsables();
+
+        }
+
         private void InteractWithLockedDoor()
         {
-            if(_doorInRange != null)
+            if (_doorInRange != null)
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -220,7 +262,7 @@ namespace TGP.Control
 
                     InventorySlot[] slots = _playerInventory.GetFilledSlots();
 
-                    foreach(InventorySlot slot in slots)
+                    foreach (InventorySlot slot in slots)
                     {
                         KeycardItem keycard = slot.item as KeycardItem;
 
@@ -228,7 +270,7 @@ namespace TGP.Control
                         {
                             Debug.Log("Keycard");
 
-                            if(keycard.GetUnlockables() == doorID)
+                            if (keycard.GetUnlockables() == doorID)
                             {
                                 _doorInRange.Unlock();
                             }
@@ -238,7 +280,7 @@ namespace TGP.Control
 
                 }
             }
-         
+
         }
 
         private void InteractWithEquipment()
