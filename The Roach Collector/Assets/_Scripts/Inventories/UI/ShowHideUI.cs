@@ -10,6 +10,8 @@ namespace Harris.UI
         [SerializeField] KeyCode toggleKey = KeyCode.Escape;
         [SerializeField] GameObject uiContainer = null;
 
+        public GameObject UIContainer {  get { return uiContainer; } }
+
         private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
