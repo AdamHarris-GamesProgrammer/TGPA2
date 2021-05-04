@@ -10,7 +10,7 @@ public class WeaponConfig : MonoBehaviour
     [SerializeField] private float _bulletSpeed = 1000.0f;
     [SerializeField] private float _bulletDrop = 0.0f;
     [SerializeField] private float _damage = 10.0f;
-    [SerializeField] private int _clipAmno = 30;
+    [SerializeField] private int _clipAmmo = 30;
     [SerializeField] private int _clipSize = 30;
 
     public int FireRate
@@ -79,15 +79,15 @@ public class WeaponConfig : MonoBehaviour
             _damage = value;
         }
     }
-    public int ClipAmno
+    public int ClipAmmo
     {
         get
         {
-            return _clipAmno;
+            return _clipAmmo;
         }
         set
         {
-            _clipAmno = value;
+            _clipAmmo = value;
         }
     }
     public int ClipSize

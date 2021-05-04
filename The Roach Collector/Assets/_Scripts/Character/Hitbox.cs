@@ -15,6 +15,6 @@ public class Hitbox : MonoBehaviour
 
     public void OnRaycastHit(RaycastWeapon weapon, Vector3 rayDirection)
     {
-        _health.TakeDamage(weapon.GetDamage());
+        _health.TakeDamage(weapon._weaponConfig.Damage);
     }
 }

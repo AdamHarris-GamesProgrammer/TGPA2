@@ -15,21 +15,6 @@ public class PlayerUI : MonoBehaviour
 
     [SerializeField] GameObject _alarmText;
 
-    //update number of lives whenever player is hurt or healed. lives is for the number of lives left
-    public void UpdateLivesUI(int lives)
-    {
-        //existing lives
-        for (int i = 0; i < lives; i++)
-        {
-            hearts[i].SetActive(true);
-        }
-        //lost lives
-        for (int i = lives; i < hearts.Length; i++)
-        {
-            hearts[i].SetActive(false);
-        }
-    }
-
     //update ammo whenever player shoots, reloads or gains ammo. clip is ammo in clip. clipsize is for ammo in each reload and anmoLeft is total ammo
     public void UpdateAmmoUI(int clip, int clipSize, int ammoLeft)
     {

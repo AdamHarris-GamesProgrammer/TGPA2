@@ -19,7 +19,7 @@ public class RaycastWeapon : MonoBehaviour
     }
 
 
-    [SerializeField] private WeaponConfig _weaponConfig;
+    [SerializeField] public WeaponConfig _weaponConfig;
     private bool _isFiring = false;
     
     [SerializeField] private ParticleSystem _muzzleFlash;
@@ -234,9 +234,9 @@ public class RaycastWeapon : MonoBehaviour
             for(int i = 0; i < _weaponConfig.BulletCount; ++i) {
                 Fire(target += UnityEngine.Random.insideUnitSphere * _weaponConfig.WeaponSpread);
             }
-            _weaponConfig.ClipAmno--;
-            //AmnoUI.UpdateAmmoUI(_clipAmno, _clipSize, _TotalAmno);
-            if (_weaponConfig.ClipAmno <= 0)
+            _weaponConfig.ClipAmmo--;
+            //AmnoUI.UpdateAmmoUI(_clipAmmo, _clipSize, _TotalAmno);
+            if (_weaponConfig.ClipAmmo <= 0)
             {
                 StopFiring();
             }

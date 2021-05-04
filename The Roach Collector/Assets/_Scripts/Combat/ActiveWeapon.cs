@@ -50,7 +50,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         if(_weapon)
         {
-            if (Input.GetButtonDown("Fire1") && _weapon._clipAmno > 0 && _weapon._isReloading == false)
+            if (Input.GetButtonDown("Fire1") && _weapon._weaponConfig.ClipAmmo > 0 && _weapon._isReloading == false)
             {
                 _weapon.StartFiring();
             }
@@ -76,17 +76,17 @@ public class ActiveWeapon : MonoBehaviour
             {
                 
                 _weapon._isReloading = true;
-                _weapon._TotalAmno += _weapon._clipAmno;
+                _weapon._TotalAmno += _weapon._weaponConfig.ClipAmmo;
 
-                if (_weapon._TotalAmno < _weapon._clipSize)
+                if (_weapon._TotalAmno < _weapon._weaponConfig.ClipAmmo)
                 {
-                    _weapon._clipAmno = _weapon._TotalAmno;
+                    _weapon._weaponConfig.ClipAmmo = _weapon._TotalAmno;
                     _weapon._TotalAmno = 0;
                 }
                 else
                 {
-                    _weapon._clipAmno = _weapon._clipSize;
-                    _weapon._TotalAmno -= _weapon._clipSize;
+                    _weapon._weaponConfig.ClipAmmo = _weapon._weaponConfig.ClipAmmo;
+                    _weapon._TotalAmno -= _weapon._weaponConfig.ClipSize;
                 }
 
                 _anim.SetBool("isReloading", _weapon._isReloading);
