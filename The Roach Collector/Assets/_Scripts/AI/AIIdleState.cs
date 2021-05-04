@@ -37,7 +37,7 @@ public class AIIdleState : AIState
         if(_FOV.IsEnemyInFOV())
         {
             //Player is in view, change to chase state
-            Debug.Log("Player in FOV");
+            //Debug.Log("Player in FOV");
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
         }
 

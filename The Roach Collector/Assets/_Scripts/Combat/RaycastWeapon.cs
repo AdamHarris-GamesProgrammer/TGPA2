@@ -42,9 +42,15 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] public float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
     [SerializeField] public bool _isReloading = false;
+    [SerializeField] private DamageType _type;
     private float _damageMultiplier = 1.0f;
 
     public LayerMask _layerMask;
+
+    public DamageType GetDamageType()
+    {
+        return _type;
+    }
 
     public void SetDamageMultiplier(float val)
     {

@@ -18,10 +18,6 @@ public class DeathMenu : MonoBehaviour
         {
             SceneManager.LoadScene("DeathScreen");
         }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _health.TakeDamage(10.0f);
-        }
     }
     public void Respawn()
     {

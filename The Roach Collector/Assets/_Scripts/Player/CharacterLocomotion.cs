@@ -157,7 +157,6 @@ public class CharacterLocomotion : MonoBehaviour
     {
         //Moving along X and Z, and then scale move speed by the players move speed stat. (Modified by equipped armor)
         Vector3 stepForward = (_rootMotion * _playerSpeed) * (1 + _player.GetStat(StatID.MOVE_SPEED)._value);
-        Debug.Log(stepForward);
         Vector3 stepDown = Vector3.down * _stepDown;
 
         _controller.Move(stepForward + stepDown);

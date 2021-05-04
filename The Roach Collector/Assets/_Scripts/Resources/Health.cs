@@ -1,6 +1,7 @@
 using Harris.Inventories;
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -62,12 +63,34 @@ public class Health : MonoBehaviour
     }
 
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(DamageType type, float amount)
     {
         //Stops the Character from taking damage if they don't need to.
-        if (!_canBeHarmed) return;
+
         if (_isDead) return;
 
+        Debug.Log(gameObject.name + " taking " + type + " with " + amount);
+        if(type == DamageType.MELEE_DAMGE) 
+        {
+            PlayerController player = GetComponent<PlayerController>();
+            if (player)
+            {
+                float resistance = 1.0f - player.GetStat(StatID.MELEE_RESISTANCE)._value;
+                amount *= resistance;
+            }
+        }
+        else if(type == DamageType.PROJECTILE_DAMAGE)
+        {
+            PlayerController player = GetComponent<PlayerController>();
+            if (player)
+            {
+                float resistance = 1.0f - player.GetStat(StatID.PROJECTILE_RESISTANCE)._value;
+                amount *= resistance;
+            }
+        }
+        Debug.Log(gameObject.name + " taking " + type + " with " + amount + " after reistance");
+
+        if (!_canBeHarmed) return;
 
         //Armor can block 90% of incoming damage. 10% of damage will always come through
         //The remaining 90% of damage is then blocked based on how much armor the player has
