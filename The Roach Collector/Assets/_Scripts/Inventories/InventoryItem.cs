@@ -65,7 +65,16 @@ namespace Harris.Inventories
             if (itemID == null || !itemLookupCache.ContainsKey(itemID)) return null;
             return itemLookupCache[itemID];
         }
-        
+
+        /// <summary>
+        /// Trigger the use of this item. Override to provide functionality.
+        /// </summary>
+        /// <param name="user">The character that is using this action.</param>
+        public virtual void Use(GameObject user)
+        {
+            Debug.Log("Using action: " + this);
+        }
+
         /// <summary>
         /// Spawn the pickup gameobject into the world.
         /// </summary>

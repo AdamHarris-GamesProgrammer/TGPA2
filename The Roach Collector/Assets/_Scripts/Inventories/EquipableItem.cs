@@ -11,13 +11,18 @@ namespace Harris.Inventories
     {
         // CONFIG DATA
         [Tooltip("Where are we allowed to put this item.")]
-        [SerializeField] EquipLocation allowedEquipLocation = EquipLocation.Weapon;
+        [SerializeField] EquipLocation _allowedEquipLocation = EquipLocation.Weapon;
 
         // PUBLIC
 
+        public override void Use(GameObject user)
+        {
+            user.GetComponent<Equipment>().AddItem(_allowedEquipLocation, this);
+        }
+
         public EquipLocation GetAllowedEquipLocation()
         {
-            return allowedEquipLocation;
+            return _allowedEquipLocation;
         }
     }
 }

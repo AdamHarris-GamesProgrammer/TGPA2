@@ -41,7 +41,7 @@ namespace Harris.UI.Inventories
 
         public InventoryItem GetItem()
         {
-            return store.GetAction(index);
+            return store.GetItem(index);
         }
 
         public int GetNumber()
