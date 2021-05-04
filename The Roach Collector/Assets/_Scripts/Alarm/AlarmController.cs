@@ -16,8 +16,7 @@ public class AlarmController : MonoBehaviour
 
     Transform _activationPoint;
 
-    public Transform ActivationPoint
-    { get { return _activationPoint;} }
+    public Transform ActivationPoint { get { return _activationPoint;} }
 
     static bool _isSet = false;
     public bool IsSet { get { return _isSet; } }
