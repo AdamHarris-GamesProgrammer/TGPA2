@@ -170,7 +170,7 @@ public class CoverSnippet : CombatSnippet
 
 
 
-        float healthRatio = _aiHealth.GetHealthRatio();
+        float healthRatio = _aiHealth.HealthRatio;
 
         
         if(healthRatio <= 0.5f && _needToReload)
@@ -201,7 +201,7 @@ public class CoverSnippet : CombatSnippet
     public bool IsFinished()
     {
         //If the ais health is above the threshold or the timer is less than 0 then exit the snippet.
-        bool result = (_aiHealth.GetHealthRatio() > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
+        bool result = (_aiHealth.HealthRatio > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
 
         if(result)
         {

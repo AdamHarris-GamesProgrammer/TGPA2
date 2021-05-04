@@ -168,8 +168,6 @@ public class CharacterLocomotion : MonoBehaviour
             _controller.Move(Vector3.up * _stepDown);
         }
 
-
-
         _rootMotion = Vector3.zero;
 
         //Stepped off edge
@@ -178,8 +176,6 @@ public class CharacterLocomotion : MonoBehaviour
             InheritVelocity(0.0f);
         }
     }
-
-
 
     private void InheritVelocity(float jumpVelocity)
     {

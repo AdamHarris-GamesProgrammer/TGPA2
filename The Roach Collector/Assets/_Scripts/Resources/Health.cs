@@ -15,24 +15,12 @@ public class Health : MonoBehaviour
 
     public bool CanBeHarmed {  get { return _canBeHarmed; } set { _canBeHarmed = value; } }
 
+    public float CurrentHealth { get { return _currentHealth; } }
+    public float HealthRatio { get { return _currentHealth / _maxHealth; } }
 
     protected bool _isDead = false;
 
     public UnityEvent _OnDie;
-
-    private void Awake()
-    {
-    }
-
-    public float GetCurrentHealth()
-    {
-        return _currentHealth;
-    }
-
-    public float GetHealthRatio()
-    {
-        return _currentHealth / _maxHealth;
-    }
 
     public bool IsDead()
     {
@@ -46,10 +34,7 @@ public class Health : MonoBehaviour
         OnHeal();
     }
 
-    protected virtual void OnHeal()
-    {
 
-    }
 
     void Start()
     {
@@ -77,19 +62,9 @@ public class Health : MonoBehaviour
         OnDamage();
     }
 
-    protected virtual void OnStart()
-    {
-
-    }
-
-    protected virtual void OnDeath()
-    {
-
-    }
-
-    protected virtual void OnDamage()
-    {
-
-    }
+    protected virtual void OnHeal() {}
+    protected virtual void OnStart() {}
+    protected virtual void OnDeath() {}
+    protected virtual void OnDamage() {}
 
 }
