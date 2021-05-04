@@ -19,29 +19,26 @@ public class RaycastWeapon : MonoBehaviour
     }
 
 
+    [SerializeField] private WeaponConfig _weaponConfig;
     private bool _isFiring = false;
-    [SerializeField] private int _fireRate = 25;
-    [SerializeField] private float _weaponSpread = 0;
-    [SerializeField] private int _bulletCount = 1;
-    [SerializeField] private float _bulletSpeed = 1000.0f;
-    [SerializeField] private float _bulletDrop = 0.0f;
+    
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private ParticleSystem _metalHitEffect;
     [SerializeField] private ParticleSystem _fleshHitEffect;
 
     [SerializeField] private Transform _raycastOrigin;
-    [SerializeField] private float _damage = 10.0f;
+    
     [SerializeField] private AnimationClip _weaponAnimation;
 
 
-    [SerializeField] public int _clipAmno = 30;
-    [SerializeField] public int _clipSize = 30;
+    
     [SerializeField] public int _TotalAmno = 90;
     [SerializeField] public float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
     [SerializeField] public bool _isReloading = false;
 
     public LayerMask _layerMask;
+    //public PlayerUI AmnoUI;
 
 
     [SerializeField] private TrailRenderer _tracerEffect;
@@ -53,10 +50,7 @@ public class RaycastWeapon : MonoBehaviour
         return _raycastOrigin;
     }
 
-    public float GetDamage()
-    {
-        return _damage;
-    }
+    
 
     public AnimationClip GetAnimationClip()
     {
@@ -103,7 +97,7 @@ public class RaycastWeapon : MonoBehaviour
     Vector3 GetPosition(Bullet bullet)
     {
         //Calculate gravity
-        Vector3 gravity = Vector3.down * _bulletDrop;
+        Vector3 gravity = Vector3.down * _weaponConfig.BulletDrop;
 
         //p + v* t + 0.5 * g * t *t
         //Brackets aren't needed but they help make the equation more readable
@@ -128,7 +122,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         _muzzleFlash.Emit(1);
 
-        Vector3 velocity = (target - _raycastOrigin.position).normalized * _bulletSpeed;
+        Vector3 velocity = (target - _raycastOrigin.position).normalized * _weaponConfig.BulletSpeed;
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
 
@@ -234,14 +228,15 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
-        float fireInterval = 1.0f / _fireRate;
+        float fireInterval = 1.0f / _weaponConfig.FireRate;
         while(_accumulatedTime > 0.0f)
         {
-            for(int i = 0; i < _bulletCount; ++i) {
-                Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
+            for(int i = 0; i < _weaponConfig.BulletCount; ++i) {
+                Fire(target += UnityEngine.Random.insideUnitSphere * _weaponConfig.WeaponSpread);
             }
-            _clipAmno--;
-            if (_clipAmno <= 0)
+            _weaponConfig.ClipAmno--;
+            //AmnoUI.UpdateAmmoUI(_clipAmno, _clipSize, _TotalAmno);
+            if (_weaponConfig.ClipAmno <= 0)
             {
                 StopFiring();
             }
