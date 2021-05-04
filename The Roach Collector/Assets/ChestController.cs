@@ -1,6 +1,7 @@
 ﻿using Harris.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 public class ChestController : MonoBehaviour
@@ -10,6 +11,8 @@ public class ChestController : MonoBehaviour
 
     [SerializeField] GameObject _chestInventory;
     GameObject _playerInventory;
+
+
 
     void Awake()
     {
@@ -34,6 +37,7 @@ public class ChestController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            _chestInventory = FindObjectOfType<PlayerController>().ChestInventory;
             _inRange = true;
         }
     }
