@@ -17,7 +17,16 @@ namespace Harris.Inventories
 
         public override void Use(GameObject user)
         {
-            user.GetComponent<Equipment>().AddItem(_allowedEquipLocation, this);
+            Equipment equipment = user.GetComponent<Equipment>();
+
+            EquipableItem item = equipment.GetItemInSlot(_allowedEquipLocation);
+
+            if(item != null)
+            {
+                user.GetComponent<Inventory>().AddToFirstEmptySlot(item, 1);
+            }
+
+            equipment.AddItem(_allowedEquipLocation, this);
         }
 
         public EquipLocation GetAllowedEquipLocation()
