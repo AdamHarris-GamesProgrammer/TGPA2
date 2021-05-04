@@ -145,7 +145,7 @@ namespace TGP.Control
                     //TODO: Somehow make the animation look better 
 
 
-                    Vector3 offSetPos = _agentInRange.transform.position - _assassinOffset;
+                    Vector3 offSetPos = _agentInRange.transform.position - _agentInRange.transform.forward * 1.0f;
 
                     transform.position = offSetPos;
 
