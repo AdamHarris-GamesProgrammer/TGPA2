@@ -9,7 +9,7 @@ public class ChestController : MonoBehaviour
     bool _inRange = false;
     bool _isOpen = false;
 
-    [SerializeField] GameObject _chestInventory;
+    GameObject _chestInventory;
     GameObject _playerInventory;
 
 
@@ -53,7 +53,6 @@ public class ChestController : MonoBehaviour
 
     void Panels(bool val)
     {
-        //TODO: Open/close player inventory and chest inventory
         _chestInventory.SetActive(val);
         _playerInventory.SetActive(val);
 
