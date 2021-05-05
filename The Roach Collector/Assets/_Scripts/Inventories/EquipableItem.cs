@@ -9,6 +9,7 @@ namespace Harris.Inventories
     [CreateAssetMenu(menuName = ("InventorySystem/Equipable Item"))]
     public class EquipableItem : InventoryItem
     {
+        [Header("Equipable Settings")]
         // CONFIG DATA
         [Tooltip("Where are we allowed to put this item.")]
         [SerializeField] EquipLocation _allowedEquipLocation = EquipLocation.Weapon;
