@@ -27,11 +27,11 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private ParticleSystem _fleshHitEffect = null;
 
     [SerializeField] private Transform _raycastOrigin = null;
-    [SerializeField] private AnimationClip _weaponAnimation;
 
     [SerializeField] WeaponConfig _config;
+    public WeaponConfig Config { get { return _config; } }
 
-    [SerializeField] private int _clipAmmo = 30;
+    [SerializeField] public int _clipAmmo = 30;
     [SerializeField] public int _totalAmmo = 90;
     [SerializeField] public float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
@@ -69,11 +69,6 @@ public class RaycastWeapon : MonoBehaviour
     public float GetDamage()
     {
         return _config.Damage * _damageMultiplier;
-    }
-
-    public AnimationClip GetAnimationClip()
-    {
-        return _weaponAnimation;
     }
 
     public bool IsFiring()
