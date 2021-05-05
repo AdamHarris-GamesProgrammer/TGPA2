@@ -269,18 +269,20 @@ public class RaycastWeapon : MonoBehaviour
         float fireInterval = 1.0f / _config.FireRate;
         //Debug.Log("Fire Interval: " + fireInterval);
         _accumulatedTime += deltaTime;
-        while(_accumulatedTime > 0.0f)
+        while(_accumulatedTime > fireInterval)
         {
             for (int i = 0; i < _config.BulletCount; i++) {
                 
                 Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
+                Debug.Log("Fire");
+                Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
             if (_clipAmmo <= 0)
             {
                 StopFiring();
             }
-            _accumulatedTime -= fireInterval;
+            _accumulatedTime = 0.0f;
         }
     }
 }
