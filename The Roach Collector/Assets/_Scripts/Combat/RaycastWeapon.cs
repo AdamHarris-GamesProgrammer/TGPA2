@@ -274,8 +274,8 @@ public class RaycastWeapon : MonoBehaviour
             for (int i = 0; i < _config.BulletCount; i++) {
                 
                 Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
-                Debug.Log("Fire");
-                Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
+                //Debug.Log("Fire");
+                //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
             if (_clipAmmo <= 0)
