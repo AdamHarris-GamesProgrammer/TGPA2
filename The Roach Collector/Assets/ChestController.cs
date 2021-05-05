@@ -1,5 +1,4 @@
-﻿using Harris.Inventories;
-using Harris.UI;
+﻿using Harris.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TGP.Control;
@@ -10,15 +9,14 @@ public class ChestController : MonoBehaviour
     bool _inRange = false;
     bool _isOpen = false;
 
-    GameObject _chestInventoryPanel;
-    GameObject _playerInventoryPanel;
-    Inventory _chestInventory;
+    [SerializeField] GameObject _chestInventory;
+    GameObject _playerInventory;
+
 
 
     void Awake()
     {
-        _playerInventoryPanel = FindObjectOfType<ShowHideUI>().UIContainer;
-        _chestInventory = GetComponent<Inventory>();
+        _playerInventory = FindObjectOfType<ShowHideUI>().UIContainer;
 
     }
 
@@ -39,7 +37,7 @@ public class ChestController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _chestInventoryPanel = FindObjectOfType<PlayerController>().ChestInventory;
+            _chestInventory = FindObjectOfType<PlayerController>().ChestInventory;
             _inRange = true;
         }
     }
@@ -56,8 +54,8 @@ public class ChestController : MonoBehaviour
     void Panels(bool val)
     {
         //TODO: Open/close player inventory and chest inventory
-        _chestInventoryPanel.SetActive(val);
-        _playerInventoryPanel.SetActive(val);
+        _chestInventory.SetActive(val);
+        _playerInventory.SetActive(val);
 
 
         if (!val)
