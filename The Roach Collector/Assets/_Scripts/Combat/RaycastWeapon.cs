@@ -35,6 +35,8 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private float _damage = 10.0f;
     [SerializeField] private AnimationClip _weaponAnimation;
 
+    [SerializeField] WeaponConfig _config;
+
 
     [SerializeField] public int _clipAmmo = 5;
     [SerializeField] public int _clipSize = 30;
