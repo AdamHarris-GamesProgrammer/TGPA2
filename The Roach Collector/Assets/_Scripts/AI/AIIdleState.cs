@@ -24,6 +24,7 @@ public class AIIdleState : AIState
 
     public void Exit(AIAgent agent)
     {
+        agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
     public AiStateId GetID()
@@ -37,7 +38,7 @@ public class AIIdleState : AIState
         if(_FOV.IsEnemyInFOV)
         {
             //Player is in view, change to chase state
-            //Debug.Log("Player in FOV");
+            Debug.Log("Player in FOV");
             //TODO: Incorporate Perception system 
             //TODO: Add in Object for players last known position
             //TODO: Check out if the player is still there. 

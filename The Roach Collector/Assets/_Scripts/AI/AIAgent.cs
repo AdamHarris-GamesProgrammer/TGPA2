@@ -73,6 +73,8 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
+        stateMachine.RegisterState(new AISearchForPlayerState(this));
+        stateMachine.RegisterState(new AICheckPlayerState(this));
 
         if (_startingWeapon)
         {

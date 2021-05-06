@@ -37,10 +37,12 @@ public class FieldOfView : MonoBehaviour
         if (_visibleTargets.Count > 0)
         {
             _playerGO.GetComponent<PlayerController>().IsDetected = true;
+            //Debug.Log("Enemy in fov");
             _isEnemyinFOV = true;
         }
         else
         {
+            //Debug.Log("Enemy not in fov");
             _isEnemyinFOV = false;
         }
 

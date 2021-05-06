@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class AISearchForPlayerState : AIState
 {
+    public AISearchForPlayerState(AIAgent agent)
+    {
+
+    } 
+
     public void Enter(AIAgent agent)
     {
 

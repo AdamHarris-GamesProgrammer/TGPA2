@@ -6,8 +6,12 @@ using UnityEngine.AI;
 public class AICheckPlayerState : AIState
 {
     LastKnownLocation _lastKnownLocation;
+    NavMeshAgent _navAgent;
 
-    
+    public AICheckPlayerState(AIAgent agent)
+    {
+        _navAgent = agent.GetComponent<NavMeshAgent>();
+    }
 
 
     public void Enter(AIAgent agent)
@@ -19,6 +23,8 @@ public class AICheckPlayerState : AIState
 
         bool successful = false;
         Vector3 finalDestination = Vector3.zero;
+
+        Debug.Log("check player state");
 
         do
         {
@@ -51,7 +57,7 @@ public class AICheckPlayerState : AIState
 
         } while (!successful);
 
-        agent.GetComponent<NavMeshAgent>().SetDestination(finalDestination);
+        _navAgent.SetDestination(finalDestination);
     }
 
     public void Exit(AIAgent agent)
@@ -61,7 +67,14 @@ public class AICheckPlayerState : AIState
 
     public void Update(AIAgent agent)
     {
+        if(_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        {
+            Vector3 direction = _lastKnownLocation.transform.position - agent.transform.position;
 
+            Quaternion look = Quaternion.Slerp(agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+
+            agent.transform.rotation = look;
+        }
     }
 
     public AiStateId GetID()
