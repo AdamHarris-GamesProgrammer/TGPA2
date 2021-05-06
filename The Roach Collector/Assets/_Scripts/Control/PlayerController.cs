@@ -46,7 +46,8 @@ namespace TGP.Control
 
         public void ResetStats()
         {
-            for(int i = 0; i < _stats.Length; i++) {
+            for (int i = 0; i < _stats.Length; i++)
+            {
                 _stats[i]._value = 0.0f;
             }
         }
@@ -90,7 +91,7 @@ namespace TGP.Control
 
         public StatValues GetStat(StatID id)
         {
-            foreach(StatValues stat in _stats)
+            foreach (StatValues stat in _stats)
             {
                 if (stat._id == id) return stat;
             }
@@ -142,8 +143,11 @@ namespace TGP.Control
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
+                //Debug.Log("F is pressed");
+
                 if (_agentInRange != null && !_detected)
                 {
+                    //Debug.Log("Assassinate");
                     if (_agentInRange.GetHealth().IsDead) return;
                     //TODO: Somehow make the animation look better 
 
@@ -218,20 +222,12 @@ namespace TGP.Control
                     _alarm.DisableAlarm();
                 }
             }
+
             InteractWithAssassination();
 
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                InteractWithEquipment();
-
-            }
-            else
-            {
-                InteractWithActionBar();
-            }
+            InteractWithActionBar();
 
             InteractWithLockedDoor();
-
 
             InteractWithUsables();
 
@@ -266,22 +262,6 @@ namespace TGP.Control
                 }
             }
 
-        }
-
-        private void InteractWithEquipment()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                //Debug.Log("Shift + 1");
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //Debug.Log("Shift + 2");
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                //Debug.Log("Shift + 3");
-            }
         }
 
         private void InteractWithActionBar()

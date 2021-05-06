@@ -31,7 +31,7 @@ public class AIAgent : MonoBehaviour
 
     bool _beingKilled = false;
 
-    public bool BeingKilled { set { _beingKilled = value; } }
+    public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }

@@ -18,6 +18,7 @@ public class AssassinationTarget : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //Debug.Log("Player in range");
             _player.GetComponent<PlayerController>().AgentInRange = GetComponentInParent<AIAgent>();
         }
     }

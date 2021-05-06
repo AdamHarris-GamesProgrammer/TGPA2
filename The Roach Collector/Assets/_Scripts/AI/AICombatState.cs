@@ -31,6 +31,8 @@ public class AICombatState : AIState
             agent.stateMachine.ChangeState(AiStateId.Idle);
         }
 
+        if (agent.BeingKilled) return;
+
         if (_currentSnippet.IsFinished())
         {
             int highestScore = 0;

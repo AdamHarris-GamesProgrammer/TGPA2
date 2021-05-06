@@ -87,6 +87,7 @@ public class AdvanceSnippet : CombatSnippet
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _aiHealth = agent.GetComponent<AIHealth>();
+        _fov = agent.GetComponent<FieldOfView>();
         _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
         _agent = agent;
     }
