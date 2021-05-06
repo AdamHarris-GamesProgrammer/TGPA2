@@ -48,7 +48,7 @@ public class AIWeapons : MonoBehaviour
             _currentWeapon.StartFiring();
         }else
         {
-            _currentWeapon.StopFiring();
+           // _currentWeapon.StopFiring();
         }
     }
 
