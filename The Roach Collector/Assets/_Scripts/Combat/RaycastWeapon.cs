@@ -28,7 +28,7 @@ public class RaycastWeapon : MonoBehaviour
 
     [SerializeField] private Transform _raycastOrigin = null;
 
-    [SerializeField] WeaponConfig _config;
+    [SerializeField] public WeaponConfig _config;
     public WeaponConfig Config { get { return _config; } }
 
     [SerializeField] public int _clipAmmo = 30;

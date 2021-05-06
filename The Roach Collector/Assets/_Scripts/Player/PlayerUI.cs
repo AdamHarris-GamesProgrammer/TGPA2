@@ -18,7 +18,7 @@ public class PlayerUI : MonoBehaviour
     //update ammo whenever player shoots, reloads or gains ammo. clip is ammo in clip. clipsize is for ammo in each reload and anmoLeft is total ammo
     public void UpdateAmmoUI(int clip, int clipSize, int ammoLeft)
     {
-        ammoTxt.text = clip + "/ " + (ammoLeft - clipSize);
+        ammoTxt.text = clip + "/ " + (ammoLeft);
         if (ammoLeft > 0)
         {
             ammoTxt.color = Color.black;

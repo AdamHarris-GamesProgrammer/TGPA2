@@ -16,6 +16,7 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
+    [SerializeField] public PlayerUI _PlayerUI = null;
 
     public Cinemachine.CinemachineFreeLook _camera;
 
@@ -33,6 +34,8 @@ public class ActiveWeapon : MonoBehaviour
             RaycastWeapon weapon = Instantiate(_startingWeapon);
 
             Equip(weapon);
+
+            _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
         }
     }
 
@@ -49,6 +52,7 @@ public class ActiveWeapon : MonoBehaviour
             if (_weapon.IsFiring())
             {
                 _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
 
             _weapon.UpdateBullets(Time.deltaTime);
@@ -64,7 +68,6 @@ public class ActiveWeapon : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
             {
-                
                 _weapon._isReloading = true;
                 _weapon._totalAmmo += _weapon._clipAmmo;
 
@@ -80,6 +83,7 @@ public class ActiveWeapon : MonoBehaviour
                 }
 
                 _anim.SetBool("isReloading", true);
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
             if (_weapon._isReloading == false)
             {
