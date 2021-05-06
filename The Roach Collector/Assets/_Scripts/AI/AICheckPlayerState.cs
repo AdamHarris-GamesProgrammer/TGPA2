@@ -29,6 +29,12 @@ public class AICheckPlayerState : AIState
         if (_lastKnownLocation == null)
         {
             _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
+
+            if (_lastKnownLocation == null)
+            {
+                Debug.LogError("Last Player Location prefab not placed in scene.");
+            }
+
         }
 
         bool successful = false;
@@ -139,7 +145,7 @@ public class AICheckPlayerState : AIState
             {
                 foreach (AIAgent ally in agents)
                 {
-                    ally.stateMachine.ChangeState(AiStateId.SearchForPlayer);
+                    ally.stateMachine.ChangeState(AiStateId.CombatState);
                 }
             }
             else

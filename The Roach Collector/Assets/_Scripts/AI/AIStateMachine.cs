@@ -43,6 +43,7 @@ public class AIStateMachine
 
     public void ChangeState(AiStateId newState)
     {
+        //Debug.Log(newState);
         GetState(_currentState)?.Exit(_agent);
         _currentState = newState;
         GetState(_currentState)?.Enter(_agent);

@@ -29,10 +29,12 @@ public class SetAlarmSnippet : CombatSnippet
 
         if(_isTrying)
         {
+            //Debug.Log("Setting alarm position");
             _navAgent.SetDestination(_currentAlarm.ActivationPoint.position);
 
             if (_navAgent.remainingDistance <= 1.5f)
             {
+                //Debug.Log("in range of alarm");
                 _isTrying = false;
                 if (_currentAlarm.IsDisabled)
                 {
@@ -41,9 +43,10 @@ public class SetAlarmSnippet : CombatSnippet
                 else
                 {
                     //TODO: Trigger a animation here
-
+                    Debug.Log("Alarm is not disabled");
                     if (_agent.CanActivateAlarm)
                     {
+                        Debug.Log("Trying to activate alarm");
                         if (_currentAlarm.ActivateAlarm())
                         {
                             _isFinished = true;
@@ -71,10 +74,11 @@ public class SetAlarmSnippet : CombatSnippet
     {
         _agent.PlayAlarmPrompt();
 
-        //Debug.Log("Alarm Snippet");
+        Debug.Log(_agent.transform.name + " Alarm Snippet");
 
         _isFinished = false;
         _isTrying = false;
+        _alarmsLeft = true;
 
         _navAgent.stoppingDistance = 1.0f;
     }
@@ -82,6 +86,7 @@ public class SetAlarmSnippet : CombatSnippet
     public int Evaluate()
     {
         int returnScore = 0;
+        //return 100;
 
 
         if (_alarmsInScene.Length == 0) return 0;
@@ -139,6 +144,6 @@ public class SetAlarmSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        return !_alarmsLeft;
+        return !_alarmsLeft || _isFinished;
     }
 }

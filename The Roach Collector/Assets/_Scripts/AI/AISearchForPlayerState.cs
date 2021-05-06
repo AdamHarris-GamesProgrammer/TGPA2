@@ -11,22 +11,31 @@ public class AISearchForPlayerState : AIState
     float _timeAtEachSearchPoint = 5.0f;
     float _timer = 0.0f;
     NavMeshAgent _navAgent;
-    int index = 0;
+    int _index = 0;
+
+    FieldOfView _fov;
+
 
     Vector3[] _searchLocations = new Vector3[3];
 
     public AISearchForPlayerState(AIAgent agent)
     {
         _playersKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
+
+        if(_playersKnownLocation == null)
+        {
+            Debug.LogError("Last Player Location prefab not placed in scene.");
+        }
+
         _navAgent = agent.GetComponent<NavMeshAgent>();
 
-
+        _fov = agent.GetComponent<FieldOfView>();
         
     } 
 
     public void Enter(AIAgent agent)
     {
-        index = 0;
+        _index = 0;
 
         for (int i = 0; i < 3; i++)
         {
@@ -50,7 +59,7 @@ public class AISearchForPlayerState : AIState
             
         }
 
-        _navAgent.SetDestination(_searchLocations[index]);
+        _navAgent.SetDestination(_searchLocations[_index]);
     }
 
     public void Exit(AIAgent agent)
@@ -65,6 +74,12 @@ public class AISearchForPlayerState : AIState
 
     public void Update(AIAgent agent)
     {
+        if (_fov.IsEnemyInFOV)
+        {
+            agent.stateMachine.ChangeState(AiStateId.CombatState);
+        }
+
+
         if(_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
         {
             _timer += Time.deltaTime;
@@ -72,16 +87,18 @@ public class AISearchForPlayerState : AIState
             if(_timer > _timeAtEachSearchPoint)
             {
                 _timer = 0.0f;
-                index++;
+                _index++;
 
-                if(index < _searchLocations.Length)
+                if(_index < _searchLocations.Length)
                 {
-                    _navAgent.SetDestination(_searchLocations[index]);
+                    _navAgent.SetDestination(_searchLocations[_index]);
+                    //Debug.Log("Next Search point");
                 }
                 else
                 {
                     GameObject.FindObjectOfType<PlayerController>().IsDetected = false;
                     agent.stateMachine.ChangeState(AiStateId.Idle);
+                    //Debug.Log("End Search");
                 }
             }
 

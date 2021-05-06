@@ -30,7 +30,7 @@ public class AdvanceSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        //Debug.Log("Advance Snippet");
+        //Debug.Log(_agent.transform.name + " Advance Snippet");
 
         _timer = 0.0f;
 

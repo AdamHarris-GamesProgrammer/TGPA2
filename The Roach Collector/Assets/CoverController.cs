@@ -32,7 +32,7 @@ public class CoverController : MonoBehaviour
     public void AddUser()
     {
         _currentPopulation++;
-        Debug.Log("Cover Population: " + _currentPopulation);
+        //Debug.Log("Cover Population: " + _currentPopulation);
     }
 
     public void RemoveUser()

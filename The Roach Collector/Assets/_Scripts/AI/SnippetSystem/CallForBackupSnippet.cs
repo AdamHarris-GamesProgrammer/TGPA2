@@ -11,7 +11,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void Action()
     {
-        Debug.Log("Backup Action");
+        
         foreach(AIAgent enemy in _enemiesInRange)
         {
             //Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
@@ -23,6 +23,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
+        Debug.Log(_agent.transform.name + " Backup snippet");
         _agent.PlayBackupSound();
     }
 

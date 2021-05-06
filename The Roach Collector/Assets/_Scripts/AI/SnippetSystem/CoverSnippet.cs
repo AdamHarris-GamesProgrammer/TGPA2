@@ -143,7 +143,7 @@ public class CoverSnippet : CombatSnippet
             }
 
             _navAgent.SetDestination(furthestCoverPoint.position);
-            Debug.Log("Set Destination to: " + furthestCoverPoint.position);
+            //Debug.Log("Set Destination to: " + furthestCoverPoint.position);
             
             _navAgent.stoppingDistance = 1.0f;
 
@@ -153,7 +153,7 @@ public class CoverSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        //Debug.Log("Cover Snippet");
+        Debug.Log(_agent.transform.name + " Cover Snippet");
         _hasFoundCover = false;
 
         _timer = _agent._config._coverDuration;

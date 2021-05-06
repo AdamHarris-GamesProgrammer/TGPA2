@@ -18,7 +18,7 @@ public class Hitbox : MonoBehaviour
     public void OnRaycastHit(RaycastWeapon weapon, Vector3 rayDirection)
     {
         float totalDamage = weapon.GetDamage() * _damageMultiplier;
-        Debug.Log(_health.gameObject.name + " is taking damage");
+        //Debug.Log(_health.gameObject.name + " is taking damage");
         //Debug.Log(transform.name + " is taking damage " + weapon.GetDamage() + " multiplied by: " + _damageMultiplier + " giving a total of: " + totalDamage);
         _health.TakeDamage(weapon.GetDamageType(), totalDamage);
     }

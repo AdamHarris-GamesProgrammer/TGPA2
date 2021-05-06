@@ -31,6 +31,7 @@ public class AlarmController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
         //send signal that enemy can enable the alarm
         if (other.CompareTag("Player"))
         {
@@ -39,10 +40,11 @@ public class AlarmController : MonoBehaviour
             other.GetComponent<PlayerController>().Alarm = this;
             other.GetComponent<PlayerController>().CanDisableAlarm = true;
         }
-        else if(other.CompareTag("Enemy"))
-        {
-            other.GetComponent<AIAgent>().CanActivateAlarm = true;
-        }
+        //else if(other.GetComponentInParent<AIAgent>())
+        //{
+        //    Debug.Log("Enemy can enable alarm");
+        //    other.GetComponent<AIAgent>().CanActivateAlarm = true;
+        //}
 
 
     }
@@ -63,10 +65,10 @@ public class AlarmController : MonoBehaviour
             other.GetComponent<PlayerController>().Alarm = null;
             other.GetComponent<PlayerController>().CanDisableAlarm = false;
         }
-        else if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<AIAgent>().CanActivateAlarm = false;
-        }
+        //else if (other.CompareTag("Enemy"))
+        //{
+        //    other.GetComponent<AIAgent>().CanActivateAlarm = false;
+        //}
     }
 
     public void DisableAlarm()
@@ -91,9 +93,11 @@ public class AlarmController : MonoBehaviour
 
     public bool ActivateAlarm()
     {
+        Debug.Log("Activate Alarm");
         //If the alarm is not disabled, then enable the alarm
         if(!_isDisabled)
         {
+            Debug.Log("Alarm Behavior");
             ActivationBehaviour();
             return true;
         }
