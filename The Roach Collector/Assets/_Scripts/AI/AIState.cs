@@ -10,10 +10,8 @@ public enum AiStateId
     FindWeapon,
     Patrol,
     CombatState,
-    BrickMelee,
-    BrickKick,
-    BrickBlock,
-    BrickPhase2,
+    GotToPlayerLocation,
+    SearchForPlayer
 }
 
 public interface AIState

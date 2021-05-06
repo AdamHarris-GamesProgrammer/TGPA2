@@ -24,6 +24,15 @@ public class AIStateMachine
     public AIState GetState(AiStateId stateId)
     {
         int index = (int)stateId;
+
+
+        AIState strate = states[index];
+
+        if(strate == null)
+        {
+            Debug.Log(stateId + " has not been registered to " + _agent.name);
+        }
+
         return states[index];
     }
 

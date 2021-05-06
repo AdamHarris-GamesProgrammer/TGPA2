@@ -75,6 +75,8 @@ public class AICombatState : AIState
 
     public void Enter(AIAgent agent)
     {
+        Debug.Log("Entered Combat State");
+
         //Decide starting snippet
         int highestScore = 0;
         foreach (CombatSnippet behavior in _combatBehaviours)
