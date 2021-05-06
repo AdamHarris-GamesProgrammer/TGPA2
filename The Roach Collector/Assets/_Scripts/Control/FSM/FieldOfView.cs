@@ -44,13 +44,14 @@ public class FieldOfView : MonoBehaviour
             _isEnemyinFOV = false;
         }
 
-        if(_hasTimerStarted && _detectionTimer <= _detectedValue)
+        if(_hasTimerStarted)
         {
+
             _detectionTimer += Time.deltaTime;
         }
         else
         {
-            _detectionTimer = 0;
+            _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
         }
 
     }
@@ -61,6 +62,7 @@ public class FieldOfView : MonoBehaviour
         Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
         foreach (Collider target in TargetsInRadius)
         {
+            //Debug.Log(target.transform.name);
             Transform targetTransform = target.transform;
             Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
             
@@ -70,7 +72,7 @@ public class FieldOfView : MonoBehaviour
 
                 RaycastHit hitInfo;
          
-                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, DistanceToTarget))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, _targetMask))
                 {
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
@@ -89,6 +91,7 @@ public class FieldOfView : MonoBehaviour
                         {
                             //Debug.Log("Player is too close");
                             _visibleTargets.Add(targetTransform);
+                            FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
                             return;
                         }
 
@@ -98,10 +101,13 @@ public class FieldOfView : MonoBehaviour
                         {
                             //Debug.Log("Player is detected through time");
                             _visibleTargets.Add(targetTransform);
+
+                            FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
                         }
                     }
                     else
                     {
+                        Debug.Log(hitInfo.collider.tag);
                         _hasTimerStarted = false;
                     }
                 }

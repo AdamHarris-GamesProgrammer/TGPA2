@@ -41,7 +41,7 @@ public class AIIdleState : AIState
             //TODO: Incorporate Perception system 
             //TODO: Add in Object for players last known position
             //TODO: Check out if the player is still there. 
-            agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
+            agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);
         }
 
 
