@@ -14,7 +14,7 @@ namespace Harris.UI.Inventories
     {
         // CONFIG DATA
         [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] int index = 0;
+        [SerializeField] public int index = 0;
         [SerializeField] Text textObject;
 
         // CACHE
