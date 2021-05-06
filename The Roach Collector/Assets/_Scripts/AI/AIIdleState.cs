@@ -38,6 +38,9 @@ public class AIIdleState : AIState
         {
             //Player is in view, change to chase state
             //Debug.Log("Player in FOV");
+            //TODO: Incorporate Perception system 
+            //TODO: Add in Object for players last known position
+            //TODO: Check out if the player is still there. 
             agent.stateMachine.ChangeState(AiStateId.ChasePlayer);
         }
 
