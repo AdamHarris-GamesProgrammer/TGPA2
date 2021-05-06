@@ -16,6 +16,7 @@ namespace Harris.Inventories
     [CreateAssetMenu(menuName = ("InventorySystem/Item"))]
     public class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
     {
+        [Header("Inventory Item Settings")]
         // CONFIG DATA
         [Tooltip("Auto-generated UUID for saving/loading. Clear this field if you want to generate a new one.")]
         [SerializeField] string itemID = null;

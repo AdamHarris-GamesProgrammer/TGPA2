@@ -23,6 +23,8 @@ namespace TGP.Control
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm = null;
 
+        private GameObject _chestInventory;
+        public GameObject ChestInventory { get { return _chestInventory; } }
 
         [SerializeField] GameObject _applyingHealthText = null;
         [SerializeField] GameObject _applyingDamageText = null;
@@ -131,8 +133,9 @@ namespace TGP.Control
             _playerInventory = GetComponent<Inventory>();
             _usables = new List<UsableItem>();
             _itemsToRemoveThisFrame = new List<UsableItem>();
+            _chestInventory = GameObject.FindGameObjectWithTag("ChestCanvas");
+            _chestInventory.SetActive(false);
         }
-
 
 
         private void InteractWithAssassination()

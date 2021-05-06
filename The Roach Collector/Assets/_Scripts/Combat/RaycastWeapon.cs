@@ -22,22 +22,16 @@ public class RaycastWeapon : MonoBehaviour
     
 
     private bool _isFiring = false;
-    [SerializeField] private int _fireRate = 25;
-    [SerializeField] private float _weaponSpread = 0;
-    [SerializeField] private int _bulletCount = 1;
-    [SerializeField] private float _bulletSpeed = 1000.0f;
-    [SerializeField] private float _bulletDrop = 0.0f;
     [SerializeField] private ParticleSystem _muzzleFlash = null;
     [SerializeField] private ParticleSystem _metalHitEffect = null;
     [SerializeField] private ParticleSystem _fleshHitEffect = null;
 
     [SerializeField] private Transform _raycastOrigin = null;
-    [SerializeField] private float _damage = 10.0f;
-    [SerializeField] private AnimationClip _weaponAnimation;
 
+    [SerializeField] WeaponConfig _config;
+    public WeaponConfig Config { get { return _config; } }
 
-    [SerializeField] public int _clipAmmo = 5;
-    [SerializeField] public int _clipSize = 30;
+    [SerializeField] public int _clipAmmo = 30;
     [SerializeField] public int _totalAmmo = 90;
     [SerializeField] public float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
@@ -74,12 +68,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public float GetDamage()
     {
-        return _damage * _damageMultiplier;
-    }
-
-    public AnimationClip GetAnimationClip()
-    {
-        return _weaponAnimation;
+        return _config.Damage * _damageMultiplier;
     }
 
     public bool IsFiring()
@@ -108,15 +97,15 @@ public class RaycastWeapon : MonoBehaviour
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
-                if (_totalAmmo < _clipSize)
+                if (_totalAmmo < _config.ClipSize)
                 {
                     _clipAmmo = _totalAmmo;
                     _totalAmmo = 0;
                 }
                 else
                 {
-                    _clipAmmo = _clipSize;
-                    _totalAmmo -= _clipSize;
+                    _clipAmmo = _config.ClipSize;
+                    _totalAmmo -= _config.ClipSize;
                 }
             }
         }
@@ -135,7 +124,7 @@ public class RaycastWeapon : MonoBehaviour
     Vector3 GetPosition(Bullet bullet)
     {
         //Calculate gravity
-        Vector3 gravity = Vector3.down * _bulletDrop;
+        Vector3 gravity = Vector3.down * _config.BulletDrop;
 
         //p + v* t + 0.5 * g * t *t
         //Brackets aren't needed but they help make the equation more readable
@@ -160,7 +149,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         _muzzleFlash.Emit(1);
 
-        Vector3 velocity = (target - _raycastOrigin.position).normalized * _bulletSpeed;
+        Vector3 velocity = (target - _raycastOrigin.position).normalized * _config.BulletSpeed;
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
 
@@ -277,21 +266,23 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
-        float fireInterval = 1.0f / _fireRate;
+        float fireInterval = 1.0f / _config.FireRate;
         //Debug.Log("Fire Interval: " + fireInterval);
         _accumulatedTime += deltaTime;
-        while(_accumulatedTime > 0.0f)
+        while(_accumulatedTime > fireInterval)
         {
-            for (int i = 0; i < _bulletCount; i++) {
+            for (int i = 0; i < _config.BulletCount; i++) {
                 
-                Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
+                Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
+                //Debug.Log("Fire");
+                //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
             if (_clipAmmo <= 0)
             {
                 StopFiring();
             }
-            _accumulatedTime -= fireInterval;
+            _accumulatedTime = 0.0f;
         }
     }
 }
