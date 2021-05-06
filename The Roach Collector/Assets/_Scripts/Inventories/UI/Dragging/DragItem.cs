@@ -208,13 +208,24 @@ namespace Harris.Core.UI.Dragging
             Equipment playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
             InventorySlotUI inventorySlot = GetComponentInParent<InventorySlotUI>();
+            ActionSlotUI actionSlot = GetComponentInParent<ActionSlotUI>();
+
 
             Debug.Log("Pointer Click");
+
+
 
             if (inventorySlot)
             {
                 Debug.Log("Inventory Slot");
                 int indexOfItem = inventorySlot.index;
+                playerInventory.SelectItem(indexOfItem);
+                inventorySlot.SetSelected(true);
+            }
+            else if (actionSlot)
+            {
+                Debug.Log("Action Slot");
+                int indexOfItem = actionSlot.index;
                 playerInventory.SelectItem(indexOfItem);
                 inventorySlot.SetSelected(true);
             }
