@@ -23,6 +23,8 @@ public class SetAlarmSnippet : CombatSnippet
 
     AIAgent _agent;
 
+    string _name = "SetAlarmSnippet";
+
     public void Action()
     {
         if (_alarmsInScene[0].IsSet) _isFinished = true;
@@ -141,4 +143,10 @@ public class SetAlarmSnippet : CombatSnippet
     {
         return !_alarmsLeft;
     }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
 }
