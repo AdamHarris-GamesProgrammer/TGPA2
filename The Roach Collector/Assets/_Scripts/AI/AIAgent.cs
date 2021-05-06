@@ -163,8 +163,6 @@ public class AIAgent : MonoBehaviour
             }
         }
 
-
-
         return agentsInDistance;
     }
 

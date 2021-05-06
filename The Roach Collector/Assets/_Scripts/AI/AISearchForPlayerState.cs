@@ -11,7 +11,7 @@ public class AISearchForPlayerState : AIState
 
     public void Enter(AIAgent agent)
     {
-
+        Debug.Log("Enter Search");
     }
 
     public void Exit(AIAgent agent)

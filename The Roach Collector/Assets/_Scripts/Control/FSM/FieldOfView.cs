@@ -89,7 +89,7 @@ public class FieldOfView : MonoBehaviour
                         }
 
 
-                        if(DistanceToTarget <= (_viewRadius / 2))
+                        if(DistanceToTarget <= (_viewRadius / 8))
                         {
                             //Debug.Log("Player is too close");
                             _visibleTargets.Add(targetTransform);
