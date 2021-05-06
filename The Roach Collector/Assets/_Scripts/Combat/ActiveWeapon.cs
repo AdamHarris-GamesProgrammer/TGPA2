@@ -19,12 +19,16 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
     PlayerUI _PlayerUI = null;
+    [SerializeField] public PlayerUI _PlayerUI = null;
+    public RaycastWeapon _MeleeWeapon;
 
     Inventory _inventory;
     PlayerController _controller;
 
     Animator _anim;
-    RaycastWeapon _weapon;
+    [SerializeField] private RaycastWeapon _weapon;
+
+    [SerializeField] private bool _isMelee = false;
 
     private void Awake()
     {
@@ -48,6 +52,7 @@ public class ActiveWeapon : MonoBehaviour
 
             _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
         }
+        
     }
 
     private void Reload()
@@ -64,6 +69,7 @@ public class ActiveWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if(_weapon)
         {
             if (_inventory)
@@ -76,9 +82,73 @@ public class ActiveWeapon : MonoBehaviour
 
                     _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
                 }
+           
+                if(_weapon._totalAmmo == 0 && _weapon._clipAmmo == 0 && _isMelee == false)
+                {
+                    _isMelee = true;
+                    RaycastWeapon Melee = Instantiate(_MeleeWeapon);
+                    Equip(Melee);
+                }
             }
+            
+            WeaponLogic();
+            
+        }
+        else
+        {
+            _PlayerUI.UpdateAmmoUI(0,0,0);
+        }
+    }
 
-            if (_weapon.Config.IsAutomatic)
+    public void DropWeapon()
+    {
+        if (_weapon)
+        {
+            _weapon.transform.SetParent(null);
+            _weapon.gameObject.GetComponent<BoxCollider>().enabled = true;
+            _weapon.gameObject.AddComponent<Rigidbody>();
+            _weapon = null;
+        }
+    }
+    public void Equip(RaycastWeapon newWeapon)
+    {
+        if(_weapon)
+        {
+            Destroy(_weapon.gameObject);
+        }
+
+        _weapon = newWeapon;
+
+        if (newWeapon)
+        {
+            _weapon.transform.parent = _weaponParent;
+            _weapon.transform.localPosition = Vector3.zero;
+            _weapon.transform.localRotation = Quaternion.identity;
+
+            newWeapon.Setup();
+        }
+
+        if (_inventory)
+        {
+            if (_inventory.HasItem(_weapon.Config.AmmoType))
+            {
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
+
+                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
+
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+            }
+            else
+            {
+                _weapon.TotalAmmo = 0;
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+            }
+        }
+    }
+
+    void GunLogic()
+    {
+        if (_weapon.Config.IsAutomatic)
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
@@ -138,56 +208,38 @@ public class ActiveWeapon : MonoBehaviour
                 _controller.IsShooting = false;
                 _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
+    }
+
+    void MeleeLogic()
+    {
+
+        if(Input.GetButtonDown("Fire1"))
+        {
+            
+            _anim.SetTrigger("Stab");
+        }
+
+        if(_anim.GetCurrentAnimatorStateInfo(0).IsName("Stabbing") && _anim.GetCurrentAnimatorStateInfo(0).length > _anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
+        {
+            GetComponent<WeaponStabCheck>().SetStabbing(true);
         }
         else
         {
-            _PlayerUI.UpdateAmmoUI(0,0,0);
+            GetComponent<WeaponStabCheck>().SetStabbing(false);
         }
+
     }
 
-    public void DropWeapon()
+    void WeaponLogic()
     {
-        if (_weapon)
+        if(_isMelee)
         {
-            _weapon.transform.SetParent(null);
-            _weapon.gameObject.GetComponent<BoxCollider>().enabled = true;
-            _weapon.gameObject.AddComponent<Rigidbody>();
-            _weapon = null;
+            MeleeLogic();
+        }
+        else
+        {
+            GunLogic();
         }
     }
-    public void Equip(RaycastWeapon newWeapon)
-    {
-        if(_weapon)
-        {
-            Destroy(_weapon.gameObject);
-        }
 
-        _weapon = newWeapon;
-
-        if (newWeapon)
-        {
-            _weapon.transform.parent = _weaponParent;
-            _weapon.transform.localPosition = Vector3.zero;
-            _weapon.transform.localRotation = Quaternion.identity;
-
-            newWeapon.Setup();
-        }
-
-        if (_inventory)
-        {
-            if (_inventory.HasItem(_weapon.Config.AmmoType))
-            {
-                int index = _inventory.FindItem(_weapon.Config.AmmoType);
-
-                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
-
-                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
-            }
-            else
-            {
-                _weapon.TotalAmmo = 0;
-                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
-            }
-        }
-    }
 }

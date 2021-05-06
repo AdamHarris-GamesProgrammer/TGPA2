@@ -9,6 +9,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     bool _hasBackup = false;
 
+    string Name = "CallForBackupSnippet";
     public void Action()
     {
         
@@ -52,5 +53,9 @@ public class CallForBackupSnippet : CombatSnippet
     public bool IsFinished()
     {
         return _hasBackup;
+    }
+    public string GetName()
+    {
+        return Name;
     }
 }

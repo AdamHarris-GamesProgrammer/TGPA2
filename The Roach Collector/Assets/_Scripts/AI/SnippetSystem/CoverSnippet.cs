@@ -11,6 +11,7 @@ public class CoverSnippet : CombatSnippet
     Animator _anim;
 
 
+    string _name = "CoverSnippet";
 
     CoverController[] _coversInScene;
 
@@ -261,6 +262,11 @@ public class CoverSnippet : CombatSnippet
         return returnScore;
     }
 
+    public string GetName()
+    {
+        return _name;
+    }
+
     public void Initialize(AIAgent agent)
     {
         _navAgent = agent.GetComponent<NavMeshAgent>();
@@ -288,4 +294,5 @@ public class CoverSnippet : CombatSnippet
 
         return result;
     }
+
 }

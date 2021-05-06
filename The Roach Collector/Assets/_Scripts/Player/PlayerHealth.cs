@@ -67,6 +67,7 @@ public class PlayerHealth : Health
         //Left over damage is now updated to use the armor and the damage to go through
         leftOverDamage = leftOverDamage - armorBlocks + damageToGoThrough;
 
+        Debug.Log(leftOverDamage);
 
         base.TakeDamage(type, leftOverDamage);
     }

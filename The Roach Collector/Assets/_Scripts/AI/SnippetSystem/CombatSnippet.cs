@@ -13,4 +13,6 @@ public interface CombatSnippet
     bool IsFinished();
 
     void EnterSnippet();
+
+    string GetName();
 }
