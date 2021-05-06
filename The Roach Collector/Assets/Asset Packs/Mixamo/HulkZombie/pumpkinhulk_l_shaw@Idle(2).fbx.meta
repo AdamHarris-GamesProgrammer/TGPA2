@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: b63783dbc3c0d684fa448b963373b00c
 ModelImporter:
-  serializedVersion: 20200
+  serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Idle(2)
+    second: HulkIdle
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle(2)
+      name: HulkIdle
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
@@ -127,7 +127,6 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
