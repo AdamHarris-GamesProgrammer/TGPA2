@@ -5,13 +5,11 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    public int lives;
     public int clip;
     public int clipSize;
     public int ammoLeft;
 
     public Text ammoTxt;
-    public GameObject[] hearts;
 
     [SerializeField] GameObject _alarmText = null;
 
