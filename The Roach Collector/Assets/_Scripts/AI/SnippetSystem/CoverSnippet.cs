@@ -55,9 +55,9 @@ public class CoverSnippet : CombatSnippet
 
             Transform _player = _agent.GetPlayer();
 
-            float angle = Vector3.AngleBetween(_agent.transform.forward, _player.forward);
+            float angle = Vector3.Angle(_agent.transform.forward, _player.forward);
 
-            if(angle < 2.9f)
+            if(angle < 166.0f)
             {
                 //TODO: Stop enemy from shooting until they stand up.
                 _anim.SetBool("isCrouching", false);
@@ -170,7 +170,7 @@ public class CoverSnippet : CombatSnippet
 
 
 
-        float healthRatio = _aiHealth.GetHealthRatio();
+        float healthRatio = _aiHealth.HealthRatio;
 
         
         if(healthRatio <= 0.5f && _needToReload)
@@ -201,7 +201,7 @@ public class CoverSnippet : CombatSnippet
     public bool IsFinished()
     {
         //If the ais health is above the threshold or the timer is less than 0 then exit the snippet.
-        bool result = (_aiHealth.GetHealthRatio() > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
+        bool result = (_aiHealth.HealthRatio > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
 
         if(result)
         {

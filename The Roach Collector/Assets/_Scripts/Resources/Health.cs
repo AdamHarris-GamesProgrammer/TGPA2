@@ -1,5 +1,7 @@
+
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,53 +11,45 @@ public class Health : MonoBehaviour
     public float _maxHealth;
     public float _currentHealth;
 
-    [SerializeField] bool _canBeHarmed = true;
+    [SerializeField] protected bool _canBeHarmed = true;
 
     public bool CanBeHarmed {  get { return _canBeHarmed; } set { _canBeHarmed = value; } }
 
-    Ragdoll _ragDoll;
-    
+    public float CurrentHealth { get { return _currentHealth; } }
+    public float HealthRatio { get { return _currentHealth / _maxHealth; } }
 
-    private bool _isDead = false;
+    protected bool _isDead = false;
+    public bool IsDead { get { return _isDead; } }
 
     public UnityEvent _OnDie;
 
-    public float GetCurrentHealth()
-    {
-        return _currentHealth;
+    public void Heal(float amount) {
+        Debug.Log("Healing by: " + amount);
+        //Stops the health from going above maximum.
+        _currentHealth = Mathf.Min(_currentHealth += amount, _maxHealth);
+        OnHeal();
     }
 
-    public float GetHealthRatio()
-    {
-        return _currentHealth / _maxHealth;
-    }
 
-    public bool IsDead()
-    {
-        return _isDead;
-    }
 
     void Start()
     {
-        
         _currentHealth = _maxHealth;
-        _ragDoll = GetComponent<Ragdoll>();
         _OnDie.AddListener(OnDeath);
         
         OnStart();
     }
 
 
-    public void TakeDamage(float amount)
+    public virtual void TakeDamage(DamageType type, float amount)
     {
-        //Stops the Character from taking damage if they don't need to.
-        if (!_canBeHarmed) return;
         if (_isDead) return;
+        if (!_canBeHarmed) return;
 
+        //Take away the left over damage and get the minimum from damage or 0 and set health to this
+        _currentHealth = Mathf.Max(_currentHealth -= amount, 0f);
 
-        _currentHealth -= amount;
-
-        if (_currentHealth <= 0.0f)
+        if (_currentHealth == 0.0f)
         {
             _isDead = true;
             _OnDie.Invoke();
@@ -64,19 +58,9 @@ public class Health : MonoBehaviour
         OnDamage();
     }
 
-    protected virtual void OnStart()
-    {
-
-    }
-
-    protected virtual void OnDeath()
-    {
-
-    }
-
-    protected virtual void OnDamage()
-    {
-
-    }
+    protected virtual void OnHeal() {}
+    protected virtual void OnStart() {}
+    protected virtual void OnDeath() {}
+    protected virtual void OnDamage() {}
 
 }

@@ -4,6 +4,7 @@ using Harris.Saving;
 using Harris.UI.Inventories;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Harris.Inventories
 {
@@ -40,6 +41,26 @@ namespace Harris.Inventories
             public int number;
         }
 
+
+        public InventorySlot[] GetFilledSlots()
+        {
+            //Stores slots which have a item in them
+            List<InventorySlot> filledSlots = new List<InventorySlot>();
+
+            //Cycle through each inventory slot
+            foreach(InventorySlot slot in _slots)
+            {
+                //does the slot contain an item
+                if(slot.item  != null)
+                {
+                    //Add the slot to the list if there is a item
+                    filledSlots.Add(slot);
+                }
+            }
+
+            //Converts the list to a array and returns it
+            return filledSlots.ToArray();
+        }
 
         //UNITY MESSAGES
         private void Awake()
@@ -173,6 +194,8 @@ namespace Harris.Inventories
 
             _slots[i].item = item;
             _slots[i].number += number;
+
+            //Debug.Log(item.GetDisplayName() + " is placed in the " + i + "th slot");
             if (InventoryUpdated != null)
             {
                 InventoryUpdated();

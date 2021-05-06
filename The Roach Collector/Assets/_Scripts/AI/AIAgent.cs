@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
-
+using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
@@ -13,11 +13,9 @@ public class AIAgent : MonoBehaviour
     public AIAgentConfig _config;
 
     AudioSource _audioSource;
-    [SerializeField] private AudioClip _backupPrompt;
-    [SerializeField] private AudioClip _alarmPrompt;
-    [SerializeField] private AiStateId _CurrentState;
-
-    public FieldOfView _FOV;
+    [SerializeField] private AudioClip _backupPrompt = null;
+    [SerializeField] private AudioClip _alarmPrompt = null;
+    [SerializeField] private AiStateId _currentState = AiStateId.Idle;
 
     Transform _player;
     AIWeapons _aiWeapon;
@@ -30,6 +28,10 @@ public class AIAgent : MonoBehaviour
     List<AIAgent> _agentsInScene;
     List<AlarmController> _alarmsInScene;
     List<CoverController> _coversInScene;
+
+    bool _beingKilled = false;
+
+    public bool BeingKilled { set { _beingKilled = value; } }
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
@@ -53,21 +55,22 @@ public class AIAgent : MonoBehaviour
 
         _agentsInScene = new List<AIAgent>();
         _alarmsInScene = new List<AlarmController>();
+        _coversInScene = new List<CoverController>();
 
         _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
+        _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _FOV = GetComponent<FieldOfView>();
 
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
-        stateMachine.RegisterState(new AIIdleState(this, _FOV));
+        stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
 
@@ -90,13 +93,15 @@ public class AIAgent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_beingKilled) return;
+
         stateMachine.Update();
-        _CurrentState = stateMachine._currentState;
+        _currentState = stateMachine._currentState;
     }
 
     public void Aggrevate()
     {
-        if (_aiHealth.IsDead()) return;
+        if (_aiHealth.IsDead) return;
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
     }
@@ -147,7 +152,7 @@ public class AIAgent : MonoBehaviour
             foreach (AIAgent enemy in _agentsInScene)
             {
                 //Don't add the enemy if the there dead
-                if (enemy.GetHealth().IsDead()) continue;
+                if (enemy.GetHealth().IsDead) continue;
 
                 if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
                 {
@@ -175,5 +180,32 @@ public class AIAgent : MonoBehaviour
 
         return coversInDistance;
     }
-}
 
+    //Used for telling the player when they are in range for assassination attack
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player in range");
+            _player.GetComponent<PlayerController>().AgentInRange = this;
+        }
+    }
+
+    //Used for telling the player when they are no longer in range for assassination attack
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Player not in range");
+            _player.GetComponent<PlayerController>().AgentInRange = null;
+        }
+    }
+
+    //Called by Unity Animator in the StealthAttackResponse and BrutalAttackResponse animations
+    void DeathAnimEvent()
+    {
+        Debug.Log("Death event");
+
+        stateMachine.ChangeState(AiStateId.Death);
+    }
+}

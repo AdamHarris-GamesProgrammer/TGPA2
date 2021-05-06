@@ -10,19 +10,13 @@ public class AlarmController : MonoBehaviour
     bool _isDisabled = false;
     bool _isActivated = false;
 
-    [SerializeField] Material _disabledMaterial;
-    [SerializeField] Material _standbyMaterial;
-    [SerializeField] Material _activatedMaterial;
+    [SerializeField] Material _disabledMaterial = null;
+    [SerializeField] Material _standbyMaterial = null;
+    [SerializeField] Material _activatedMaterial = null;
 
     Transform _activationPoint;
 
-    public Transform ActivationPoint
-    {
-        get
-        {
-            return _activationPoint;
-        }
-    }
+    public Transform ActivationPoint { get { return _activationPoint;} }
 
     static bool _isSet = false;
     public bool IsSet { get { return _isSet; } }

@@ -5,6 +5,7 @@ using Harris.Saving;
 using Harris.UI.Inventories;
 using Harris.Inventories;
 using UnityEngine.UI;
+using TGP.Control;
 
 namespace Harris.Inventories
 {
@@ -42,12 +43,22 @@ namespace Harris.Inventories
         {
             int total = 0;
 
+            //TODO: Better way of doing this as this couples the player to the equipment
+            PlayerController player = GetComponent<PlayerController>();
+            //Reset the stats of the player
+            player.ResetStats();
+
             foreach(EquipLocation location in GetAllPopulatedSlots())
             {
                 ArmorConfig armor = GetItemInSlot(location) as ArmorConfig;
                 if (armor != null)
                 {
                     total += armor.GetArmor();
+
+                    foreach(StatValues stat in armor.GetStatValues())
+                    {
+                        player.EquipStat(stat);
+                    }
                 }
             }
 
@@ -128,10 +139,7 @@ namespace Harris.Inventories
 
             _equippedItems[slot] = item;
 
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
         public int GetIndexOfType(EquipLocation location)
@@ -152,10 +160,7 @@ namespace Harris.Inventories
         public void RemoveItem(EquipLocation slot)
         {
             _equippedItems.Remove(slot);
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
         /// <summary>

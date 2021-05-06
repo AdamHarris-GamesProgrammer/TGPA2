@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Harris.Inventories
 {
-    [CreateAssetMenu(menuName = ("Harris/Inventory/Drop Library"))]
+    [CreateAssetMenu(menuName = ("InventorySystem/Drop Library"))]
     public class DropLibrary : ScriptableObject
     {
         [System.Serializable]
@@ -13,7 +13,7 @@ namespace Harris.Inventories
         {
             [SerializeField] public InventoryItem item;
 
-            [Range(0f, 1f)][SerializeField] public float chance;
+            [Range(0f, 1f)][SerializeField] public float chance = 0.1f;
             [Min(1)][SerializeField] public int minItems = 1;
             [Min(1)][SerializeField] public int maxItems = 1;
 
@@ -28,7 +28,7 @@ namespace Harris.Inventories
         [SerializeField] float dropChancePercentage;
         [Min(1)][SerializeField] int minDrops = 1;
         [Min(1)][SerializeField] int maxDrops = 1;
-        [SerializeField] Drop[] potentialDrops;
+        [SerializeField] readonly Drop[] potentialDrops;
 
 
         public struct Dropped

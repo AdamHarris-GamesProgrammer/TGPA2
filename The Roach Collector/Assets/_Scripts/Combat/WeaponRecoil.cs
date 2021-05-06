@@ -12,11 +12,11 @@ public class WeaponRecoil : MonoBehaviour
         _cameraShake = GetComponent<Cinemachine.CinemachineImpulseSource>();
     }
 
-    [SerializeField] Vector2[] _recoilPattern;
+    [SerializeField] Vector2[] _recoilPattern = null;
     float _verticalRecoil;
     float _horizontalRecoil;
 
-    [SerializeField] float _duration;
+    [SerializeField] float _duration = 0.1f;
 
     float _time;
 

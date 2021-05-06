@@ -1,103 +1,108 @@
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 public class FieldOfView : MonoBehaviour
 {
-    public GameObject Player;
-    CharacterLocomotion CharLocomotion;
-    public float viewRadius;
-    [Range(0, 360)]
-    public float viewAngle;
+    private GameObject _playerGO;
+    CharacterLocomotion _charLocomotion;
+    [Min(0f)] public float _viewRadius;
+    [Range(0, 360)] public float _viewAngle;
 
-    public LayerMask targetMask;
-    bool enemyinFOV;
+    [SerializeField] LayerMask _targetMask;
+    bool _isEnemyinFOV;
+
+    public bool IsEnemyInFOV { get { return _isEnemyinFOV; } }
 
     [HideInInspector()]
-    public List<Transform> visibleTargets = new List<Transform>();
+    public List<Transform> _visibleTargets = new List<Transform>();
 
-    public float DetectionTimer = 0;
-    public float DetectedStand = 1;
-    public float DetectedCrouch = 3;
-    public float DetectedValue = 1;
-    bool StartTimer = false;
+    [SerializeField] float _detectionTimer = 0;
+    [SerializeField] float _detectedStand = 1;
+    [SerializeField] float _detectedCrouch = 3;
+    [SerializeField] float _detectedValue = 1;
+    bool _hasTimerStarted = false;
 
     private void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
-        CharLocomotion = Player.GetComponent<CharacterLocomotion>();
+        _playerGO = GameObject.FindGameObjectWithTag("Player");
+        _charLocomotion = _playerGO.GetComponent<CharacterLocomotion>();
     }
 
     void Update()
     {
-        findVisibleTargets();
+        FindVisibleTargets();
 
-        if (visibleTargets.Count > 0)
+        if (_visibleTargets.Count > 0)
         {
-            enemyinFOV = true;
+            _playerGO.GetComponent<PlayerController>().IsDetected = true;
+            _isEnemyinFOV = true;
         }
         else
         {
-            enemyinFOV = false;
+            _isEnemyinFOV = false;
         }
 
-        if(StartTimer && DetectionTimer <= DetectedValue)
+        if(_hasTimerStarted && _detectionTimer <= _detectedValue)
         {
-            DetectionTimer += Time.deltaTime;
+            _detectionTimer += Time.deltaTime;
         }
         else
         {
-            DetectionTimer = 0;
+            _detectionTimer = 0;
         }
 
     }
-
-    void findVisibleTargets()
+    
+    void FindVisibleTargets()
     {
-        visibleTargets.Clear();
-        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+        _visibleTargets.Clear();
+        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
         foreach (Collider target in TargetsInRadius)
         {
             Transform targetTransform = target.transform;
             Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
             
-            if (Vector3.Angle(transform.forward, targetDirection) < viewAngle / 2)
+            if (Vector3.Angle(transform.forward, targetDirection) < _viewAngle / 2)
             {
                 float DistanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                 RaycastHit hitInfo;
          
-                if (Physics.Raycast((transform.position + new Vector3(0, 1, 0)), targetDirection, out hitInfo, DistanceToTarget))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, DistanceToTarget))
                 {
-                    Debug.DrawRay((transform.position + new Vector3(0,1,0)), (targetDirection * DistanceToTarget), Color.green);
+                    Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
                     {
-                        if(CharLocomotion.GetisCrouching())
+                        if(_charLocomotion.IsCrouching)
                         {
-                            DetectedValue = DetectedCrouch;
+                            _detectedValue = _detectedCrouch;
                         }
                         else
                         {
-                            DetectedValue = DetectedStand;
+                            _detectedValue = _detectedStand;
                         }
 
 
-                        if(DistanceToTarget <= (viewRadius / 2))
+                        if(DistanceToTarget <= (_viewRadius / 2))
                         {
-                            visibleTargets.Add(targetTransform);
+                            //Debug.Log("Player is too close");
+                            _visibleTargets.Add(targetTransform);
                             return;
                         }
 
-                        StartTimer = true;
+                        _hasTimerStarted = true;
 
-                        if (DetectionTimer > DetectedValue)
+                        if (_detectionTimer > _detectedValue)
                         {
-                            visibleTargets.Add(targetTransform);
+                            //Debug.Log("Player is detected through time");
+                            _visibleTargets.Add(targetTransform);
                         }
                     }
                     else
                     {
-                        StartTimer = false;
+                        _hasTimerStarted = false;
                     }
                 }
 
@@ -115,11 +120,5 @@ public class FieldOfView : MonoBehaviour
 
         return new Vector3(Mathf.Sin(angleindegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleindegrees * Mathf.Deg2Rad));
     }
-
-    public bool IsEnemyInFOV()
-    {
-        return enemyinFOV;
-    }
-
 }
 

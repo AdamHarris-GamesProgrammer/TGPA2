@@ -9,7 +9,7 @@ namespace Harris.Inventories
     {
         [Tooltip("How far the pickups can be scattered from the dropper.")]
         [SerializeField] float scatterDistance = 1.0f;
-        [SerializeField] DropLibrary dropLibrary;
+        [SerializeField] DropLibrary dropLibrary = null;
         [SerializeField] int numberOfDrops = 2;
 
         //CONSTANTS

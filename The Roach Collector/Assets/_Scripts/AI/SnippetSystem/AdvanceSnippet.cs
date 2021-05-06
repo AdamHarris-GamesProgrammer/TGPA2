@@ -42,7 +42,7 @@ public class AdvanceSnippet : CombatSnippet
     {
         int returnScore = 0;
 
-        float healthRatio = _aiHealth.GetHealthRatio();
+        float healthRatio = _aiHealth.HealthRatio;
 
         if (healthRatio > _agent._config._advanceEnterHealthRatio)
         {
@@ -63,7 +63,7 @@ public class AdvanceSnippet : CombatSnippet
     public bool IsFinished()
     {
         //Checks if the enemy is low on health or if the state duration is up
-        return (_aiHealth.GetHealthRatio() < 0.5f || _timer >= _agent._config._advanceStateDuration);
+        return (_aiHealth.HealthRatio < 0.5f || _timer >= _agent._config._advanceStateDuration);
 
     }
 }

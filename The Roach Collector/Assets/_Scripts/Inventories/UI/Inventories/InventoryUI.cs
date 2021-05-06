@@ -21,7 +21,17 @@ namespace Harris.UI.Inventories
 
         private void Awake() 
         {
-            playerInventory = Inventory.GetPlayerInventory();
+            Inventory parent = GetComponentInParent<Inventory>();
+
+            if (parent)
+            {
+                playerInventory = parent;
+            }
+            else
+            {
+                playerInventory = Inventory.GetPlayerInventory();
+            }
+
             playerInventory.InventoryUpdated += Redraw;
         }
 

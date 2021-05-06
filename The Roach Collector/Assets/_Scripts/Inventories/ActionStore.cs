@@ -17,7 +17,7 @@ namespace Harris.Inventories
         Dictionary<int, DockedItemSlot> dockedItems = new Dictionary<int, DockedItemSlot>();
         private class DockedItemSlot 
         {
-            public ActionItem item;
+            public InventoryItem item;
             public int number;
         }
 
@@ -39,7 +39,7 @@ namespace Harris.Inventories
         /// <summary>
         /// Get the action at the given index.
         /// </summary>
-        public ActionItem GetAction(int index)
+        public InventoryItem GetItem(int index)
         {
             if (dockedItems.ContainsKey(index))
             {
@@ -82,9 +82,10 @@ namespace Harris.Inventories
             else
             {
                 var slot = new DockedItemSlot();
-                slot.item = item as ActionItem;
+                slot.item = item;
                 slot.number = number;
                 dockedItems[index] = slot;
+                //Debug.Log(slot.item.GetDisplayName() + " placed in action bar");
             }
             if (storeUpdated != null)
             {
@@ -102,12 +103,34 @@ namespace Harris.Inventories
         {
             if (dockedItems.ContainsKey(index))
             {
-                dockedItems[index].item.Use(user);
-                if (dockedItems[index].item.isConsumable())
+                ActionItem action = dockedItems[index].item as ActionItem;
+
+                if (action)
                 {
+                   action.Use(user);
+                    if (action.isConsumable())
+                    {
+                        RemoveItems(index, 1);
+                    }
+                    return true;
+                }
+
+                ArmorConfig armor = dockedItems[index].item as ArmorConfig;
+                if (armor)
+                {
+                    armor.Use(gameObject);
                     RemoveItems(index, 1);
                 }
-                return true;
+
+                //TODO: Implement WeaponConfig InventoryItem
+                WeaponConfig weapon = dockedItems[index].item as WeaponConfig;
+                if(weapon)
+                {
+                    weapon.Use(gameObject);
+                }
+                //if weapon
+                    //equip weapon
+
             }
             return false;
         }
@@ -142,17 +165,23 @@ namespace Harris.Inventories
         /// <returns>Will return int.MaxValue when there is not effective bound.</returns>
         public int MaxAcceptable(InventoryItem item, int index)
         {
-            var actionItem = item as ActionItem;
-            if (!actionItem) return 0;
+            
+            //if (!actionItem) return 0;
 
             if (dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, dockedItems[index].item))
             {
                 return 0;
             }
-            if (actionItem.isConsumable())
+
+            var actionItem = item as ActionItem;
+            if (actionItem)
             {
-                return int.MaxValue;
+                if (actionItem.isConsumable())
+                {
+                    return int.MaxValue;
+                }
             }
+
             if (dockedItems.ContainsKey(index))
             {
                 return 0;
