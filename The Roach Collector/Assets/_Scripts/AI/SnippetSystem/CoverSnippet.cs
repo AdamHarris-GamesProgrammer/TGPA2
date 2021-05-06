@@ -104,7 +104,7 @@ public class CoverSnippet : CombatSnippet
                 //If the cover is full then don't go to this cover
                 if (cover.IsFull)
                 {
-                    Debug.Log("Cover is full");
+                    //Debug.Log("Cover is full");
                     continue;
                 }
 

@@ -110,13 +110,13 @@ public class AIAgent : MonoBehaviour
 
     public void PlayBackupSound()
     {
-        Debug.Log("Play Backup Prompt");
+        //Debug.Log("Play Backup Prompt");
         _audioSource.PlayOneShot(_backupPrompt);
     }
 
     public void PlayAlarmPrompt()
     {
-        Debug.Log("Play Alarm Prompt");
+        //Debug.Log("Play Alarm Prompt");
         _audioSource.PlayOneShot(_alarmPrompt);
     }
 

@@ -43,10 +43,10 @@ public class SetAlarmSnippet : CombatSnippet
                 else
                 {
                     //TODO: Trigger a animation here
-                    Debug.Log("Alarm is not disabled");
+                    //Debug.Log("Alarm is not disabled");
                     if (_agent.CanActivateAlarm)
                     {
-                        Debug.Log("Trying to activate alarm");
+                        //Debug.Log("Trying to activate alarm");
                         if (_currentAlarm.ActivateAlarm())
                         {
                             _isFinished = true;

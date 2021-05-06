@@ -11,22 +11,48 @@ public class AdvanceSnippet : CombatSnippet
 
     AIAgent _agent;
 
+    FieldOfView _fov;
+
+    LastKnownLocation _lastKnownLocation;
+
     float _timer = 0.0f;
 
     public void Action()
     {
         _timer += Time.deltaTime;
 
-        Vector3 playerPos = _agent.GetPlayer().position;
 
-        _navAgent.SetDestination(playerPos);
+        if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        {
+            if (_fov.IsEnemyInFOV)
+            {
+                //Set the player as the target
+                _aiWeapon.SetTarget(_agent.GetPlayer());
 
-        //Set the player as the target
-        _aiWeapon.SetTarget(_agent.GetPlayer());
+                //Start firing
+                _aiWeapon.SetFiring(true);
+            }
+            else
+            {
+                //TODO: Replace 12.5 with a weapon usability range
+                _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(12.5f));
 
-        //Start firing
-        _aiWeapon.SetFiring(true);
+                _aiWeapon.SetTarget(null);
+                _aiWeapon.SetFiring(false);
+                //TODO: Find nearby allies and see if they know where the player is.
+                //TODO: Use this to move to that new location and shoot
+            }
+        }
+        else
+        {
+            _aiWeapon.SetTarget(null);
+            _aiWeapon.SetFiring(false);
+        }
+
+        //TODO: Decide when is the optimal position to shoot. 
+        //TODO: Make the AI decide where to move based on if they can shoot the player from there.
     }
+
 
     public void EnterSnippet()
     {
@@ -34,8 +60,12 @@ public class AdvanceSnippet : CombatSnippet
 
         _timer = 0.0f;
 
+        Vector3 playerPos = _lastKnownLocation.transform.position;
+
+        _navAgent.SetDestination(playerPos);
+
         //TODO: Change this so some AI will rush the player
-        _navAgent.stoppingDistance = 10.0f;
+        _navAgent.stoppingDistance = 5.0f;
     }
 
     public int Evaluate()
@@ -57,6 +87,7 @@ public class AdvanceSnippet : CombatSnippet
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _aiHealth = agent.GetComponent<AIHealth>();
+        _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
         _agent = agent;
     }
 

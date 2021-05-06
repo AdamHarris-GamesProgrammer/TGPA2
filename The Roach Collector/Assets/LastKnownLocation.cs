@@ -52,6 +52,49 @@ public class LastKnownLocation : MonoBehaviour
     }
 
 
+    public Vector3 GeneratePointInRange(float distance)
+    {
+        Vector3 dist = transform.position;
+
+        bool successful = false;
+        
+        //Debug.Log("check player state");
+
+        //Brute force a position in range of the player.
+        do
+        {
+            Vector2 point = Random.insideUnitCircle;
+            float x = point.x;
+            float y = point.y;
+
+            x *= 2.0f;
+            y *= 2.0f;
+
+            x -= 1.0f;
+            y -= 1.0f;
+
+            point.x = x;
+            point.y = y;
+
+            //Debug.Log("Point: " + point);
+
+            Vector3 destination = new Vector3(point.x * _playerRadius / 2, transform.position.y, point.y * _playerRadius / 2);
+
+            //Debug.Log("Destination: " + destination);
+
+            dist = transform.position + destination;
+
+            //Debug.Log("Final Destination: " + finalDestination);
+
+            successful = Physics.Raycast(dist, transform.position - dist);
+
+            //Debug.Log("Successful: " + successful);
+
+        } while (!successful);
+
+        return dist;
+    }
+
     // Update is called once per frame
     void Update()
     {
