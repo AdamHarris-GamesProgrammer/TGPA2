@@ -139,7 +139,7 @@ public class AICheckPlayerState : AIState
             {
                 foreach (AIAgent ally in agents)
                 {
-                    ally.stateMachine.ChangeState(AiStateId.CombatState);
+                    ally.stateMachine.ChangeState(AiStateId.SearchForPlayer);
                 }
             }
             else
