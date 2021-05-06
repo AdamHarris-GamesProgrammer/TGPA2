@@ -123,7 +123,11 @@ namespace Harris.Inventories
                 }
 
                 //TODO: Implement WeaponConfig InventoryItem
-
+                WeaponConfig weapon = dockedItems[index].item as WeaponConfig;
+                if(weapon)
+                {
+                    weapon.Use(gameObject);
+                }
                 //if weapon
                     //equip weapon
 

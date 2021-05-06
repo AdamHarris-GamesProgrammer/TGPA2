@@ -17,6 +17,7 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private int _clipSize = 30;
     [SerializeField] private DamageType _damageType;
     [SerializeField] private float _reloadDuration = 1.0f;
+    [SerializeField] private RaycastWeapon _weapon;
 
     public int FireRate { get { return _fireRate; } set { _fireRate = value; } }
     public float WeaponSpread { get { return _weaponSpread; } set { _weaponSpread = value; } }
@@ -31,6 +32,10 @@ public class WeaponConfig : EquipableItem
 
     public override void Use(GameObject user)
     {
-
+        if(user.CompareTag("Player"))
+        {
+            RaycastWeapon weapon = Instantiate(_weapon);
+            user.GetComponent<ActiveWeapon>().Equip(weapon);
+        }
     }
 }
