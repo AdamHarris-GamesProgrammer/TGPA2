@@ -16,6 +16,8 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private AudioClip _backupPrompt = null;
     [SerializeField] private AudioClip _alarmPrompt = null;
     [SerializeField] private AiStateId _currentState = AiStateId.Idle;
+    [SerializeField] private LayerMask _characterMask;
+    public LayerMask CharacterMask {  get { return _characterMask; } }
 
     Transform _player;
     AIWeapons _aiWeapon;
