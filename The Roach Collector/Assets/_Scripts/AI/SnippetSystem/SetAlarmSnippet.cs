@@ -99,7 +99,7 @@ public class SetAlarmSnippet : CombatSnippet
         //No alarms in usable range
         if (_alarmsInUsableRange.Count == 0) return 0;
 
-        if (_enemiesInUsableRange.Count >= 3) returnScore = 50;
+        if (_enemiesInUsableRange.Count <= 3) returnScore = 50;
         else returnScore = 70;
 
 
