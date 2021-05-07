@@ -1,3 +1,4 @@
+using Harris.Inventories;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
-    
+    Inventory _inventory;
 
     private bool _isFiring = false;
     [SerializeField] private ParticleSystem _muzzleFlash = null;
@@ -40,6 +41,23 @@ public class RaycastWeapon : MonoBehaviour
     private float _damageMultiplier = 1.0f;
 
     public LayerMask _layerMask;
+
+    void Awake()
+    {
+
+        _weaponRecoil = GetComponent<WeaponRecoil>();
+    }
+
+    public void Setup()
+    {
+        _inventory = GetComponentInParent<Inventory>();
+
+        if (_inventory != null)
+        {
+            Debug.Log("Player Weapon");
+            _totalAmmo = 0;
+        }
+    }
 
     public DamageType GetDamageType()
     {
@@ -74,11 +92,6 @@ public class RaycastWeapon : MonoBehaviour
     public bool IsFiring()
     {
         return _isFiring;
-    }
-
-    private void Awake()
-    {
-        _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
     public void Update()
@@ -263,6 +276,8 @@ public class RaycastWeapon : MonoBehaviour
         UpdateBullets(deltaTime);
         
     }
+
+    
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {

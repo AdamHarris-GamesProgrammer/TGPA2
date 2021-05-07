@@ -18,7 +18,9 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private DamageType _damageType;
     [SerializeField] private float _reloadDuration = 1.0f;
     [SerializeField] private RaycastWeapon _weapon;
+    [SerializeField] private AmmoID _ammoType;
 
+    public AmmoID AmmoType { get { return _ammoType; } }
     public int FireRate { get { return _fireRate; } set { _fireRate = value; } }
     public float WeaponSpread { get { return _weaponSpread; } set { _weaponSpread = value; } }
     public int BulletCount { get { return _bulletCount; } set { _bulletCount = value; } }

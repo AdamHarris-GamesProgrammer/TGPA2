@@ -39,8 +39,16 @@ public class ActiveWeapon : MonoBehaviour
         }
     }
 
+    private void Reload()
+    {
+        _weapon._isReloading = true;
+
+        _anim.SetBool("isReloading", true);
+        _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+    }
+
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if(_weapon)
         {
@@ -68,22 +76,8 @@ public class ActiveWeapon : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
             {
-                _weapon._isReloading = true;
-                _weapon._totalAmmo += _weapon._clipAmmo;
+                Reload();
 
-                if (_weapon._totalAmmo < _weapon.Config.ClipSize)
-                {
-                    _weapon._clipAmmo = _weapon._totalAmmo;
-                    _weapon._totalAmmo = 0;
-                }
-                else
-                {
-                    _weapon._clipAmmo = _weapon.Config.ClipSize;
-                    _weapon._totalAmmo -= _weapon.Config.ClipSize;
-                }
-
-                _anim.SetBool("isReloading", true);
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
             if (_weapon._isReloading == false)
             {
@@ -121,6 +115,8 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.localRotation = Quaternion.identity;
 
             _weapon.Recoil._camera = _camera;
+
+            newWeapon.Setup();
         }
     }
 }

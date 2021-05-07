@@ -19,7 +19,7 @@ public class PlayerUI : MonoBehaviour
         ammoTxt.text = clip + "/ " + (ammoLeft);
         if (ammoLeft > 0)
         {
-            ammoTxt.color = Color.black;
+            ammoTxt.color = Color.white;
         }
         else
         {
