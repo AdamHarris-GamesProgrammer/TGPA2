@@ -52,7 +52,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         if(_weapon)
         {
-            if (Input.GetButtonDown("Fire1") && _weapon._clipAmmo > 0 && _weapon._isReloading == false)
+            if (Input.GetButtonDown("Fire1"))
             {
                 _weapon.StartFiring();
             }

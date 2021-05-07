@@ -96,6 +96,16 @@ public class RaycastWeapon : MonoBehaviour
 
     public void Update()
     {
+        if(_inventory)
+        {
+            if (_inventory.HasItem(_config.AmmoType))
+            {
+                int index = _inventory.FindItem(_config.AmmoType);
+
+                _totalAmmo = _inventory.GetNumberInSlot(index);
+            }
+        }
+
         if (_isReloading == true)
         {
             if (_reloadTimeLeft > 0)
@@ -104,6 +114,9 @@ public class RaycastWeapon : MonoBehaviour
             }
             else
             {
+                //TODO: Integrate ammo consumption logic here
+
+
                 _reloadTimeLeft = _reloadDuration;
                 _isReloading = false;
 
@@ -114,11 +127,31 @@ public class RaycastWeapon : MonoBehaviour
                 {
                     _clipAmmo = _totalAmmo;
                     _totalAmmo = 0;
+
+                    if (_inventory)
+                    {
+                        if (_inventory.HasItem(_config.AmmoType))
+                        {
+                            int index = _inventory.FindItem(_config.AmmoType);
+
+                            _inventory.RemoveFromSlot(index, _totalAmmo);
+                        }
+                    }
                 }
                 else
                 {
                     _clipAmmo = _config.ClipSize;
                     _totalAmmo -= _config.ClipSize;
+
+                    if (_inventory)
+                    {
+                        if (_inventory.HasItem(_config.AmmoType))
+                        {
+                            int index = _inventory.FindItem(_config.AmmoType);
+
+                            _inventory.RemoveFromSlot(index, _config.ClipSize);
+                        }
+                    }
                 }
             }
         }
@@ -171,10 +204,20 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StartFiring()
     {
-        _accumulatedTime = 0.0f;
-        _isFiring = true;
-        _weaponRecoil.Reset();
-        //Fire();
+        if(_clipAmmo <= 0)
+        {
+            _isReloading = true;
+        }
+        else if (_isReloading)
+        {
+
+        }
+        else
+        {
+            _accumulatedTime = 0.0f;
+            _isFiring = true;
+            _weaponRecoil.Reset();
+        }
     }
 
     public void StopFiring()
@@ -293,6 +336,20 @@ public class RaycastWeapon : MonoBehaviour
                 //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
+
+            //if (_inventory)
+            //{
+            //    //TODO: Ammo Items
+            //    //TODO: Find the ammo in the inventory,
+            //    //if we have the ammo then use it from the inventory.
+            //    if (_inventory.HasItem(_config.AmmoType))
+            //    {
+            //        int index = _inventory.FindItem(_config.AmmoType);
+
+            //        _inventory.RemoveFromSlot(index, 1);
+            //    }
+            //}
+
             if (_clipAmmo <= 0)
             {
                 StopFiring();
