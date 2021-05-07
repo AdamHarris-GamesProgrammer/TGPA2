@@ -32,7 +32,8 @@ public class CoverSnippet : CombatSnippet
     float _changeCoverDuration = 5.0f;
     float _changeCoverTimer = 0.0f;
 
-
+    float _betweenStandingDuration = 3.0f;
+    float _betweenStandingTimer = 0.0f;
 
 
     public void Action()
@@ -52,59 +53,11 @@ public class CoverSnippet : CombatSnippet
 
             Transform _player = _agent.GetPlayer();
 
-            //float angle = Vector3.Angle(_agent.transform.forward, _player.forward);
-            //if (angle < 166.0f)
-            //{
-            //    //TODO: Stop enemy from shooting until they stand up.
-            //    _anim.SetBool("isCrouching", false);
-            //    _aiWeapon.SetTarget(_player);
-            //    _aiWeapon.SetFiring(true);
-            //    _crouchTimer = _crouchDuration;
-            //}
-            //else
-            //{
-            //    _crouchTimer -= Time.deltaTime;
-            //    _anim.SetBool("isCrouching", true);
-            //    _aiWeapon.SetTarget(null);
-            //    _aiWeapon.SetFiring(false);
-            //}
-            ////if (_needToReload)
-            ////{
-            ////    _crouchTimer -= Time.deltaTime;
-            ////    _anim.SetBool("isCrouching", true);
-            ////    _aiWeapon.SetTarget(null);
-            ////    _aiWeapon.SetFiring(false);
-            ////    //Debug.Log("RELOADING");
-            ////    _aiWeapon.GetEquippedWeapon()._isReloading = true;
-            ////}
-            ////_crouchTimer -= Time.deltaTime;
-            //if (_crouchTimer <= 0.0f)
-            //{
-            //    _crouchTimer = _crouchDuration;
-            //    _anim.SetBool("isCrouching", false);
-            //    _aiWeapon.SetTarget(_player);
-            //    _aiWeapon.SetFiring(true);
-            //}
-
-            //Todo: implement better standing system.
-            //Each action frame perform a raycast from a point above the cover and see if it will hit the player,
-            //if the ai does not need to reload then stand up and shoot.
-            //or if the ai does need to reload then stay crouched and reload. 
-
-
-            //if the ai needs to reload 
-            //crouch and reload
-            //else
-            //if raycast from cover to player is successful
-            //stand and shoot for 0.5 seconds
-            //if the ai has been standing for longer than 0.5 seconds then sit back down and wait to stand for a few seconds
-            //else
-            //sit still for X amount of time and then go to another piece of cover?
-            //therefore the cycle continues until the ai dies
-
             //AI is not standing
             if (!_isStanding)
             {
+                _betweenStandingTimer += _betweenStandingDuration;
+
                 //AI needs to reload
                 if (_aiWeapon.GetEquippedWeapon().NeedToReload())
                 {
@@ -112,6 +65,12 @@ public class CoverSnippet : CombatSnippet
                     _aiWeapon.SetTarget(null);
                     _aiWeapon.SetFiring(false);
                     _aiWeapon.GetEquippedWeapon()._isReloading = true;
+
+                    //Does the AI have any bullets left?
+                    if(_aiWeapon.GetEquippedWeapon()._totalAmmo <= 0)
+                    {
+                        //TODO Switch to melee state here. 
+                    }
                 }
                 //AI Does not need to reload
                 else
@@ -123,13 +82,19 @@ public class CoverSnippet : CombatSnippet
                     {
                         if (hit.collider.CompareTag("Player"))
                         {
-                            _isStanding = true;
-                            _anim.SetBool("isCrouching", false);
-                            _aiWeapon.SetTarget(_player);
-                            _aiWeapon.SetFiring(true);
+                            if(_betweenStandingTimer > _betweenStandingDuration)
+                            {
+                                _betweenStandingTimer = 0.0f;
+
+                                _isStanding = true;
+                                _anim.SetBool("isCrouching", false);
+                                _aiWeapon.SetTarget(_player);
+                                _aiWeapon.SetFiring(true);
+                            }
 
                             _changeCoverTimer = 0.0f;
                         }
+                        //AI cannot feasibly shoot the player
                         else
                         {
                             Debug.Log("Raycast hit: " + hit.collider.name);
