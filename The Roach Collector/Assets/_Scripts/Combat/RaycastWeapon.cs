@@ -134,7 +134,7 @@ public class RaycastWeapon : MonoBehaviour
                         {
                             int index = _inventory.FindItem(_config.AmmoType);
 
-                            _inventory.RemoveFromSlot(index, _totalAmmo);
+                            _inventory.RemoveFromSlot(index, _clipAmmo);
                         }
                     }
                 }
