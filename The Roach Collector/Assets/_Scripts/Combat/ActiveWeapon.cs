@@ -46,6 +46,9 @@ public class ActiveWeapon : MonoBehaviour
 
     private void Reload()
     {
+        //Stops the player from reloading with a full mag
+        if (_weapon._clipAmmo == _weapon.Config.ClipSize) return;
+
         _weapon._isReloading = true;
 
         _anim.SetBool("isReloading", true);
@@ -135,6 +138,23 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.Recoil._camera = _camera;
 
             newWeapon.Setup();
+        }
+
+        if (_inventory)
+        {
+            if (_inventory.HasItem(_weapon._config.AmmoType))
+            {
+                int index = _inventory.FindItem(_weapon._config.AmmoType);
+
+                _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+            }
+            else
+            {
+                _weapon._totalAmmo = 0;
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+            }
         }
     }
 }
