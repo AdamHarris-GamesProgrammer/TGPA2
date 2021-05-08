@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Harris.Inventories;
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
 public class ActiveWeapon : MonoBehaviour
@@ -20,6 +21,8 @@ public class ActiveWeapon : MonoBehaviour
 
     public Cinemachine.CinemachineFreeLook _camera;
 
+    Inventory _inventory;
+
     Animator _anim;
     RaycastWeapon _weapon;
 
@@ -28,6 +31,8 @@ public class ActiveWeapon : MonoBehaviour
     void Start()
     {
         _anim = GetComponent<Animator>();
+        _inventory = GetComponent<Inventory>();
+
 
         if (_startingWeapon)
         {
@@ -52,6 +57,19 @@ public class ActiveWeapon : MonoBehaviour
     {
         if(_weapon)
         {
+            if (_inventory)
+            {
+                if (_inventory.HasItem(_weapon._config.AmmoType))
+                {
+                    int index = _inventory.FindItem(_weapon._config.AmmoType);
+
+                    _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+
+                    _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                }
+            }
+
+
             if (Input.GetButtonDown("Fire1"))
             {
                 _weapon.StartFiring();
@@ -70,10 +88,6 @@ public class ActiveWeapon : MonoBehaviour
                 _weapon.StopFiring();
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Equip(null);
-            }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
             {
                 Reload();
@@ -82,6 +96,10 @@ public class ActiveWeapon : MonoBehaviour
             if (_weapon._isReloading == false)
             {
                 _anim.SetBool("isReloading", false);
+            }
+            else
+            {
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
         }
         else

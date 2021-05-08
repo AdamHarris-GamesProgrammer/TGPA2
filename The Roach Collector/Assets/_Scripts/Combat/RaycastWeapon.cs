@@ -338,19 +338,6 @@ public class RaycastWeapon : MonoBehaviour
             }
             _clipAmmo--;
 
-            //if (_inventory)
-            //{
-            //    //TODO: Ammo Items
-            //    //TODO: Find the ammo in the inventory,
-            //    //if we have the ammo then use it from the inventory.
-            //    if (_inventory.HasItem(_config.AmmoType))
-            //    {
-            //        int index = _inventory.FindItem(_config.AmmoType);
-
-            //        _inventory.RemoveFromSlot(index, 1);
-            //    }
-            //}
-
             if (_clipAmmo <= 0)
             {
                 StopFiring();
