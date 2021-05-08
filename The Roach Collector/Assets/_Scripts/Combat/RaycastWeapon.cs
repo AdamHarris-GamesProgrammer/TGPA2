@@ -44,7 +44,6 @@ public class RaycastWeapon : MonoBehaviour
 
     void Awake()
     {
-
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
