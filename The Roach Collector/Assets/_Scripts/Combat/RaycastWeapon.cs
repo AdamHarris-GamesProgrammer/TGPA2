@@ -57,6 +57,10 @@ public class RaycastWeapon : MonoBehaviour
             Debug.Log("Player Weapon");
             _totalAmmo = 0;
         }
+        else
+        {
+            _clipAmmo = _config.ClipSize;
+        }
     }
 
     public DamageType GetDamageType()
