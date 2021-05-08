@@ -114,9 +114,6 @@ public class RaycastWeapon : MonoBehaviour
             }
             else
             {
-                //TODO: Integrate ammo consumption logic here
-
-
                 _reloadTimeLeft = _reloadDuration;
                 _isReloading = false;
 
