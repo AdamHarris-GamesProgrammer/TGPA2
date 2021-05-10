@@ -32,6 +32,11 @@ namespace TGP.Control
         [SerializeField] GameObject _applyingSpeedText = null;
 
 
+        [SerializeField] GameObject _aimCam;
+        [SerializeField] GameObject _followCam;
+        public GameObject AimCam { get { return _aimCam; } }
+        public GameObject FollowCam { get { return _followCam; } }
+
         LockedDoor _doorInRange = null;
         public LockedDoor DoorInRange
         {

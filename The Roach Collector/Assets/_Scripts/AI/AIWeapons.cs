@@ -54,7 +54,6 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
-
         _currentWeapon = weapon;
         _currentWeapon.transform.SetParent(transform, false);
         _sockets.Attach(weapon.transform, MeshSockets.SocketID.RightHand);
