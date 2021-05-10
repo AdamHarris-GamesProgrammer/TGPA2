@@ -96,7 +96,6 @@ namespace Harris.Inventories
             if (_dockedItems.ContainsKey(index))
             {
                 ActionItem action = _dockedItems[index].item as ActionItem;
-
                 if (action)
                 {
                    action.Use(user);

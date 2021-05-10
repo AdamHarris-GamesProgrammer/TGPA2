@@ -7,47 +7,44 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// An slot for the players equipment.
-    /// </summary>
     public class EquipmentSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
-
         [SerializeField] InventoryItemIcon _itemIcon = null;
         [SerializeField] EquipLocation _equipLocation = EquipLocation.Helmet;
 
-        // CACHE
-        Equipment playerEquipment;
+        Equipment _playerEquipment;
 
-        // LIFECYCLE METHODS
-       
-        public EquipLocation GetEquipLocation()
-        {
-            return _equipLocation;
-        }
+        public EquipLocation EquipLocation {  get { return _equipLocation; } }
 
         private void Awake() 
         {
+            //Finds our player
             var player = GameObject.FindGameObjectWithTag("Player");
             if (!player) return;
 
-            playerEquipment = player.GetComponent<Equipment>();
-            playerEquipment.EquipmentUpdated += RedrawUI;
+            //Gets the equipment component from the player
+            _playerEquipment = player.GetComponent<Equipment>();
+            //Sets the equipment to be redrawn when needed
+            _playerEquipment.EquipmentUpdated += RedrawUI;
         }
 
         private void Start() 
         {
+            //Redraws the UI when needed
             RedrawUI();
         }
 
-        // PUBLIC
 
         public int MaxAcceptable(InventoryItem item)
         {
+            //Is this an equippable item
             EquipableItem equipableItem = item as EquipableItem;
             if (equipableItem == null) return 0;
+
+            //if the locations are different
             if (equipableItem.GetAllowedEquipLocation() != _equipLocation) return 0;
+
+            //if we have no item
             if (GetItem() != null) return 0;
 
             return 1;
@@ -55,36 +52,32 @@ namespace Harris.UI.Inventories
 
         public void AddItems(InventoryItem item, int number)
         {
-            playerEquipment.AddItem(_equipLocation, (EquipableItem) item);
+            //Adds an item to the equipment
+            _playerEquipment.AddItem(_equipLocation, (EquipableItem) item);
         }
 
         public InventoryItem GetItem()
         {
-            return playerEquipment.GetItemInSlot(_equipLocation);
+            //Returns an item from the equip location
+            return _playerEquipment.GetItemInSlot(_equipLocation);
         }
 
         public int GetNumber()
         {
-            if (GetItem() != null)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0;
-            }
+            //return the number of items in this slot
+            if (GetItem() != null) return 1;
+            else return 0;
         }
 
         public void RemoveItems(int number)
         {
-            playerEquipment.RemoveItem(_equipLocation);
+            _playerEquipment.RemoveItem(_equipLocation);
         }
 
-        // PRIVATE
 
         void RedrawUI()
         {
-            _itemIcon.SetItem(playerEquipment.GetItemInSlot(_equipLocation));
+            _itemIcon.SetItem(_playerEquipment.GetItemInSlot(_equipLocation));
         }
     }
 }

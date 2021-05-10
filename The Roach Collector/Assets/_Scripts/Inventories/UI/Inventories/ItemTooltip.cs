@@ -9,11 +9,8 @@ namespace Harris.UI.Inventories
     /// </summary>
     public class ItemTooltip : MonoBehaviour
     {
-        // CONFIG DATA
         [SerializeField] Text _titleText = null;
         [SerializeField] Text _bodyText = null;
-
-        // PUBLIC
 
         public void Setup(InventoryItem item)
         {

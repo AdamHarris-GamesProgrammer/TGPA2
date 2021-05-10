@@ -7,87 +7,73 @@ using UnityEngine.EventSystems;
 
 namespace Harris.Core.UI.Dragging
 {
-    /// <summary>
-    /// Allows a UI element to be dragged and dropped from and to a container.
-    /// 
-    /// Create a subclass for the type you want to be draggable. Then place on
-    /// the UI element you want to make draggable.
-    /// 
-    /// During dragging, the item is reparented to the parent canvas.
-    /// 
-    /// After the item is dropped it will be automatically return to the
-    /// original UI parent. It is the job of components implementing `IDragContainer`,
-    /// `IDragDestination and `IDragSource` to update the interface after a drag
-    /// has occurred.
-    /// </summary>
-    /// <typeparam name="T">The type that represents the item being dragged.</typeparam>
-    public class DragItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
-        where T : class
+    public class DragItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler where T : class
     {
-        // PRIVATE STATE
         Vector3 _startPosition;
         Transform _originalParent;
         IDragSource<T> _itemSource;
 
-        // CACHED REFERENCES
         Canvas _parentCanvas;
 
-        // LIFECYCLE METHODS
         private void Awake()
         {
+            //Get the parent canvas and the current slot
             _parentCanvas = GetComponentInParent<Canvas>();
             _itemSource = GetComponentInParent<IDragSource<T>>();
         }
 
-        // PRIVATE
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
-            
+            //Set the starting position and the original parent of this item.
             _startPosition = transform.position;
             _originalParent = transform.parent;
-            // Else won't get the drop event.
+            
+            //Allows raycasts to the canvas
             GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+            //Sets the transform to the canvas as opposed to the slot, used for dragging
             transform.SetParent(_parentCanvas.transform, true);
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
+            //Updates the objects position as we move around
             transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
+            //Sets the position to original
             transform.position = _startPosition;
+            //Canvas needs to block raycasts again
             GetComponent<CanvasGroup>().blocksRaycasts = true;
+            //sets us to the original parent
             transform.SetParent(_originalParent, true);
 
-            IDragDestination<T> container;
+            //Creates a destination object
+            IDragDestination<T> container = null;
+            //if we are not over this current object
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                //set the canvas as our destination
                 container = _parentCanvas.GetComponent<IDragDestination<T>>();
             }
             else
             {
-                container = GetContainer(eventData);
+                //Get the container we are hovering over
+                if (eventData.pointerEnter)
+                {
+                    container = eventData.pointerEnter.GetComponentInParent<IDragDestination<T>>();
+                }
             }
 
+            //if we have a container object then drop our item into the new container.
             if (container != null)
             {
                 DropItemIntoContainer(container);
             }
 
 
-        }
-
-        private IDragDestination<T> GetContainer(PointerEventData eventData)
-        {
-            if (eventData.pointerEnter)
-            {
-                var container = eventData.pointerEnter.GetComponentInParent<IDragDestination<T>>();
-
-                return container;
-            }
-            return null;
         }
 
         private void DropItemIntoContainer(IDragDestination<T> destination)
@@ -214,18 +200,16 @@ namespace Harris.Core.UI.Dragging
             {
                 int indexOfItem = inventorySlot._index;
                 playerInventory.SelectItem(indexOfItem);
-                inventorySlot.SetSelected(true);
             }
             else if (actionSlot)
             {
                 int indexOfItem = actionSlot._index;
                 playerInventory.SelectItem(indexOfItem);
-                inventorySlot.SetSelected(true);
             }
             else
             {
                 EquipmentSlotUI equipmentSlot = GetComponentInParent<EquipmentSlotUI>();
-                EquipLocation location = equipmentSlot.GetEquipLocation();
+                EquipLocation location = equipmentSlot.EquipLocation;
                 playerEquipment.Select(location);
             }
         }

@@ -8,39 +8,25 @@ using System.Collections.Generic;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// Provides storage for the player inventory. A configurable number of
-    /// slots are available.
-    ///
-    /// This component should be placed on the GameObject tagged "Player".
-    /// </summary>
     public class Inventory : MonoBehaviour, ISaveable
     {
-        // CONFIG DATA
         [Tooltip("Allowed size")]
         [SerializeField] int _inventorySize = 16;
 
 
-        // STATE
         InventorySlot[] _slots;
         int _currentSelectedSlot;
 
-        //UNITY MESSAGES
         private void Awake()
         {
             _slots = new InventorySlot[_inventorySize];
             _currentSelectedSlot = -1;
         }
 
-        // EVENTS
-        /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
+        // Broadcasts when the items in the slots are added/removed.
         public event Action InventoryUpdated;
 
-        /// <summary>
-        /// Struct that represents everyhting to do with a Inventory Slot. Contains the item and number of that item
-        /// </summary>
+        /// Struct that represents everything to do with a Inventory Slot. Contains the item and number of that item
         public struct InventorySlot
         {
             public InventoryItem item;
@@ -68,9 +54,6 @@ namespace Harris.Inventories
             return filledSlots.ToArray();
         }
 
-
-
-        // PUBLIC
 
         /// <summary>
         /// Selects the item at the designated index.
@@ -112,10 +95,6 @@ namespace Harris.Inventories
 
             InventorySlotUI[] ui;
 
-            ui = FindObjectsOfType<InventorySlotUI>();
-
-            ui[_currentSelectedSlot].SetSelected(false);
-
             //Change currentSelectedSlot back to non-selected
             _currentSelectedSlot = -1;
         }
@@ -145,8 +124,6 @@ namespace Harris.Inventories
             //Finds the SlotUIs
             ui = FindObjectsOfType<InventorySlotUI>();
 
-            //Deselects the current slot
-            ui[_currentSelectedSlot].SetSelected(false);
 
             //Sets the current slot to -1
             _currentSelectedSlot = -1;

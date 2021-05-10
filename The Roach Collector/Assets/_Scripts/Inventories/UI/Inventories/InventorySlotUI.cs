@@ -8,10 +8,8 @@ namespace Harris.UI.Inventories
 {
     public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
+        
         [SerializeField] InventoryItemIcon _icon = null;
-        [SerializeField] Sprite _selectedIcon = null;
-        Sprite defaultIcon;
 
         // STATE
         public int _index;
@@ -22,13 +20,12 @@ namespace Harris.UI.Inventories
 
         void Awake()
         {
-            defaultIcon = GetComponent<Image>().sprite;
         }
 
         public void Setup(Inventory inventory, int index)
         {
-            this._inventory = inventory;
-            this._index = index;
+            _inventory = inventory;
+            _index = index;
             _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
         }
 
@@ -59,20 +56,6 @@ namespace Harris.UI.Inventories
         public void RemoveItems(int number)
         {
             _inventory.RemoveFromSlot(_index, number);
-        }
-
-        public void SetSelected(bool isSelected)
-        {
-            Image image = GetComponent<Image>();
-            if (isSelected)
-            {
-                image.sprite = _selectedIcon;
-            }
-            else
-            {
-                image.sprite = defaultIcon;
-            }
-
         }
     }
 }
