@@ -22,7 +22,7 @@ public class CharacterAiming : MonoBehaviour
         _controller = GetComponent<PlayerController>();
         _mainCamera = Camera.main;
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     
