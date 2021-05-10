@@ -12,11 +12,10 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         LevelSelectorMenu.SetActive(true);
-        Debug.Log("aaaa");
     }
-    public void Tutorial()
+    public void Hideout()
     {
-        SceneManager.LoadScene("_Dev");
+        SceneManager.LoadScene("Hideout");
     }
     public void Setting()
     {

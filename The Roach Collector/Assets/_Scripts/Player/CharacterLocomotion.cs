@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -7,25 +8,27 @@ public class CharacterLocomotion : MonoBehaviour
 {
     
 
-    [Min(0f)][SerializeField] private float _jumpHeight;
-    [Min(0f)][SerializeField] private float _gravity;
-    [SerializeField] private float _stepDown;
-    [SerializeField] private float _jumpDamping;
+    [Min(0f)][SerializeField] private float _jumpHeight = 2.0f;
+    [Min(0f)][SerializeField] private float _gravity = -9.81f;
+    [SerializeField] private float _stepDown = 0.1f;
+    [SerializeField] private float _jumpDamping = 0.1f;
     [SerializeField] private float _playerSpeed = 1.0f;
     [SerializeField] private float _pushPower = 2.0F;
-    [SerializeField] private float _airControl;
-    [SerializeField] Rig _kneeLayer;
+    [SerializeField] private float _airControl = 0.1f;
 
+    
 
     bool _isJumping;
     bool _isCrouching = false;
+
+    public bool IsCrouching { get { return _isCrouching; } }
 
     Vector2 _input;
     Vector3 _velocity;
     Vector3 _rootMotion;
 
 
-
+    PlayerController _player;
     CharacterController _controller;
     Animator _animator;
     PlayerHealth _health;
@@ -36,28 +39,29 @@ public class CharacterLocomotion : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _health = GetComponent<PlayerHealth>();
+        _player = GetComponent<PlayerController>();
     }
 
     void Update()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         //Disables crouching if we are crouching enables crouching if I am standing
         if (Input.GetKeyDown(KeyCode.C))
         {
             _isCrouching = !_isCrouching;
 
-            _controller.height = _isCrouching ? 0.9f : 1.6f;
+            _controller.height = _isCrouching ? 1.5f : 1.6f;
         }
 
-        //Checks we are crouching
+        //Checks we are crouching and sets the bool in the animator
         if (_isCrouching)
         {
-            _kneeLayer.weight += 0.2f;
+            _animator.SetBool("isCrouching", true);
         }
         else
         {
-            _kneeLayer.weight -= 0.2f;
+            _animator.SetBool("isCrouching", false);
         }
 
         //Handles our root motion
@@ -76,7 +80,7 @@ public class CharacterLocomotion : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         if (_isJumping) //In Air state
         {
@@ -92,15 +96,16 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void OnAnimatorMove()
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
 
         //Accumulates our root motion this frame
         _rootMotion += _animator.deltaPosition;
+        //Debug.Log(_rootMotion);
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (_health.IsDead()) return;
+        if (_health.IsDead) return;
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody
@@ -152,8 +157,8 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void UpdateOnGround()
     {
-        //Moving along X and Z
-        Vector3 stepForward = _rootMotion * _playerSpeed;
+        //Moving along X and Z, and then scale move speed by the players move speed stat. (Modified by equipped armor)
+        Vector3 stepForward = (_rootMotion * _playerSpeed) * (1 + _player.GetStat(StatID.MOVE_SPEED)._value);
         Vector3 stepDown = Vector3.down * _stepDown;
 
         _controller.Move(stepForward + stepDown);
@@ -165,8 +170,6 @@ public class CharacterLocomotion : MonoBehaviour
             _controller.Move(Vector3.up * _stepDown);
         }
 
-
-
         _rootMotion = Vector3.zero;
 
         //Stepped off edge
@@ -175,8 +178,6 @@ public class CharacterLocomotion : MonoBehaviour
             InheritVelocity(0.0f);
         }
     }
-
-
 
     private void InheritVelocity(float jumpVelocity)
     {
@@ -197,10 +198,8 @@ public class CharacterLocomotion : MonoBehaviour
 
     Vector3 CalculateAirControl()
     {
-        return ((transform.forward * _input.y) + (transform.right * _input.x)) *(_airControl / 100);
+        return ((transform.forward * _input.y) + (transform.right * _input.x)) * (_airControl / 100);
     }
 
     #endregion
-
-
 }

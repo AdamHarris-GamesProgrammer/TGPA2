@@ -8,9 +8,10 @@ public enum AiStateId
     Death,
     Idle,
     FindWeapon,
-    AttackPlayer,
     Patrol,
-    CombatState
+    CombatState,
+    GotToPlayerLocation,
+    SearchForPlayer
 }
 
 public interface AIState

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using Harris.Core.UI.Dragging;
 using Harris.Inventories;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Harris.UI.Inventories
 {
@@ -14,8 +14,8 @@ namespace Harris.UI.Inventories
     {
         // CONFIG DATA
         [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] int index = 0;
-        [SerializeField] TextMeshProUGUI textObject;
+        [SerializeField] public int index = 0;
+        [SerializeField] Text textObject;
 
         // CACHE
         ActionStore store;
@@ -41,7 +41,7 @@ namespace Harris.UI.Inventories
 
         public InventoryItem GetItem()
         {
-            return store.GetAction(index);
+            return store.GetItem(index);
         }
 
         public int GetNumber()

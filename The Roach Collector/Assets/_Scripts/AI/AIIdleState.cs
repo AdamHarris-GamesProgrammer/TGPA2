@@ -1,23 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIIdleState : AIState
 {
     Transform _player;
-
+    FieldOfView _FOV;
 
     public AIIdleState(AIAgent agent)
     {
         _player = agent.GetPlayer();
+        _FOV = agent.GetComponent<FieldOfView>();
     }
 
     public void Enter(AIAgent agent)
     {
+        agent.GetComponent<AIWeapons>().SetTarget(null);
+        agent.GetComponent<AIWeapons>().SetFiring(false);
+        agent.GetComponent<NavMeshAgent>().isStopped = true;
+
     }
 
     public void Exit(AIAgent agent)
     {
+        agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
     public AiStateId GetID()
@@ -27,23 +34,17 @@ public class AIIdleState : AIState
 
     public void Update(AIAgent agent)
     {
-        Vector3 playerDirection = _player.position - agent.transform.position;
-        if (playerDirection.sqrMagnitude > agent._config._maxSightDistance * agent._config._maxSightDistance)
+        //Check if player is in the AI's field of view
+        if(_FOV.IsEnemyInFOV)
         {
-            //Player is too far away
-            return;
+            //Player is in view, change to chase state
+            Debug.Log("Player in FOV");
+            //TODO: Incorporate Perception system 
+            //TODO: Add in Object for players last known position
+            //TODO: Check out if the player is still there. 
+            agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);
         }
 
-        Vector3 agentDirection = agent.transform.forward;
-
-        playerDirection.Normalize();
-
-        float dotProduct = Vector3.Dot(playerDirection, agentDirection);
-        if(dotProduct > 0.0f)
-        {
-            //TODO Change this to a proper detection system
-            agent.stateMachine.ChangeState(AiStateId.CombatState);
-        }
 
     }
 

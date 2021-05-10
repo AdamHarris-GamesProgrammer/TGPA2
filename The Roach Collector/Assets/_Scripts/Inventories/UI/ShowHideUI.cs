@@ -10,12 +10,11 @@ namespace Harris.UI
         [SerializeField] KeyCode toggleKey = KeyCode.Escape;
         [SerializeField] GameObject uiContainer = null;
 
-        public event Action showUI;
-        public event Action closeUI;
+        public GameObject UIContainer {  get { return uiContainer; } }
 
-        // Start is called before the first frame update
-        void Start()
+        private void Awake()
         {
+            Cursor.lockState = CursorLockMode.Locked;
             uiContainer.SetActive(false);
         }
 
@@ -26,18 +25,16 @@ namespace Harris.UI
             {
                 uiContainer.SetActive(!uiContainer.activeSelf);
 
-                if (!uiContainer.active)
+                if (!uiContainer.activeSelf)
                 {
-                    //showUI.Invoke();
                     Time.timeScale = 1;
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
                 else
                 {
-                    //closeUI.Invoke();
                     Time.timeScale = 0;
-                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
                 }
 

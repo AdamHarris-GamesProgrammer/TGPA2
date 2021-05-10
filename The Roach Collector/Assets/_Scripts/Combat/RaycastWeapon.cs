@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class RaycastWeapon : MonoBehaviour
 {
@@ -18,27 +19,47 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
+    
 
     private bool _isFiring = false;
-    [SerializeField] private int _fireRate = 25;
-    [SerializeField] private float _weaponSpread = 0;
-    [SerializeField] private int _bulletCount = 1;
-    [SerializeField] private float _bulletSpeed = 1000.0f;
-    [SerializeField] private float _bulletDrop = 0.0f;
-    [SerializeField] private ParticleSystem _muzzleFlash;
-    [SerializeField] private ParticleSystem _metalHitEffect;
-    [SerializeField] private ParticleSystem _fleshHitEffect;
+    [SerializeField] private ParticleSystem _muzzleFlash = null;
+    [SerializeField] private ParticleSystem _metalHitEffect = null;
+    [SerializeField] private ParticleSystem _fleshHitEffect = null;
 
-    [SerializeField] private Transform _raycastOrigin;
-    [SerializeField] private float _damage = 10.0f;
-    [SerializeField] private AnimationClip _weaponAnimation;
+    [SerializeField] private Transform _raycastOrigin = null;
+
+    [SerializeField] public WeaponConfig _config;
+    public WeaponConfig Config { get { return _config; } }
+
+    [SerializeField] public int _clipAmmo = 30;
+    [SerializeField] public int _totalAmmo = 90;
+    [SerializeField] public float _reloadDuration = 1.0f;
+    [SerializeField] private float _reloadTimeLeft = 1.0f;
+    [SerializeField] public bool _isReloading = false;
+    [SerializeField] private DamageType _type;
+    private float _damageMultiplier = 1.0f;
 
     public LayerMask _layerMask;
 
+    public DamageType GetDamageType()
+    {
+        return _type;
+    }
 
-    [SerializeField] private TrailRenderer _tracerEffect;
+    public void SetDamageMultiplier(float val)
+    {
+        _damageMultiplier = val;
+    }
 
-    public WeaponRecoil _weaponRecoil;
+    public bool NeedToReload()
+    {
+        return (_clipAmmo <= 0);
+    }
+
+    [SerializeField] private TrailRenderer _tracerEffect = null;
+
+    private WeaponRecoil _weaponRecoil;
+    public WeaponRecoil Recoil { get { return _weaponRecoil; } }
 
     public Transform GetRaycastOrigin()
     {
@@ -47,12 +68,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public float GetDamage()
     {
-        return _damage;
-    }
-
-    public AnimationClip GetAnimationClip()
-    {
-        return _weaponAnimation;
+        return _config.Damage * _damageMultiplier;
     }
 
     public bool IsFiring()
@@ -60,12 +76,41 @@ public class RaycastWeapon : MonoBehaviour
         return _isFiring;
     }
 
-
     private void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
+    public void Update()
+    {
+        if (_isReloading == true)
+        {
+            if (_reloadTimeLeft > 0)
+            {
+                _reloadTimeLeft -= Time.deltaTime;
+            }
+            else
+            {
+                _reloadTimeLeft = _reloadDuration;
+                _isReloading = false;
+
+                //Add in the new bullets
+                _totalAmmo += _clipAmmo;
+
+                if (_totalAmmo < _config.ClipSize)
+                {
+                    _clipAmmo = _totalAmmo;
+                    _totalAmmo = 0;
+                }
+                else
+                {
+                    _clipAmmo = _config.ClipSize;
+                    _totalAmmo -= _config.ClipSize;
+                }
+            }
+        }
+        
+    }
 
     Ray _ray;
     RaycastHit _hitInfo;
@@ -79,7 +124,7 @@ public class RaycastWeapon : MonoBehaviour
     Vector3 GetPosition(Bullet bullet)
     {
         //Calculate gravity
-        Vector3 gravity = Vector3.down * _bulletDrop;
+        Vector3 gravity = Vector3.down * _config.BulletDrop;
 
         //p + v* t + 0.5 * g * t *t
         //Brackets aren't needed but they help make the equation more readable
@@ -104,7 +149,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         _muzzleFlash.Emit(1);
 
-        Vector3 velocity = (target - _raycastOrigin.position).normalized * _bulletSpeed;
+        Vector3 velocity = (target - _raycastOrigin.position).normalized * _config.BulletSpeed;
         var bullet = CreateBullet(_raycastOrigin.position, velocity);
         _bullets.Add(bullet);
 
@@ -140,9 +185,14 @@ public class RaycastWeapon : MonoBehaviour
     {
         _bullets.ForEach(bullet =>
         {
+            //p0 origin position
             Vector3 p0 = GetPosition(bullet);
             bullet._time += dt;
+
+            //p1 new position
             Vector3 p1 = GetPosition(bullet);
+
+            //Calculate the raycast between the origin and new position and see if we collide with anything
             RayCastSegment(p0, p1, bullet);
 
         });
@@ -184,7 +234,13 @@ public class RaycastWeapon : MonoBehaviour
 
             }
 
-            bullet._tracer.transform.position = _hitInfo.point;
+            //TODO: Error triggered here by Tracer being destroyed before this code
+            //This is very efficient as it will be done each bullet update per bullet per frame
+            if(bullet._tracer != null)
+            {
+                bullet._tracer.transform.position = _hitInfo.point;
+            }
+
             bullet._time = _maxLifeTime;
         }
         else
@@ -205,18 +261,28 @@ public class RaycastWeapon : MonoBehaviour
 
         _accumulatedTime += deltaTime;
         UpdateBullets(deltaTime);
+        
     }
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
-        float fireInterval = 1.0f / _fireRate;
-        while(_accumulatedTime > 0.0f)
+        float fireInterval = 1.0f / _config.FireRate;
+        //Debug.Log("Fire Interval: " + fireInterval);
+        _accumulatedTime += deltaTime;
+        while(_accumulatedTime > fireInterval)
         {
-            for(int i = 0; i < _bulletCount; ++i) {
-                Fire(target += UnityEngine.Random.insideUnitSphere * _weaponSpread);
+            for (int i = 0; i < _config.BulletCount; i++) {
+                
+                Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
+                //Debug.Log("Fire");
+                //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
-            
-            _accumulatedTime -= fireInterval;
+            _clipAmmo--;
+            if (_clipAmmo <= 0)
+            {
+                StopFiring();
+            }
+            _accumulatedTime = 0.0f;
         }
     }
 }

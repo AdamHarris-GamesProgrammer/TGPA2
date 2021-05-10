@@ -12,7 +12,11 @@ public class AIWeapons : MonoBehaviour
 
     bool _isWeaponActive = false;
 
+    [Header("Accuracy Settinga")]
     [SerializeField] float _inaccuracy = 0.0f;
+
+    [Header("Damage Settings")]
+    [SerializeField] float _damageMultiplier = 0.2f;
 
     public void SetTarget(Transform transform)
     {
@@ -57,6 +61,7 @@ public class AIWeapons : MonoBehaviour
         _weaponIK.SetAimTransform(_currentWeapon.GetRaycastOrigin());
         _weaponIK.SetWeaponTransform(_currentWeapon.transform);
         _isWeaponActive = true;
+        _currentWeapon.SetDamageMultiplier(_damageMultiplier);
     }
 
     public void DropWeapon()
@@ -74,6 +79,11 @@ public class AIWeapons : MonoBehaviour
     public bool HasWeapon()
     {
         return _currentWeapon != null;
+    }
+
+    public RaycastWeapon GetEquippedWeapon()
+    {
+        return _currentWeapon;
     }
 
 }

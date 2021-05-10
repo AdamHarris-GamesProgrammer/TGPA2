@@ -4,13 +4,13 @@ using UnityEngine;
 
 public interface CombatSnippet
 {
-    public void Initialize(AIAgent agent);
+    void Initialize(AIAgent agent);
 
-    public int Evaluate();
+    int Evaluate();
 
-    public void Action();
+    void Action();
 
-    public bool IsFinished();
+    bool IsFinished();
 
-    public void EnterSnippet();
+    void EnterSnippet();
 }

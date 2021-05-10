@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class ReloadSnippet : CombatSnippet
 {
+    AIWeapons _aiWeapons;
+    AIAgent _agent;
+
     public void Action()
     {
-
+        //Debug.Log(_agent.transform.name + " is reloading");
+        _aiWeapons.GetEquippedWeapon()._isReloading = true;
     }
 
     public void EnterSnippet()
@@ -18,20 +22,24 @@ public class ReloadSnippet : CombatSnippet
     {
         int returnScore = 0;
 
-        //Implement the concept of ammo usage
 
+        if (_aiWeapons.GetEquippedWeapon().NeedToReload())
+        {
+            returnScore = 100;
+        }
 
         return returnScore;
     }
 
     public void Initialize(AIAgent agent)
     {
-
+        _aiWeapons = agent.GetComponent<AIWeapons>();
+        _agent = agent;
     }
 
     public bool IsFinished()
     {
-        //TODO: Implement finish logic
-        return true;
+        //If we no longer need to reload.
+        return !_aiWeapons.GetEquippedWeapon().NeedToReload();
     }
 }

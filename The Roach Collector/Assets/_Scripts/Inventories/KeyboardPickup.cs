@@ -6,15 +6,17 @@ using UnityEngine;
 namespace Harris.Inventories
 {
     [RequireComponent(typeof(Pickup))]
-    public class KeyboardPickup : MonoBehaviour, IInteractive
+    public class KeyboardPickup : MonoBehaviour
     {
         Pickup pickup;
 
-        [SerializeField] GameObject pickupPrompt;
+        [SerializeField] KeyCode _pickupKey = KeyCode.E;
+
+        bool _inRange = false;
 
         public void Interact()
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(_pickupKey))
             {
                 if (pickup.CanBePickedUp())
                 {
@@ -23,14 +25,33 @@ namespace Harris.Inventories
             }
         }
 
-        public void ShowUI(bool isActive)
-        {
-            pickupPrompt.SetActive(isActive);
-        }
-
         void Awake()
         {
             pickup = GetComponent<Pickup>();
+        }
+
+        private void Update()
+        {
+            if(_inRange)
+            {
+                Interact();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _inRange = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                _inRange = false;
+            }
         }
     }
 }

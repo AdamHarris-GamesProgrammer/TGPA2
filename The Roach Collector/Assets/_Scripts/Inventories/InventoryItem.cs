@@ -12,8 +12,11 @@ namespace Harris.Inventories
     /// In practice, you are likely to use a subclass such as `ActionItem` or
     /// `EquipableItem`.
     /// </remarks>
-    public abstract class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
+    /// 
+    [CreateAssetMenu(menuName = ("InventorySystem/Item"))]
+    public class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
     {
+        [Header("Inventory Item Settings")]
         // CONFIG DATA
         [Tooltip("Auto-generated UUID for saving/loading. Clear this field if you want to generate a new one.")]
         [SerializeField] string itemID = null;
@@ -63,7 +66,16 @@ namespace Harris.Inventories
             if (itemID == null || !itemLookupCache.ContainsKey(itemID)) return null;
             return itemLookupCache[itemID];
         }
-        
+
+        /// <summary>
+        /// Trigger the use of this item. Override to provide functionality.
+        /// </summary>
+        /// <param name="user">The character that is using this action.</param>
+        public virtual void Use(GameObject user)
+        {
+            Debug.Log("Using action: " + this);
+        }
+
         /// <summary>
         /// Spawn the pickup gameobject into the world.
         /// </summary>

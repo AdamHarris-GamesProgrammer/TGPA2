@@ -10,7 +10,7 @@ namespace Harris.Inventories
     /// This class should be used as a base. Subclasses must implement the `Use`
     /// method.
     /// </remarks>
-    [CreateAssetMenu(menuName = ("Harris/InventorySystem/Action Item"))]
+    [CreateAssetMenu(menuName = ("InventorySystem/Action Item"))]
     public class ActionItem : InventoryItem
     {
         // CONFIG DATA
@@ -19,14 +19,7 @@ namespace Harris.Inventories
 
         // PUBLIC
 
-        /// <summary>
-        /// Trigger the use of this item. Override to provide functionality.
-        /// </summary>
-        /// <param name="user">The character that is using this action.</param>
-        public virtual void Use(GameObject user)
-        {
-            Debug.Log("Using action: " + this);
-        }
+
 
         public bool isConsumable()
         {
