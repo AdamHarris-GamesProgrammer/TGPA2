@@ -17,31 +17,36 @@ public class AdvanceSnippet : CombatSnippet
 
     float _timer = 0.0f;
 
+
+    float _stationaryDuration = 2.5f;
+    float _stationaryTimer = 0.0f;
+
     public void Action()
     {
         _timer += Time.deltaTime;
 
+        Vector3 direction = _agent.GetPlayer().position - _agent.transform.position;
+
+        Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+
+        _agent.transform.rotation = look;
 
         if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
         {
-            if (_fov.IsEnemyInFOV)
-            {
-                //Set the player as the target
-                _aiWeapon.SetTarget(_agent.GetPlayer());
+            _stationaryTimer += Time.deltaTime;
 
-                //Start firing
-                _aiWeapon.SetFiring(true);
+            if(_stationaryTimer > _stationaryDuration)
+            {
+                _stationaryTimer = 0.0f;
+                _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(12.5f));
             }
             else
             {
-                //TODO: Replace 12.5 with a weapon usability range
-                _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(12.5f));
-
-                _aiWeapon.SetTarget(null);
-                _aiWeapon.SetFiring(false);
-                //TODO: Find nearby allies and see if they know where the player is.
-                //TODO: Use this to move to that new location and shoot
+                _aiWeapon.SetTarget(_agent.GetPlayer());
+                //Debug.Log("Should shoot");
+                _aiWeapon.SetFiring(true);
             }
+            
         }
         else
         {
@@ -95,7 +100,7 @@ public class AdvanceSnippet : CombatSnippet
     public bool IsFinished()
     {
         //Checks if the enemy is low on health or if the state duration is up
-        return (_aiHealth.HealthRatio < 0.5f || _timer >= _agent._config._advanceStateDuration);
+        return (_aiHealth.HealthRatio < 0.5f/* || _timer >= _agent._config._advanceStateDuration*/);
 
     }
 }

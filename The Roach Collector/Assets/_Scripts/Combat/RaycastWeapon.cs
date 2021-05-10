@@ -327,7 +327,7 @@ public class RaycastWeapon : MonoBehaviour
         float fireInterval = 1.0f / _config.FireRate;
         //Debug.Log("Fire Interval: " + fireInterval);
         _accumulatedTime += deltaTime;
-        while(_accumulatedTime > fireInterval)
+        while(_accumulatedTime >= fireInterval)
         {
             for (int i = 0; i < _config.BulletCount; i++) {
                 
@@ -341,7 +341,7 @@ public class RaycastWeapon : MonoBehaviour
             {
                 StopFiring();
             }
-            _accumulatedTime = 0.0f;
+            _accumulatedTime = Mathf.Max(_accumulatedTime -= Time.deltaTime, 0.0f);
         }
     }
 }
