@@ -7,9 +7,12 @@ public class AssassinationTarget : MonoBehaviour
 {
     Transform _player;
 
+    AIAgent _owner;
+
     private void Awake()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _owner = GetComponentInParent<AIAgent>();
     }
 
 
@@ -18,8 +21,10 @@ public class AssassinationTarget : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (_owner.GetComponent<Health>().IsDead) return;
+
             //Debug.Log("Player in range");
-            _player.GetComponent<PlayerController>().AgentInRange = GetComponentInParent<AIAgent>();
+            _player.GetComponent<PlayerController>().AgentInRange = _owner;
         }
     }
 

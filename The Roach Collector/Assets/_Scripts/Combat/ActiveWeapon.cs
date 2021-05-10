@@ -17,14 +17,17 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] public PlayerUI _PlayerUI = null;
-
-    public Cinemachine.CinemachineVirtualCamera _camera;
+    PlayerUI _PlayerUI = null;
 
     Inventory _inventory;
 
     Animator _anim;
     RaycastWeapon _weapon;
+
+    private void Awake()
+    {
+        _PlayerUI = GetComponent<PlayerUI>();
+    }
 
 
     // Start is called before the first frame update
@@ -136,8 +139,6 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.parent = _weaponParent;
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
-
-            _weapon.Recoil._camera = _camera;
 
             newWeapon.Setup();
         }

@@ -18,7 +18,11 @@ namespace TGP.Control
 
         public bool InKillAnimation { get { return _inKillAnimation; } }
 
-        public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
+        public AIAgent AgentInRange { get { return _agentInRange; }
+            set {
+                _agentInRange = value;
+                gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
+            } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm = null;
@@ -44,8 +48,8 @@ namespace TGP.Control
             set
             {
                 _doorInRange = value;
-                if (value == null) _unlockDoorPrompt.SetActive(false);
-                else _unlockDoorPrompt.SetActive(true);
+                SendMessage("DisplayDoorPrompt", value);
+                
             }
         }
 
@@ -65,10 +69,6 @@ namespace TGP.Control
         ActionStore _actionSlots;
 
         Animator _animator;
-
-        [SerializeField] Vector3 _assassinOffset = Vector3.back;
-
-        [SerializeField] GameObject _unlockDoorPrompt;
 
         Inventory _playerInventory;
 
@@ -166,7 +166,6 @@ namespace TGP.Control
                     _agentInRange.BeingKilled = true;
 
                     _inKillAnimation = true;
-
 
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
 
@@ -271,30 +270,12 @@ namespace TGP.Control
 
         private void InteractWithActionBar()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                _actionSlots.Use(0, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                _actionSlots.Use(1, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                _actionSlots.Use(2, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                _actionSlots.Use(3, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                _actionSlots.Use(4, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-                _actionSlots.Use(5, this.gameObject);
-            }
+            if (Input.GetKeyDown(KeyCode.Alpha1))      _actionSlots.Use(0, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) _actionSlots.Use(1, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) _actionSlots.Use(2, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) _actionSlots.Use(3, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha5)) _actionSlots.Use(4, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha6)) _actionSlots.Use(5, this.gameObject);
         }
 
         //Animation event from the StealthAttack animation 
