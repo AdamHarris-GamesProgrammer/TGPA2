@@ -33,7 +33,7 @@ public class CallForBackupSnippet : CombatSnippet
 
         int returnScore = 0;
 
-        _enemiesInRange = _agent.GetEnemiesInRange(_agent._config._backupEnemyDistance);
+        _enemiesInRange = _agent.Zone.GetAliveEnemies();
 
         if (_enemiesInRange.Count >= 3)
         {

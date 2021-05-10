@@ -20,5 +20,18 @@ public class CombatZone : MonoBehaviour
         _coversInZone = GetComponentsInChildren<CoverController>().ToList<CoverController>();
     }
 
-    
+    public List<AIAgent> GetAliveEnemies()
+    {
+        List<AIAgent> aliveEnemies = new List<AIAgent>();
+
+        foreach (AIAgent enemy in _agentInZone)
+        {
+            //Don't add the enemy if the there dead
+            if (enemy.GetHealth().IsDead) continue;
+
+            aliveEnemies.Add(enemy);
+        }
+
+        return aliveEnemies;
+    }
 }
