@@ -53,7 +53,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if (_inventory != null)
         {
-            Debug.Log("Player Weapon");
+            //Debug.Log("Player Weapon");
             _totalAmmo = 0;
         }
         else

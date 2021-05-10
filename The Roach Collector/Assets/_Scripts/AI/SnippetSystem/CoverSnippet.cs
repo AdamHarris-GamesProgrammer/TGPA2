@@ -217,7 +217,7 @@ public class CoverSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        Debug.Log(_agent.transform.name + " Cover Snippet");
+        //Debug.Log(_agent.transform.name + " Cover Snippet");
 
         _aiWeapon.SetTarget(null);
 
@@ -246,7 +246,7 @@ public class CoverSnippet : CombatSnippet
             returnScore = 80;
         }
 
-        Debug.Log("Cover Snippet Returning: " + returnScore);
+        //Debug.Log("Cover Snippet Returning: " + returnScore);
 
         return returnScore;
     }
