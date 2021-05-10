@@ -15,7 +15,7 @@ namespace Harris.UI.Inventories
     public class InventoryItemIcon : MonoBehaviour
     {
         // CONFIG DATA
-        [SerializeField] Text itemNumber = null;
+        [SerializeField] Text _itemNumber = null;
 
         // PUBLIC
 
@@ -37,16 +37,16 @@ namespace Harris.UI.Inventories
                 iconImage.sprite = item.Icon;
             }
 
-            if (itemNumber)
+            if (_itemNumber)
             {
                 if (number <= 1)
                 {
-                    itemNumber.gameObject.SetActive(false);
+                    _itemNumber.gameObject.SetActive(false);
                 }
                 else
                 {
-                    itemNumber.gameObject.SetActive(true);
-                    itemNumber.text = number.ToString();
+                    _itemNumber.gameObject.SetActive(true);
+                    _itemNumber.text = number.ToString();
                 }
             }
         }

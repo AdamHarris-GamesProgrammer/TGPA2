@@ -17,7 +17,6 @@ namespace Harris.UI.Inventories
     {
         public void AddItems(InventoryItem item, int number)
         {
-            Debug.Log("Drop Item");
             var player = GameObject.FindGameObjectWithTag("Player");
             player.GetComponent<ItemDropper>().DropItem(item, number);
         }

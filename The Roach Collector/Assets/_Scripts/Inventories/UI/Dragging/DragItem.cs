@@ -25,29 +25,29 @@ namespace Harris.Core.UI.Dragging
         where T : class
     {
         // PRIVATE STATE
-        Vector3 startPosition;
-        Transform originalParent;
-        IDragSource<T> source;
+        Vector3 _startPosition;
+        Transform _originalParent;
+        IDragSource<T> _itemSource;
 
         // CACHED REFERENCES
-        Canvas parentCanvas;
+        Canvas _parentCanvas;
 
         // LIFECYCLE METHODS
         private void Awake()
         {
-            parentCanvas = GetComponentInParent<Canvas>();
-            source = GetComponentInParent<IDragSource<T>>();
+            _parentCanvas = GetComponentInParent<Canvas>();
+            _itemSource = GetComponentInParent<IDragSource<T>>();
         }
 
         // PRIVATE
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
             
-            startPosition = transform.position;
-            originalParent = transform.parent;
+            _startPosition = transform.position;
+            _originalParent = transform.parent;
             // Else won't get the drop event.
             GetComponent<CanvasGroup>().blocksRaycasts = false;
-            transform.SetParent(parentCanvas.transform, true);
+            transform.SetParent(_parentCanvas.transform, true);
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)
@@ -57,14 +57,14 @@ namespace Harris.Core.UI.Dragging
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
-            transform.position = startPosition;
+            transform.position = _startPosition;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
-            transform.SetParent(originalParent, true);
+            transform.SetParent(_originalParent, true);
 
             IDragDestination<T> container;
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                container = parentCanvas.GetComponent<IDragDestination<T>>();
+                container = _parentCanvas.GetComponent<IDragDestination<T>>();
             }
             else
             {
@@ -93,11 +93,11 @@ namespace Harris.Core.UI.Dragging
         private void DropItemIntoContainer(IDragDestination<T> destination)
         {
             //if the destination is the same as the source
-            if (object.ReferenceEquals(destination, source)) return;
+            if (object.ReferenceEquals(destination, _itemSource)) return;
 
             //Gets the IDragContainer of the destination
             var destinationContainer = destination as IDragContainer<T>;
-            var sourceContainer = source as IDragContainer<T>;
+            var sourceContainer = _itemSource as IDragContainer<T>;
 
             // Swap won't be possible
             if (destinationContainer == null || sourceContainer == null ||
@@ -166,15 +166,15 @@ namespace Harris.Core.UI.Dragging
 
         private bool AttemptSimpleTransfer(IDragDestination<T> destination)
         {
-            var draggingItem = source.GetItem();
-            var draggingNumber = source.GetNumber();
+            var draggingItem = _itemSource.GetItem();
+            var draggingNumber = _itemSource.GetNumber();
 
             var acceptable = destination.MaxAcceptable(draggingItem);
             var toTransfer = Mathf.Min(acceptable, draggingNumber);
 
             if (toTransfer > 0)
             {
-                source.RemoveItems(toTransfer);
+                _itemSource.RemoveItems(toTransfer);
                 destination.AddItems(draggingItem, toTransfer);
                 return false;
             }
@@ -212,7 +212,7 @@ namespace Harris.Core.UI.Dragging
 
             if (inventorySlot)
             {
-                int indexOfItem = inventorySlot.index;
+                int indexOfItem = inventorySlot._index;
                 playerInventory.SelectItem(indexOfItem);
                 inventorySlot.SetSelected(true);
             }

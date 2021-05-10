@@ -9,14 +9,14 @@ namespace Harris.UI.Inventories
     public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
         // CONFIG DATA
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] Sprite selectedIcon = null;
+        [SerializeField] InventoryItemIcon _icon = null;
+        [SerializeField] Sprite _selectedIcon = null;
         Sprite defaultIcon;
 
         // STATE
-        public int index;
-        InventoryItem item;
-        Inventory inventory;
+        public int _index;
+        InventoryItem _item;
+        Inventory _inventory;
 
         // PUBLIC
 
@@ -27,14 +27,14 @@ namespace Harris.UI.Inventories
 
         public void Setup(Inventory inventory, int index)
         {
-            this.inventory = inventory;
-            this.index = index;
-            icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
+            this._inventory = inventory;
+            this._index = index;
+            _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
         }
 
         public int MaxAcceptable(InventoryItem item)
         {
-            if (inventory.HasSpaceFor(item))
+            if (_inventory.HasSpaceFor(item))
             {
                 return int.MaxValue;
             }
@@ -43,22 +43,22 @@ namespace Harris.UI.Inventories
 
         public void AddItems(InventoryItem item, int number)
         {
-            inventory.AddItemToSlot(index, item, number);
+            _inventory.AddItemToSlot(_index, item, number);
         }
 
         public InventoryItem GetItem()
         {
-            return inventory.GetItemInSlot(index);
+            return _inventory.GetItemInSlot(_index);
         }
 
         public int GetNumber()
         {
-            return inventory.GetNumberInSlot(index);
+            return _inventory.GetNumberInSlot(_index);
         }
 
         public void RemoveItems(int number)
         {
-            inventory.RemoveFromSlot(index, number);
+            _inventory.RemoveFromSlot(_index, number);
         }
 
         public void SetSelected(bool isSelected)
@@ -66,7 +66,7 @@ namespace Harris.UI.Inventories
             Image image = GetComponent<Image>();
             if (isSelected)
             {
-                image.sprite = selectedIcon;
+                image.sprite = _selectedIcon;
             }
             else
             {

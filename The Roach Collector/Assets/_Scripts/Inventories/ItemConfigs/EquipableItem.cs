@@ -12,7 +12,7 @@ namespace Harris.Inventories
         [Header("Equipable Settings")]
         // CONFIG DATA
         [Tooltip("Where are we allowed to put this item.")]
-        [SerializeField] EquipLocation _allowedEquipLocation = EquipLocation.Weapon;
+        [SerializeField] EquipLocation _allowedEquipLocation = EquipLocation.Helmet;
 
         // PUBLIC
 

@@ -14,8 +14,8 @@ namespace Harris.UI.Inventories
     {
         // CONFIG DATA
 
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] EquipLocation equipLocation = EquipLocation.Weapon;
+        [SerializeField] InventoryItemIcon _itemIcon = null;
+        [SerializeField] EquipLocation _equipLocation = EquipLocation.Helmet;
 
         // CACHE
         Equipment playerEquipment;
@@ -24,7 +24,7 @@ namespace Harris.UI.Inventories
        
         public EquipLocation GetEquipLocation()
         {
-            return equipLocation;
+            return _equipLocation;
         }
 
         private void Awake() 
@@ -47,7 +47,7 @@ namespace Harris.UI.Inventories
         {
             EquipableItem equipableItem = item as EquipableItem;
             if (equipableItem == null) return 0;
-            if (equipableItem.GetAllowedEquipLocation() != equipLocation) return 0;
+            if (equipableItem.GetAllowedEquipLocation() != _equipLocation) return 0;
             if (GetItem() != null) return 0;
 
             return 1;
@@ -55,12 +55,12 @@ namespace Harris.UI.Inventories
 
         public void AddItems(InventoryItem item, int number)
         {
-            playerEquipment.AddItem(equipLocation, (EquipableItem) item);
+            playerEquipment.AddItem(_equipLocation, (EquipableItem) item);
         }
 
         public InventoryItem GetItem()
         {
-            return playerEquipment.GetItemInSlot(equipLocation);
+            return playerEquipment.GetItemInSlot(_equipLocation);
         }
 
         public int GetNumber()
@@ -77,14 +77,14 @@ namespace Harris.UI.Inventories
 
         public void RemoveItems(int number)
         {
-            playerEquipment.RemoveItem(equipLocation);
+            playerEquipment.RemoveItem(_equipLocation);
         }
 
         // PRIVATE
 
         void RedrawUI()
         {
-            icon.SetItem(playerEquipment.GetItemInSlot(equipLocation));
+            _itemIcon.SetItem(playerEquipment.GetItemInSlot(_equipLocation));
         }
     }
 }

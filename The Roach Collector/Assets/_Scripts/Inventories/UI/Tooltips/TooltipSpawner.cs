@@ -14,7 +14,7 @@ namespace Harris.Core.UI.Tooltips
     {
         // CONFIG DATA
         [Tooltip("The prefab of the tooltip to spawn.")]
-        [SerializeField] GameObject tooltipPrefab = null;
+        [SerializeField] GameObject _tooltipPrefab = null;
 
         // PRIVATE STATE
         GameObject tooltip = null;
@@ -56,7 +56,7 @@ namespace Harris.Core.UI.Tooltips
 
             if (!tooltip && CanCreateTooltip())
             {
-                tooltip = Instantiate(tooltipPrefab, parentCanvas.transform);
+                tooltip = Instantiate(_tooltipPrefab, parentCanvas.transform);
             }
 
             if (tooltip)

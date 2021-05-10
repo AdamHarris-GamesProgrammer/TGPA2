@@ -10,8 +10,8 @@ namespace Harris.Inventories
     public class PickupSpawner : MonoBehaviour, ISaveable
     {
         // CONFIG DATA
-        [SerializeField] InventoryItem item = null;
-        [SerializeField] int number = 1;
+        [SerializeField] InventoryItem _item = null;
+        [SerializeField] int _number = 1;
 
         // LIFECYCLE METHODS
         private void Awake()
@@ -43,7 +43,7 @@ namespace Harris.Inventories
 
         private void SpawnPickup()
         {
-            var spawnedPickup = item.SpawnPickup(transform.position, number);
+            var spawnedPickup = _item.SpawnPickup(transform.position, _number);
             spawnedPickup.transform.SetParent(transform);
         }
 

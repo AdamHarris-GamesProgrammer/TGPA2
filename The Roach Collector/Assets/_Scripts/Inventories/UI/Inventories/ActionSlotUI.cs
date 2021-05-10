@@ -18,16 +18,16 @@ namespace Harris.UI.Inventories
         [SerializeField] Text _textObject;
 
         // CACHE
-        ActionStore store;
+        ActionStore _store;
 
         // LIFECYCLE METHODS
         private void Awake()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
             if (!player) return;
-            store = player.GetComponent<ActionStore>();
-            if (!store) return;
-            store.storeUpdated += UpdateIcon;
+            _store = player.GetComponent<ActionStore>();
+            if (!_store) return;
+            _store.storeUpdated += UpdateIcon;
 
             //Hotkey number above the slot.
             _textObject.text = string.Format("{0}", _index + 1);
@@ -37,27 +37,27 @@ namespace Harris.UI.Inventories
 
         public InventoryItem GetItem()
         {
-            return store.GetItem(_index);
+            return _store.GetItem(_index);
         }
 
         public void AddItems(InventoryItem item, int number)
         {
-            store.AddAction(item, _index, number);
+            _store.AddAction(item, _index, number);
         }
 
         public int GetNumber()
         {
-            return store.GetNumber(_index);
+            return _store.GetNumber(_index);
         }
 
         public int MaxAcceptable(InventoryItem item)
         {
-            return store.MaxAcceptable(item, _index);
+            return _store.MaxAcceptable(item, _index);
         }
 
         public void RemoveItems(int number)
         {
-            store.RemoveItems(_index, number);
+            _store.RemoveItems(_index, number);
         }
 
         // PRIVATE

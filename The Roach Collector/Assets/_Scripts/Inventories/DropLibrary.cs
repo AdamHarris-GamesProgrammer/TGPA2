@@ -11,17 +11,17 @@ namespace Harris.Inventories
         [System.Serializable]
         class Drop
         {
-            [SerializeField] public InventoryItem item;
+            [SerializeField] public InventoryItem _item;
 
-            [Range(0f, 1f)][SerializeField] public float chance = 0.1f;
-            [Min(1)][SerializeField] public int minItems = 1;
-            [Min(1)][SerializeField] public int maxItems = 1;
+            [Range(0f, 1f)][SerializeField] public float _chance = 0.1f;
+            [Min(1)][SerializeField] public int _minItems = 1;
+            [Min(1)][SerializeField] public int _maxItems = 1;
 
             public int GetRandomNumber()
             {
-                if (!item.IsStackable) return 1;
+                if (!_item.IsStackable) return 1;
 
-                return UnityEngine.Random.Range(minItems, maxItems + 1);
+                return UnityEngine.Random.Range(_minItems, _maxItems + 1);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Harris.Inventories
 
             Dropped droppedItem;
 
-            droppedItem.item = drop.item;
+            droppedItem.item = drop._item;
             droppedItem.number = drop.GetRandomNumber();
 
             return droppedItem;
@@ -67,7 +67,7 @@ namespace Harris.Inventories
             float chanceTotal = 0;
             foreach(var drop in potentialDrops)
             {
-                chanceTotal += drop.chance;
+                chanceTotal += drop._chance;
                 if(chanceTotal > randomRoll)
                 {
                     return drop;
@@ -99,7 +99,7 @@ namespace Harris.Inventories
             foreach(var drop in potentialDrops)
             {
                 //Add the chance to the total
-                total += drop.chance;
+                total += drop._chance;
             }
 
             return total;

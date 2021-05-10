@@ -12,10 +12,10 @@ namespace Harris.UI.Inventories
     public class InventoryUI : MonoBehaviour
     {
         // CONFIG DATA
-        [SerializeField] InventorySlotUI InventoryItemPrefab = null;
+        [SerializeField] InventorySlotUI _inventoryItemPrefab = null;
 
         // CACHE
-        Inventory playerInventory;
+        Inventory _playerInventory;
 
         // LIFECYCLE METHODS
 
@@ -25,14 +25,14 @@ namespace Harris.UI.Inventories
 
             if (parent)
             {
-                playerInventory = parent;
+                _playerInventory = parent;
             }
             else
             {
-                playerInventory = Inventory.GetPlayerInventory();
+                _playerInventory = Inventory.GetPlayerInventory();
             }
 
-            playerInventory.InventoryUpdated += Redraw;
+            _playerInventory.InventoryUpdated += Redraw;
         }
 
         private void Start()
@@ -49,11 +49,11 @@ namespace Harris.UI.Inventories
                 Destroy(child.gameObject);
             }
 
-            for (int i = 0; i < playerInventory.GetSize(); i++)
+            for (int i = 0; i < _playerInventory.GetSize(); i++)
             {
-                var itemUI = Instantiate(InventoryItemPrefab, transform);
+                var itemUI = Instantiate(_inventoryItemPrefab, transform);
                 itemUI.name = i.ToString();
-                itemUI.Setup(playerInventory, i);
+                itemUI.Setup(_playerInventory, i);
             }
         }
     }

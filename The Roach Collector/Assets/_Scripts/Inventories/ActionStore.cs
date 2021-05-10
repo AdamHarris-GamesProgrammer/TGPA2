@@ -14,7 +14,7 @@ namespace Harris.Inventories
     public class ActionStore : MonoBehaviour, ISaveable
     {
         // STATE
-        Dictionary<int, DockedItemSlot> dockedItems = new Dictionary<int, DockedItemSlot>();
+        Dictionary<int, DockedItemSlot> _dockedItems = new Dictionary<int, DockedItemSlot>();
         private class DockedItemSlot 
         {
             public InventoryItem item;
@@ -33,9 +33,9 @@ namespace Harris.Inventories
         /// </summary>
         public InventoryItem GetItem(int index)
         {
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
-                return dockedItems[index].item;
+                return _dockedItems[index].item;
             }
             return null;
         }
@@ -49,9 +49,9 @@ namespace Harris.Inventories
         /// </returns>
         public int GetNumber(int index)
         {
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
-                return dockedItems[index].number;
+                return _dockedItems[index].number;
             }
             return 0;
         }
@@ -64,11 +64,11 @@ namespace Harris.Inventories
         /// <param name="number">How many items to add.</param>
         public void AddAction(InventoryItem item, int index, int number)
         {
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {  
-                if (object.ReferenceEquals(item, dockedItems[index].item))
+                if (object.ReferenceEquals(item, _dockedItems[index].item))
                 {
-                    dockedItems[index].number += number;
+                    _dockedItems[index].number += number;
                 }
             }
             else
@@ -76,7 +76,7 @@ namespace Harris.Inventories
                 var slot = new DockedItemSlot();
                 slot.item = item;
                 slot.number = number;
-                dockedItems[index] = slot;
+                _dockedItems[index] = slot;
                 //Debug.Log(slot.item.GetDisplayName() + " placed in action bar");
             }
             if (storeUpdated != null)
@@ -93,9 +93,9 @@ namespace Harris.Inventories
         /// <returns>False if the action could not be executed.</returns>
         public bool Use(int index, GameObject user)
         {
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
-                ActionItem action = dockedItems[index].item as ActionItem;
+                ActionItem action = _dockedItems[index].item as ActionItem;
 
                 if (action)
                 {
@@ -107,14 +107,14 @@ namespace Harris.Inventories
                     return true;
                 }
 
-                ArmorConfig armor = dockedItems[index].item as ArmorConfig;
+                ArmorConfig armor = _dockedItems[index].item as ArmorConfig;
                 if (armor)
                 {
                     armor.Use(gameObject);
                     RemoveItems(index, 1);
                 }
 
-                WeaponConfig weapon = dockedItems[index].item as WeaponConfig;
+                WeaponConfig weapon = _dockedItems[index].item as WeaponConfig;
                 if(weapon)
                 {
                     weapon.Use(gameObject);
@@ -129,12 +129,12 @@ namespace Harris.Inventories
         /// </summary>
         public void RemoveItems(int index, int number)
         {
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
-                dockedItems[index].number -= number;
-                if (dockedItems[index].number <= 0)
+                _dockedItems[index].number -= number;
+                if (_dockedItems[index].number <= 0)
                 {
-                    dockedItems.Remove(index);
+                    _dockedItems.Remove(index);
                 }
                 if (storeUpdated != null)
                 {
@@ -157,7 +157,7 @@ namespace Harris.Inventories
             
             //if (!actionItem) return 0;
 
-            if (dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, dockedItems[index].item))
+            if (_dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, _dockedItems[index].item))
             {
                 return 0;
             }
@@ -171,7 +171,7 @@ namespace Harris.Inventories
                 }
             }
 
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
                 return 0;
             }
@@ -191,7 +191,7 @@ namespace Harris.Inventories
         object ISaveable.Save()
         {
             var state = new Dictionary<int, DockedItemRecord>();
-            foreach (var pair in dockedItems)
+            foreach (var pair in _dockedItems)
             {
                 var record = new DockedItemRecord();
                 record.itemID = pair.Value.item.ItemID;

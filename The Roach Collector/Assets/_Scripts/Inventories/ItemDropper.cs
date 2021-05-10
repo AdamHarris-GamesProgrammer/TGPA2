@@ -12,8 +12,8 @@ namespace Harris.Inventories
     public class ItemDropper : MonoBehaviour, ISaveable
     {
         // STATE
-        private List<Pickup> droppedItems = new List<Pickup>();
-        private List<DropRecord> otherSceneDroppedItems = new List<DropRecord>();
+        private List<Pickup> _droppedItems = new List<Pickup>();
+        private List<DropRecord> _otherSceneDroppedItems = new List<DropRecord>();
 
         // PUBLIC
 
@@ -55,7 +55,7 @@ namespace Harris.Inventories
         public void SpawnPickup(InventoryItem item, Vector3 spawnLocation, int number)
         {
             var pickup = item.SpawnPickup(spawnLocation, number);
-            droppedItems.Add(pickup);
+            _droppedItems.Add(pickup);
         }
 
         [System.Serializable]
@@ -72,7 +72,7 @@ namespace Harris.Inventories
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
             RemoveDestroyedDrops();
             var droppedItemsList = new List<DropRecord>();
-            foreach(Pickup pickup in droppedItems)
+            foreach(Pickup pickup in _droppedItems)
             {
                 var droppedItem = new DropRecord();
                 
@@ -84,7 +84,7 @@ namespace Harris.Inventories
                 droppedItemsList.Add(droppedItem);
                 
             }
-            droppedItemsList.AddRange(otherSceneDroppedItems);
+            droppedItemsList.AddRange(_otherSceneDroppedItems);
             return droppedItemsList;
         }
 
@@ -93,13 +93,13 @@ namespace Harris.Inventories
             var droppedItemsList = (List<DropRecord>)state;
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-            otherSceneDroppedItems.Clear();
+            _otherSceneDroppedItems.Clear();
 
             foreach (var item in droppedItemsList)
             {
                 if(item.sceneIndex != sceneIndex)
                 {
-                    otherSceneDroppedItems.Add(item);
+                    _otherSceneDroppedItems.Add(item);
                     continue;
                 }
 
@@ -116,14 +116,14 @@ namespace Harris.Inventories
         private void RemoveDestroyedDrops()
         {
             var newList = new List<Pickup>();
-            foreach (var item in droppedItems)
+            foreach (var item in _droppedItems)
             {
                 if (item != null)
                 {
                     newList.Add(item);
                 }
             }
-            droppedItems = newList;
+            _droppedItems = newList;
         }
     }
 }
