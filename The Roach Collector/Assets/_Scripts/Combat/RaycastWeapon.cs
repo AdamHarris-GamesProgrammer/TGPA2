@@ -1,3 +1,4 @@
+using Harris.Inventories;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
-    
+    Inventory _inventory;
 
     private bool _isFiring = false;
     [SerializeField] private ParticleSystem _muzzleFlash = null;
@@ -40,6 +41,26 @@ public class RaycastWeapon : MonoBehaviour
     private float _damageMultiplier = 1.0f;
 
     public LayerMask _layerMask;
+
+    void Awake()
+    {
+        _weaponRecoil = GetComponent<WeaponRecoil>();
+    }
+
+    public void Setup()
+    {
+        _inventory = GetComponentInParent<Inventory>();
+
+        if (_inventory != null)
+        {
+            //Debug.Log("Player Weapon");
+            _totalAmmo = 0;
+        }
+        else
+        {
+            _clipAmmo = _config.ClipSize;
+        }
+    }
 
     public DamageType GetDamageType()
     {
@@ -76,13 +97,18 @@ public class RaycastWeapon : MonoBehaviour
         return _isFiring;
     }
 
-    private void Awake()
-    {
-        _weaponRecoil = GetComponent<WeaponRecoil>();
-    }
-
     public void Update()
     {
+        if(_inventory)
+        {
+            if (_inventory.HasItem(_config.AmmoType))
+            {
+                int index = _inventory.FindItem(_config.AmmoType);
+
+                _totalAmmo = _inventory.GetNumberInSlot(index);
+            }
+        }
+
         if (_isReloading == true)
         {
             if (_reloadTimeLeft > 0)
@@ -101,11 +127,31 @@ public class RaycastWeapon : MonoBehaviour
                 {
                     _clipAmmo = _totalAmmo;
                     _totalAmmo = 0;
+
+                    if (_inventory)
+                    {
+                        if (_inventory.HasItem(_config.AmmoType))
+                        {
+                            int index = _inventory.FindItem(_config.AmmoType);
+
+                            _inventory.RemoveFromSlot(index, _clipAmmo);
+                        }
+                    }
                 }
                 else
                 {
                     _clipAmmo = _config.ClipSize;
                     _totalAmmo -= _config.ClipSize;
+
+                    if (_inventory)
+                    {
+                        if (_inventory.HasItem(_config.AmmoType))
+                        {
+                            int index = _inventory.FindItem(_config.AmmoType);
+
+                            _inventory.RemoveFromSlot(index, _config.ClipSize);
+                        }
+                    }
                 }
             }
         }
@@ -158,10 +204,19 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StartFiring()
     {
-        _accumulatedTime = 0.0f;
-        _isFiring = true;
-        _weaponRecoil.Reset();
-        //Fire();
+        if(_clipAmmo <= 0)
+        {
+            _isReloading = true;
+        }
+        else if (_isReloading)
+        {
+
+        }
+        else
+        {
+            _accumulatedTime = 0.0f;
+            _isFiring = true;
+        }
     }
 
     public void StopFiring()
@@ -235,7 +290,8 @@ public class RaycastWeapon : MonoBehaviour
             }
 
             //TODO: Error triggered here by Tracer being destroyed before this code
-            //This is very efficient as it will be done each bullet update per bullet per frame
+            //This is not very efficient as it will be done each bullet update per bullet per frame
+            //Better way is needed >: ( 
             if(bullet._tracer != null)
             {
                 bullet._tracer.transform.position = _hitInfo.point;
@@ -264,12 +320,14 @@ public class RaycastWeapon : MonoBehaviour
         
     }
 
+    
+
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
         float fireInterval = 1.0f / _config.FireRate;
         //Debug.Log("Fire Interval: " + fireInterval);
         _accumulatedTime += deltaTime;
-        while(_accumulatedTime > fireInterval)
+        while(_accumulatedTime >= fireInterval)
         {
             for (int i = 0; i < _config.BulletCount; i++) {
                 
@@ -278,11 +336,12 @@ public class RaycastWeapon : MonoBehaviour
                 //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
+
             if (_clipAmmo <= 0)
             {
                 StopFiring();
             }
-            _accumulatedTime = 0.0f;
+            _accumulatedTime = Mathf.Max(_accumulatedTime -= Time.deltaTime, 0.0f);
         }
     }
 }

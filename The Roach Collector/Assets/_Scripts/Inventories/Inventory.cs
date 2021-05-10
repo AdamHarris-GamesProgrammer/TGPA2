@@ -212,6 +212,7 @@ namespace Harris.Inventories
             {
                 if (object.ReferenceEquals(_slots[i].item, item))
                 {
+                    
                     return true;
                 }
             }
@@ -281,6 +282,16 @@ namespace Harris.Inventories
                 InventoryUpdated();
             }
             return true;
+        }
+
+        public int FindItem(InventoryItem item)
+        {
+            int i = FindStack(item);
+            if (i < 0)
+            {
+                i = FindEmptySlot();
+            }
+            return i;
         }
 
         // PRIVATE

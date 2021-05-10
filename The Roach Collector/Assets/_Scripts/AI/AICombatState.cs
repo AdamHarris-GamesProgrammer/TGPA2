@@ -27,8 +27,11 @@ public class AICombatState : AIState
     {
         if (_playerHealth.IsDead)
         {
+            Debug.Log("Player Dead");
             agent.stateMachine.ChangeState(AiStateId.Idle);
         }
+
+        if (agent.BeingKilled) return;
 
         if (_currentSnippet.IsFinished())
         {
@@ -75,7 +78,7 @@ public class AICombatState : AIState
 
     public void Enter(AIAgent agent)
     {
-        Debug.Log("Entered Combat State");
+        //Debug.Log("Entered Combat State");
 
         //Decide starting snippet
         int highestScore = 0;
@@ -96,6 +99,6 @@ public class AICombatState : AIState
 
     public void Exit(AIAgent agent)
     {
-
+        //Debug.Log("Exiting Combat State");
     }
 }

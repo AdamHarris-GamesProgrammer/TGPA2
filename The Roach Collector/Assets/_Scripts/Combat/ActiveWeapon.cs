@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Harris.Inventories;
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
 public class ActiveWeapon : MonoBehaviour
@@ -16,18 +17,25 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] public PlayerUI _PlayerUI = null;
+    PlayerUI _PlayerUI = null;
 
-    public Cinemachine.CinemachineFreeLook _camera;
+    Inventory _inventory;
 
     Animator _anim;
     RaycastWeapon _weapon;
+
+    private void Awake()
+    {
+        _PlayerUI = GetComponent<PlayerUI>();
+    }
 
 
     // Start is called before the first frame update
     void Start()
     {
         _anim = GetComponent<Animator>();
+        _inventory = GetComponent<Inventory>();
+
 
         if (_startingWeapon)
         {
@@ -39,12 +47,36 @@ public class ActiveWeapon : MonoBehaviour
         }
     }
 
+    private void Reload()
+    {
+        //Stops the player from reloading with a full mag
+        if (_weapon._clipAmmo == _weapon.Config.ClipSize) return;
+
+        _weapon._isReloading = true;
+
+        _anim.SetBool("isReloading", true);
+        _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+    }
+
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if(_weapon)
         {
-            if (Input.GetButtonDown("Fire1") && _weapon._clipAmmo > 0 && _weapon._isReloading == false)
+            if (_inventory)
+            {
+                if (_inventory.HasItem(_weapon._config.AmmoType))
+                {
+                    int index = _inventory.FindItem(_weapon._config.AmmoType);
+
+                    _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+
+                    _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                }
+            }
+
+
+            if (Input.GetButtonDown("Fire1"))
             {
                 _weapon.StartFiring();
             }
@@ -62,32 +94,20 @@ public class ActiveWeapon : MonoBehaviour
                 _weapon.StopFiring();
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Equip(null);
-            }
             if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
             {
-                _weapon._isReloading = true;
-                _weapon._totalAmmo += _weapon._clipAmmo;
+                Reload();
 
-                if (_weapon._totalAmmo < _weapon.Config.ClipSize)
-                {
-                    _weapon._clipAmmo = _weapon._totalAmmo;
-                    _weapon._totalAmmo = 0;
-                }
-                else
-                {
-                    _weapon._clipAmmo = _weapon.Config.ClipSize;
-                    _weapon._totalAmmo -= _weapon.Config.ClipSize;
-                }
-
-                _anim.SetBool("isReloading", true);
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
+
+
             if (_weapon._isReloading == false)
             {
                 _anim.SetBool("isReloading", false);
+            }
+            else
+            {
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
         }
         else
@@ -120,7 +140,24 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
 
-            _weapon.Recoil._camera = _camera;
+            newWeapon.Setup();
+        }
+
+        if (_inventory)
+        {
+            if (_inventory.HasItem(_weapon._config.AmmoType))
+            {
+                int index = _inventory.FindItem(_weapon._config.AmmoType);
+
+                _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+            }
+            else
+            {
+                _weapon._totalAmmo = 0;
+                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+            }
         }
     }
 }

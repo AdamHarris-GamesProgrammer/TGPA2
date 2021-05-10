@@ -15,7 +15,7 @@ public class ReloadSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        Debug.Log("Reload Snippet");
+        Debug.Log(_agent.transform.name + " Reload Snippet");
     }
 
     public int Evaluate()

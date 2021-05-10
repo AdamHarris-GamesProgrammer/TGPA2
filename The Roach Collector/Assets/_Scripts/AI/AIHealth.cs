@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AIHealth : Health
 {
-    AIAgent _aiAgent;
-    UIHealthBar _healthBar;
+    protected AIAgent _aiAgent;
+    protected UIHealthBar _healthBar;
 
     protected override void OnStart()
     {
