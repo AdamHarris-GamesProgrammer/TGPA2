@@ -210,7 +210,6 @@ namespace Harris.Core.UI.Dragging
             InventorySlotUI inventorySlot = GetComponentInParent<InventorySlotUI>();
             ActionSlotUI actionSlot = GetComponentInParent<ActionSlotUI>();
 
-
             if (inventorySlot)
             {
                 int indexOfItem = inventorySlot.index;
