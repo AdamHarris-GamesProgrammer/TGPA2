@@ -86,81 +86,82 @@ namespace Harris.Core.UI.Dragging
             var sourceContainer = _itemSource as IDragContainer<T>;
 
             // Swap won't be possible
+            //if the destination or the source are null
+            //or the item is null
+            //or the object of the source and destination are the same
+                //then attempt a transfer
             if (destinationContainer == null || sourceContainer == null ||
                 destinationContainer.GetItem() == null ||
                 object.ReferenceEquals(destinationContainer.GetItem(), sourceContainer.GetItem()))
             {
-                AttemptSimpleTransfer(destination);
+                AttemptItemTransfer(destination);
                 return;
             }
 
+            //if the conditions above are not met then attempt to swap the items
             AttemptSwap(destinationContainer, sourceContainer);
         }
 
         private void AttemptSwap(IDragContainer<T> destination, IDragContainer<T> source)
         {
-            // Provisionally remove item from both sides. 
-            var removedSourceNumber = source.GetNumber();
-            var removedSourceItem = source.GetItem();
-            var removedDestinationNumber = destination.GetNumber();
-            var removedDestinationItem = destination.GetItem();
+            //Get the items and the number of the items at the destination and source
+            int removedSourceNumber = source.GetNumber();
+            T removedSourceItem = source.GetItem();
+            int removedDestinationNumber = destination.GetNumber();
+            T removedDestinationItem = destination.GetItem();
 
+            //Remove the items from the source and destination 
             source.RemoveItems(removedSourceNumber);
             destination.RemoveItems(removedDestinationNumber);
 
-            var sourceTakeBackNumber = CalculateTakeBack(removedSourceItem, removedSourceNumber, source, destination);
-            var destinationTakeBackNumber = CalculateTakeBack(removedDestinationItem, removedDestinationNumber, destination, source);
+            //Calculates the amount of items we need to take back 
+            int sourceTakeBackNumber = CalculateTakeBack(removedSourceItem, removedSourceNumber, source, destination);
+            int destinationTakeBackNumber = CalculateTakeBack(removedDestinationItem, removedDestinationNumber, destination, source);
 
-            // Do take backs (if needed)
+            //if we need to do takebacks then add the items to the source 
             if (sourceTakeBackNumber > 0)
             {
                 source.AddItems(removedSourceItem, sourceTakeBackNumber);
                 removedSourceNumber -= sourceTakeBackNumber;
             }
+            //if we need to do takeabacks then add the items to the destination
             if (destinationTakeBackNumber > 0)
             {
                 destination.AddItems(removedDestinationItem, destinationTakeBackNumber);
                 removedDestinationNumber -= destinationTakeBackNumber;
             }
 
-            // Abort if we can't do a successful swap
+            //Abandon this if we cannot swap
             if (source.MaxAcceptable(removedDestinationItem) < removedDestinationNumber ||
                 destination.MaxAcceptable(removedSourceItem) < removedSourceNumber ||
                 removedSourceNumber == 0)
             {
-                if (removedDestinationNumber > 0)
-                {
-                    destination.AddItems(removedDestinationItem, removedDestinationNumber);
-                }
-                if (removedSourceNumber > 0)
-                {
-                    source.AddItems(removedSourceItem, removedSourceNumber);
-                }
+                //Add the items back to the slots
+                if (removedDestinationNumber > 0) destination.AddItems(removedDestinationItem, removedDestinationNumber);
+                if (removedSourceNumber > 0) source.AddItems(removedSourceItem, removedSourceNumber);
                 return;
             }
 
             // Do swaps
-            if (removedDestinationNumber > 0)
-            {
-                source.AddItems(removedDestinationItem, removedDestinationNumber);
-            }
-            if (removedSourceNumber > 0)
-            {
-                destination.AddItems(removedSourceItem, removedSourceNumber);
-            }
+            if (removedDestinationNumber > 0) source.AddItems(removedDestinationItem, removedDestinationNumber);
+            if (removedSourceNumber > 0) destination.AddItems(removedSourceItem, removedSourceNumber);
         }
 
-        private bool AttemptSimpleTransfer(IDragDestination<T> destination)
+        private bool AttemptItemTransfer(IDragDestination<T> destination)
         {
-            var draggingItem = _itemSource.GetItem();
-            var draggingNumber = _itemSource.GetNumber();
+            T draggingItem = _itemSource.GetItem();
+            int draggingNumber = _itemSource.GetNumber();
 
-            var acceptable = destination.MaxAcceptable(draggingItem);
-            var toTransfer = Mathf.Min(acceptable, draggingNumber);
+            int acceptable = destination.MaxAcceptable(draggingItem);
+            int toTransfer = Mathf.Min(acceptable, draggingNumber);
 
+            //if we have items to transfer
             if (toTransfer > 0)
             {
+                //remove items from the source
                 _itemSource.RemoveItems(toTransfer);
+
+                //and add them to the destination
                 destination.AddItems(draggingItem, toTransfer);
                 return false;
             }
@@ -170,42 +171,44 @@ namespace Harris.Core.UI.Dragging
 
         private int CalculateTakeBack(T removedItem, int removedNumber, IDragContainer<T> removeSource, IDragContainer<T> destination)
         {
-            var takeBackNumber = 0;
-            var destinationMaxAcceptable = destination.MaxAcceptable(removedItem);
+            int takeBackNumber = 0;
+            int destinationMaxAcceptable = destination.MaxAcceptable(removedItem);
 
             if (destinationMaxAcceptable < removedNumber)
             {
                 takeBackNumber = removedNumber - destinationMaxAcceptable;
 
-                var sourceTakeBackAcceptable = removeSource.MaxAcceptable(removedItem);
+                int sourceTakeBackAcceptable = removeSource.MaxAcceptable(removedItem);
 
                 // Abort and reset
-                if (sourceTakeBackAcceptable < takeBackNumber)
-                {
-                    return 0;
-                }
+                if (sourceTakeBackAcceptable < takeBackNumber) return 0;
             }
             return takeBackNumber;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            //Get the players inventory and equipment
             Inventory playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
             Equipment playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
+            //Get the slot ui 
             InventorySlotUI inventorySlot = GetComponentInParent<InventorySlotUI>();
             ActionSlotUI actionSlot = GetComponentInParent<ActionSlotUI>();
 
+            //if this is an inventory slot
             if (inventorySlot)
             {
                 int indexOfItem = inventorySlot._index;
                 playerInventory.SelectItem(indexOfItem);
             }
+            //if this is an action slot
             else if (actionSlot)
             {
                 int indexOfItem = actionSlot._index;
                 playerInventory.SelectItem(indexOfItem);
             }
+            //if it is neither a inventory or a action slot then we are an equipment slot
             else
             {
                 EquipmentSlotUI equipmentSlot = GetComponentInParent<EquipmentSlotUI>();

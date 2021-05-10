@@ -5,15 +5,8 @@ using Harris.Saving;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// Provides the storage for an action bar. The bar has a finite number of
-    /// slots that can be filled and actions in the slots can be "used".
-    /// 
-    /// This component should be placed on the GameObject tagged "Player".
-    /// </summary>
     public class ActionStore : MonoBehaviour, ISaveable
     {
-        // STATE
         Dictionary<int, DockedItemSlot> _dockedItems = new Dictionary<int, DockedItemSlot>();
         private class DockedItemSlot 
         {
@@ -21,16 +14,8 @@ namespace Harris.Inventories
             public int number;
         }
 
-        // PUBLIC
-
-        /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
         public event Action storeUpdated;
 
-        /// <summary>
-        /// Get the action at the given index.
-        /// </summary>
         public InventoryItem GetItem(int index)
         {
             if (_dockedItems.ContainsKey(index))
@@ -40,13 +25,6 @@ namespace Harris.Inventories
             return null;
         }
 
-        /// <summary>
-        /// Get the number of items left at the given index.
-        /// </summary>
-        /// <returns>
-        /// Will return 0 if no item is in the index or the item has
-        /// been fully consumed.
-        /// </returns>
         public int GetNumber(int index)
         {
             if (_dockedItems.ContainsKey(index))
@@ -56,12 +34,6 @@ namespace Harris.Inventories
             return 0;
         }
 
-        /// <summary>
-        /// Add an item to the given index.
-        /// </summary>
-        /// <param name="item">What item should be added.</param>
-        /// <param name="index">Where should the item be added.</param>
-        /// <param name="number">How many items to add.</param>
         public void AddAction(InventoryItem item, int index, int number)
         {
             if (_dockedItems.ContainsKey(index))
@@ -85,12 +57,6 @@ namespace Harris.Inventories
             }
         }
 
-        /// <summary>
-        /// Use the item at the given slot. If the item is consumable one
-        /// instance will be destroyed until the item is removed completely.
-        /// </summary>
-        /// <param name="user">The character that wants to use this action.</param>
-        /// <returns>False if the action could not be executed.</returns>
         public bool Use(int index, GameObject user)
         {
             if (_dockedItems.ContainsKey(index))
@@ -123,9 +89,6 @@ namespace Harris.Inventories
             return false;
         }
 
-        /// <summary>
-        /// Remove a given number of items from the given slot.
-        /// </summary>
         public void RemoveItems(int index, int number)
         {
             if (_dockedItems.ContainsKey(index))
@@ -143,18 +106,9 @@ namespace Harris.Inventories
             
         }
 
-        /// <summary>
-        /// What is the maximum number of items allowed in this slot.
-        /// 
-        /// This takes into account whether the slot already contains an item
-        /// and whether it is the same type. Will only accept multiple if the
-        /// item is consumable.
-        /// </summary>
-        /// <returns>Will return int.MaxValue when there is not effective bound.</returns>
         public int MaxAcceptable(InventoryItem item, int index)
         {
             
-            //if (!actionItem) return 0;
 
             if (_dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, _dockedItems[index].item))
             {
@@ -178,7 +132,6 @@ namespace Harris.Inventories
             return 1;
         }
 
-        /// PRIVATE
 
         [System.Serializable]
         private struct DockedItemRecord

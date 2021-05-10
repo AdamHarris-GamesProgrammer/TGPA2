@@ -4,9 +4,6 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// Root of the tooltip prefab to expose properties to other classes.
-    /// </summary>
     public class ItemTooltip : MonoBehaviour
     {
         [SerializeField] Text _titleText = null;

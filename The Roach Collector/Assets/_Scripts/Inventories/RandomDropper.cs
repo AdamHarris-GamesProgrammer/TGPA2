@@ -12,7 +12,6 @@ namespace Harris.Inventories
         [SerializeField] DropLibrary _dropLibrary = null;
         [SerializeField] int _numberOfDrops = 2;
 
-        //CONSTANTS
         const int ATTEMPTS = 20;
 
         public void RandomDrop()

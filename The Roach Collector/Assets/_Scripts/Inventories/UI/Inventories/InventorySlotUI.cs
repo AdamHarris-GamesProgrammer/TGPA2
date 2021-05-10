@@ -11,12 +11,10 @@ namespace Harris.UI.Inventories
         
         [SerializeField] InventoryItemIcon _icon = null;
 
-        // STATE
         public int _index;
         InventoryItem _item;
         Inventory _inventory;
 
-        // PUBLIC
 
         void Awake()
         {
