@@ -13,9 +13,9 @@ namespace Harris.UI.Inventories
     public class ActionSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
         // CONFIG DATA
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] public int index = 0;
-        [SerializeField] Text textObject;
+        [SerializeField] InventoryItemIcon _icon = null;
+        [SerializeField] public int _index = 0;
+        [SerializeField] Text _textObject;
 
         // CACHE
         ActionStore store;
@@ -29,41 +29,42 @@ namespace Harris.UI.Inventories
             if (!store) return;
             store.storeUpdated += UpdateIcon;
 
-            textObject.text = string.Format("{0}", index + 1);
+            //Hotkey number above the slot.
+            _textObject.text = string.Format("{0}", _index + 1);
         }
 
         // PUBLIC
 
-        public void AddItems(InventoryItem item, int number)
-        {
-            store.AddAction(item, index, number);
-        }
-
         public InventoryItem GetItem()
         {
-            return store.GetItem(index);
+            return store.GetItem(_index);
+        }
+
+        public void AddItems(InventoryItem item, int number)
+        {
+            store.AddAction(item, _index, number);
         }
 
         public int GetNumber()
         {
-            return store.GetNumber(index);
+            return store.GetNumber(_index);
         }
 
         public int MaxAcceptable(InventoryItem item)
         {
-            return store.MaxAcceptable(item, index);
+            return store.MaxAcceptable(item, _index);
         }
 
         public void RemoveItems(int number)
         {
-            store.RemoveItems(index, number);
+            store.RemoveItems(_index, number);
         }
 
         // PRIVATE
 
         void UpdateIcon()
         {
-            icon.SetItem(GetItem(), GetNumber());
+            _icon.SetItem(GetItem(), GetNumber());
         }
     }
 }

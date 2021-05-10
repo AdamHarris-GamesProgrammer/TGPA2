@@ -34,7 +34,7 @@ namespace Harris.UI.Inventories
             else
             {
                 iconImage.enabled = true;
-                iconImage.sprite = item.GetIcon();
+                iconImage.sprite = item.Icon;
             }
 
             if (itemNumber)

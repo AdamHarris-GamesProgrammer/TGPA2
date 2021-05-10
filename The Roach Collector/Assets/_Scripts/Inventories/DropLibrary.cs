@@ -19,7 +19,7 @@ namespace Harris.Inventories
 
             public int GetRandomNumber()
             {
-                if (!item.IsStackable()) return 1;
+                if (!item.IsStackable) return 1;
 
                 return UnityEngine.Random.Range(minItems, maxItems + 1);
             }

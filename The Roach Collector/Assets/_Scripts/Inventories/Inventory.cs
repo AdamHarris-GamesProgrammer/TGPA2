@@ -25,6 +25,12 @@ namespace Harris.Inventories
         InventorySlot[] _slots;
         int _currentSelectedSlot;
 
+        //UNITY MESSAGES
+        private void Awake()
+        {
+            _slots = new InventorySlot[_inventorySize];
+            _currentSelectedSlot = -1;
+        }
 
         // EVENTS
         /// <summary>
@@ -62,12 +68,7 @@ namespace Harris.Inventories
             return filledSlots.ToArray();
         }
 
-        //UNITY MESSAGES
-        private void Awake()
-        {
-            _slots = new InventorySlot[_inventorySize];
-            _currentSelectedSlot = -1;
-        }
+
 
         // PUBLIC
 
@@ -332,7 +333,7 @@ namespace Harris.Inventories
         /// <returns>-1 if no stack exists or if the item is not stackable.</returns>
         private int FindStack(InventoryItem item)
         {
-            if (!item.IsStackable())
+            if (!item.IsStackable)
             {
                 return -1;
             }
@@ -366,7 +367,7 @@ namespace Harris.Inventories
             {
                 if (_slots[i].item != null)
                 {
-                    slotStrings[i].itemID = _slots[i].item.GetItemID();
+                    slotStrings[i].itemID = _slots[i].item.ItemID;
                     slotStrings[i].number = _slots[i].number;
                 }
             }

@@ -17,8 +17,8 @@ namespace Harris.UI.Inventories
 
         public void Setup(InventoryItem item)
         {
-            titleText.text = item.GetDisplayName();
-            bodyText.text = item.GetDescription();
+            titleText.text = item.Name;
+            bodyText.text = item.Description;
         }
 
         public void Close()

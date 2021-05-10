@@ -24,14 +24,6 @@ namespace Harris.Inventories
         // PUBLIC
 
         /// <summary>
-        /// Gets the amount of action slots the player has access to.
-        /// </summary>
-        public int GetActionBarSize()
-        {
-            return dockedItems.Count;
-        }
-
-        /// <summary>
         /// Broadcasts when the items in the slots are added/removed.
         /// </summary>
         public event Action storeUpdated;
@@ -108,7 +100,7 @@ namespace Harris.Inventories
                 if (action)
                 {
                    action.Use(user);
-                    if (action.isConsumable())
+                    if (action.IsConsumable)
                     {
                         RemoveItems(index, 1);
                     }
@@ -122,14 +114,11 @@ namespace Harris.Inventories
                     RemoveItems(index, 1);
                 }
 
-                //TODO: Implement WeaponConfig InventoryItem
                 WeaponConfig weapon = dockedItems[index].item as WeaponConfig;
                 if(weapon)
                 {
                     weapon.Use(gameObject);
                 }
-                //if weapon
-                    //equip weapon
 
             }
             return false;
@@ -176,7 +165,7 @@ namespace Harris.Inventories
             var actionItem = item as ActionItem;
             if (actionItem)
             {
-                if (actionItem.isConsumable())
+                if (actionItem.IsConsumable)
                 {
                     return int.MaxValue;
                 }
@@ -205,7 +194,7 @@ namespace Harris.Inventories
             foreach (var pair in dockedItems)
             {
                 var record = new DockedItemRecord();
-                record.itemID = pair.Value.item.GetItemID();
+                record.itemID = pair.Value.item.ItemID;
                 record.number = pair.Value.number;
                 state[pair.Key] = record;
             }

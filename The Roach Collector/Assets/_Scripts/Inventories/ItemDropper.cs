@@ -76,7 +76,7 @@ namespace Harris.Inventories
             {
                 var droppedItem = new DropRecord();
                 
-                droppedItem.itemID = pickup.GetItem().GetItemID();
+                droppedItem.itemID = pickup.GetItem().ItemID;
                 droppedItem.position = new SerializableVector3(pickup.transform.position);
                 droppedItem.number = pickup.GetNumber();
                 droppedItem.sceneIndex = sceneIndex;

@@ -5,46 +5,38 @@ using UnityEngine;
 namespace Harris.Inventories
 {
     /// <summary>
-    /// A ScriptableObject that represents any item that can be put in an
-    /// inventory.
+    /// A ScriptableObject that represents any item that can be put in an inventory
     /// </summary>
-    /// <remarks>
-    /// In practice, you are likely to use a subclass such as `ActionItem` or
-    /// `EquipableItem`.
-    /// </remarks>
-    /// 
     [CreateAssetMenu(menuName = ("InventorySystem/Item"))]
     public class InventoryItem : ScriptableObject, ISerializationCallbackReceiver
     {
         [Header("Inventory Item Settings")]
-        // CONFIG DATA
+        
         [Tooltip("Auto-generated UUID for saving/loading. Clear this field if you want to generate a new one.")]
-        [SerializeField] string itemID = null;
+        [SerializeField] string _itemID = null;
         [Tooltip("Item name to be displayed in UI.")]
-        [SerializeField] string displayName = null;
+        [SerializeField] string _displayName = null;
         [Tooltip("Item description to be displayed in UI.")]
-        [SerializeField][TextArea] string description = null;
+        [SerializeField][TextArea] string _description = null;
         [Tooltip("The UI icon to represent this item in the inventory.")]
-        [SerializeField] Sprite icon = null;
+        [SerializeField] Sprite _icon = null;
         [Tooltip("The prefab that should be spawned when this item is dropped.")]
-        [SerializeField] Pickup pickup = null;
+        [SerializeField] Pickup _pickup = null;
         [Tooltip("If true, multiple items of this type can be stacked in the same inventory slot.")]
-        [SerializeField] bool stackable = false;
+        [SerializeField] bool _isStackable = false;
 
-        // STATE
         static Dictionary<string, InventoryItem> itemLookupCache;
 
-        // PUBLIC
+        public Sprite Icon { get { return _icon; } }
 
-        /// <summary>
-        /// Get the inventory item instance from its UUID.
-        /// </summary>
-        /// <param name="itemID">
-        /// String UUID that persists between game instances.
-        /// </param>
-        /// <returns>
-        /// Inventory item instance corresponding to the ID.
-        /// </returns>
+        public string ItemID { get { return _itemID; } }
+        public bool IsStackable { get { return _isStackable; } }
+        public string Name { get { return _displayName; } }
+        public virtual string Description { get { return _description; } }
+
+
+
+        //Gets a inventory item based on the items id. 
         public static InventoryItem GetFromID(string itemID)
         {
             if (itemLookupCache == null)
@@ -53,13 +45,13 @@ namespace Harris.Inventories
                 var itemList = UnityEngine.Resources.LoadAll<InventoryItem>("");
                 foreach (var item in itemList)
                 {
-                    if (itemLookupCache.ContainsKey(item.itemID))
+                    if (itemLookupCache.ContainsKey(item._itemID))
                     {
-                        Debug.LogError(string.Format("Looks like there's a duplicate InventorySystem ID for objects: {0} and {1}", itemLookupCache[item.itemID], item));
+                        Debug.LogError(string.Format("Looks like there's a duplicate InventorySystem ID for objects: {0} and {1}", itemLookupCache[item._itemID], item));
                         continue;
                     }
 
-                    itemLookupCache[item.itemID] = item;
+                    itemLookupCache[item._itemID] = item;
                 }
             }
 
@@ -67,69 +59,37 @@ namespace Harris.Inventories
             return itemLookupCache[itemID];
         }
 
-        /// <summary>
-        /// Trigger the use of this item. Override to provide functionality.
-        /// </summary>
-        /// <param name="user">The character that is using this action.</param>
+        //Virtual method for using this item. Not all items need a use function but it's here for when it's needed
         public virtual void Use(GameObject user)
         {
             Debug.Log("Using action: " + this);
         }
 
-        /// <summary>
-        /// Spawn the pickup gameobject into the world.
-        /// </summary>
-        /// <param name="position">Where to spawn the pickup.</param>
-        /// <param name="number">How many instances of the item does the pickup represent.</param>
-        /// <returns>Reference to the pickup object spawned.</returns>
+        //Spawns a pickup at a specified position with a specified number of the item dropped.
         public Pickup SpawnPickup(Vector3 position, int number)
         {
-            var pickup = Instantiate(this.pickup);
+            var pickup = Instantiate(this._pickup);
             pickup.transform.position = position;
             pickup.Setup(this, number);
             return pickup;
         }
 
-        public Sprite GetIcon()
-        {
-            return icon;
-        }
 
-        public string GetItemID()
-        {
-            return itemID;
-        }
 
-        public bool IsStackable()
-        {
-            return stackable;
-        }
-        
-        public string GetDisplayName()
-        {
-            return displayName;
-        }
-
-        public virtual string GetDescription()
-        {
-            return description;
-        }
-
-        // PRIVATE
-        
+        //Interface Implementation
+        //Using this interface as it will create the items id when we create the asset
         void ISerializationCallbackReceiver.OnBeforeSerialize()
         {
             // Generate and save a new UUID if this is blank.
-            if (string.IsNullOrWhiteSpace(itemID))
+            if (string.IsNullOrWhiteSpace(_itemID))
             {
-                itemID = System.Guid.NewGuid().ToString();
+                _itemID = System.Guid.NewGuid().ToString();
             }
         }
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            // Require by the ISerializationCallbackReceiver but we don't need
-            // to do anything with it.
+            // Required by the ISerializationCallbackReciever, but we dont actually need it. 
         }
     }
 }

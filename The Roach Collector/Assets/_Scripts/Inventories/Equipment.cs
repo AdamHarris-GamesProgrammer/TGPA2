@@ -179,7 +179,7 @@ namespace Harris.Inventories
             var equippedItemsForSerialization = new Dictionary<EquipLocation, string>();
             foreach (var pair in _equippedItems)
             {
-                equippedItemsForSerialization[pair.Key] = pair.Value.GetItemID();
+                equippedItemsForSerialization[pair.Key] = pair.Value.ItemID;
             }
             return equippedItemsForSerialization;
         }

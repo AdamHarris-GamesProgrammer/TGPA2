@@ -218,7 +218,7 @@ namespace Harris.Core.UI.Dragging
             }
             else if (actionSlot)
             {
-                int indexOfItem = actionSlot.index;
+                int indexOfItem = actionSlot._index;
                 playerInventory.SelectItem(indexOfItem);
                 inventorySlot.SetSelected(true);
             }

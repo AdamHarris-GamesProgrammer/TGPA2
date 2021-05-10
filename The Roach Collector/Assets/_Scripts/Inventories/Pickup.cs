@@ -33,7 +33,7 @@ namespace Harris.Inventories
         public void Setup(InventoryItem item, int number)
         {
             this.item = item;
-            if (!item.IsStackable())
+            if (!item.IsStackable)
             {
                 number = 1;
             }
