@@ -19,7 +19,7 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private RaycastWeapon _startingWeapon = null;
     [SerializeField] public PlayerUI _PlayerUI = null;
 
-    public Cinemachine.CinemachineFreeLook _camera;
+    public Cinemachine.CinemachineVirtualCamera _camera;
 
     Inventory _inventory;
 

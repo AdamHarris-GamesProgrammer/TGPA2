@@ -24,7 +24,7 @@ public class BossHealth : AIHealth
 
     protected virtual void NextStage()
     {
-        Debug.Log("Progressed to stage: " + _index);
+        //Debug.Log("Progressed to stage: " + _index);
 
         //Example logic
         //TankHealth.cs
