@@ -15,6 +15,11 @@ public class SoundController : MonoBehaviour
     private float _defaultRadius;
     float _currentRadius;
 
+    bool _isStanding = false;
+    bool _isShooting = false;
+    public bool IsShooting { get { return _isShooting; } }
+    public bool IsStanding { get { return _isStanding; } }
+
     private void Awake()
     {
         _collider = GetComponent<SphereCollider>();
@@ -26,16 +31,18 @@ public class SoundController : MonoBehaviour
     private void FixedUpdate()
     {
         _currentRadius = _collider.radius;
+        _isShooting = _player.IsShooting;
+        _isStanding = _player.IsStanding;
 
-        if (_player.IsShooting)
+        if (_isShooting)
         {
             _currentRadius = Mathf.Lerp(_currentRadius, _gunSoundRadius, Time.deltaTime * 5.0f);
         }
-        else if (_player.IsStanding)
+        else if (_isStanding)
         {
             _currentRadius = Mathf.Lerp(_currentRadius, _walkSoundRadius, Time.deltaTime);
         }
-        else if(!_player.IsStanding)
+        else if(!_isStanding)
         {
             _currentRadius = Mathf.Lerp(_currentRadius, _crouchSoundRadius, Time.deltaTime);
         }

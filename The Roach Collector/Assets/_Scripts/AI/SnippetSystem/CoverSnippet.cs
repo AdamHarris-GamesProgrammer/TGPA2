@@ -232,8 +232,11 @@ public class CoverSnippet : CombatSnippet
     public int Evaluate()
     {
         int returnScore = 0;
-
-        _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
+        
+        if(_aiWeapon.GetEquippedWeapon() != null)
+        {
+            _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
+        }
 
         float healthRatio = _aiHealth.HealthRatio;
 

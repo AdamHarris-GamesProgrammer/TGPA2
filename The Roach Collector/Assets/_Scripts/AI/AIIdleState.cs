@@ -7,11 +7,13 @@ public class AIIdleState : AIState
 {
     Transform _player;
     FieldOfView _FOV;
+    SoundPerception _soundPerception;
 
     public AIIdleState(AIAgent agent)
     {
         _player = agent.GetPlayer();
         _FOV = agent.GetComponent<FieldOfView>();
+        _soundPerception = agent.GetComponentInChildren<SoundPerception>();
     }
 
     public void Enter(AIAgent agent)
@@ -35,7 +37,7 @@ public class AIIdleState : AIState
     public void Update(AIAgent agent)
     {
         //Check if player is in the AI's field of view
-        if(_FOV.IsEnemyInFOV)
+        if(_FOV.IsEnemyInFOV || _soundPerception.IsHeard)
         {
             //Player is in view, change to chase state
             //Debug.Log("Player in FOV");
