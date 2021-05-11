@@ -64,7 +64,7 @@ public class CoverSnippet : CombatSnippet
                     _anim.SetBool("isCrouching", true);
                     _aiWeapon.SetTarget(null);
                     _aiWeapon.SetFiring(false);
-                    _aiWeapon.GetEquippedWeapon()._isReloading = true;
+                    _aiWeapon.GetEquippedWeapon().Reload();
 
                     //Does the AI have any bullets left?
                     if(_aiWeapon.GetEquippedWeapon()._totalAmmo <= 0)

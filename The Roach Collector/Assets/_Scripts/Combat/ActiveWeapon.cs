@@ -55,7 +55,7 @@ public class ActiveWeapon : MonoBehaviour
         //Stops the player from reloading with a full mag
         if (_weapon._clipAmmo == _weapon.Config.ClipSize) return;
 
-        _weapon._isReloading = true;
+        _weapon.Reload();
 
         _anim.SetBool("isReloading", true);
         _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);

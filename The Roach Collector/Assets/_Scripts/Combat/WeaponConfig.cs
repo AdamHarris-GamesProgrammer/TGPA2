@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName =("InventorySystem/Weapon Config"))]
+[CreateAssetMenu(menuName = ("InventorySystem/Weapon Config"))]
 public class WeaponConfig : EquipableItem
 {
     [Header("Weapon Settings")]
@@ -13,12 +13,36 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private float _bulletSpeed = 1000.0f;
     [SerializeField] private float _bulletDrop = 0.0f;
     [SerializeField] private float _damage = 10.0f;
-    
+
     [SerializeField] private int _clipSize = 30;
     [SerializeField] private DamageType _damageType;
     [SerializeField] private float _reloadDuration = 1.0f;
     [SerializeField] private RaycastWeapon _weapon;
     [SerializeField] private AmmoItem _ammoItem;
+
+    [Header("Sound Settings")]  
+    [SerializeField] private AudioClip _dryFire = null;         //
+    [SerializeField] private AudioClip _startFire = null;       //
+    [SerializeField] private AudioClip _magazineUnload = null;  //
+    [SerializeField] private AudioClip _magazineLoad = null;    //
+    [SerializeField] private AudioClip _safetySwitch = null;
+    [SerializeField] private AudioClip _bulletLoad = null;      //
+    [SerializeField] private AudioClip _tail = null;            //
+    [SerializeField] private AudioClip _cockSound = null;
+    [SerializeField] private AudioClip _endFire = null;         //
+    [SerializeField] private AudioClip _continuousFire = null;  //
+    public AudioClip StartFire { get { return _startFire; } }
+    public AudioClip ContinuousFire{get { return _continuousFire; }}
+    public AudioClip EndFire{get { return _endFire; }}
+    public AudioClip Tail{get { return _tail; }}
+    public AudioClip CockSound{get { return _cockSound; }}
+    public AudioClip SafetySwitch{get { return _safetySwitch; }}
+    public AudioClip BulletLoad{get { return _bulletLoad; }}
+
+    public AudioClip MagazineLoad{get { return _magazineLoad; }}
+    public AudioClip MagazineUnload{get { return _magazineUnload; }}
+
+    public AudioClip DryFire { get { return _dryFire; } }
 
     public AmmoItem AmmoType { get { return _ammoItem; } }
     public int FireRate { get { return _fireRate; } set { _fireRate = value; } }
@@ -34,7 +58,7 @@ public class WeaponConfig : EquipableItem
 
     public override void Use(GameObject user)
     {
-        if(user.CompareTag("Player"))
+        if (user.CompareTag("Player"))
         {
             RaycastWeapon weapon = Instantiate(_weapon);
             user.GetComponent<ActiveWeapon>().Equip(weapon);

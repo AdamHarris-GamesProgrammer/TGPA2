@@ -40,20 +40,23 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private DamageType _type;
     private float _damageMultiplier = 1.0f;
 
+    AudioSource _audioSoruce;
+
     public LayerMask _layerMask;
 
     void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
+        
     }
 
     public void Setup()
     {
         _inventory = GetComponentInParent<Inventory>();
+        _audioSoruce = GetComponentInParent<AudioSource>();
 
         if (_inventory != null)
         {
-            //Debug.Log("Player Weapon");
             _totalAmmo = 0;
         }
         else
@@ -123,6 +126,9 @@ public class RaycastWeapon : MonoBehaviour
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
+                _audioSoruce.PlayOneShot(_config.BulletLoad);
+
+
                 if (_totalAmmo < _config.ClipSize)
                 {
                     _clipAmmo = _totalAmmo;
@@ -153,6 +159,11 @@ public class RaycastWeapon : MonoBehaviour
                         }
                     }
                 }
+
+                _audioSoruce.PlayOneShot(_config.MagazineLoad);
+
+                _audioSoruce.PlayOneShot(_config.SafetySwitch);
+                _audioSoruce.PlayOneShot(_config.CockSound);
             }
         }
         
@@ -200,13 +211,17 @@ public class RaycastWeapon : MonoBehaviour
         _bullets.Add(bullet);
 
         _weaponRecoil.GenerateRecoil();
+
+        _audioSoruce.PlayOneShot(_config.ContinuousFire);
+        _audioSoruce.PlayOneShot(_config.Tail);
     }
 
     public void StartFiring()
     {
         if(_clipAmmo <= 0)
         {
-            _isReloading = true;
+            _audioSoruce.PlayOneShot(_config.DryFire);
+            Reload();
         }
         else if (_isReloading)
         {
@@ -214,6 +229,7 @@ public class RaycastWeapon : MonoBehaviour
         }
         else
         {
+            _audioSoruce.PlayOneShot(_config.StartFire);
             _accumulatedTime = 0.0f;
             _isFiring = true;
         }
@@ -222,6 +238,7 @@ public class RaycastWeapon : MonoBehaviour
     public void StopFiring()
     {
         _isFiring = false;
+        _audioSoruce.PlayOneShot(_config.EndFire);
     }
 
     public void UpdateBullets(float dt)
@@ -251,6 +268,12 @@ public class RaycastWeapon : MonoBehaviour
             RayCastSegment(p0, p1, bullet);
 
         });
+    }
+
+    public void Reload()
+    {
+        _isReloading = true;
+        _audioSoruce.PlayOneShot(_config.MagazineUnload);
     }
 
     void RayCastSegment(Vector3 start, Vector3 end, Bullet bullet)

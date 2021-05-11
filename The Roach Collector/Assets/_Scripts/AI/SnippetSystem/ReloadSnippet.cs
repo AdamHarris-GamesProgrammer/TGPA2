@@ -10,7 +10,7 @@ public class ReloadSnippet : CombatSnippet
     public void Action()
     {
         //Debug.Log(_agent.transform.name + " is reloading");
-        _aiWeapons.GetEquippedWeapon()._isReloading = true;
+        _aiWeapons.GetEquippedWeapon().Reload();
     }
 
     public void EnterSnippet()

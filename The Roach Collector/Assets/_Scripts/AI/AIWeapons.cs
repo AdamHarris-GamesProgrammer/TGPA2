@@ -61,6 +61,7 @@ public class AIWeapons : MonoBehaviour
         _weaponIK.SetWeaponTransform(_currentWeapon.transform);
         _isWeaponActive = true;
         _currentWeapon.SetDamageMultiplier(_damageMultiplier);
+        _currentWeapon.Setup();
     }
 
     public void DropWeapon()
