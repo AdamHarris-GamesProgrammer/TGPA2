@@ -77,6 +77,9 @@ public class CharacterLocomotion : MonoBehaviour
         {
             Jump();
         }
+
+        //if we are crouching then we are not standing etc.
+        _player.IsStanding = !_isCrouching;
     }
     private void FixedUpdate()
     {

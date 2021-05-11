@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Harris.Inventories;
+using TGP.Control;
 
 #if UNITY_EDITOR
 using UnityEditor.Animations;
@@ -20,6 +21,7 @@ public class ActiveWeapon : MonoBehaviour
     PlayerUI _PlayerUI = null;
 
     Inventory _inventory;
+    PlayerController _controller;
 
     Animator _anim;
     RaycastWeapon _weapon;
@@ -27,6 +29,7 @@ public class ActiveWeapon : MonoBehaviour
     private void Awake()
     {
         _PlayerUI = GetComponent<PlayerUI>();
+        _controller = GetComponent<PlayerController>();
     }
 
 
@@ -79,6 +82,7 @@ public class ActiveWeapon : MonoBehaviour
             if (Input.GetButtonDown("Fire1"))
             {
                 _weapon.StartFiring();
+                _controller.IsShooting = true;
             }
 
             if (_weapon.IsFiring())
@@ -92,14 +96,20 @@ public class ActiveWeapon : MonoBehaviour
             if (Input.GetButtonUp("Fire1"))
             {
                 _weapon.StopFiring();
+                _controller.IsShooting = false;
             }
 
             if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
             {
                 Reload();
+                _controller.IsShooting = false;
 
             }
 
+            if (_weapon.NeedToReload())
+            {
+                _controller.IsShooting = false;
+            }
 
             if (_weapon._isReloading == false)
             {
@@ -107,6 +117,7 @@ public class ActiveWeapon : MonoBehaviour
             }
             else
             {
+                _controller.IsShooting = false;
                 _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
             }
         }

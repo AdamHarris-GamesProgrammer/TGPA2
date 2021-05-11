@@ -42,6 +42,13 @@ namespace TGP.Control
         public GameObject FollowCam { get { return _followCam; } }
 
         LockedDoor _doorInRange = null;
+
+        bool _isShooting = false;
+        bool _isStanding = true;
+
+        public bool IsShooting { get { return _isShooting; } set { _isShooting = value; } }
+        public bool IsStanding { get { return _isStanding; } set { _isStanding = value; } }
+
         public LockedDoor DoorInRange
         {
             get { return _doorInRange; }
@@ -279,7 +286,7 @@ namespace TGP.Control
         }
 
         //Animation event from the StealthAttack animation 
-#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable IDE0051 // Remove unused private members //This is just disabling a warning as OutOfKillAnim is not technically used in code but instead is called in a animation
         void OutOfKillAnim()
 #pragma warning restore IDE0051 // Remove unused private members
         {
