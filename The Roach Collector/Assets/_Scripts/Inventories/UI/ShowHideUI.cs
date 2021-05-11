@@ -27,13 +27,17 @@ namespace Harris.UI
 
                 if (!_uiContainer.activeSelf)
                 {
+                    //Unfreeze time
                     Time.timeScale = 1;
+                    //Locks cursor to center of screen
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
                 else
                 {
+                    //freezes time
                     Time.timeScale = 0;
+                    //confines the cursor to the screen
                     Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
                 }

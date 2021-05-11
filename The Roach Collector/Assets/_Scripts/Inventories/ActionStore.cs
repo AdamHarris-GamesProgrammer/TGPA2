@@ -18,8 +18,10 @@ namespace Harris.Inventories
 
         public InventoryItem GetItem(int index)
         {
+            //checks if we actually have a slot for the index passed in
             if (_dockedItems.ContainsKey(index))
             {
+                //Gets the item
                 return _dockedItems[index].item;
             }
             return null;
@@ -27,6 +29,7 @@ namespace Harris.Inventories
 
         public int GetNumber(int index)
         {
+            //Gets the number of items in the passed in slot
             if (_dockedItems.ContainsKey(index))
             {
                 return _dockedItems[index].number;
@@ -34,23 +37,30 @@ namespace Harris.Inventories
             return 0;
         }
 
-        public void AddAction(InventoryItem item, int index, int number)
+        public void AddItem(InventoryItem item, int index, int number)
         {
+            //if we already have an index for the index
             if (_dockedItems.ContainsKey(index))
             {  
+                //if the object in the action slot is the same as the passed in item
                 if (object.ReferenceEquals(item, _dockedItems[index].item))
                 {
+                    //Then add the number of items to this slot
                     _dockedItems[index].number += number;
                 }
             }
+            //We have not got this slot filled
             else
             {
+                //Create a slot instance and set it up
                 var slot = new DockedItemSlot();
                 slot.item = item;
                 slot.number = number;
                 _dockedItems[index] = slot;
                 //Debug.Log(slot.item.GetDisplayName() + " placed in action bar");
             }
+
+            //Update the action bar
             if (storeUpdated != null)
             {
                 storeUpdated();
@@ -59,8 +69,10 @@ namespace Harris.Inventories
 
         public bool Use(int index, GameObject user)
         {
+            //Checks we have an item in this slot
             if (_dockedItems.ContainsKey(index))
             {
+                //If the item is an action item
                 ActionItem action = _dockedItems[index].item as ActionItem;
                 if (action)
                 {
@@ -72,6 +84,7 @@ namespace Harris.Inventories
                     return true;
                 }
 
+                //if the item is an armor item
                 ArmorConfig armor = _dockedItems[index].item as ArmorConfig;
                 if (armor)
                 {
@@ -79,6 +92,7 @@ namespace Harris.Inventories
                     RemoveItems(index, 1);
                 }
 
+                //if the item is a weapon
                 WeaponConfig weapon = _dockedItems[index].item as WeaponConfig;
                 if(weapon)
                 {
@@ -91,11 +105,16 @@ namespace Harris.Inventories
 
         public void RemoveItems(int index, int number)
         {
+            //If we have this index
             if (_dockedItems.ContainsKey(index))
             {
+                //remove the amount of items we are using
                 _dockedItems[index].number -= number;
+
+                //if there is now 0 items in the slot 
                 if (_dockedItems[index].number <= 0)
                 {
+                    //then remove the item
                     _dockedItems.Remove(index);
                 }
                 if (storeUpdated != null)
@@ -108,18 +127,20 @@ namespace Harris.Inventories
 
         public int MaxAcceptable(InventoryItem item, int index)
         {
-            
-
+            //if we have an item here and the item is not the same as the passed in item
             if (_dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, _dockedItems[index].item))
             {
                 return 0;
             }
 
+            //if the item is an action item
             var actionItem = item as ActionItem;
             if (actionItem)
             {
+                //if it is consumable
                 if (actionItem.IsConsumable)
                 {
+                    //return the max value
                     return int.MaxValue;
                 }
             }
@@ -158,7 +179,7 @@ namespace Harris.Inventories
             var stateDict = (Dictionary<int, DockedItemRecord>)state;
             foreach (var pair in stateDict)
             {
-                AddAction(InventoryItem.GetFromID(pair.Value.itemID), pair.Key, pair.Value.number);
+                AddItem(InventoryItem.GetFromID(pair.Value.itemID), pair.Key, pair.Value.number);
             }
         }
     }

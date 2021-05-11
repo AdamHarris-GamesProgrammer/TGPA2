@@ -22,8 +22,11 @@ namespace Harris.UI.Inventories
 
         public void Setup(Inventory inventory, int index)
         {
+            //Sets the inventory that this slot is in
             _inventory = inventory;
+            //gives the slot an index
             _index = index;
+            //sets the item in the icon
             _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
         }
 
@@ -36,11 +39,13 @@ namespace Harris.UI.Inventories
             return 0;
         }
 
+        //Adds an item to this slot
         public void AddItems(InventoryItem item, int number)
         {
             _inventory.AddItemToSlot(_index, item, number);
         }
 
+        //Returns this item
         public InventoryItem GetItem()
         {
             return _inventory.GetItemInSlot(_index);

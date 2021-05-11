@@ -9,6 +9,7 @@ namespace Harris.UI.Inventories
         [SerializeField] Text _titleText = null;
         [SerializeField] Text _bodyText = null;
 
+        //Sets the information for the tooltip
         public void Setup(InventoryItem item)
         {
             _titleText.text = item.Name;

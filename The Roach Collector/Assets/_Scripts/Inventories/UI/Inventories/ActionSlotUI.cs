@@ -40,7 +40,7 @@ namespace Harris.UI.Inventories
         //Adds an item the slot
         public void AddItems(InventoryItem item, int number)
         {
-            _store.AddAction(item, _index, number);
+            _store.AddItem(item, _index, number);
         }
 
         //Gets the number of items in this location
