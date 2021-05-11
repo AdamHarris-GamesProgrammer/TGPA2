@@ -213,7 +213,7 @@ public class RaycastWeapon : MonoBehaviour
         _weaponRecoil.GenerateRecoil();
 
         _audioSoruce.PlayOneShot(_config.ContinuousFire);
-        _audioSoruce.PlayOneShot(_config.Tail);
+        //_audioSoruce.PlayOneShot(_config.Tail);
     }
 
     public void StartFiring()
