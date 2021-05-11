@@ -15,15 +15,10 @@ namespace Harris.Inventories
     {
         // CONFIG DATA
         [Tooltip("Does an instance of this item get consumed every time it's used.")]
-        [SerializeField] bool consumable = false;
+        [SerializeField] bool _isConsumable = false;
 
         // PUBLIC
 
-
-
-        public bool isConsumable()
-        {
-            return consumable;
-        }
+        public bool IsConsumable { get { return _isConsumable; } }
     }
 }
