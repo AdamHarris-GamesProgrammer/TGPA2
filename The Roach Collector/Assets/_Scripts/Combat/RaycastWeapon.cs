@@ -53,7 +53,7 @@ public class RaycastWeapon : MonoBehaviour
     public void Setup()
     {
         _inventory = GetComponentInParent<Inventory>();
-        _audioSoruce = GetComponentInParent<AudioSource>();
+        _audioSoruce = GetComponent<AudioSource>();
 
         if (_inventory != null)
         {
@@ -213,7 +213,6 @@ public class RaycastWeapon : MonoBehaviour
         _weaponRecoil.GenerateRecoil();
 
         _audioSoruce.PlayOneShot(_config.ContinuousFire);
-        //_audioSoruce.PlayOneShot(_config.Tail);
     }
 
     public void StartFiring()

@@ -27,14 +27,12 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private AudioClip _magazineLoad = null;    //
     [SerializeField] private AudioClip _safetySwitch = null;
     [SerializeField] private AudioClip _bulletLoad = null;      //
-    [SerializeField] private AudioClip _tail = null;            //
     [SerializeField] private AudioClip _cockSound = null;
     [SerializeField] private AudioClip _endFire = null;         //
     [SerializeField] private AudioClip _continuousFire = null;  //
     public AudioClip StartFire { get { return _startFire; } }
     public AudioClip ContinuousFire{get { return _continuousFire; }}
     public AudioClip EndFire{get { return _endFire; }}
-    public AudioClip Tail{get { return _tail; }}
     public AudioClip CockSound{get { return _cockSound; }}
     public AudioClip SafetySwitch{get { return _safetySwitch; }}
     public AudioClip BulletLoad{get { return _bulletLoad; }}
