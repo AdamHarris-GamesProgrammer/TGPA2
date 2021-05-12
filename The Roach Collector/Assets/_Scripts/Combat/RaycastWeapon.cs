@@ -362,6 +362,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if(_timeSinceLastShot > _timeBetweenShots)
         {
+            _timeSinceLastShot = 0.0f;
             for (int i = 0; i < _config.BulletCount; i++)
             {
 
