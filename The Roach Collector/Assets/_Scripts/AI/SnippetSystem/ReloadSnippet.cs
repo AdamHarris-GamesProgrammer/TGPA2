@@ -23,7 +23,7 @@ public class ReloadSnippet : CombatSnippet
         int returnScore = 0;
 
 
-        if (_aiWeapons.GetEquippedWeapon().NeedToReload())
+        if (_aiWeapons.GetEquippedWeapon().NeedToReload)
         {
             returnScore = 100;
         }
@@ -40,6 +40,6 @@ public class ReloadSnippet : CombatSnippet
     public bool IsFinished()
     {
         //If we no longer need to reload.
-        return !_aiWeapons.GetEquippedWeapon().NeedToReload();
+        return !_aiWeapons.GetEquippedWeapon().NeedToReload;
     }
 }

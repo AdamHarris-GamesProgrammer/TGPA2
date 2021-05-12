@@ -33,7 +33,6 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private AudioClip _endFire = null;         //
     [SerializeField] private AudioClip _continuousFire = null;  //
 
-
     public AudioClip StartFire { get { return _startFire; } }
     public AudioClip ContinuousFire{get { return _continuousFire; }}
     public AudioClip EndFire{get { return _endFire; }}

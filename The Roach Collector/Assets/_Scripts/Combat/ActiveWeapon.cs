@@ -90,9 +90,9 @@ public class ActiveWeapon : MonoBehaviour
                     _weapon.StopFiring();
                     _controller.IsShooting = false;
                 }
-                if (_weapon.IsFiring())
+                if (_weapon.IsFiring)
                 {
-                    _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                    _weapon.UpdateWeapon(_crosshairTarget.position);
                     _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
                 }
             }
@@ -102,7 +102,7 @@ public class ActiveWeapon : MonoBehaviour
                 {
                     _weapon.StartFiring();
                     _controller.IsShooting = true;
-                    _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                    _weapon.UpdateWeapon(_crosshairTarget.position);
                 }
                 else
                 {
@@ -113,7 +113,7 @@ public class ActiveWeapon : MonoBehaviour
             }
 
 
-            _weapon.UpdateBullets(Time.deltaTime);
+            _weapon.UpdateBullets();
 
             
 
@@ -124,7 +124,7 @@ public class ActiveWeapon : MonoBehaviour
 
             }
 
-            if (_weapon.NeedToReload())
+            if (_weapon.NeedToReload)
             {
                 _controller.IsShooting = false;
             }

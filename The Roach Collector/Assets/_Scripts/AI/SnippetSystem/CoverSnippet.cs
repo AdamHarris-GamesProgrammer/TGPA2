@@ -59,7 +59,7 @@ public class CoverSnippet : CombatSnippet
                 _betweenStandingTimer += _betweenStandingDuration;
 
                 //AI needs to reload
-                if (_aiWeapon.GetEquippedWeapon().NeedToReload())
+                if (_aiWeapon.GetEquippedWeapon().NeedToReload)
                 {
                     _anim.SetBool("isCrouching", true);
                     _aiWeapon.SetTarget(null);
@@ -235,7 +235,7 @@ public class CoverSnippet : CombatSnippet
         
         if(_aiWeapon.GetEquippedWeapon() != null)
         {
-            _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
+            _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload;
         }
 
         float healthRatio = _aiHealth.HealthRatio;
