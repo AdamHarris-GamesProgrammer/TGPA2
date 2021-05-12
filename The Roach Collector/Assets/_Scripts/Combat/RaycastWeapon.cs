@@ -272,7 +272,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
         {
-            Debug.Log("Hit: " + _hitInfo.transform.name);
+            //Debug.Log("Hit: " + _hitInfo.transform.name);
 
             Rigidbody hitRb = _hitInfo.transform.gameObject.GetComponent<Rigidbody>();
             if (hitRb)
@@ -327,7 +327,6 @@ public class RaycastWeapon : MonoBehaviour
         }
 
         UpdateBullets();
-        
     }
 
     public void UpdateFiring(Vector3 target)

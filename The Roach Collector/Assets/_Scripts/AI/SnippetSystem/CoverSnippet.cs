@@ -64,10 +64,13 @@ public class CoverSnippet : CombatSnippet
                     _anim.SetBool("isCrouching", true);
                     _aiWeapon.SetTarget(null);
                     _aiWeapon.SetFiring(false);
-                    _aiWeapon.GetEquippedWeapon().Reload();
+                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+                    {
+                        _aiWeapon.GetEquippedWeapon().Reload();
+                    }
 
                     //Does the AI have any bullets left?
-                    if(_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
+                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
                     {
                         //TODO Switch to melee state here. 
                     }
