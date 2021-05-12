@@ -44,7 +44,20 @@ public class AdvanceSnippet : CombatSnippet
             {
                 _aiWeapon.SetTarget(_agent.GetPlayer());
                 //Debug.Log("Should shoot");
-                _aiWeapon.SetFiring(true);
+
+                if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+                {
+                    _aiWeapon.GetEquippedWeapon().Reload();
+                }
+                else
+                {
+                    if (!_aiWeapon.GetEquippedWeapon().IsFiring)
+                    {
+                        _aiWeapon.SetFiring(true);
+                    }
+                }
+
+                
             }
             
         }

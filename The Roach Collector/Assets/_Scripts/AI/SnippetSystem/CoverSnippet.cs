@@ -92,7 +92,11 @@ public class CoverSnippet : CombatSnippet
                                 _isStanding = true;
                                 _anim.SetBool("isCrouching", false);
                                 _aiWeapon.SetTarget(_player);
-                                _aiWeapon.SetFiring(true);
+
+                                if (!_aiWeapon.GetEquippedWeapon().IsFiring)
+                                {
+                                    _aiWeapon.SetFiring(true);
+                                }
                             }
 
                             _changeCoverTimer = 0.0f;
