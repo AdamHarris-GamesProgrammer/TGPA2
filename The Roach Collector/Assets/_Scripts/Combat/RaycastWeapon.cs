@@ -29,25 +29,40 @@ public class RaycastWeapon : MonoBehaviour
 
     [SerializeField] private Transform _raycastOrigin = null;
 
-    [SerializeField] public WeaponConfig _config;
-    public WeaponConfig Config { get { return _config; } }
+    [SerializeField] private WeaponConfig _config;
+    
 
-    [SerializeField] public int _clipAmmo = 30;
-    [SerializeField] public int _totalAmmo = 90;
-    [SerializeField] public float _reloadDuration = 1.0f;
+    [SerializeField] private int _clipAmmo = 30;
+    [SerializeField] private int _totalAmmo = 90;
+    [SerializeField] private float _reloadDuration = 1.0f;
     [SerializeField] private float _reloadTimeLeft = 1.0f;
-    [SerializeField] public bool _isReloading = false;
+    [SerializeField] private bool _isReloading = false;
     [SerializeField] private DamageType _type;
     private float _damageMultiplier = 1.0f;
 
     AudioSource _audioSoruce;
 
-    public LayerMask _layerMask;
+    [SerializeField] private LayerMask _layerMask;
+
+    public bool IsReloading { get { return _isReloading; } }
+    public WeaponConfig Config { get { return _config; } }
+    public int ClipAmmo { get { return _clipAmmo; } }
+    public int TotalAmmo { get { return _totalAmmo; } set { _totalAmmo = value; } }
+
+    float _timeSinceLastShot = 0.0f;
+    float _timeBetweenShots;
+
+    Ray _ray;
+    RaycastHit _hitInfo;
+
+    List<Bullet> _bullets = new List<Bullet>();
+
+    private float _maxLifeTime = 3.0f;
+
 
     void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
-        
     }
 
     public void Setup()
@@ -63,6 +78,8 @@ public class RaycastWeapon : MonoBehaviour
         {
             _clipAmmo = _config.ClipSize;
         }
+
+        _timeBetweenShots = 1.0f / _config.FireRate;
     }
 
     public DamageType GetDamageType()
@@ -102,6 +119,8 @@ public class RaycastWeapon : MonoBehaviour
 
     public void Update()
     {
+        _timeSinceLastShot += Time.deltaTime;
+
         if(_inventory)
         {
             if (_inventory.HasItem(_config.AmmoType))
@@ -169,14 +188,7 @@ public class RaycastWeapon : MonoBehaviour
         
     }
 
-    Ray _ray;
-    RaycastHit _hitInfo;
 
-    float _accumulatedTime;
-
-    List<Bullet> _bullets = new List<Bullet>();
-
-    public float _maxLifeTime = 3.0f;
 
     Vector3 GetPosition(Bullet bullet)
     {
@@ -229,7 +241,6 @@ public class RaycastWeapon : MonoBehaviour
         else
         {
             _audioSoruce.PlayOneShot(_config.StartFire);
-            _accumulatedTime = 0.0f;
             _isFiring = true;
         }
     }
@@ -237,7 +248,11 @@ public class RaycastWeapon : MonoBehaviour
     public void StopFiring()
     {
         _isFiring = false;
-        _audioSoruce.PlayOneShot(_config.EndFire);
+
+        if(_config.EndFire != null)
+        {
+            _audioSoruce.PlayOneShot(_config.EndFire);
+        }
     }
 
     public void UpdateBullets(float dt)
@@ -337,7 +352,6 @@ public class RaycastWeapon : MonoBehaviour
             UpdateFiring(deltaTime, target);
         }
 
-        _accumulatedTime += deltaTime;
         UpdateBullets(deltaTime);
         
     }
@@ -346,16 +360,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(float deltaTime, Vector3 target)
     {
-        float fireInterval = 1.0f / _config.FireRate;
-        //Debug.Log("Fire Interval: " + fireInterval);
-        _accumulatedTime += deltaTime;
-        while(_accumulatedTime >= fireInterval)
+        if(_timeSinceLastShot > _timeBetweenShots)
         {
-            for (int i = 0; i < _config.BulletCount; i++) {
-                
+            for (int i = 0; i < _config.BulletCount; i++)
+            {
+
                 Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
-                //Debug.Log("Fire");
-                //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
 
@@ -363,7 +373,6 @@ public class RaycastWeapon : MonoBehaviour
             {
                 StopFiring();
             }
-            _accumulatedTime = Mathf.Max(_accumulatedTime -= Time.deltaTime, 0.0f);
         }
     }
 }

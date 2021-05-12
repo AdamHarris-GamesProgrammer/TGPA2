@@ -67,7 +67,7 @@ public class CoverSnippet : CombatSnippet
                     _aiWeapon.GetEquippedWeapon().Reload();
 
                     //Does the AI have any bullets left?
-                    if(_aiWeapon.GetEquippedWeapon()._totalAmmo <= 0)
+                    if(_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
                     {
                         //TODO Switch to melee state here. 
                     }

@@ -19,6 +19,8 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private float _reloadDuration = 1.0f;
     [SerializeField] private RaycastWeapon _weapon;
     [SerializeField] private AmmoItem _ammoItem;
+    [SerializeField] private bool _isAutomatic = false;
+    
 
     [Header("Sound Settings")]  
     [SerializeField] private AudioClip _dryFire = null;         //
@@ -30,6 +32,8 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private AudioClip _cockSound = null;
     [SerializeField] private AudioClip _endFire = null;         //
     [SerializeField] private AudioClip _continuousFire = null;  //
+
+
     public AudioClip StartFire { get { return _startFire; } }
     public AudioClip ContinuousFire{get { return _continuousFire; }}
     public AudioClip EndFire{get { return _endFire; }}
@@ -51,6 +55,7 @@ public class WeaponConfig : EquipableItem
     public float Damage { get { return _damage; } set { _damage = value; } }
     public int ClipSize { get { return _clipSize; } set { _clipSize = value; } }
 
+    public bool IsAutomatic { get { return _isAutomatic; } }
     public DamageType DamageType { get { return _damageType; } }
     public float ReloadDuration { get { return _reloadDuration; } }
 

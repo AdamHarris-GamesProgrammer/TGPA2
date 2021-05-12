@@ -46,19 +46,19 @@ public class ActiveWeapon : MonoBehaviour
 
             Equip(weapon);
 
-            _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
         }
     }
 
     private void Reload()
     {
         //Stops the player from reloading with a full mag
-        if (_weapon._clipAmmo == _weapon.Config.ClipSize) return;
+        if (_weapon.ClipAmmo == _weapon.Config.ClipSize) return;
 
         _weapon.Reload();
 
         _anim.SetBool("isReloading", true);
-        _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+        _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
     }
 
     // Update is called once per frame
@@ -68,38 +68,56 @@ public class ActiveWeapon : MonoBehaviour
         {
             if (_inventory)
             {
-                if (_inventory.HasItem(_weapon._config.AmmoType))
+                if (_inventory.HasItem(_weapon.Config.AmmoType))
                 {
-                    int index = _inventory.FindItem(_weapon._config.AmmoType);
+                    int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
-                    _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+                    _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
 
-                    _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
                 }
             }
 
-
-            if (Input.GetButtonDown("Fire1"))
+            if (_weapon.Config.IsAutomatic)
             {
-                _weapon.StartFiring();
-                _controller.IsShooting = true;
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    _weapon.StartFiring();
+                    _controller.IsShooting = true;
+                }
+                if (Input.GetButtonUp("Fire1"))
+                {
+                    _weapon.StopFiring();
+                    _controller.IsShooting = false;
+                }
+                if (_weapon.IsFiring())
+                {
+                    _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    _weapon.StartFiring();
+                    _controller.IsShooting = true;
+                    _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                }
+                else
+                {
+                    _controller.IsShooting = false;
+                    _weapon.StopFiring();
+                }
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
 
-            if (_weapon.IsFiring())
-            {
-                _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
-            }
 
             _weapon.UpdateBullets(Time.deltaTime);
 
-            if (Input.GetButtonUp("Fire1"))
-            {
-                _weapon.StopFiring();
-                _controller.IsShooting = false;
-            }
+            
 
-            if (Input.GetKeyDown(KeyCode.R) && _weapon._totalAmmo > 0)
+            if (Input.GetKeyDown(KeyCode.R) && _weapon.TotalAmmo > 0)
             {
                 Reload();
                 _controller.IsShooting = false;
@@ -111,18 +129,19 @@ public class ActiveWeapon : MonoBehaviour
                 _controller.IsShooting = false;
             }
 
-            if (_weapon._isReloading == false)
+            if (_weapon.IsReloading == false)
             {
                 _anim.SetBool("isReloading", false);
             }
             else
             {
                 _controller.IsShooting = false;
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
         }
         else
         {
+            _PlayerUI.UpdateAmmoUI(0,0,0);
         }
     }
 
@@ -156,18 +175,18 @@ public class ActiveWeapon : MonoBehaviour
 
         if (_inventory)
         {
-            if (_inventory.HasItem(_weapon._config.AmmoType))
+            if (_inventory.HasItem(_weapon.Config.AmmoType))
             {
-                int index = _inventory.FindItem(_weapon._config.AmmoType);
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
-                _weapon._totalAmmo = _inventory.GetNumberInSlot(index);
+                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
 
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
             else
             {
-                _weapon._totalAmmo = 0;
-                _PlayerUI.UpdateAmmoUI(_weapon._clipAmmo, _weapon._config.ClipSize, _weapon._totalAmmo);
+                _weapon.TotalAmmo = 0;
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
         }
     }
