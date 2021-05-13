@@ -9,8 +9,7 @@ public enum AiStateId
     Idle,
     FindWeapon,
     Patrol,
-    CombatState,
-    Melee
+    CombatState
 }
 
 public interface AIState

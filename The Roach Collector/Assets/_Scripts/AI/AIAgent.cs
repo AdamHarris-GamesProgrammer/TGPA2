@@ -8,14 +8,9 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-    
-
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
-
-    [SerializeField] private int _AiClipBullets = 0;
-    [SerializeField] private int _AiTotalBullets = 0;
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
@@ -35,7 +30,6 @@ public class AIAgent : MonoBehaviour
     List<CoverController> _coversInScene;
 
     bool _beingKilled = false;
-    bool _usingMelee = false;
 
     public bool BeingKilled { set { _beingKilled = value; } }
 
@@ -48,7 +42,6 @@ public class AIAgent : MonoBehaviour
     }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] private RaycastWeapon _MeleeWeapon;
 
     public Transform GetPlayer()
     {
@@ -80,7 +73,6 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
-        stateMachine.RegisterState(new AIMeleeState(this));
 
         if (_startingWeapon)
         {
@@ -105,21 +97,6 @@ public class AIAgent : MonoBehaviour
 
         stateMachine.Update();
         _currentState = stateMachine._currentState;
-
-        _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
-        _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
-
-        if(_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
-        {
-            _usingMelee = true;
-            Debug.Log("Change Weapon");
-            RaycastWeapon meleeweapon = Instantiate(_MeleeWeapon);
-            _aiWeapon.EquipWeapon(meleeweapon);
-
-            stateMachine.ChangeState(AiStateId.Melee);
-
-        }
-
     }
 
     public void Aggrevate()

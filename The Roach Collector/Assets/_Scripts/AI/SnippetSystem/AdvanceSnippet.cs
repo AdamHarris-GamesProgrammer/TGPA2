@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class AdvanceSnippet : CombatSnippet
 {
-    public string Name = "Advance Snippet";
-
     NavMeshAgent _navAgent;
     AIWeapons _aiWeapon;
     AIHealth _aiHealth;
@@ -26,15 +24,8 @@ public class AdvanceSnippet : CombatSnippet
         //Set the player as the target
         _aiWeapon.SetTarget(_agent.GetPlayer());
 
-        if (_aiWeapon.GetEquippedWeapon()._clipAmmo > 0)
-        {
-            //Start firing
-            _aiWeapon.SetFiring(true);
-        }
-        else
-        {
-            _aiWeapon.SetFiring(false);
-        }
+        //Start firing
+        _aiWeapon.SetFiring(true);
     }
 
     public void EnterSnippet()
@@ -75,10 +66,4 @@ public class AdvanceSnippet : CombatSnippet
         return (_aiHealth.HealthRatio < 0.5f || _timer >= _agent._config._advanceStateDuration);
 
     }
-
-    public string GetName()
-    {
-        return Name;
-    }
-
 }

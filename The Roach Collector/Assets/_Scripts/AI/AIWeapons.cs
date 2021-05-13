@@ -39,7 +39,6 @@ public class AIWeapons : MonoBehaviour
             target += UnityEngine.Random.insideUnitSphere * _inaccuracy;
             _currentWeapon.UpdateWeapon(Time.deltaTime, target);
         }
-
     }
 
     public void SetFiring(bool enabled)
@@ -47,8 +46,7 @@ public class AIWeapons : MonoBehaviour
         if (enabled)
         {
             _currentWeapon.StartFiring();
-        }
-        else
+        }else
         {
             _currentWeapon.StopFiring();
         }
@@ -56,11 +54,6 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
-
-        if(_currentWeapon)
-        {
-            Destroy(_currentWeapon.gameObject);
-        }
 
         _currentWeapon = weapon;
         _currentWeapon.transform.SetParent(transform, false);

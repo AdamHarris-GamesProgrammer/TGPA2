@@ -9,9 +9,9 @@ public class CallForBackupSnippet : CombatSnippet
 
     bool _hasBackup = false;
 
-    string Name = "CallForBackupSnippet";
     public void Action()
     {
+        Debug.Log("Backup Action");
         foreach(AIAgent enemy in _enemiesInRange)
         {
             //Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
@@ -51,9 +51,5 @@ public class CallForBackupSnippet : CombatSnippet
     public bool IsFinished()
     {
         return _hasBackup;
-    }
-    public string GetName()
-    {
-        return Name;
     }
 }
