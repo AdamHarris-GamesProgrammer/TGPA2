@@ -7,6 +7,8 @@ public class ReloadSnippet : CombatSnippet
     AIWeapons _aiWeapons;
     AIAgent _agent;
 
+    string _name = "Reload Snippet";
+
     public void Action()
     {
         //Debug.Log(_agent.transform.name + " is reloading");
@@ -42,4 +44,10 @@ public class ReloadSnippet : CombatSnippet
         //If we no longer need to reload.
         return !_aiWeapons.GetEquippedWeapon().NeedToReload();
     }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
 }

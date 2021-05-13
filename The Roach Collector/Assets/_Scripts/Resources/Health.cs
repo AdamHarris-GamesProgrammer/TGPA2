@@ -51,6 +51,7 @@ public class Health : MonoBehaviour
 
         if (_currentHealth == 0.0f)
         {
+            Debug.LogError("Dead");
             _isDead = true;
             _OnDie.Invoke();
         }
