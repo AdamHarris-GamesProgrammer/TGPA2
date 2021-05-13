@@ -4,8 +4,22 @@ using UnityEngine;
 
 public class LevelEndPoint : MonoBehaviour
 {
-    void OnCollisionEnter(Collision levelEndPoint)
+    [SerializeField]private GameObject EndLevelUI;
+    [SerializeField]private GameObject Spotlight;
+    [SerializeField]private bool isBossAlive;
+
+    void OnTriggerEnter(Collider levelEndPoint)
     {
-        //TODO make level end UI transition
+        if (!isBossAlive)
+        {
+            EndLevelUI.SetActive(true);
+            gameObject.SetActive(false);
+        }
+        
+    }
+
+    public void SetSpotlight()
+    {
+        Spotlight.SetActive(true);
     }
 }
