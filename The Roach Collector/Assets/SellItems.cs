@@ -51,8 +51,9 @@ public class SellItems : MonoBehaviour
         foreach(SellableItem item in _sellables) {
             var slot = Instantiate(_itemObject, _itemList.transform);
 
-            slot.Setup(item.Icon, item.Name, item);
+             int index = _playerInventoy.Find(item);
 
+            slot.Setup(item.Icon, item.Name, item, _playerInventoy.GetInventorySlot(index).number);
         }
         
     }
@@ -88,11 +89,6 @@ public class SellItems : MonoBehaviour
             }            
 
             LoadItems();
-
-            //TODO: Remove from inventory
-            //TODO: Add money to player
-            //TODO: Remove from list (if applicable)
-            //TODO: add in a quanitity for the amount of these items you have 
         }
     }
 }

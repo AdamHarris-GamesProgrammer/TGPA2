@@ -5,18 +5,22 @@ using UnityEngine.UI;
 
 public class SellItemUI : MonoBehaviour
 {
-    private Image _itemSprite;
-    private Text _itemName;
+    [SerializeField] private Image _itemSprite;
+    [SerializeField] private Text _itemName;
+
+    [SerializeField] private Text _quantityText;
+    [SerializeField] private Text _valueText;
+
     private SellableItem _item;
 
     void Awake() {
-        _itemSprite = GetComponentInChildren<Image>();
-        _itemName = GetComponentInChildren<Text>();
     }
 
-    public void Setup(Sprite sprite, string name, SellableItem item) {
+    public void Setup(Sprite sprite, string name, SellableItem item, int quantity) {
         _itemSprite.sprite = sprite;
         _itemName.text = name;
+        _valueText.text = "Value: " + item.ItemValue.ToString("#0.00");
+        _quantityText.text = "Quantity: " + quantity;
         _item = item;
     }
 
