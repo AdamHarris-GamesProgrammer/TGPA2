@@ -58,14 +58,23 @@ public class LaptopScript : MonoBehaviour
         activeCanvas.gameObject.active = false;
         activeCanvas = canvasToSwitch;
         activeCanvas.gameObject.active = true;
+        
+    }
+
+    public void SwitchToSellCanvas(Canvas canvas) {
+        SwitchCanvas(canvas);
+        FindObjectOfType<SellItems>().LoadItems();
     }
 
     public void SwitchShopPanel(GameObject panelToSwitch)
     {
+        
         activePanel.gameObject.active = false;
         activePanel = panelToSwitch;
         activePanel.gameObject.active = true;
+        
 
     }
+
 }
 
