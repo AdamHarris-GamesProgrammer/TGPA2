@@ -33,6 +33,10 @@ namespace Harris.Inventories
             public int number;
         }
 
+        public InventorySlot GetInventorySlot(int index) {
+            return  _slots[index];
+        }
+
 
         public InventorySlot[] GetFilledSlots()
         {
@@ -223,6 +227,17 @@ namespace Harris.Inventories
                 i = FindEmptySlot();
             }
             return i;
+        }
+
+        public int Find(InventoryItem item) {
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                if (object.ReferenceEquals(_slots[i].item, item))
+                {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private int FindSlot(InventoryItem item)

@@ -57,6 +57,7 @@ namespace TGP.Control
 
         public void GainMoney(float amount) {
             _currency += amount;
+            Debug.Log("Currency: " + _currency);
         }
 
         public bool HasEnoughMoney(float amount) {

@@ -19,14 +19,19 @@ public class SellItems : MonoBehaviour
 
     List<SellableItem> _sellables;
 
+    SellableItem _selectedItem = null;
+
     void Awake() {
         _player = GameObject.FindObjectOfType<PlayerController>();
         _playerInventoy = _player.GetComponent<Inventory>();
         _sellables = new List<SellableItem>();
+
+        LoadItems();
     }
 
     public void LoadItems() {
         _sellables.Clear();
+        SelectItem(null);
 
         foreach(Inventory.InventorySlot item in _playerInventoy.GetFilledSlots()){
             SellableItem sellable = item.item as SellableItem;
@@ -46,17 +51,48 @@ public class SellItems : MonoBehaviour
         foreach(SellableItem item in _sellables) {
             var slot = Instantiate(_itemObject, _itemList.transform);
 
-            slot.Setup(item.Icon, item.Name);
+            slot.Setup(item.Icon, item.Name, item);
 
         }
         
     }
 
-    public void SelectItem(){
+    public void SelectItem(SellableItem item) {
+        _selectedItem = item;
 
+        if(_selectedItem) {
+            _itemDescription.text = item.Description;
+            _itemName.text = item.Name;
+        }else
+        {
+            _itemDescription.text = "";
+            _itemName.text = "";    
+        }
     }
 
-    void SellItem(SellableItem item, int amount) {
+    public void SellItem() {
+        if(_selectedItem != null) {
+            Debug.Log("Selling item");
 
+            _player.GainMoney(_selectedItem.ItemValue);
+
+            int index = _playerInventoy.Find(_selectedItem);
+            
+            Debug.Log(index);
+
+            _playerInventoy.RemoveFromSlot(index, 1);
+
+            if(_playerInventoy.GetInventorySlot(index).number == 0) {
+                Debug.Log("Removing from sellables");
+                _sellables.Remove(_selectedItem);
+            }            
+
+            LoadItems();
+
+            //TODO: Remove from inventory
+            //TODO: Add money to player
+            //TODO: Remove from list (if applicable)
+            //TODO: add in a quanitity for the amount of these items you have 
+        }
     }
 }
