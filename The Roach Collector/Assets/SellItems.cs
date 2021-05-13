@@ -38,7 +38,6 @@ public class SellItems : MonoBehaviour
 
             if(sellable) {
                 _sellables.Add(sellable);
-                Debug.Log(sellable);
             }
         }
 
@@ -73,18 +72,14 @@ public class SellItems : MonoBehaviour
 
     public void SellItem() {
         if(_selectedItem != null) {
-            Debug.Log("Selling item");
 
             _player.GainMoney(_selectedItem.ItemValue);
 
             int index = _playerInventoy.Find(_selectedItem);
             
-            Debug.Log(index);
-
             _playerInventoy.RemoveFromSlot(index, 1);
 
             if(_playerInventoy.GetInventorySlot(index).number == 0) {
-                Debug.Log("Removing from sellables");
                 _sellables.Remove(_selectedItem);
             }            
 
