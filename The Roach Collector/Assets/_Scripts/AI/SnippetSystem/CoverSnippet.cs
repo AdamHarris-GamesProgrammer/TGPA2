@@ -10,196 +10,120 @@ public class CoverSnippet : CombatSnippet
     AIHealth _aiHealth;
     Animator _anim;
 
-
+    string _name = "CoverSnippet";
 
     CoverController[] _coversInScene;
 
     CoverController _currentCover;
 
-    LastKnownLocation _lastKnownLocation;
-
     AIAgent _agent;
 
+    bool _hasFoundCover = false;
+
+    float _timer = 0.0f;
+
+    float _crouchDuration = 1.5f;
+
+    float _crouchTimer = 0.0f;
 
     bool _needToReload = false;
 
-
-    bool _isStanding = false;
-
-    float _standShootDuration = 0.5f;
-    float _standShootTimer = 0.0f;
-
-    float _changeCoverDuration = 5.0f;
-    float _changeCoverTimer = 0.0f;
-
-    float _betweenStandingDuration = 3.0f;
-    float _betweenStandingTimer = 0.0f;
-
-
     public void Action()
     {
+        _timer -= Time.deltaTime;
+
         //TODO: Implement AI popping their head over cover
         //TODO: Implement AI crouching and un-crouching animation
         //TODO: Make enemy actively decide when to leave cover based on factors(?)
 
-
-        if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        if(_currentCover)
         {
-            Vector3 direction = _lastKnownLocation.transform.position - _agent.transform.position;
+            if (_needToReload)
+            {
+                _crouchTimer -= Time.deltaTime;
+                _anim.SetBool("isCrouching", true);
+                _aiWeapon.SetTarget(null);
+                _aiWeapon.SetFiring(false);
 
-            Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+                //Debug.Log("RELOADING");
 
-            _agent.transform.rotation = look;
+                _aiWeapon.GetEquippedWeapon()._isReloading = true;
+            }
+
+            _agent.transform.LookAt(_agent.GetPlayer());
+            _hasFoundCover = true;
 
             Transform _player = _agent.GetPlayer();
 
-            //AI is not standing
-            if (!_isStanding)
+            float angle = Vector3.Angle(_agent.transform.forward, _player.forward);
+
+            if(angle < 166.0f)
             {
-                _betweenStandingTimer += _betweenStandingDuration;
+                //TODO: Stop enemy from shooting until they stand up.
+                _anim.SetBool("isCrouching", false);
+                _aiWeapon.SetTarget(_player);
 
-                //AI needs to reload
-                if (_aiWeapon.GetEquippedWeapon().NeedToReload)
-                {
-                    _anim.SetBool("isCrouching", true);
-                    _aiWeapon.SetTarget(null);
-                    _aiWeapon.SetFiring(false);
-                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-                    {
-                        _aiWeapon.GetEquippedWeapon().Reload();
-                    }
-
-                    //Does the AI have any bullets left?
-                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
-                    {
-                        //TODO Switch to melee state here. 
-                    }
-                }
-                //AI Does not need to reload
-                else
-                {
-                    RaycastHit hit;
-                    //TODO: replace 25.0f with some kind of weapon range value
-                    //AI can feasibly shoot the player
-                    if (Physics.Raycast(_agent.transform.position + Vector3.up, _player.position - _agent.transform.position, out hit, 25.0f, _agent.CharacterMask)) 
-                    {
-                        if (hit.collider.CompareTag("Player"))
-                        {
-                            if(_betweenStandingTimer > _betweenStandingDuration)
-                            {
-                                _betweenStandingTimer = 0.0f;
-
-                                _isStanding = true;
-                                _anim.SetBool("isCrouching", false);
-                                _aiWeapon.SetTarget(_player);
-
-                                if (!_aiWeapon.GetEquippedWeapon().IsFiring)
-                                {
-                                    _aiWeapon.SetFiring(true);
-                                }
-                            }
-
-                            _changeCoverTimer = 0.0f;
-                        }
-                        //AI cannot feasibly shoot the player
-                        else
-                        {
-                            Debug.Log("Raycast hit: " + hit.collider.name);
-
-                            _anim.SetBool("isCrouching", true);
-                            _aiWeapon.SetTarget(null);
-                            _aiWeapon.SetFiring(false);
-
-                            _changeCoverTimer += Time.deltaTime;
-
-                            if (_changeCoverTimer > _changeCoverDuration)
-                            {
-                                SelectCover();
-                            }
-                        }
-                        
-                    }
-                    //AI can not feasibly shoot the player
-                    else
-                    {
-                        _anim.SetBool("isCrouching", true);
-                        _aiWeapon.SetTarget(null);
-                        _aiWeapon.SetFiring(false);
-
-                        _changeCoverTimer += Time.deltaTime;
-
-                        if(_changeCoverTimer > _changeCoverDuration)
-                        {
-                            SelectCover();
-                        }
-                    }
-                }
+                
+                _aiWeapon.SetFiring(true);
+                _crouchTimer = _crouchDuration;
             }
-            //AI is standing
             else
             {
-                _standShootTimer += Time.deltaTime;
+                _crouchTimer -= Time.deltaTime;
+                _anim.SetBool("isCrouching", true);
+                _aiWeapon.SetTarget(null);
+                _aiWeapon.SetFiring(false);
+            }
 
-                if(_standShootTimer > _standShootDuration)
+            //_crouchTimer -= Time.deltaTime;
+
+            if(_crouchTimer <= 0.0f)
+            {
+                _crouchTimer = _crouchDuration;
+                _anim.SetBool("isCrouching", false);
+                _aiWeapon.SetTarget(_player);
+                _aiWeapon.SetFiring(true);
+            }
+
+            //Debug.Log(angle);
+        }
+
+        if(!_hasFoundCover)
+        {
+            _aiWeapon.SetTarget(null);
+
+
+
+            //Debug.Log(_coversInScene.Length);
+            CoverController closestCover = _coversInScene[0];
+            float closestDistance = 10000.0f;
+
+            //Cycle through each cover in the array
+            foreach (CoverController cover in _coversInScene)
+            {
+                //If the cover is full then don't go to this cover
+                if (cover.IsFull)
                 {
-                    _standShootTimer = 0.0f;
-                    _isStanding = false;
+                    Debug.Log("Cover is full");
+                    continue;
+                }
 
-                    _anim.SetBool("isCrouching", true);
-                    _aiWeapon.SetTarget(null);
-                    _aiWeapon.SetFiring(false);
+                //Calculate the distance between the agent and the cover
+                float distance = Vector3.Distance(_agent.transform.position, cover.transform.position);
+
+
+                //if the distance from this cover is less than the distance from the closest cover
+                if (distance < closestDistance)
+                {
+                    //Set the new closest cover
+                    closestCover = cover;
+                    closestDistance = distance;
+
                 }
             }
-        }
 
-    }
+            _currentCover = closestCover;
 
-    private void SelectCover()
-    {
-        _anim.SetBool("isCrouching", false);
-        _aiWeapon.SetTarget(null);
-        _aiWeapon.SetFiring(false);
-
-        _changeCoverTimer = 0.0f;
-
-        if (_currentCover)
-        {
-            _currentCover.RemoveUser();
-        }
-
-        CoverController closestCover = null;
-        float closestDistance = 10000.0f;
-
-        //Cycle through each cover in the array
-        foreach (CoverController cover in _coversInScene)
-        {
-            if (_currentCover != null && _currentCover == cover) continue;
-
-            //If the cover is full then don't go to this cover
-            if (cover.IsFull)
-            {
-                //Debug.Log("Cover is full");
-                continue;
-            }
-
-            //Calculate the distance between the agent and the cover
-            float distance = Vector3.Distance(_agent.transform.position, cover.transform.position);
-
-
-            //if the distance from this cover is less than the distance from the closest cover
-            if (distance < closestDistance)
-            {
-                //Set the new closest cover
-                closestCover = cover;
-                closestDistance = distance;
-
-            }
-        }
-
-        _currentCover = closestCover;
-
-        if(_currentCover != null)
-        {
             //Move the agent to the cover
             _currentCover.AddUser();
 
@@ -219,35 +143,37 @@ public class CoverSnippet : CombatSnippet
             }
 
             _navAgent.SetDestination(furthestCoverPoint.position);
+            Debug.Log("Set Destination to: " + furthestCoverPoint.position);
+            
+            _navAgent.stoppingDistance = 1.0f;
+
+            _hasFoundCover = true;
         }
     }
 
     public void EnterSnippet()
     {
-        //Debug.Log(_agent.transform.name + " Cover Snippet");
+        //Debug.Log("Cover Snippet");
+        _hasFoundCover = false;
 
-        _aiWeapon.SetTarget(null);
+        _timer = _agent._config._coverDuration;
 
-        _navAgent.stoppingDistance = 1.0f;
-
-        //Debug.Log(_coversInScene.Length);
-        SelectCover();
-
+        //_anim.SetBool("isCrouching", true);
 
     }
 
     public int Evaluate()
     {
         int returnScore = 0;
-        
-        if(_aiWeapon.GetEquippedWeapon() != null)
-        {
-            _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload;
-        }
+
+       _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload();
+
+
 
         float healthRatio = _aiHealth.HealthRatio;
 
-        if (healthRatio <= 0.5f && _needToReload)
+        
+        if(healthRatio <= 0.5f && _needToReload)
         {
             returnScore = 120;
         }
@@ -256,9 +182,12 @@ public class CoverSnippet : CombatSnippet
             returnScore = 80;
         }
 
-        //Debug.Log("Cover Snippet Returning: " + returnScore);
-
         return returnScore;
+    }
+
+    public string GetName()
+    {
+        return _name;
     }
 
     public void Initialize(AIAgent agent)
@@ -267,7 +196,6 @@ public class CoverSnippet : CombatSnippet
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>();
-        _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 
         //Debug.Log(_coversInScene.Length);
 
@@ -277,15 +205,15 @@ public class CoverSnippet : CombatSnippet
 
     public bool IsFinished()
     {
-        //TODO: Have a event for when the player has been lost by all AI saying it is safe to come out of cover.
         //If the ais health is above the threshold or the timer is less than 0 then exit the snippet.
-        bool result = (_aiHealth.HealthRatio > _agent._config._coverExitHealthThreashold);
+        bool result = (_aiHealth.HealthRatio > _agent._config._coverExitHealthThreashold || _timer <= 0.0f);
 
-        if (result)
+        if(result)
         {
             _currentCover?.RemoveUser();
         }
 
         return result;
     }
+
 }

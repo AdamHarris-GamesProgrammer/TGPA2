@@ -5,54 +5,55 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
+    /// <summary>
+    /// To be placed on the root of the inventory UI. Handles spawning all the
+    /// inventory slot prefabs.
+    /// </summary>
     public class InventoryUI : MonoBehaviour
     {
-        [SerializeField] InventorySlotUI _inventoryItemPrefab = null;
+        // CONFIG DATA
+        [SerializeField] InventorySlotUI InventoryItemPrefab = null;
 
-        Inventory _inventory;
+        // CACHE
+        Inventory playerInventory;
 
+        // LIFECYCLE METHODS
 
         private void Awake() 
         {
-            Inventory parentInventory = GetComponentInParent<Inventory>();
+            Inventory parent = GetComponentInParent<Inventory>();
 
-            //if we have an inventory as our parent
-            if (parentInventory)
+            if (parent)
             {
-                //this is a chest
-                _inventory = parentInventory;
+                playerInventory = parent;
             }
             else
             {
-                //this is the player
-                _inventory = Inventory.GetPlayerInventory();
+                playerInventory = Inventory.GetPlayerInventory();
             }
 
-            //Add the redraw method to the inventory update method
-            _inventory.InventoryUpdated += Redraw;
+            playerInventory.InventoryUpdated += Redraw;
         }
 
         private void Start()
         {
-            //Redraws the inventory on start
             Redraw();
         }
 
+        // PRIVATE
+
         private void Redraw()
         {
-            //Deletes all the slots he have
             foreach (Transform child in transform)
             {
                 Destroy(child.gameObject);
             }
 
-            //loops through the slots in our inventory
-            for (int i = 0; i < _inventory.GetSize(); i++)
+            for (int i = 0; i < playerInventory.GetSize(); i++)
             {
-                //Instantiate a new slot and set the name and icon etc. 
-                var itemUI = Instantiate(_inventoryItemPrefab, transform);
+                var itemUI = Instantiate(InventoryItemPrefab, transform);
                 itemUI.name = i.ToString();
-                itemUI.Setup(_inventory, i);
+                itemUI.Setup(playerInventory, i);
             }
         }
     }

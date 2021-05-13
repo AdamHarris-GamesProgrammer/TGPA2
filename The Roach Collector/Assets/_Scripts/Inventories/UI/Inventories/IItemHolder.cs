@@ -5,9 +5,11 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
+    /// <summary>
+    /// Allows the `ItemTooltipSpawner` to display the right information.
+    /// </summary>
     public interface IItemHolder
     {
-        //Gets the item from the slot
         InventoryItem GetItem();
     }
 }

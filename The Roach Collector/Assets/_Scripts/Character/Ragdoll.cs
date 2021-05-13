@@ -31,7 +31,7 @@ public class Ragdoll : MonoBehaviour
 
     public void ActivateRagdoll()
     {
-        //Debug.Log("Activating ragdoll");
+        Debug.Log("Activating ragdoll");
         _animator.enabled = false;
         foreach (var rb in _rigidbodies)
         {

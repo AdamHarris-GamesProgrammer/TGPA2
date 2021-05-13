@@ -39,6 +39,12 @@ public class AlarmController : MonoBehaviour
             other.GetComponent<PlayerController>().Alarm = this;
             other.GetComponent<PlayerController>().CanDisableAlarm = true;
         }
+        else if(other.CompareTag("Enemy"))
+        {
+            other.GetComponent<AIAgent>().CanActivateAlarm = true;
+        }
+
+
     }
 
     private void Update()
@@ -56,6 +62,10 @@ public class AlarmController : MonoBehaviour
             other.SendMessage("DisplayAlarm", false);
             other.GetComponent<PlayerController>().Alarm = null;
             other.GetComponent<PlayerController>().CanDisableAlarm = false;
+        }
+        else if (other.CompareTag("Enemy"))
+        {
+            other.GetComponent<AIAgent>().CanActivateAlarm = false;
         }
     }
 

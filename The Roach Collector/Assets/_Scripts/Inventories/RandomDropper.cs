@@ -8,15 +8,16 @@ namespace Harris.Inventories
     public class RandomDropper : ItemDropper
     {
         [Tooltip("How far the pickups can be scattered from the dropper.")]
-        [SerializeField] float _scatterDistance = 1.0f;
-        [SerializeField] DropLibrary _dropLibrary = null;
-        [SerializeField] int _numberOfDrops = 2;
+        [SerializeField] float scatterDistance = 1.0f;
+        [SerializeField] DropLibrary dropLibrary = null;
+        [SerializeField] int numberOfDrops = 2;
 
+        //CONSTANTS
         const int ATTEMPTS = 20;
 
         public void RandomDrop()
         {
-            var drops = _dropLibrary.GetRandomDrops();
+            var drops = dropLibrary.GetRandomDrops();
 
             foreach (var drop in drops)
             {
@@ -29,7 +30,7 @@ namespace Harris.Inventories
 
             for (int i = 0; i < ATTEMPTS; i++)
             {
-                Vector3 randomPoint = transform.position + (Random.insideUnitSphere * _scatterDistance);
+                Vector3 randomPoint = transform.position + (Random.insideUnitSphere * scatterDistance);
 
                 //Samples the position on the nav mesh
                 NavMeshHit hit;

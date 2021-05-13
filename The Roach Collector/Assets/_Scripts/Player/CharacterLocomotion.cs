@@ -8,7 +8,7 @@ public class CharacterLocomotion : MonoBehaviour
 {
     
 
-    [Min(0f)][SerializeField] private float _jumpHeight = 0.5f;
+    [Min(0f)][SerializeField] private float _jumpHeight = 2.0f;
     [Min(0f)][SerializeField] private float _gravity = -9.81f;
     [SerializeField] private float _stepDown = 0.1f;
     [SerializeField] private float _jumpDamping = 0.1f;
@@ -77,9 +77,6 @@ public class CharacterLocomotion : MonoBehaviour
         {
             Jump();
         }
-
-        //if we are crouching then we are not standing etc.
-        _player.IsStanding = !_isCrouching;
     }
     private void FixedUpdate()
     {

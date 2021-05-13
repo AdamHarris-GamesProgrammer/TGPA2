@@ -4,16 +4,21 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
+    /// <summary>
+    /// Root of the tooltip prefab to expose properties to other classes.
+    /// </summary>
     public class ItemTooltip : MonoBehaviour
     {
-        [SerializeField] Text _titleText = null;
-        [SerializeField] Text _bodyText = null;
+        // CONFIG DATA
+        [SerializeField] Text titleText = null;
+        [SerializeField] Text bodyText = null;
 
-        //Sets the information for the tooltip
+        // PUBLIC
+
         public void Setup(InventoryItem item)
         {
-            _titleText.text = item.Name;
-            _bodyText.text = item.Description;
+            titleText.text = item.GetDisplayName();
+            bodyText.text = item.GetDescription();
         }
 
         public void Close()

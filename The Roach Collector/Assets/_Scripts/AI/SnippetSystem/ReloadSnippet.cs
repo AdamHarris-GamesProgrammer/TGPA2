@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class ReloadSnippet : CombatSnippet
 {
-    AIWeapons _aiWeapon;
+    AIWeapons _aiWeapons;
     AIAgent _agent;
+
+    string _name = "Reload Snippet";
 
     public void Action()
     {
         //Debug.Log(_agent.transform.name + " is reloading");
-        if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-        {
-            _aiWeapon.GetEquippedWeapon().Reload();
-        }
+        _aiWeapons.GetEquippedWeapon()._isReloading = true;
     }
 
     public void EnterSnippet()
     {
-        Debug.Log(_agent.transform.name + " Reload Snippet");
-        _aiWeapon.SetFiring(false);
+        Debug.Log("Reload Snippet");
     }
 
     public int Evaluate()
@@ -27,7 +25,7 @@ public class ReloadSnippet : CombatSnippet
         int returnScore = 0;
 
 
-        if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+        if (_aiWeapons.GetEquippedWeapon().NeedToReload())
         {
             returnScore = 100;
         }
@@ -37,13 +35,19 @@ public class ReloadSnippet : CombatSnippet
 
     public void Initialize(AIAgent agent)
     {
-        _aiWeapon = agent.GetComponent<AIWeapons>();
+        _aiWeapons = agent.GetComponent<AIWeapons>();
         _agent = agent;
     }
 
     public bool IsFinished()
     {
         //If we no longer need to reload.
-        return !_aiWeapon.GetEquippedWeapon().NeedToReload;
+        return !_aiWeapons.GetEquippedWeapon().NeedToReload();
     }
+
+    public string GetName()
+    {
+        return _name;
+    }
+
 }

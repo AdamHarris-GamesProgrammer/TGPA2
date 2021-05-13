@@ -10,8 +10,7 @@ public enum AiStateId
     FindWeapon,
     Patrol,
     CombatState,
-    GotToPlayerLocation,
-    SearchForPlayer
+    Melee
 }
 
 public interface AIState

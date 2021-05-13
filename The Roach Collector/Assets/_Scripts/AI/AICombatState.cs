@@ -27,11 +27,8 @@ public class AICombatState : AIState
     {
         if (_playerHealth.IsDead)
         {
-            Debug.Log("Player Dead");
             agent.stateMachine.ChangeState(AiStateId.Idle);
         }
-
-        if (agent.BeingKilled) return;
 
         if (_currentSnippet.IsFinished())
         {
@@ -78,8 +75,6 @@ public class AICombatState : AIState
 
     public void Enter(AIAgent agent)
     {
-        //Debug.Log("Entered Combat State");
-
         //Decide starting snippet
         int highestScore = 0;
         foreach (CombatSnippet behavior in _combatBehaviours)
@@ -93,12 +88,11 @@ public class AICombatState : AIState
                 _currentSnippet = behavior;
             }
         }
-
         agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
     public void Exit(AIAgent agent)
     {
-        //Debug.Log("Exiting Combat State");
+
     }
 }

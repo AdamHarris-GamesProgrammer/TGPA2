@@ -18,11 +18,7 @@ namespace TGP.Control
 
         public bool InKillAnimation { get { return _inKillAnimation; } }
 
-        public AIAgent AgentInRange { get { return _agentInRange; }
-            set {
-                _agentInRange = value;
-                gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
-            } }
+        public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm = null;
@@ -36,34 +32,21 @@ namespace TGP.Control
         [SerializeField] GameObject _applyingSpeedText = null;
 
 
-        [SerializeField] GameObject _aimCam;
-        [SerializeField] GameObject _followCam;
-        public GameObject AimCam { get { return _aimCam; } }
-        public GameObject FollowCam { get { return _followCam; } }
-
         LockedDoor _doorInRange = null;
-
-        bool _isShooting = false;
-        bool _isStanding = true;
-
-        public bool IsShooting { get { return _isShooting; } set { _isShooting = value; } }
-        public bool IsStanding { get { return _isStanding; } set { _isStanding = value; } }
-
         public LockedDoor DoorInRange
         {
             get { return _doorInRange; }
             set
             {
                 _doorInRange = value;
-                SendMessage("DisplayDoorPrompt", value);
-                
+                if (value == null) _unlockDoorPrompt.SetActive(false);
+                else _unlockDoorPrompt.SetActive(true);
             }
         }
 
         public void ResetStats()
         {
-            for (int i = 0; i < _stats.Length; i++)
-            {
+            for(int i = 0; i < _stats.Length; i++) {
                 _stats[i]._value = 0.0f;
             }
         }
@@ -76,6 +59,10 @@ namespace TGP.Control
         ActionStore _actionSlots;
 
         Animator _animator;
+
+        [SerializeField] Vector3 _assassinOffset = Vector3.back;
+
+        [SerializeField] GameObject _unlockDoorPrompt;
 
         Inventory _playerInventory;
 
@@ -103,7 +90,7 @@ namespace TGP.Control
 
         public StatValues GetStat(StatID id)
         {
-            foreach (StatValues stat in _stats)
+            foreach(StatValues stat in _stats)
             {
                 if (stat._id == id) return stat;
             }
@@ -155,11 +142,8 @@ namespace TGP.Control
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //Debug.Log("F is pressed");
-
                 if (_agentInRange != null && !_detected)
                 {
-                    //Debug.Log("Assassinate");
                     if (_agentInRange.GetHealth().IsDead) return;
                     //TODO: Somehow make the animation look better 
 
@@ -173,6 +157,7 @@ namespace TGP.Control
                     _agentInRange.BeingKilled = true;
 
                     _inKillAnimation = true;
+
 
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
 
@@ -233,12 +218,20 @@ namespace TGP.Control
                     _alarm.DisableAlarm();
                 }
             }
-
             InteractWithAssassination();
 
-            InteractWithActionBar();
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                InteractWithEquipment();
+
+            }
+            else
+            {
+                InteractWithActionBar();
+            }
 
             InteractWithLockedDoor();
+
 
             InteractWithUsables();
 
@@ -275,18 +268,52 @@ namespace TGP.Control
 
         }
 
+        private void InteractWithEquipment()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                //Debug.Log("Shift + 1");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                //Debug.Log("Shift + 2");
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                //Debug.Log("Shift + 3");
+            }
+        }
+
         private void InteractWithActionBar()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))      _actionSlots.Use(0, this.gameObject);
-            else if (Input.GetKeyDown(KeyCode.Alpha2)) _actionSlots.Use(1, this.gameObject);
-            else if (Input.GetKeyDown(KeyCode.Alpha3)) _actionSlots.Use(2, this.gameObject);
-            else if (Input.GetKeyDown(KeyCode.Alpha4)) _actionSlots.Use(3, this.gameObject);
-            else if (Input.GetKeyDown(KeyCode.Alpha5)) _actionSlots.Use(4, this.gameObject);
-            else if (Input.GetKeyDown(KeyCode.Alpha6)) _actionSlots.Use(5, this.gameObject);
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _actionSlots.Use(0, this.gameObject);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                _actionSlots.Use(1, this.gameObject);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                _actionSlots.Use(2, this.gameObject);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                _actionSlots.Use(3, this.gameObject);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                _actionSlots.Use(4, this.gameObject);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                _actionSlots.Use(5, this.gameObject);
+            }
         }
 
         //Animation event from the StealthAttack animation 
-#pragma warning disable IDE0051 // Remove unused private members //This is just disabling a warning as OutOfKillAnim is not technically used in code but instead is called in a animation
+#pragma warning disable IDE0051 // Remove unused private members
         void OutOfKillAnim()
 #pragma warning restore IDE0051 // Remove unused private members
         {

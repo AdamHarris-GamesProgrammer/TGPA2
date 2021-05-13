@@ -1,4 +1,3 @@
-using Harris.Inventories;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,89 +19,71 @@ public class RaycastWeapon : MonoBehaviour
         public TrailRenderer _tracer;
     }
 
+    
 
-    [Header("General Settings")]
-    [SerializeField] private Transform _raycastOrigin = null;
-    [SerializeField] private WeaponConfig _config;
-    [SerializeField] private LayerMask _layerMask;
-
-    [Header("Ammo Settings")]
-    [SerializeField] private int _clipAmmo = 30;
-    [SerializeField] private int _totalAmmo = 90;
-    [SerializeField] private DamageType _type;
-
-    [Header("VFX Settings")]
+    private bool _isFiring = false;
     [SerializeField] private ParticleSystem _muzzleFlash = null;
     [SerializeField] private ParticleSystem _metalHitEffect = null;
     [SerializeField] private ParticleSystem _fleshHitEffect = null;
+
+    [SerializeField] private Transform _raycastOrigin = null;
+
+    [SerializeField] public WeaponConfig _config;
+    public WeaponConfig Config { get { return _config; } }
+
+    [SerializeField] public int _clipAmmo = 30;
+    [SerializeField] public int _totalAmmo = 90;
+    [SerializeField] public float _reloadDuration = 1.0f;
+    [SerializeField] private float _reloadTimeLeft = 1.0f;
+    [SerializeField] public bool _isReloading = false;
+    [SerializeField] private DamageType _type;
+    private float _damageMultiplier = 1.0f;
+
+    public LayerMask _layerMask;
+
+    public DamageType GetDamageType()
+    {
+        return _type;
+    }
+
+    public void SetDamageMultiplier(float val)
+    {
+        _damageMultiplier = val;
+    }
+
+    public bool NeedToReload()
+    {
+        return (_clipAmmo <= 0);
+    }
+
     [SerializeField] private TrailRenderer _tracerEffect = null;
 
-    public bool IsReloading { get { return _isReloading; } }
-    public WeaponConfig Config { get { return _config; } }
-    public int ClipAmmo { get { return _clipAmmo; } }
-    public int TotalAmmo { get { return _totalAmmo; } set { _totalAmmo = value; } }
-    public Transform RaycastOrigin { get { return _raycastOrigin; } }
-    public bool IsFiring { get { return _isFiring; } }
-    public bool NeedToReload { get { return (_clipAmmo <= 0); } }
-    public WeaponRecoil Recoil { get { return _weaponRecoil; } }
-    public DamageType DamageType { get { return _type; } }
-    public float Damage { get { return _config.Damage * _damageMultiplier; } }
-    public float DamageMultiplier { get { return _damageMultiplier; } set { _damageMultiplier = value; } }
-
-    private float _maxLifeTime = 3.0f;
-    private float _damageMultiplier = 1.0f;
-    float _timeSinceLastShot = 0.0f;
-    float _timeBetweenShots;
-    private float _reloadTimeLeft = 1.0f;
-
-    private bool _isFiring = false;
-    private bool _isReloading = false;
-
-    Inventory _inventory;
-    AudioSource _audioSoruce;
     private WeaponRecoil _weaponRecoil;
-    Ray _ray;
-    RaycastHit _hitInfo;
+    public WeaponRecoil Recoil { get { return _weaponRecoil; } }
 
-    List<Bullet> _bullets = new List<Bullet>();
+    public Transform GetRaycastOrigin()
+    {
+        return _raycastOrigin;
+    }
 
-    void Awake()
+    public float GetDamage()
+    {
+        return _config.Damage * _damageMultiplier;
+    }
+
+    public bool IsFiring()
+    {
+        return _isFiring;
+    }
+
+    private void Awake()
     {
         _weaponRecoil = GetComponent<WeaponRecoil>();
     }
 
-    public void Setup()
-    {
-        _inventory = GetComponentInParent<Inventory>();
-        _audioSoruce = GetComponent<AudioSource>();
-
-        if (_inventory)
-        {
-            _totalAmmo = 0;
-        }
-        else
-        {
-            _clipAmmo = _config.ClipSize;
-        }
-
-        _timeBetweenShots = 1.0f / _config.FireRate;
-    }
-
     public void Update()
     {
-        _timeSinceLastShot += Time.deltaTime;
-
-        if(_inventory)
-        {
-            if (_inventory.HasItem(_config.AmmoType))
-            {
-                int index = _inventory.FindItem(_config.AmmoType);
-
-                _totalAmmo = _inventory.GetNumberInSlot(index);
-            }
-        }
-
-        if (_isReloading)
+        if (_isReloading == true)
         {
             if (_reloadTimeLeft > 0)
             {
@@ -110,53 +91,35 @@ public class RaycastWeapon : MonoBehaviour
             }
             else
             {
-                _reloadTimeLeft = _config.ReloadDuration;
+                _reloadTimeLeft = _reloadDuration;
                 _isReloading = false;
 
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
-                //Debug.Log("Bullet load");
-                _audioSoruce.PlayOneShot(_config.BulletLoad);
-
-
                 if (_totalAmmo < _config.ClipSize)
                 {
                     _clipAmmo = _totalAmmo;
                     _totalAmmo = 0;
-
-                    RemoveAmmoFromInventory(_clipAmmo);
                 }
                 else
                 {
                     _clipAmmo = _config.ClipSize;
                     _totalAmmo -= _config.ClipSize;
-
-                    RemoveAmmoFromInventory(_config.ClipSize);
                 }
-                //Debug.Log("Magazine load");
-                _audioSoruce.PlayOneShot(_config.MagazineLoad);
-                //Debug.Log("Safety Switch");
-                _audioSoruce.PlayOneShot(_config.SafetySwitch);
-                //Debug.Log("Cock Sound");
-                _audioSoruce.PlayOneShot(_config.CockSound);
             }
         }
         
     }
 
-    void RemoveAmmoFromInventory(int amount)
-    {
-        if (_inventory)
-        {
-            if (_inventory.HasItem(_config.AmmoType))
-            {
-                int index = _inventory.FindItem(_config.AmmoType);
+    Ray _ray;
+    RaycastHit _hitInfo;
 
-                _inventory.RemoveFromSlot(index, amount);
-            }
-        }
-    }
+    float _accumulatedTime;
+
+    List<Bullet> _bullets = new List<Bullet>();
+
+    public float _maxLifeTime = 3.0f;
 
     Vector3 GetPosition(Bullet bullet)
     {
@@ -181,6 +144,7 @@ public class RaycastWeapon : MonoBehaviour
         return bullet;
     }
 
+
     private void Fire(Vector3 target)
     {
         _muzzleFlash.Emit(1);
@@ -190,51 +154,24 @@ public class RaycastWeapon : MonoBehaviour
         _bullets.Add(bullet);
 
         _weaponRecoil.GenerateRecoil();
-
-        //Debug.Log("Continuous Fire");
-        _audioSoruce.PlayOneShot(_config.ContinuousFire);
     }
 
     public void StartFiring()
     {
-        if(_clipAmmo <= 0)
-        {
-            if (_timeSinceLastShot > _timeBetweenShots)
-            {
-                //Debug.Log("Dry Fire");
-                _audioSoruce.PlayOneShot(_config.DryFire);
-            }
-            Reload();
-        }
-        else if (_isReloading)
-        {
-
-        }
-        else
-        {
-            if(_timeSinceLastShot > _timeBetweenShots)
-            {
-                //Debug.Log("Start Fire");
-                _audioSoruce.PlayOneShot(_config.StartFire);
-            }
-            
-            _isFiring = true;
-        }
+        _accumulatedTime = 0.0f;
+        _isFiring = true;
+        _weaponRecoil.Reset();
+        //Fire();
     }
 
     public void StopFiring()
     {
         _isFiring = false;
-
-        if(_config.EndFire != null)
-        {
-            _audioSoruce.PlayOneShot(_config.EndFire);
-        }
     }
 
-    public void UpdateBullets()
+    public void UpdateBullets(float dt)
     {
-        SimulateBullets();
+        SimulateBullets(dt);
         DestroyBullets();
     }
 
@@ -244,13 +181,13 @@ public class RaycastWeapon : MonoBehaviour
         _bullets.RemoveAll(bullets => bullets._time >= _maxLifeTime);
     }
 
-     void SimulateBullets()
+     void SimulateBullets(float dt)
     {
         _bullets.ForEach(bullet =>
         {
             //p0 origin position
             Vector3 p0 = GetPosition(bullet);
-            bullet._time += Time.deltaTime;
+            bullet._time += dt;
 
             //p1 new position
             Vector3 p1 = GetPosition(bullet);
@@ -259,17 +196,6 @@ public class RaycastWeapon : MonoBehaviour
             RayCastSegment(p0, p1, bullet);
 
         });
-    }
-
-    public void Reload()
-    {
-        if (!_isReloading)
-        {
-            _audioSoruce.PlayOneShot(_config.MagazineUnload);
-
-        }
-        _isReloading = true;
-
     }
 
     void RayCastSegment(Vector3 start, Vector3 end, Bullet bullet)
@@ -282,8 +208,6 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
         {
-            //Debug.Log("Hit: " + _hitInfo.transform.name);
-
             Rigidbody hitRb = _hitInfo.transform.gameObject.GetComponent<Rigidbody>();
             if (hitRb)
             {
@@ -311,8 +235,7 @@ public class RaycastWeapon : MonoBehaviour
             }
 
             //TODO: Error triggered here by Tracer being destroyed before this code
-            //This is not very efficient as it will be done each bullet update per bullet per frame
-            //Better way is needed >: ( 
+            //This is very efficient as it will be done each bullet update per bullet per frame
             if(bullet._tracer != null)
             {
                 bullet._tracer.transform.position = _hitInfo.point;
@@ -329,32 +252,37 @@ public class RaycastWeapon : MonoBehaviour
         }
     }
 
-    public void UpdateWeapon(Vector3 target)
+    public void UpdateWeapon(float deltaTime, Vector3 target)
     {
         if(_isFiring)
         {
-            UpdateFiring(target);
+            UpdateFiring(deltaTime, target);
         }
 
-        UpdateBullets();
+        _accumulatedTime += deltaTime;
+        UpdateBullets(deltaTime);
+        
     }
 
-    public void UpdateFiring(Vector3 target)
+    public void UpdateFiring(float deltaTime, Vector3 target)
     {
-        if(_timeSinceLastShot > _timeBetweenShots)
+        float fireInterval = 1.0f / _config.FireRate;
+        //Debug.Log("Fire Interval: " + fireInterval);
+        _accumulatedTime += deltaTime;
+        while(_accumulatedTime > fireInterval)
         {
-            _timeSinceLastShot = 0.0f;
-            for (int i = 0; i < _config.BulletCount; i++)
-            {
-
+            for (int i = 0; i < _config.BulletCount; i++) {
+                
                 Fire(target += UnityEngine.Random.insideUnitSphere * _config.WeaponSpread);
+                //Debug.Log("Fire");
+                //Debug.Log("Clip ammo: " + _clipAmmo + " Mag Size: " + _config.ClipSize);
             }
             _clipAmmo--;
-
             if (_clipAmmo <= 0)
             {
                 StopFiring();
             }
+            _accumulatedTime = 0.0f;
         }
     }
 }

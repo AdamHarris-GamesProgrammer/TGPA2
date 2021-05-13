@@ -13,19 +13,14 @@ public class CharacterAiming : MonoBehaviour
 
     PlayerController _controller;
 
-    [SerializeField] GameObject _followCam;
-    [SerializeField] GameObject _aimCam;
-
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<PlayerController>();
         _mainCamera = Camera.main;
         Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
     }
-
-    
 
     // Update is called once per frame
     void FixedUpdate()
@@ -35,17 +30,6 @@ public class CharacterAiming : MonoBehaviour
         if (_controller.InKillAnimation) return;
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, yawCamera, 0), _turnSpeed * Time.fixedDeltaTime);
-
-        if (Input.GetMouseButton(1))
-        {
-            _aimCam.SetActive(true);
-            _followCam.SetActive(false);
-        }
-        else
-        {
-            _aimCam.SetActive(false);
-            _followCam.SetActive(true);
-        }
     }
 
     private void LateUpdate()
