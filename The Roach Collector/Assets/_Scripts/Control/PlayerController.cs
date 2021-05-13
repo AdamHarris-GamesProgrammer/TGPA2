@@ -49,6 +49,20 @@ namespace TGP.Control
         public bool IsShooting { get { return _isShooting; } set { _isShooting = value; } }
         public bool IsStanding { get { return _isStanding; } set { _isStanding = value; } }
 
+        private float _currency = 0.0f;
+
+        public void SpendMoney(float amount) {
+            _currency -= amount;
+        }
+
+        public void GainMoney(float amount) {
+            _currency += amount;
+        }
+
+        public bool HasEnoughMoney(float amount) {
+            return (_currency - amount >= 0.0f);
+        }
+
         public LockedDoor DoorInRange
         {
             get { return _doorInRange; }

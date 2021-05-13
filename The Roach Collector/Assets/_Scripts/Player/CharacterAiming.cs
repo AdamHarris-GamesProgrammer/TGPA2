@@ -21,6 +21,7 @@ public class CharacterAiming : MonoBehaviour
     {
         _controller = GetComponent<PlayerController>();
         _mainCamera = Camera.main;
+        //Debug.Log("Character Aiming cursor");
         Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
     }
