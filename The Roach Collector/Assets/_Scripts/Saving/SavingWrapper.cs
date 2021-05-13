@@ -20,4 +20,12 @@ public class SavingWrapper : MonoBehaviour
     {
         
     }
+
+    public void Save() {
+        FindObjectOfType<SavingSystem>().Save("save.dat");
+    }
+
+    public void Load() {
+        FindObjectOfType<SavingSystem>().Load("save.dat");
+    }
 }

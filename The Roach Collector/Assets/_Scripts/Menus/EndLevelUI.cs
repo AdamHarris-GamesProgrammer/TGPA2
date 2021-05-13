@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Harris.Saving;
 
+[System.Serializable]
+struct LevelData
+{
+    public int highscore;
+    public int bestTime;
+    public int highestRank;
+    public int roachesCollected;        
+}
 
-public class EndLevelUI : MonoBehaviour
+public class EndLevelUI : MonoBehaviour, ISaveable
 {
     public string LevelName;
     public Text LevelNameTXT;
@@ -21,11 +30,21 @@ public class EndLevelUI : MonoBehaviour
     [SerializeField]private Sprite[] rankSprites = new Sprite [6];
     [SerializeField]private Image rankImage;
     [SerializeField]private int score;
+    [SerializeField]private int time;
+    [SerializeField]private int rank;
 
 
+    private int highscore;
+    private int bestTime;
+    private int highestRank;
+    private int roachesCollected; 
+
+    
 
     public void NextLevel()
     {
+        FindObjectOfType<SavingWrapper>().Save();
+
         SceneManager.LoadScene("Level0" + (currentLevel + 1).ToString());
     }
 
@@ -46,41 +65,20 @@ public class EndLevelUI : MonoBehaviour
 
     void Start()
     {
+        //FindObjectOfType<SavingWrapper>().Save();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SetLevelName();
         SetRoaches();
         CheckRank();
-    }
-
-    void GetBestScore()
-    {
-
-    }
-
-    void GetBestTime()
-    {
-
-    }
-
-    void SetBestScore()
-    {
-
-    }
-
-    void SetBestTime()
-    {
-
+        Debug.Log(score);
+        score+= 1000;
+        //FindObjectOfType<SavingWrapper>().Save();
     }
 
     void SetLevelName()
     {
         LevelNameTXT.text = LevelName; 
-    }
-
-    void GetRoaches()
-    {
-
     }
 
     void SetRoaches()
@@ -115,31 +113,74 @@ public class EndLevelUI : MonoBehaviour
         if (score >= ranks[0])
         {
             rankImage.sprite = rankSprites[5];
+            rank = 0;
         }
         //D
         else if (score >= ranks[1])
         {
             rankImage.sprite = rankSprites[4];
+            rank = 1;
         }
         //C
         else if (score >= ranks[2])
         {
             rankImage.sprite = rankSprites[3];
+            rank = 2;
         }
         //B
         else if (score >= ranks[3])
         {
             rankImage.sprite = rankSprites[2];
+            rank = 3;
         }
         //A
         else if (score >= ranks[4])
         {
             rankImage.sprite = rankSprites[1];
+            rank = 4;
         }
         //S
         else 
         {
             rankImage.sprite = rankSprites[0];
+            rank = 5;
         }
     }
+
+    public object Save()
+    {
+        
+        LevelData data = new LevelData();
+
+        if (score > highscore)
+        {
+            data.highscore = score;
+        }
+        if (time > bestTime)
+        {
+            data.bestTime = time;
+        }
+        if (roachCount > roachesCollected)
+        {
+            data.roachesCollected = roachCount;
+        }
+        if (rank > highestRank)
+        {
+            data.highestRank = rank;
+        }
+
+        return data;
+    }
+
+    public void Load(object state)
+    {
+        
+        LevelData data = (LevelData)state;
+        highscore = data.highscore;
+        bestTime = data.bestTime;
+        highestRank = data.highestRank;
+        roachesCollected = data.roachesCollected;
+    }
+
+    
 }
