@@ -11,6 +11,7 @@ namespace Harris.UI
         [SerializeField] GameObject _uiContainer = null;
 
         public GameObject UIContainer {  get { return _uiContainer; } }
+        public GameObject UIGuideContainer;
 
         private void Awake()
         {
@@ -24,6 +25,7 @@ namespace Harris.UI
             if (Input.GetKeyDown(_toggleKey))
             {
                 _uiContainer.SetActive(!_uiContainer.activeSelf);
+                UIGuideContainer.SetActive(!_uiContainer.activeSelf);
 
                 if (!_uiContainer.activeSelf)
                 {
