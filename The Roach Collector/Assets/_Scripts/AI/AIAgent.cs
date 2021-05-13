@@ -8,19 +8,16 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-    
-
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
-
-    [SerializeField] private int _AiClipBullets = 0;
-    [SerializeField] private int _AiTotalBullets = 0;
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
     [SerializeField] private AudioClip _alarmPrompt = null;
     [SerializeField] private AiStateId _currentState = AiStateId.Idle;
+    [SerializeField] private LayerMask _characterMask;
+    public LayerMask CharacterMask {  get { return _characterMask; } }
 
     Transform _player;
     AIWeapons _aiWeapon;
@@ -34,10 +31,12 @@ public class AIAgent : MonoBehaviour
     List<AlarmController> _alarmsInScene;
     List<CoverController> _coversInScene;
 
-    bool _beingKilled = false;
-    bool _usingMelee = false;
+    CombatZone _owningZone;
+    public CombatZone Zone { get { return _owningZone; } }
 
-    public bool BeingKilled { set { _beingKilled = value; } }
+    bool _beingKilled = false;
+
+    public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
@@ -48,7 +47,6 @@ public class AIAgent : MonoBehaviour
     }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] private RaycastWeapon _MeleeWeapon;
 
     public Transform GetPlayer()
     {
@@ -63,6 +61,8 @@ public class AIAgent : MonoBehaviour
         _agentsInScene = new List<AIAgent>();
         _alarmsInScene = new List<AlarmController>();
         _coversInScene = new List<CoverController>();
+
+        _owningZone = GetComponentInParent<CombatZone>();
 
         _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
@@ -80,7 +80,8 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
-        stateMachine.RegisterState(new AIMeleeState(this));
+        stateMachine.RegisterState(new AISearchForPlayerState(this));
+        stateMachine.RegisterState(new AICheckPlayerState(this));
 
         if (_startingWeapon)
         {
@@ -105,21 +106,6 @@ public class AIAgent : MonoBehaviour
 
         stateMachine.Update();
         _currentState = stateMachine._currentState;
-
-        _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
-        _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
-
-        if(_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
-        {
-            _usingMelee = true;
-            Debug.Log("Change Weapon");
-            RaycastWeapon meleeweapon = Instantiate(_MeleeWeapon);
-            _aiWeapon.EquipWeapon(meleeweapon);
-
-            stateMachine.ChangeState(AiStateId.Melee);
-
-        }
-
     }
 
     public void Aggrevate()
@@ -131,98 +117,16 @@ public class AIAgent : MonoBehaviour
 
     public void PlayBackupSound()
     {
-        Debug.Log("Play Backup Prompt");
+        //Debug.Log("Play Backup Prompt");
         _audioSource.PlayOneShot(_backupPrompt);
     }
 
     public void PlayAlarmPrompt()
     {
-        Debug.Log("Play Alarm Prompt");
+        //Debug.Log("Play Alarm Prompt");
         _audioSource.PlayOneShot(_alarmPrompt);
     }
 
-    public List<AlarmController> GetAlarmsInRange(float distance)
-    {
-        List<AlarmController> alarmsInDistance = new List<AlarmController>();
-
-        foreach (AlarmController alarm in _alarmsInScene)
-        {
-            if (Vector3.Distance(transform.position, alarm.transform.position) < distance)
-            {
-                alarmsInDistance.Add(alarm);
-            }
-        }
-
-        return alarmsInDistance;
-    }
-
-    public List<AIAgent> GetEnemiesInRange(float distance, bool includeDead = false)
-    {
-        List<AIAgent> agentsInDistance = new List<AIAgent>();
-
-        if(includeDead)
-        {
-            foreach (AIAgent enemy in _agentsInScene)
-            {
-                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
-                {
-                    agentsInDistance.Add(enemy);
-                }
-            }
-        }
-        else
-        {
-            foreach (AIAgent enemy in _agentsInScene)
-            {
-                //Don't add the enemy if the there dead
-                if (enemy.GetHealth().IsDead) continue;
-
-                if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
-                {
-                    agentsInDistance.Add(enemy);
-                }
-            }
-        }
-
-
-
-        return agentsInDistance;
-    }
-
-    public List<CoverController> GetCoversInRange(float distance)
-    {
-        List<CoverController> coversInDistance = new List<CoverController>();
-
-        foreach(CoverController cover in _coversInScene)
-        {
-            if(Vector3.Distance(transform.position, cover.transform.position) < distance)
-            {
-                coversInDistance.Add(cover);
-            }
-        }
-
-        return coversInDistance;
-    }
-
-    //Used for telling the player when they are in range for assassination attack
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player in range");
-            _player.GetComponent<PlayerController>().AgentInRange = this;
-        }
-    }
-
-    //Used for telling the player when they are no longer in range for assassination attack
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("Player not in range");
-            _player.GetComponent<PlayerController>().AgentInRange = null;
-        }
-    }
 
     //Called by Unity Animator in the StealthAttackResponse and BrutalAttackResponse animations
     void DeathAnimEvent()

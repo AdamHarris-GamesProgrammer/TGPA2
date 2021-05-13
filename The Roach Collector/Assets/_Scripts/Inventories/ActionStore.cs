@@ -5,147 +5,117 @@ using Harris.Saving;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// Provides the storage for an action bar. The bar has a finite number of
-    /// slots that can be filled and actions in the slots can be "used".
-    /// 
-    /// This component should be placed on the GameObject tagged "Player".
-    /// </summary>
     public class ActionStore : MonoBehaviour, ISaveable
     {
-        // STATE
-        Dictionary<int, DockedItemSlot> dockedItems = new Dictionary<int, DockedItemSlot>();
+        Dictionary<int, DockedItemSlot> _dockedItems = new Dictionary<int, DockedItemSlot>();
         private class DockedItemSlot 
         {
             public InventoryItem item;
             public int number;
         }
 
-        // PUBLIC
-
-        /// <summary>
-        /// Gets the amount of action slots the player has access to.
-        /// </summary>
-        public int GetActionBarSize()
-        {
-            return dockedItems.Count;
-        }
-
-        /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
         public event Action storeUpdated;
 
-        /// <summary>
-        /// Get the action at the given index.
-        /// </summary>
         public InventoryItem GetItem(int index)
         {
-            if (dockedItems.ContainsKey(index))
+            //checks if we actually have a slot for the index passed in
+            if (_dockedItems.ContainsKey(index))
             {
-                return dockedItems[index].item;
+                //Gets the item
+                return _dockedItems[index].item;
             }
             return null;
         }
 
-        /// <summary>
-        /// Get the number of items left at the given index.
-        /// </summary>
-        /// <returns>
-        /// Will return 0 if no item is in the index or the item has
-        /// been fully consumed.
-        /// </returns>
         public int GetNumber(int index)
         {
-            if (dockedItems.ContainsKey(index))
+            //Gets the number of items in the passed in slot
+            if (_dockedItems.ContainsKey(index))
             {
-                return dockedItems[index].number;
+                return _dockedItems[index].number;
             }
             return 0;
         }
 
-        /// <summary>
-        /// Add an item to the given index.
-        /// </summary>
-        /// <param name="item">What item should be added.</param>
-        /// <param name="index">Where should the item be added.</param>
-        /// <param name="number">How many items to add.</param>
-        public void AddAction(InventoryItem item, int index, int number)
+        public void AddItem(InventoryItem item, int index, int number)
         {
-            if (dockedItems.ContainsKey(index))
+            //if we already have an index for the index
+            if (_dockedItems.ContainsKey(index))
             {  
-                if (object.ReferenceEquals(item, dockedItems[index].item))
+                //if the object in the action slot is the same as the passed in item
+                if (object.ReferenceEquals(item, _dockedItems[index].item))
                 {
-                    dockedItems[index].number += number;
+                    //Then add the number of items to this slot
+                    _dockedItems[index].number += number;
                 }
             }
+            //We have not got this slot filled
             else
             {
+                //Create a slot instance and set it up
                 var slot = new DockedItemSlot();
                 slot.item = item;
                 slot.number = number;
-                dockedItems[index] = slot;
+                _dockedItems[index] = slot;
                 //Debug.Log(slot.item.GetDisplayName() + " placed in action bar");
             }
+
+            //Update the action bar
             if (storeUpdated != null)
             {
                 storeUpdated();
             }
         }
 
-        /// <summary>
-        /// Use the item at the given slot. If the item is consumable one
-        /// instance will be destroyed until the item is removed completely.
-        /// </summary>
-        /// <param name="user">The character that wants to use this action.</param>
-        /// <returns>False if the action could not be executed.</returns>
         public bool Use(int index, GameObject user)
         {
-            if (dockedItems.ContainsKey(index))
+            //Checks we have an item in this slot
+            if (_dockedItems.ContainsKey(index))
             {
-                ActionItem action = dockedItems[index].item as ActionItem;
-
+                //If the item is an action item
+                ActionItem action = _dockedItems[index].item as ActionItem;
                 if (action)
                 {
                    action.Use(user);
-                    if (action.isConsumable())
+                    if (action.IsConsumable)
                     {
                         RemoveItems(index, 1);
                     }
                     return true;
                 }
 
-                ArmorConfig armor = dockedItems[index].item as ArmorConfig;
+                //if the item is an armor item
+                ArmorConfig armor = _dockedItems[index].item as ArmorConfig;
                 if (armor)
                 {
                     armor.Use(gameObject);
                     RemoveItems(index, 1);
                 }
 
-                //TODO: Implement WeaponConfig InventoryItem
-                WeaponConfig weapon = dockedItems[index].item as WeaponConfig;
+                //if the item is a weapon
+                WeaponConfig weapon = _dockedItems[index].item as WeaponConfig;
                 if(weapon)
                 {
                     weapon.Use(gameObject);
                 }
-                //if weapon
-                    //equip weapon
 
             }
             return false;
         }
 
-        /// <summary>
-        /// Remove a given number of items from the given slot.
-        /// </summary>
         public void RemoveItems(int index, int number)
         {
-            if (dockedItems.ContainsKey(index))
+            //If we have this index
+            if (_dockedItems.ContainsKey(index))
             {
-                dockedItems[index].number -= number;
-                if (dockedItems[index].number <= 0)
+                //remove the amount of items we are using
+                _dockedItems[index].number -= number;
+
+                //if there is now 0 items in the slot 
+                if (_dockedItems[index].number <= 0)
                 {
-                    dockedItems.Remove(index);
+                    //then remove the item
+                    _dockedItems.Remove(index);
                 }
                 if (storeUpdated != null)
                 {
@@ -155,34 +125,27 @@ namespace Harris.Inventories
             
         }
 
-        /// <summary>
-        /// What is the maximum number of items allowed in this slot.
-        /// 
-        /// This takes into account whether the slot already contains an item
-        /// and whether it is the same type. Will only accept multiple if the
-        /// item is consumable.
-        /// </summary>
-        /// <returns>Will return int.MaxValue when there is not effective bound.</returns>
         public int MaxAcceptable(InventoryItem item, int index)
         {
-            
-            //if (!actionItem) return 0;
-
-            if (dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, dockedItems[index].item))
+            //if we have an item here and the item is not the same as the passed in item
+            if (_dockedItems.ContainsKey(index) && !object.ReferenceEquals(item, _dockedItems[index].item))
             {
                 return 0;
             }
 
+            //if the item is an action item
             var actionItem = item as ActionItem;
             if (actionItem)
             {
-                if (actionItem.isConsumable())
+                //if it is consumable
+                if (actionItem.IsConsumable)
                 {
+                    //return the max value
                     return int.MaxValue;
                 }
             }
 
-            if (dockedItems.ContainsKey(index))
+            if (_dockedItems.ContainsKey(index))
             {
                 return 0;
             }
@@ -190,7 +153,6 @@ namespace Harris.Inventories
             return 1;
         }
 
-        /// PRIVATE
 
         [System.Serializable]
         private struct DockedItemRecord
@@ -202,10 +164,10 @@ namespace Harris.Inventories
         object ISaveable.Save()
         {
             var state = new Dictionary<int, DockedItemRecord>();
-            foreach (var pair in dockedItems)
+            foreach (var pair in _dockedItems)
             {
                 var record = new DockedItemRecord();
-                record.itemID = pair.Value.item.GetItemID();
+                record.itemID = pair.Value.item.ItemID;
                 record.number = pair.Value.number;
                 state[pair.Key] = record;
             }
@@ -217,7 +179,7 @@ namespace Harris.Inventories
             var stateDict = (Dictionary<int, DockedItemRecord>)state;
             foreach (var pair in stateDict)
             {
-                AddAction(InventoryItem.GetFromID(pair.Value.itemID), pair.Key, pair.Value.number);
+                AddItem(InventoryItem.GetFromID(pair.Value.itemID), pair.Key, pair.Value.number);
             }
         }
     }

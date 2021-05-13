@@ -37,20 +37,24 @@ public class FieldOfView : MonoBehaviour
         if (_visibleTargets.Count > 0)
         {
             _playerGO.GetComponent<PlayerController>().IsDetected = true;
+            //Debug.Log("Enemy in fov");
             _isEnemyinFOV = true;
         }
         else
         {
+            _playerGO.GetComponent<PlayerController>().IsDetected = false;
+            //Debug.Log("Enemy not in fov");
             _isEnemyinFOV = false;
         }
 
-        if(_hasTimerStarted && _detectionTimer <= _detectedValue)
+        if(_hasTimerStarted)
         {
+
             _detectionTimer += Time.deltaTime;
         }
         else
         {
-            _detectionTimer = 0;
+            _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
         }
 
     }
@@ -58,9 +62,10 @@ public class FieldOfView : MonoBehaviour
     void FindVisibleTargets()
     {
         _visibleTargets.Clear();
-        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
+        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius / 2, _targetMask);
         foreach (Collider target in TargetsInRadius)
         {
+            //Debug.Log(target.transform.name);
             Transform targetTransform = target.transform;
             Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
             
@@ -70,7 +75,7 @@ public class FieldOfView : MonoBehaviour
 
                 RaycastHit hitInfo;
          
-                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, DistanceToTarget))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius / 2, _targetMask))
                 {
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
@@ -85,10 +90,11 @@ public class FieldOfView : MonoBehaviour
                         }
 
 
-                        if(DistanceToTarget <= (_viewRadius / 2))
+                        if(DistanceToTarget <= (_viewRadius / 8))
                         {
                             //Debug.Log("Player is too close");
                             _visibleTargets.Add(targetTransform);
+                            FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
                             return;
                         }
 
@@ -98,10 +104,13 @@ public class FieldOfView : MonoBehaviour
                         {
                             //Debug.Log("Player is detected through time");
                             _visibleTargets.Add(targetTransform);
+
+                            FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
                         }
                     }
                     else
                     {
+                        Debug.Log(hitInfo.collider.tag);
                         _hasTimerStarted = false;
                     }
                 }
