@@ -11,12 +11,18 @@ public class EndLevelUI : MonoBehaviour
     public Text LevelNameTXT;
     public Text Score;
     public Text Time;
-    public int currentLevel;
     public Image RoachToken1;
     public Image RoachToken2;
     public Image RoachToken3;
     public Sprite RoachTokenSprite;
-    public int roachCount;
+    private int roachCount;
+    [SerializeField]private int currentLevel;
+    [SerializeField]private int[] ranks = new int [5];
+    [SerializeField]private Sprite[] rankSprites = new Sprite [6];
+    [SerializeField]private Image rankImage;
+    [SerializeField]private int score;
+
+
 
     public void NextLevel()
     {
@@ -44,6 +50,7 @@ public class EndLevelUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         SetLevelName();
         SetRoaches();
+        CheckRank();
     }
 
     void GetBestScore()
@@ -98,6 +105,41 @@ public class EndLevelUI : MonoBehaviour
             default:
             break;
 
+        }
+    }
+
+    //checks player score against threshholds to find the player's rank
+    void CheckRank()
+    {
+        //F
+        if (score >= ranks[0])
+        {
+            rankImage.sprite = rankSprites[5];
+        }
+        //D
+        else if (score >= ranks[1])
+        {
+            rankImage.sprite = rankSprites[4];
+        }
+        //C
+        else if (score >= ranks[2])
+        {
+            rankImage.sprite = rankSprites[3];
+        }
+        //B
+        else if (score >= ranks[3])
+        {
+            rankImage.sprite = rankSprites[2];
+        }
+        //A
+        else if (score >= ranks[4])
+        {
+            rankImage.sprite = rankSprites[1];
+        }
+        //S
+        else 
+        {
+            rankImage.sprite = rankSprites[0];
         }
     }
 }
