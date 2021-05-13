@@ -4,8 +4,8 @@ namespace Harris.Inventories
 {
     public class Pickup : MonoBehaviour
     {
-        InventoryItem _item;
-        int _number = 1;
+        [SerializeField] InventoryItem _item;
+        [SerializeField] int _number = 1;
 
         Inventory _inventory;
 
