@@ -13,7 +13,7 @@ public class SellItems : MonoBehaviour
     [SerializeField] Text _itemDescription;
     [SerializeField] Text _itemName;
 
-    [SerializeField] GameObject _itemObject;
+    [SerializeField] SellItemUI _itemObject;
 
     [SerializeField] GameObject _itemList;
 
@@ -26,6 +26,8 @@ public class SellItems : MonoBehaviour
     }
 
     public void LoadItems() {
+        _sellables.Clear();
+
         foreach(Inventory.InventorySlot item in _playerInventoy.GetFilledSlots()){
             SellableItem sellable = item.item as SellableItem;
 
@@ -44,7 +46,7 @@ public class SellItems : MonoBehaviour
         foreach(SellableItem item in _sellables) {
             var slot = Instantiate(_itemObject, _itemList.transform);
 
-
+            slot.Setup(item.Icon, item.Name);
 
         }
         
