@@ -18,7 +18,7 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    PlayerUI _PlayerUI = null;
+    //PlayerUI _PlayerUI = null;
     [SerializeField] public PlayerUI _PlayerUI = null;
     public RaycastWeapon _MeleeWeapon;
 
@@ -28,7 +28,7 @@ public class ActiveWeapon : MonoBehaviour
     Animator _anim;
     [SerializeField] private RaycastWeapon _weapon;
 
-    [SerializeField] private bool _isMelee = false;
+    [SerializeField] private bool _isMelee = true;
 
     private void Awake()
     {
@@ -74,28 +74,37 @@ public class ActiveWeapon : MonoBehaviour
         {
             if (_inventory)
             {
-                if (_inventory.HasItem(_weapon.Config.AmmoType))
+
+                if (!_weapon.IsMelee() && _inventory.HasItem(_weapon.Config.AmmoType))
                 {
+                    
                     int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
                     _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
 
                     _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+
                 }
-           
-                if(_weapon._totalAmmo == 0 && _weapon._clipAmmo == 0 && _isMelee == false)
+
+                //if (_weapon._totalAmmo == 0 && _weapon._clipAmmo == 0 && _isMelee == false)
+                //{
+                //    _isMelee = true;
+                //    RaycastWeapon Melee = Instantiate(_MeleeWeapon);
+                //    Equip(Melee);
+                //}
+
+                if(_weapon.IsMelee())
                 {
                     _isMelee = true;
-                    RaycastWeapon Melee = Instantiate(_MeleeWeapon);
-                    Equip(Melee);
                 }
-            }
             
-            WeaponLogic();
+                WeaponLogic();
+            }
             
         }
         else
         {
+
             _PlayerUI.UpdateAmmoUI(0,0,0);
         }
     }
@@ -130,7 +139,7 @@ public class ActiveWeapon : MonoBehaviour
 
         if (_inventory)
         {
-            if (_inventory.HasItem(_weapon.Config.AmmoType))
+            if (!_weapon.IsMelee() && _inventory.HasItem(_weapon.Config.AmmoType))
             {
                 int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
@@ -215,7 +224,6 @@ public class ActiveWeapon : MonoBehaviour
 
         if(Input.GetButtonDown("Fire1"))
         {
-            
             _anim.SetTrigger("Stab");
         }
 

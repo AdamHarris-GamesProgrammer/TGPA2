@@ -25,10 +25,11 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private Transform _raycastOrigin = null;
     [SerializeField] private WeaponConfig _config;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private bool _isMelee = false;
 
     [Header("Ammo Settings")]
-    [SerializeField] private int _clipAmmo = 30;
-    [SerializeField] private int _totalAmmo = 90;
+    public int _clipAmmo = 30;
+    public int _totalAmmo = 90;
     [SerializeField] private DamageType _type;
 
     [Header("VFX Settings")]
@@ -48,6 +49,10 @@ public class RaycastWeapon : MonoBehaviour
     public DamageType DamageType { get { return _type; } }
     public float Damage { get { return _config.Damage * _damageMultiplier; } }
     public float DamageMultiplier { get { return _damageMultiplier; } set { _damageMultiplier = value; } }
+    public bool IsMelee()
+    {
+        return _isMelee;
+    }
 
     private float _maxLifeTime = 3.0f;
     private float _damageMultiplier = 1.0f;
@@ -94,7 +99,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if(_inventory)
         {
-            if (_inventory.HasItem(_config.AmmoType))
+            if (!IsMelee() && _inventory.HasItem(_config.AmmoType))
             {
                 int index = _inventory.FindItem(_config.AmmoType);
 

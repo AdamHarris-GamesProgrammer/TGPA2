@@ -12,13 +12,13 @@ public class WeaponStab : MonoBehaviour
     [SerializeField] private bool WSC = false;
 
 
-    private void Start()
+    private void Awake()
     {
         Player =  GameObject.Find("Player");
 
-        if (transform.root.tag == "Enemy")
+        if (transform.root.name == "Enemies")
         {
-            _wsCheck = transform.root.GetComponent<WeaponStabCheck>();
+            _wsCheck = GetComponentInParent<AIAgent>().GetComponent<WeaponStabCheck>();
         }
         else
         {
@@ -38,7 +38,8 @@ public class WeaponStab : MonoBehaviour
         }
         else
         {
-            Parent = collision.transform.root.gameObject;
+            Parent = collision.collider.GetComponentInParent<AIAgent>().gameObject;
+            
         }
 
 
@@ -56,7 +57,7 @@ public class WeaponStab : MonoBehaviour
 
             if (WSC)
             {
-                Debug.Log(transform.root.name + " STABBED " + collision.transform.root.name);
+                //Debug.Log(transform.root.name + " STABBED " + collision.transform.root.name);
                 AttackedHealth.TakeDamage(DamageType.MELEE_DAMGE, 100);
             }
         }

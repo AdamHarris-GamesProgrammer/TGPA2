@@ -111,10 +111,11 @@ public class AIAgent : MonoBehaviour
     void Update()
     {
         if (_beingKilled) return;
-
+        if (_aiHealth.IsDead) return;
         stateMachine.Update();
         _currentState = stateMachine._currentState;
 
+        
         _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
         _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
 
@@ -127,6 +128,12 @@ public class AIAgent : MonoBehaviour
 
             stateMachine.ChangeState(AiStateId.Melee);
 
+        }
+
+        if(_aiWeapon.GetEquippedWeapon().IsMelee() && _usingMelee == false)
+        {
+            _usingMelee = true;
+            stateMachine.ChangeState(AiStateId.Melee);
         }
 
     }
