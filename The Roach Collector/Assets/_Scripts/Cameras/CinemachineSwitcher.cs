@@ -7,22 +7,28 @@ public class CinemachineSwitcher : MonoBehaviour
 {
 
     public CinemachineVirtualCamera laptopCam;
-    public CinemachineFreeLook followCam;
+    public CinemachineVirtualCamera followCam;
+    public CinemachineVirtualCamera aimCam;
 
 
     public BoxCollider collider;
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Laptop Collision");
-        SwitchCameraPriority(true);
+        if(other.CompareTag("Player")){
+            Debug.Log("Opening Laptop");
+            SwitchCameraPriority(true);
+        }
         
 
     }
    private void  OnTriggerExit(Collider other)
     {
-        SwitchCameraPriority(false);
-        Debug.Log("Exiting Laptop Collioder");
+        if(other.CompareTag("Player")) {
+            SwitchCameraPriority(false);
+            Debug.Log("Exiting Laptop Collioder");
+        }
+        
        
     }
 
@@ -31,14 +37,18 @@ public class CinemachineSwitcher : MonoBehaviour
         if (openLaptop)
         {
             followCam.Priority = 0;
+            aimCam.Priority = 0;
             laptopCam.Priority = 1;
             Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
             
         }
         else if(!openLaptop)
         {
+            //Debug.Log("Laptop Cursor lock");
             Cursor.visible = false;
             followCam.Priority = 1;
+            aimCam.Priority = 1;
             laptopCam.Priority = 0;
             
         }

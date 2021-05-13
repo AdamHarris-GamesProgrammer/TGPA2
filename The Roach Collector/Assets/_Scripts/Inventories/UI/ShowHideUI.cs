@@ -33,6 +33,7 @@ namespace Harris.UI
                     Time.timeScale = 1;
                     //Locks cursor to center of screen
                     Cursor.lockState = CursorLockMode.Locked;
+                    //Debug.Log("Show Hide UI cursor");
                     Cursor.visible = false;
                 }
                 else
