@@ -61,7 +61,7 @@ public class ChestController : MonoBehaviour
         {
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("Chest Cursor lock");
+            //Debug.Log("Chest Cursor lock");
             Cursor.visible = false;
         }
         else
