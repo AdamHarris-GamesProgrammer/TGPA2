@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName =("InventorySystem/Ammo Item"))]
-public class AmmoItem : InventoryItem
+[CreateAssetMenu(menuName=("InventorySystem/Ammo Item"))]
+public class AmmoItem : SellableItem
 {
     [Header("Ammo Settings")]
     [SerializeField] AmmoID _ammoID;
