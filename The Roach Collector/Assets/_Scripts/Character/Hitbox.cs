@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {
-    public Health _health;
+    private Health _health;
+
+    [SerializeField] private float _damageMultiplier = 1.0f;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _health = GetComponentInParent<Health>();
     }
 
     public void OnRaycastHit(RaycastWeapon weapon, Vector3 rayDirection)
     {
-        _health.TakeDamage(weapon.GetDamage());
+        float totalDamage = weapon.Damage * _damageMultiplier;
+        //Debug.Log(_health.gameObject.name + " is taking damage");
+        //Debug.Log(transform.name + " is taking damage " + weapon.GetDamage() + " multiplied by: " + _damageMultiplier + " giving a total of: " + totalDamage);
+        _health.TakeDamage(weapon.DamageType, totalDamage);
     }
 }

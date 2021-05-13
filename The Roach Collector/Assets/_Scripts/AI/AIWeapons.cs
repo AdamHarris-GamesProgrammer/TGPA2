@@ -12,7 +12,11 @@ public class AIWeapons : MonoBehaviour
 
     bool _isWeaponActive = false;
 
+    [Header("Accuracy Settinga")]
     [SerializeField] float _inaccuracy = 0.0f;
+
+    [Header("Damage Settings")]
+    [SerializeField] float _damageMultiplier = 0.2f;
 
     public void SetTarget(Transform transform)
     {
@@ -33,7 +37,7 @@ public class AIWeapons : MonoBehaviour
         {
             Vector3 target = _currentTarget.position + _weaponIK._offset;
             target += UnityEngine.Random.insideUnitSphere * _inaccuracy;
-            _currentWeapon.UpdateWeapon(Time.deltaTime, target);
+            _currentWeapon.UpdateWeapon(target);
         }
     }
 
@@ -50,13 +54,14 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
-
         _currentWeapon = weapon;
         _currentWeapon.transform.SetParent(transform, false);
         _sockets.Attach(weapon.transform, MeshSockets.SocketID.RightHand);
-        _weaponIK.SetAimTransform(_currentWeapon.GetRaycastOrigin());
+        _weaponIK.SetAimTransform(_currentWeapon.RaycastOrigin);
         _weaponIK.SetWeaponTransform(_currentWeapon.transform);
         _isWeaponActive = true;
+        _currentWeapon.DamageMultiplier = _damageMultiplier;
+        _currentWeapon.Setup();
     }
 
     public void DropWeapon()
@@ -74,6 +79,16 @@ public class AIWeapons : MonoBehaviour
     public bool HasWeapon()
     {
         return _currentWeapon != null;
+    }
+
+    public RaycastWeapon GetEquippedWeapon()
+    {
+        if(_currentWeapon == null)
+        {
+            Debug.Log("Equipped Weapon Is Null");
+        }
+
+        return _currentWeapon;
     }
 
 }

@@ -3,32 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Harris.Saving;
 using Harris.UI.Inventories;
-using TMPro;
 using Harris.Inventories;
+using UnityEngine.UI;
+using TGP.Control;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// Provides a store for the items equipped to a player. Items are stored by
-    /// their equip locations.
-    /// 
-    /// This component should be placed on the GameObject tagged "Player".
-    /// </summary>
     public class Equipment : MonoBehaviour, ISaveable
     {
-        // STATE
         Dictionary<EquipLocation, EquipableItem> _equippedItems = new Dictionary<EquipLocation, EquipableItem>();
 
         EquipLocation _currentlySelectedLocation = EquipLocation.None;
 
         private int _totalArmor;
 
-        [SerializeField] private TMP_Text _armorText;
+        [SerializeField] private Text _armorText;
         
 
-        /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
         public event Action EquipmentUpdated;
 
         private void Awake()
@@ -42,12 +33,22 @@ namespace Harris.Inventories
         {
             int total = 0;
 
+            //TODO: Better way of doing this as this couples the player to the equipment
+            PlayerController player = GetComponent<PlayerController>();
+            //Reset the stats of the player
+            player.ResetStats();
+
             foreach(EquipLocation location in GetAllPopulatedSlots())
             {
                 ArmorConfig armor = GetItemInSlot(location) as ArmorConfig;
                 if (armor != null)
                 {
                     total += armor.GetArmor();
+
+                    foreach(StatValues stat in armor.GetStatValues())
+                    {
+                        player.EquipStat(stat);
+                    }
                 }
             }
 
@@ -105,9 +106,6 @@ namespace Harris.Inventories
 
 
 
-        /// <summary>
-        /// Return the item in the given equip location.
-        /// </summary>
         public EquipableItem GetItemInSlot(EquipLocation equipLocation)
         {
             if (!_equippedItems.ContainsKey(equipLocation))
@@ -118,20 +116,13 @@ namespace Harris.Inventories
             return _equippedItems[equipLocation];
         }
 
-        /// <summary>
-        /// Add an item to the given equip location. Do not attempt to equip to
-        /// an incompatible slot.
-        /// </summary>
         public void AddItem(EquipLocation slot, EquipableItem item)
         {
             Debug.Assert(item.GetAllowedEquipLocation() == slot);
 
             _equippedItems[slot] = item;
 
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
         public int GetIndexOfType(EquipLocation location)
@@ -146,27 +137,17 @@ namespace Harris.Inventories
             return index;
         }
 
-        /// <summary>
-        /// Remove the item for the given slot.
-        /// </summary>
         public void RemoveItem(EquipLocation slot)
         {
             _equippedItems.Remove(slot);
-            if (EquipmentUpdated != null)
-            {
-                EquipmentUpdated();
-            }
+            EquipmentUpdated?.Invoke();
         }
 
-        /// <summary>
-        /// Enumerate through all the slots that currently contain items.
-        /// </summary>
         public IEnumerable<EquipLocation> GetAllPopulatedSlots()
         {
             return _equippedItems.Keys;
         }
 
-        // PRIVATE
 
         //ISavable Interface Implementation
         object ISaveable.Save()
@@ -174,7 +155,7 @@ namespace Harris.Inventories
             var equippedItemsForSerialization = new Dictionary<EquipLocation, string>();
             foreach (var pair in _equippedItems)
             {
-                equippedItemsForSerialization[pair.Key] = pair.Value.GetItemID();
+                equippedItemsForSerialization[pair.Key] = pair.Value.ItemID;
             }
             return equippedItemsForSerialization;
         }

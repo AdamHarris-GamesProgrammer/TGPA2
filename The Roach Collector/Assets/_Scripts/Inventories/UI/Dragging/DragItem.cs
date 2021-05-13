@@ -7,69 +7,67 @@ using UnityEngine.EventSystems;
 
 namespace Harris.Core.UI.Dragging
 {
-    /// <summary>
-    /// Allows a UI element to be dragged and dropped from and to a container.
-    /// 
-    /// Create a subclass for the type you want to be draggable. Then place on
-    /// the UI element you want to make draggable.
-    /// 
-    /// During dragging, the item is reparented to the parent canvas.
-    /// 
-    /// After the item is dropped it will be automatically return to the
-    /// original UI parent. It is the job of components implementing `IDragContainer`,
-    /// `IDragDestination and `IDragSource` to update the interface after a drag
-    /// has occurred.
-    /// </summary>
-    /// <typeparam name="T">The type that represents the item being dragged.</typeparam>
-    public class DragItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
-        where T : class
+    public class DragItem<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler where T : class
     {
-        // PRIVATE STATE
-        Vector3 startPosition;
-        Transform originalParent;
-        IDragSource<T> source;
+        Vector3 _startPosition;
+        Transform _originalParent;
+        IDragSource<T> _itemSource;
 
-        // CACHED REFERENCES
-        Canvas parentCanvas;
+        Canvas _parentCanvas;
 
-        // LIFECYCLE METHODS
         private void Awake()
         {
-            parentCanvas = GetComponentInParent<Canvas>();
-            source = GetComponentInParent<IDragSource<T>>();
+            //Get the parent canvas and the current slot
+            _parentCanvas = GetComponentInParent<Canvas>();
+            _itemSource = GetComponentInParent<IDragSource<T>>();
         }
 
-        // PRIVATE
         void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
         {
-            startPosition = transform.position;
-            originalParent = transform.parent;
-            // Else won't get the drop event.
+            //Set the starting position and the original parent of this item.
+            _startPosition = transform.position;
+            _originalParent = transform.parent;
+            
+            //Allows raycasts to the canvas
             GetComponent<CanvasGroup>().blocksRaycasts = false;
-            transform.SetParent(parentCanvas.transform, true);
+
+            //Sets the transform to the canvas as opposed to the slot, used for dragging
+            transform.SetParent(_parentCanvas.transform, true);
         }
 
         void IDragHandler.OnDrag(PointerEventData eventData)
         {
+            //Updates the objects position as we move around
             transform.position = eventData.position;
         }
 
         void IEndDragHandler.OnEndDrag(PointerEventData eventData)
         {
-            transform.position = startPosition;
+            //Sets the position to original
+            transform.position = _startPosition;
+            //Canvas needs to block raycasts again
             GetComponent<CanvasGroup>().blocksRaycasts = true;
-            transform.SetParent(originalParent, true);
+            //sets us to the original parent
+            transform.SetParent(_originalParent, true);
 
-            IDragDestination<T> container;
+            //Creates a destination object
+            IDragDestination<T> container = null;
+            //if we are not over this current object
             if (!EventSystem.current.IsPointerOverGameObject())
             {
-                container = parentCanvas.GetComponent<IDragDestination<T>>();
+                //set the canvas as our destination
+                container = _parentCanvas.GetComponent<IDragDestination<T>>();
             }
             else
             {
-                container = GetContainer(eventData);
+                //Get the container we are hovering over
+                if (eventData.pointerEnter)
+                {
+                    container = eventData.pointerEnter.GetComponentInParent<IDragDestination<T>>();
+                }
             }
 
+            //if we have a container object then drop our item into the new container.
             if (container != null)
             {
                 DropItemIntoContainer(container);
@@ -78,102 +76,92 @@ namespace Harris.Core.UI.Dragging
 
         }
 
-        private IDragDestination<T> GetContainer(PointerEventData eventData)
-        {
-            if (eventData.pointerEnter)
-            {
-                var container = eventData.pointerEnter.GetComponentInParent<IDragDestination<T>>();
-
-                return container;
-            }
-            return null;
-        }
-
         private void DropItemIntoContainer(IDragDestination<T> destination)
         {
             //if the destination is the same as the source
-            if (object.ReferenceEquals(destination, source)) return;
+            if (object.ReferenceEquals(destination, _itemSource)) return;
 
             //Gets the IDragContainer of the destination
             var destinationContainer = destination as IDragContainer<T>;
-            var sourceContainer = source as IDragContainer<T>;
+            var sourceContainer = _itemSource as IDragContainer<T>;
 
             // Swap won't be possible
+            //if the destination or the source are null
+            //or the item is null
+            //or the object of the source and destination are the same
+                //then attempt a transfer
             if (destinationContainer == null || sourceContainer == null ||
                 destinationContainer.GetItem() == null ||
                 object.ReferenceEquals(destinationContainer.GetItem(), sourceContainer.GetItem()))
             {
-                AttemptSimpleTransfer(destination);
+                AttemptItemTransfer(destination);
                 return;
             }
 
+            //if the conditions above are not met then attempt to swap the items
             AttemptSwap(destinationContainer, sourceContainer);
         }
 
         private void AttemptSwap(IDragContainer<T> destination, IDragContainer<T> source)
         {
-            // Provisionally remove item from both sides. 
-            var removedSourceNumber = source.GetNumber();
-            var removedSourceItem = source.GetItem();
-            var removedDestinationNumber = destination.GetNumber();
-            var removedDestinationItem = destination.GetItem();
+            //Get the items and the number of the items at the destination and source
+            int removedSourceNumber = source.GetNumber();
+            T removedSourceItem = source.GetItem();
+            int removedDestinationNumber = destination.GetNumber();
+            T removedDestinationItem = destination.GetItem();
 
+            //Remove the items from the source and destination 
             source.RemoveItems(removedSourceNumber);
             destination.RemoveItems(removedDestinationNumber);
 
-            var sourceTakeBackNumber = CalculateTakeBack(removedSourceItem, removedSourceNumber, source, destination);
-            var destinationTakeBackNumber = CalculateTakeBack(removedDestinationItem, removedDestinationNumber, destination, source);
+            //Calculates the amount of items we need to take back 
+            int sourceTakeBackNumber = CalculateTakeBack(removedSourceItem, removedSourceNumber, source, destination);
+            int destinationTakeBackNumber = CalculateTakeBack(removedDestinationItem, removedDestinationNumber, destination, source);
 
-            // Do take backs (if needed)
+            //if we need to do takebacks then add the items to the source 
             if (sourceTakeBackNumber > 0)
             {
                 source.AddItems(removedSourceItem, sourceTakeBackNumber);
                 removedSourceNumber -= sourceTakeBackNumber;
             }
+            //if we need to do takeabacks then add the items to the destination
             if (destinationTakeBackNumber > 0)
             {
                 destination.AddItems(removedDestinationItem, destinationTakeBackNumber);
                 removedDestinationNumber -= destinationTakeBackNumber;
             }
 
-            // Abort if we can't do a successful swap
+            //Abandon this if we cannot swap
             if (source.MaxAcceptable(removedDestinationItem) < removedDestinationNumber ||
                 destination.MaxAcceptable(removedSourceItem) < removedSourceNumber ||
                 removedSourceNumber == 0)
             {
-                if (removedDestinationNumber > 0)
-                {
-                    destination.AddItems(removedDestinationItem, removedDestinationNumber);
-                }
-                if (removedSourceNumber > 0)
-                {
-                    source.AddItems(removedSourceItem, removedSourceNumber);
-                }
+                //Add the items back to the slots
+                if (removedDestinationNumber > 0) destination.AddItems(removedDestinationItem, removedDestinationNumber);
+                if (removedSourceNumber > 0) source.AddItems(removedSourceItem, removedSourceNumber);
                 return;
             }
 
             // Do swaps
-            if (removedDestinationNumber > 0)
-            {
-                source.AddItems(removedDestinationItem, removedDestinationNumber);
-            }
-            if (removedSourceNumber > 0)
-            {
-                destination.AddItems(removedSourceItem, removedSourceNumber);
-            }
+            if (removedDestinationNumber > 0) source.AddItems(removedDestinationItem, removedDestinationNumber);
+            if (removedSourceNumber > 0) destination.AddItems(removedSourceItem, removedSourceNumber);
         }
 
-        private bool AttemptSimpleTransfer(IDragDestination<T> destination)
+        private bool AttemptItemTransfer(IDragDestination<T> destination)
         {
-            var draggingItem = source.GetItem();
-            var draggingNumber = source.GetNumber();
+            T draggingItem = _itemSource.GetItem();
+            int draggingNumber = _itemSource.GetNumber();
 
-            var acceptable = destination.MaxAcceptable(draggingItem);
-            var toTransfer = Mathf.Min(acceptable, draggingNumber);
+            int acceptable = destination.MaxAcceptable(draggingItem);
+            int toTransfer = Mathf.Min(acceptable, draggingNumber);
 
+            //if we have items to transfer
             if (toTransfer > 0)
             {
-                source.RemoveItems(toTransfer);
+                //remove items from the source
+                _itemSource.RemoveItems(toTransfer);
+
+                //and add them to the destination
                 destination.AddItems(draggingItem, toTransfer);
                 return false;
             }
@@ -183,48 +171,50 @@ namespace Harris.Core.UI.Dragging
 
         private int CalculateTakeBack(T removedItem, int removedNumber, IDragContainer<T> removeSource, IDragContainer<T> destination)
         {
-            var takeBackNumber = 0;
-            var destinationMaxAcceptable = destination.MaxAcceptable(removedItem);
+            int takeBackNumber = 0;
+            int destinationMaxAcceptable = destination.MaxAcceptable(removedItem);
 
             if (destinationMaxAcceptable < removedNumber)
             {
                 takeBackNumber = removedNumber - destinationMaxAcceptable;
 
-                var sourceTakeBackAcceptable = removeSource.MaxAcceptable(removedItem);
+                int sourceTakeBackAcceptable = removeSource.MaxAcceptable(removedItem);
 
                 // Abort and reset
-                if (sourceTakeBackAcceptable < takeBackNumber)
-                {
-                    return 0;
-                }
+                if (sourceTakeBackAcceptable < takeBackNumber) return 0;
             }
             return takeBackNumber;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            //Get the players inventory and equipment
             Inventory playerInventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
             Equipment playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
+            //Get the slot ui 
             InventorySlotUI inventorySlot = GetComponentInParent<InventorySlotUI>();
+            ActionSlotUI actionSlot = GetComponentInParent<ActionSlotUI>();
 
-
-
+            //if this is an inventory slot
             if (inventorySlot)
             {
-                int indexOfItem = inventorySlot.index;
+                int indexOfItem = inventorySlot._index;
                 playerInventory.SelectItem(indexOfItem);
-                inventorySlot.SetSelected(true);
             }
+            //if this is an action slot
+            else if (actionSlot)
+            {
+                int indexOfItem = actionSlot._index;
+                playerInventory.SelectItem(indexOfItem);
+            }
+            //if it is neither a inventory or a action slot then we are an equipment slot
             else
             {
                 EquipmentSlotUI equipmentSlot = GetComponentInParent<EquipmentSlotUI>();
-                EquipLocation location = equipmentSlot.GetEquipLocation();
+                EquipLocation location = equipmentSlot.EquipLocation;
                 playerEquipment.Select(location);
             }
-
-
-
         }
     }
 }

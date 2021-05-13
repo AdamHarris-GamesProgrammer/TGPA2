@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Harris.Inventories;
+using TGP.Control;
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
 public class ActiveWeapon : MonoBehaviour
@@ -10,73 +12,136 @@ public class ActiveWeapon : MonoBehaviour
 
     public Transform _crosshairTarget;
     [Header("Animation Settings")]
-    [SerializeField] private UnityEngine.Animations.Rigging.Rig _handIK;
 
     [Header("Weapon Settings")]
-    [SerializeField] private Transform _weaponParent;
-    [SerializeField] private Transform _weaponLeftGrip;
-    [SerializeField] private Transform _weaponRightGrip;
-    [SerializeField] private RaycastWeapon _startingWeapon;
+    [SerializeField] private Transform _weaponParent = null;
+    [SerializeField] private Transform _weaponLeftGrip = null;
+    [SerializeField] private Transform _weaponRightGrip = null;
+    [SerializeField] private RaycastWeapon _startingWeapon = null;
+    PlayerUI _PlayerUI = null;
 
-    public Cinemachine.CinemachineFreeLook _camera;
+    Inventory _inventory;
+    PlayerController _controller;
 
     Animator _anim;
-    AnimatorOverrideController _overrides;
     RaycastWeapon _weapon;
+
+    private void Awake()
+    {
+        _PlayerUI = GetComponent<PlayerUI>();
+        _controller = GetComponent<PlayerController>();
+    }
 
 
     // Start is called before the first frame update
     void Start()
     {
         _anim = GetComponent<Animator>();
-        _overrides = _anim.runtimeAnimatorController as AnimatorOverrideController;
+        _inventory = GetComponent<Inventory>();
 
-        //RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
-        //if(existingWeapon)
-        //{
-        //    Equip(existingWeapon);
-        //}
 
         if (_startingWeapon)
         {
             RaycastWeapon weapon = Instantiate(_startingWeapon);
 
             Equip(weapon);
+
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
         }
     }
 
+    private void Reload()
+    {
+        //Stops the player from reloading with a full mag
+        if (_weapon.ClipAmmo == _weapon.Config.ClipSize) return;
+
+        _weapon.Reload();
+
+        _anim.SetBool("isReloading", true);
+        _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+    }
+
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if(_weapon)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (_inventory)
             {
-                _weapon.StartFiring();
+                if (_inventory.HasItem(_weapon.Config.AmmoType))
+                {
+                    int index = _inventory.FindItem(_weapon.Config.AmmoType);
+
+                    _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
+
+                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+                }
             }
 
-            if (_weapon.IsFiring())
+            if (_weapon.Config.IsAutomatic)
             {
-                _weapon.UpdateWeapon(Time.deltaTime, _crosshairTarget.position);
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    _weapon.StartFiring();
+                    _controller.IsShooting = true;
+                }
+                if (Input.GetButtonUp("Fire1"))
+                {
+                    _weapon.StopFiring();
+                    _controller.IsShooting = false;
+                }
+                if (_weapon.IsFiring)
+                {
+                    _weapon.UpdateWeapon(_crosshairTarget.position);
+                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    _weapon.StartFiring();
+                    _controller.IsShooting = true;
+                    _weapon.UpdateWeapon(_crosshairTarget.position);
+                }
+                else
+                {
+                    _controller.IsShooting = false;
+                    _weapon.StopFiring();
+                }
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
 
-            _weapon.UpdateBullets(Time.deltaTime);
 
-            if (Input.GetButtonUp("Fire1"))
+            _weapon.UpdateBullets();
+
+            
+
+            if (Input.GetKeyDown(KeyCode.R) && _weapon.TotalAmmo > 0)
             {
-                _weapon.StopFiring();
+                Reload();
+                _controller.IsShooting = false;
+
             }
 
-            if (Input.GetKeyDown(KeyCode.G))
+            if (_weapon.NeedToReload)
             {
-                Equip(null);
-                _overrides["Weapon_Anim_Empty"] = null;
+                _controller.IsShooting = false;
+            }
+
+            if (_weapon.IsReloading == false)
+            {
+                _anim.SetBool("isReloading", false);
+            }
+            else
+            {
+                _controller.IsShooting = false;
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
         }
         else
         {
-            _handIK.weight = 0.0f;
-            _anim.SetLayerWeight(1, 0.0f);
+            _PlayerUI.UpdateAmmoUI(0,0,0);
         }
     }
 
@@ -104,33 +169,25 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.parent = _weaponParent;
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
-            _handIK.weight = 1.0f;
-            _anim.SetLayerWeight(1, 1.0f);
 
-            _weapon._weaponRecoil._camera = _camera;
+            newWeapon.Setup();
+        }
 
-            //Crash in current version of the Rigging package, this line fixes it
-            Invoke(nameof(SetAnimationDelayed), 0.0001f);
+        if (_inventory)
+        {
+            if (_inventory.HasItem(_weapon.Config.AmmoType))
+            {
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
+
+                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
+
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+            }
+            else
+            {
+                _weapon.TotalAmmo = 0;
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+            }
         }
     }
-
-    void SetAnimationDelayed()
-    {
-        _overrides["Weapon_Anim_Empty"] = _weapon.GetAnimationClip();
-    }
-
-
-#if UNITY_EDITOR
-    [ContextMenu("Save Weapon Pose")]
-    public void SaveWeaponPose()
-    {
-        GameObjectRecorder recorder = new GameObjectRecorder(gameObject);
-        recorder.BindComponentsOfType<Transform>(_weaponParent.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(_weaponLeftGrip.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(_weaponRightGrip.gameObject, false);
-        recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(_weapon.GetAnimationClip());
-        UnityEditor.AssetDatabase.SaveAssets();
-    }
-#endif
 }

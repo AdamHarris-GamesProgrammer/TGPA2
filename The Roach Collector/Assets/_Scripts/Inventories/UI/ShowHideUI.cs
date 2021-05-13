@@ -7,37 +7,38 @@ namespace Harris.UI
 {
     public class ShowHideUI : MonoBehaviour
     {
-        [SerializeField] KeyCode toggleKey = KeyCode.Escape;
-        [SerializeField] GameObject uiContainer = null;
+        [SerializeField] KeyCode _toggleKey = KeyCode.Escape;
+        [SerializeField] GameObject _uiContainer = null;
 
-        public event Action showUI;
-        public event Action closeUI;
+        public GameObject UIContainer {  get { return _uiContainer; } }
 
-        // Start is called before the first frame update
-        void Start()
+        private void Awake()
         {
-            uiContainer.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            _uiContainer.SetActive(false);
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(toggleKey))
+            if (Input.GetKeyDown(_toggleKey))
             {
-                uiContainer.SetActive(!uiContainer.activeSelf);
+                _uiContainer.SetActive(!_uiContainer.activeSelf);
 
-                if (!uiContainer.active)
+                if (!_uiContainer.activeSelf)
                 {
-                    //showUI.Invoke();
+                    //Unfreeze time
                     Time.timeScale = 1;
+                    //Locks cursor to center of screen
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
                 else
                 {
-                    //closeUI.Invoke();
+                    //freezes time
                     Time.timeScale = 0;
-                    Cursor.lockState = CursorLockMode.None;
+                    //confines the cursor to the screen
+                    Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
                 }
 

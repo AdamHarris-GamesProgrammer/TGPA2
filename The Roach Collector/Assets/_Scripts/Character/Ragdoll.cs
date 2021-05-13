@@ -13,21 +13,9 @@ public class Ragdoll : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
 
-        Health health = GetComponent<Health>();
-
         var bodies = new HashSet<Rigidbody>(GetComponentsInChildren<Rigidbody>());
 
         _rigidbodies = bodies.ToArray();
-
-        foreach (var rb in _rigidbodies)
-        {
-            Hitbox hitbox = rb.gameObject.AddComponent<Hitbox>();
-            hitbox._health = health;
-            if (hitbox.gameObject != gameObject)
-            {
-                hitbox.gameObject.layer = LayerMask.NameToLayer("Hitbox");
-            }
-        }
 
         DeactivateRagdoll();
     }
@@ -43,7 +31,7 @@ public class Ragdoll : MonoBehaviour
 
     public void ActivateRagdoll()
     {
-        Debug.Log("Activating ragdoll");
+        //Debug.Log("Activating ragdoll");
         _animator.enabled = false;
         foreach (var rb in _rigidbodies)
         {

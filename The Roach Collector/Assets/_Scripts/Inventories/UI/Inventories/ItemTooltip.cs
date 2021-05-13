@@ -1,24 +1,19 @@
 ﻿using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// Root of the tooltip prefab to expose properties to other classes.
-    /// </summary>
     public class ItemTooltip : MonoBehaviour
     {
-        // CONFIG DATA
-        [SerializeField] TextMeshProUGUI titleText = null;
-        [SerializeField] TextMeshProUGUI bodyText = null;
+        [SerializeField] Text _titleText = null;
+        [SerializeField] Text _bodyText = null;
 
-        // PUBLIC
-
+        //Sets the information for the tooltip
         public void Setup(InventoryItem item)
         {
-            titleText.text = item.GetDisplayName();
-            bodyText.text = item.GetDescription();
+            _titleText.text = item.Name;
+            _bodyText.text = item.Description;
         }
 
         public void Close()

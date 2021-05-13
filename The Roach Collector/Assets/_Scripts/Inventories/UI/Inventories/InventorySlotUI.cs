@@ -8,71 +8,57 @@ namespace Harris.UI.Inventories
 {
     public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] Sprite selectedIcon = null;
-        Sprite defaultIcon;
+        
+        [SerializeField] InventoryItemIcon _icon = null;
 
-        // STATE
-        public int index;
-        InventoryItem item;
-        Inventory inventory;
+        public int _index;
+        InventoryItem _item;
+        Inventory _inventory;
 
-        // PUBLIC
 
         void Awake()
         {
-            defaultIcon = GetComponent<Image>().sprite;
         }
 
         public void Setup(Inventory inventory, int index)
         {
-            this.inventory = inventory;
-            this.index = index;
-            icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
+            //Sets the inventory that this slot is in
+            _inventory = inventory;
+            //gives the slot an index
+            _index = index;
+            //sets the item in the icon
+            _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
         }
 
         public int MaxAcceptable(InventoryItem item)
         {
-            if (inventory.HasSpaceFor(item))
+            if (_inventory.HasSpaceFor(item))
             {
                 return int.MaxValue;
             }
             return 0;
         }
 
+        //Adds an item to this slot
         public void AddItems(InventoryItem item, int number)
         {
-            inventory.AddItemToSlot(index, item, number);
+            _inventory.AddItemToSlot(_index, item, number);
         }
 
+        //Returns this item
         public InventoryItem GetItem()
         {
-            return inventory.GetItemInSlot(index);
+            return _inventory.GetItemInSlot(_index);
         }
 
         public int GetNumber()
         {
-            return inventory.GetNumberInSlot(index);
+            return _inventory.GetNumberInSlot(_index);
         }
 
         public void RemoveItems(int number)
         {
-            inventory.RemoveFromSlot(index, number);
-        }
-
-        public void SetSelected(bool isSelected)
-        {
-            Image image = GetComponent<Image>();
-            if (isSelected)
-            {
-                image.sprite = selectedIcon;
-            }
-            else
-            {
-                image.sprite = defaultIcon;
-            }
-
+            _inventory.RemoveFromSlot(_index, number);
         }
     }
 }

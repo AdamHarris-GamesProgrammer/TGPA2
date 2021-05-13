@@ -6,10 +6,7 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// To be placed on icons representing the item in a slot. Allows the item
-    /// to be dragged into other slots.
-    /// </summary>
+    //Allows an item to be dragged to other slots
     public class InventoryDragItem : DragItem<InventoryItem>
     {
     }

@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class UIHealthBar : MonoBehaviour
 {
-    [SerializeField] private Transform _target;
-    [SerializeField] private Vector3 _offset;
-    [SerializeField] private Image _foregroundImage;
-    [SerializeField] private Image _backgroundImage;
+    [SerializeField] private Transform _target = null;
+    [SerializeField] private Vector3 _offset = Vector3.up;
+    [SerializeField] private Image _foregroundImage = null;
+    [SerializeField] private Image _backgroundImage = null;
 
 
-    private void Start()
+    private void Awake()
     {
         _foregroundImage.gameObject.SetActive(true);
         _backgroundImage.gameObject.SetActive(true);

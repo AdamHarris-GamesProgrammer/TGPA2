@@ -5,57 +5,30 @@ using Harris.Saving;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// To be placed on anything that wishes to drop pickups into the world.
-    /// Tracks the drops for saving and restoring.
-    /// </summary>
     public class ItemDropper : MonoBehaviour, ISaveable
     {
-        // STATE
-        private List<Pickup> droppedItems = new List<Pickup>();
-        private List<DropRecord> otherSceneDroppedItems = new List<DropRecord>();
-
-        // PUBLIC
-
-        /// <summary>
-        /// Create a pickup at the current position.
-        /// </summary>
-        /// <param name="item">The item type for the pickup.</param>
-        /// <param name="number">
-        /// The number of items contained in the pickup. Only used if the item
-        /// is stackable.
-        /// </param>
+        private List<Pickup> _droppedItems = new List<Pickup>();
+        private List<DropRecord> _otherSceneDroppedItems = new List<DropRecord>();
         public void DropItem(InventoryItem item, int number)
         {
             SpawnPickup(item, GetDropLocation(), number);
         }
 
-        /// <summary>
-        /// Create a pickup at the current position.
-        /// </summary>
-        /// <param name="item">The item type for the pickup.</param>
         public void DropItem(InventoryItem item)
         {
             SpawnPickup(item, GetDropLocation(), 1);
         }
 
-        // PROTECTED
-
-        /// <summary>
-        /// Override to set a custom method for locating a drop.
-        /// </summary>
-        /// <returns>The location the drop should be spawned.</returns>
         protected virtual Vector3 GetDropLocation()
         {
             return transform.position;
         }
 
-        // PRIVATE
 
         public void SpawnPickup(InventoryItem item, Vector3 spawnLocation, int number)
         {
             var pickup = item.SpawnPickup(spawnLocation, number);
-            droppedItems.Add(pickup);
+            _droppedItems.Add(pickup);
         }
 
         [System.Serializable]
@@ -72,11 +45,11 @@ namespace Harris.Inventories
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
             RemoveDestroyedDrops();
             var droppedItemsList = new List<DropRecord>();
-            foreach(Pickup pickup in droppedItems)
+            foreach(Pickup pickup in _droppedItems)
             {
                 var droppedItem = new DropRecord();
                 
-                droppedItem.itemID = pickup.GetItem().GetItemID();
+                droppedItem.itemID = pickup.GetItem().ItemID;
                 droppedItem.position = new SerializableVector3(pickup.transform.position);
                 droppedItem.number = pickup.GetNumber();
                 droppedItem.sceneIndex = sceneIndex;
@@ -84,7 +57,7 @@ namespace Harris.Inventories
                 droppedItemsList.Add(droppedItem);
                 
             }
-            droppedItemsList.AddRange(otherSceneDroppedItems);
+            droppedItemsList.AddRange(_otherSceneDroppedItems);
             return droppedItemsList;
         }
 
@@ -93,13 +66,13 @@ namespace Harris.Inventories
             var droppedItemsList = (List<DropRecord>)state;
             int sceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-            otherSceneDroppedItems.Clear();
+            _otherSceneDroppedItems.Clear();
 
             foreach (var item in droppedItemsList)
             {
                 if(item.sceneIndex != sceneIndex)
                 {
-                    otherSceneDroppedItems.Add(item);
+                    _otherSceneDroppedItems.Add(item);
                     continue;
                 }
 
@@ -110,20 +83,17 @@ namespace Harris.Inventories
             }
         }
 
-        /// <summary>
-        /// Remove any drops in the world that have subsequently been picked up.
-        /// </summary>
         private void RemoveDestroyedDrops()
         {
             var newList = new List<Pickup>();
-            foreach (var item in droppedItems)
+            foreach (var item in _droppedItems)
             {
                 if (item != null)
                 {
                     newList.Add(item);
                 }
             }
-            droppedItems = newList;
+            _droppedItems = newList;
         }
     }
 }

@@ -5,45 +5,54 @@ using Harris.Inventories;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// To be placed on the root of the inventory UI. Handles spawning all the
-    /// inventory slot prefabs.
-    /// </summary>
     public class InventoryUI : MonoBehaviour
     {
-        // CONFIG DATA
-        [SerializeField] InventorySlotUI InventoryItemPrefab = null;
+        [SerializeField] InventorySlotUI _inventoryItemPrefab = null;
 
-        // CACHE
-        Inventory playerInventory;
+        Inventory _inventory;
 
-        // LIFECYCLE METHODS
 
         private void Awake() 
         {
-            playerInventory = Inventory.GetPlayerInventory();
-            playerInventory.InventoryUpdated += Redraw;
+            Inventory parentInventory = GetComponentInParent<Inventory>();
+
+            //if we have an inventory as our parent
+            if (parentInventory)
+            {
+                //this is a chest
+                _inventory = parentInventory;
+            }
+            else
+            {
+                //this is the player
+                _inventory = Inventory.GetPlayerInventory();
+            }
+
+            //Add the redraw method to the inventory update method
+            _inventory.InventoryUpdated += Redraw;
         }
 
         private void Start()
         {
+            //Redraws the inventory on start
             Redraw();
         }
 
-        // PRIVATE
-
         private void Redraw()
         {
+            //Deletes all the slots he have
             foreach (Transform child in transform)
             {
                 Destroy(child.gameObject);
             }
 
-            for (int i = 0; i < playerInventory.GetSize(); i++)
+            //loops through the slots in our inventory
+            for (int i = 0; i < _inventory.GetSize(); i++)
             {
-                var itemUI = Instantiate(InventoryItemPrefab, transform);
+                //Instantiate a new slot and set the name and icon etc. 
+                var itemUI = Instantiate(_inventoryItemPrefab, transform);
                 itemUI.name = i.ToString();
-                itemUI.Setup(playerInventory, i);
+                itemUI.Setup(_inventory, i);
             }
         }
     }
