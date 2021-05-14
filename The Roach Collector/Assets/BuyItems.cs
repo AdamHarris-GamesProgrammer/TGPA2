@@ -24,6 +24,7 @@ public class BuyItems : MonoBehaviour
     
 
     Inventory _playerInventory;
+    PlayerController _player;
 
     BuyableItemUI _selectedItem = null;
 
@@ -47,7 +48,8 @@ public class BuyItems : MonoBehaviour
 
     void Awake()
     {
-        _playerInventory = FindObjectOfType<PlayerController>().GetComponent<Inventory>();
+        _player = FindObjectOfType<PlayerController>();
+        _playerInventory =_player.GetComponent<Inventory>();
 
         for(int i = 0; i < _items.Length; i++)
         {
@@ -57,5 +59,19 @@ public class BuyItems : MonoBehaviour
         }
     }
 
+    public void BuyItem()
+    {
+        if(_selectedItem != null)
+        {
+            BuyableItem item = _items[_selectedItem.Index];
+
+            if (_player.HasEnoughMoney(item._price))
+            {
+                _player.SpendMoney(item._price);
+
+                _playerInventory.AddToFirstEmptySlot(item._item, item._quantity);
+            }
+        }
+    }
 
 }

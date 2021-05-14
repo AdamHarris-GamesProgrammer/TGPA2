@@ -25,7 +25,11 @@ namespace Harris.UI
             if (Input.GetKeyDown(_toggleKey))
             {
                 _uiContainer.SetActive(!_uiContainer.activeSelf);
-                UIGuideContainer.SetActive(!_uiContainer.activeSelf);
+                if(UIGuideContainer != null)
+                {
+                    UIGuideContainer.SetActive(!_uiContainer.activeSelf);
+                }
+                
 
                 if (!_uiContainer.activeSelf)
                 {
