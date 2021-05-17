@@ -145,6 +145,17 @@ namespace TGP.Control
             }
         }
 
+        public void UnequipStat(StatValues id)
+        {
+            for(int i = 0; i < _stats.Length; i++)
+            {
+                if(_stats[i]._id == id._id)
+                {
+                    _stats[i]._value -= id._value;
+                }
+            }
+        }
+
         public StatValues GetStat(StatID id)
         {
             foreach (StatValues stat in _stats)

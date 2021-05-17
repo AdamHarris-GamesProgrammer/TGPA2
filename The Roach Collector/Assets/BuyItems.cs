@@ -16,7 +16,7 @@ public class BuyItems : MonoBehaviour
     }
 
     [SerializeField] private BuyableItemUI _buyablePrefab;
-    [SerializeField] private BuyableItem[] _items;
+    [SerializeField] private List<BuyableItem> _items;
     [SerializeField] Transform _itemTransform;
 
     [SerializeField] Text _itemNameText;
@@ -26,7 +26,7 @@ public class BuyItems : MonoBehaviour
     Inventory _playerInventory;
     PlayerController _player;
 
-    BuyableItemUI _selectedItem = null;
+    static BuyableItemUI _selectedItem = null;
 
     public void SelectItem(BuyableItemUI ui)
     {
@@ -51,7 +51,7 @@ public class BuyItems : MonoBehaviour
         _player = FindObjectOfType<PlayerController>();
         _playerInventory =_player.GetComponent<Inventory>();
 
-        for(int i = 0; i < _items.Length; i++)
+        for(int i = 0; i < _items.Count; i++)
         {
             var item = Instantiate(_buyablePrefab, _itemTransform);
 
