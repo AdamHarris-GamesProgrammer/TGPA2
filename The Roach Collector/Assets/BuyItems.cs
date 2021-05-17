@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class BuyItems : MonoBehaviour
 {
     [System.Serializable]
-    struct BuyableItem
+    public struct BuyableItem
     {
         public InventoryItem _item;
         public int _quantity;
@@ -21,15 +21,18 @@ public class BuyItems : MonoBehaviour
 
     [SerializeField] Text _itemNameText;
     [SerializeField] Text _itemDescriptionText;
-    
+
+    public List<BuyableItem> Items { get { return _items; } }
 
     Inventory _playerInventory;
     PlayerController _player;
 
     static BuyableItemUI _selectedItem = null;
+    static List<BuyableItem> _selectedList = null;
 
     public void SelectItem(BuyableItemUI ui)
     {
+        _selectedList = ui.transform.parent.GetComponent<BuyItems>().Items;
         _selectedItem = ui;
 
         if (_selectedItem != null)
@@ -50,7 +53,7 @@ public class BuyItems : MonoBehaviour
     {
         _player = FindObjectOfType<PlayerController>();
         _playerInventory =_player.GetComponent<Inventory>();
-
+        _selectedList = new List<BuyableItem>();
         for(int i = 0; i < _items.Count; i++)
         {
             var item = Instantiate(_buyablePrefab, _itemTransform);
@@ -63,7 +66,7 @@ public class BuyItems : MonoBehaviour
     {
         if(_selectedItem != null)
         {
-            BuyableItem item = _items[_selectedItem.Index];
+            BuyableItem item = _selectedList[_selectedItem.Index];
 
             if (_player.HasEnoughMoney(item._price))
             {
