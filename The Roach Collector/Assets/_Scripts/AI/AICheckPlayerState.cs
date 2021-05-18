@@ -47,7 +47,7 @@ public class AICheckPlayerState : AIState
 
     public void Update(AIAgent agent)
     {
-        if (!_arrivedAtPoint && _navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        if (!_arrivedAtPoint && _navAgent.remainingDistance < 1.5f)
         {
             _arrivedAtPoint = true;
 

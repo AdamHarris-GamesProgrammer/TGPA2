@@ -80,7 +80,7 @@ public class AISearchForPlayerState : AIState
         }
 
 
-        if(_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        if(_navAgent.remainingDistance <= 1.5f)
         {
             _timer += Time.deltaTime;
 
@@ -97,7 +97,7 @@ public class AISearchForPlayerState : AIState
                 else
                 {
                     GameObject.FindObjectOfType<PlayerController>().IsDetected = false;
-                    agent.stateMachine.ChangeState(AiStateId.Idle);
+                    agent.ReturnToDefaultState();
                     //Debug.Log("End Search");
                 }
             }
