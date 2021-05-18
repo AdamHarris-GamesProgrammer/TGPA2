@@ -5,23 +5,22 @@ using UnityEngine.AI;
 
 public class AIIdleState : AIState
 {
-    Transform _player;
     FieldOfView _FOV;
     SoundPerception _soundPerception;
+    Vector3 _defaultPosition;
 
     public AIIdleState(AIAgent agent)
     {
-        _player = agent.GetPlayer();
         _FOV = agent.GetComponent<FieldOfView>();
         _soundPerception = agent.GetComponentInChildren<SoundPerception>();
+        _defaultPosition = agent.transform.position;
     }
 
     public void Enter(AIAgent agent)
     {
         agent.GetComponent<AIWeapons>().SetTarget(null);
         agent.GetComponent<AIWeapons>().SetFiring(false);
-        agent.GetComponent<NavMeshAgent>().isStopped = true;
-
+        agent.GetComponent<NavMeshAgent>().SetDestination(_defaultPosition);
     }
 
     public void Exit(AIAgent agent)
@@ -41,9 +40,6 @@ public class AIIdleState : AIState
         {
             //Player is in view, change to chase state
             //Debug.Log("Player in FOV");
-            //TODO: Incorporate Perception system 
-            //TODO: Add in Object for players last known position
-            //TODO: Check out if the player is still there. 
             agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);
         }
 
