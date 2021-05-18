@@ -6,7 +6,6 @@ using UnityEngine;
 public class PatrolRoute : MonoBehaviour
 {
     Transform[] _patrolPoints;
-    int _index = 0;
 
     [Tooltip("If looping is set to true then the AI will go from the last to the first waypoint. If it is set to false the AI will go back to the previous point.")]
     [SerializeField] bool _loop = false;
@@ -22,26 +21,24 @@ public class PatrolRoute : MonoBehaviour
         }
     }
 
-    public Vector3 GetNextPoint()
+    public Vector3 GetNextPoint(int index)
     {
-        _index = CycleIndex();
-
-        return _patrolPoints[_index].position;
+        return _patrolPoints[index].position;
     }
 
-    private int CycleIndex()
+    public int CycleIndex(int index)
     {
         if (_loop)
         {
-            return (_index + 1) % _patrolPoints.Length;
+            return (index + 1) % _patrolPoints.Length;
         }
         else
         {
-            if(_index == transform.childCount - 1) _incremeneter = -1;
-            else if(_index == 0) _incremeneter = 1;
+            if(index == transform.childCount - 1) _incremeneter = -1;
+            else if(index == 0) _incremeneter = 1;
 
-            _index += _incremeneter;
-            return _index;
+            index += _incremeneter;
+            return index;
         }
     }
 

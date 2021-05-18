@@ -8,11 +8,13 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-    
+
 
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
+
+
 
     [SerializeField] private int _AiClipBullets = 0;
     [SerializeField] private int _AiTotalBullets = 0;
@@ -37,6 +39,15 @@ public class AIAgent : MonoBehaviour
     List<CoverController> _coversInScene;
 
     CombatZone _owningZone;
+
+    [Header("Patrol Settings")]
+    [SerializeField] PatrolRoute _route;
+    [SerializeField] float _movementSpeedInPatrol = 1.5f;
+    [SerializeField] float _waitAtEachPointDuration = 7.5f;
+
+    float _defaultMoveSpeed = 5.4f;
+    public float DefaultMoveSpeed { get { return _defaultMoveSpeed; } }
+
     public CombatZone Zone { get { return _owningZone; } }
 
     bool _beingKilled = false;
@@ -74,6 +85,8 @@ public class AIAgent : MonoBehaviour
         _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
+
+        _defaultMoveSpeed = GetComponent<NavMeshAgent>().speed;
     }
 
     // Start is called before the first frame update
@@ -91,6 +104,11 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AICheckPlayerState(this));
         stateMachine.RegisterState(new AIMeleeState(this));
 
+        if(_route != null)
+        {
+            stateMachine.RegisterState(new PatrolState(this, _route, _movementSpeedInPatrol, _waitAtEachPointDuration));
+        }
+
         if (_startingWeapon)
         {
             RaycastWeapon weapon = Instantiate(_startingWeapon);
@@ -105,6 +123,11 @@ public class AIAgent : MonoBehaviour
             Aggrevate();
         }
 
+    }
+
+    public void ReturnToDefaultState()
+    {
+        stateMachine.ChangeState(_initialState);
     }
 
     // Update is called once per frame
