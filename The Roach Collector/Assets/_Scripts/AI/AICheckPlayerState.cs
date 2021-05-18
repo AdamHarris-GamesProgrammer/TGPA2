@@ -52,8 +52,6 @@ public class AICheckPlayerState : AIState
         if (!_arrivedAtPoint && _navAgent.remainingDistance < 1.5f)
         {
             _arrivedAtPoint = true;
-
-
         }
 
         Vector3 direction = _lastKnownLocation.transform.position - _agent.transform.position;
@@ -98,22 +96,21 @@ public class AICheckPlayerState : AIState
                     }
                 }
             }
+        }
 
-            if (_agent.GetComponent<FieldOfView>().IsEnemyInFOV)
+        if (_agent.GetComponent<FieldOfView>().IsEnemyInFOV)
+        {
+            foreach (AIAgent ally in agents)
             {
-                foreach (AIAgent ally in agents)
-                {
-                    ally.stateMachine.ChangeState(AiStateId.CombatState);
-                }
+                ally.stateMachine.ChangeState(AiStateId.CombatState);
             }
-            else
+        }
+        else
+        {
+            foreach (AIAgent ally in agents)
             {
-                foreach (AIAgent ally in agents)
-                {
-                    ally.stateMachine.ChangeState(AiStateId.SearchForPlayer);
-                }
+                ally.stateMachine.ChangeState(AiStateId.SearchForPlayer);
             }
-
         }
     }
 
