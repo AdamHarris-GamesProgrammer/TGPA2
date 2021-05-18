@@ -28,14 +28,14 @@ public class PatrolState : AIState
 
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
         _index = _route.CycleIndex(_index);
         _navAgent.SetDestination(_route.GetNextPoint(_index));
         _navAgent.stoppingDistance = 0.5f;
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
         _navAgent.speed = _agent.DefaultMoveSpeed;
     }
@@ -45,7 +45,7 @@ public class PatrolState : AIState
         return AiStateId.Patrol;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
         if(_navAgent.remainingDistance <= 1.5f)
         {

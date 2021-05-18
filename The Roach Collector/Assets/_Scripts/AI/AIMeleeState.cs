@@ -6,18 +6,20 @@ public class AIMeleeState : AIState
 {
 
     Animator AnimController;
+    AIAgent _agent;
 
     public AIMeleeState(AIAgent agent)
     {
         AnimController = agent.GetComponent<Animator>();
+        _agent = agent;
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
         
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
         
     }
@@ -27,10 +29,10 @@ public class AIMeleeState : AIState
         return AiStateId.Melee;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
 
-        if(Vector3.Distance(agent.GetPlayer().position, agent.transform.position) < 3.0f)
+        if(Vector3.Distance(_agent.GetPlayer().position, _agent.transform.position) < 3.0f)
         {
             AnimController.SetTrigger("Stab");
 
@@ -38,11 +40,11 @@ public class AIMeleeState : AIState
 
         if (AnimController.GetCurrentAnimatorStateInfo(0).IsName("Stabbing") && AnimController.GetCurrentAnimatorStateInfo(0).length > AnimController.GetCurrentAnimatorStateInfo(0).normalizedTime)
         {
-            agent.GetComponent<WeaponStabCheck>().SetStabbing(true);
+            _agent.GetComponent<WeaponStabCheck>().SetStabbing(true);
         }
         else
         {
-            agent.GetComponent<WeaponStabCheck>().SetStabbing(false);
+            _agent.GetComponent<WeaponStabCheck>().SetStabbing(false);
         }
 
     }

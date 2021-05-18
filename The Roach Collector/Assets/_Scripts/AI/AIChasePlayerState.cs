@@ -6,8 +6,10 @@ public class AIChasePlayerState : AIState
 {
     MeshSockets _sockets;
     AIWeapons _aiWeapon;
-    NavMeshAgent _agent;
+    NavMeshAgent _navAgent;
     Transform _player;
+
+    AIAgent _agent;
 
     float _timer = 0.0f;
 
@@ -15,17 +17,17 @@ public class AIChasePlayerState : AIState
     {
         _sockets = agent.GetComponent<MeshSockets>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
-        _agent = agent.GetComponent<NavMeshAgent>();
+        _navAgent = agent.GetComponent<NavMeshAgent>();
         _player = agent.GetPlayer();
-
+        _agent = agent;
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
         _sockets.Attach(_aiWeapon.transform, MeshSockets.SocketID.RightHand);
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
 
     }
@@ -35,27 +37,27 @@ public class AIChasePlayerState : AIState
         return AiStateId.ChasePlayer;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
         //If the agent is not enabled then we dont update
-        if (!_agent.enabled) return;
+        if (!_navAgent.enabled) return;
 
         _timer -= Time.deltaTime;
 
         //Only sets the destination every few seconds and only if the player is further than a certain distance. This is a optimization as setting the destination is computationally expensive
         if (_timer < 0.0f)
         {
-            float sqrDistance = (_player.position - _agent.destination).sqrMagnitude;
-            if (sqrDistance > agent._config._minDistance * agent._config._minDistance)
+            float sqrDistance = (_player.position - _navAgent.destination).sqrMagnitude;
+            if (sqrDistance > _agent._config._minDistance * _agent._config._minDistance)
             {
-                _agent.destination = _player.position;
+                _navAgent.destination = _player.position;
             }
-            _timer = agent._config._maxTime;
+            _timer = _agent._config._maxTime;
         }
 
-        if(Vector3.Distance(_player.position, _agent.transform.position) < agent._config._attackDistance)
+        if(Vector3.Distance(_player.position, _navAgent.transform.position) < _agent._config._attackDistance)
         {
-            agent.stateMachine.ChangeState(AiStateId.CombatState);
+            _agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
     }
 }

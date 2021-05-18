@@ -5,20 +5,20 @@ using UnityEngine.AI;
 
 public class AIFindWeaponState : AIState
 {
-    NavMeshAgent _agent;
+    AIAgent _agent;
     AIWeapons _aiWeapon;
 
     public AIFindWeaponState(AIAgent agent)
     {
-        _agent = agent.GetComponent<NavMeshAgent>();
+        _agent = agent;
         _aiWeapon = agent.GetComponent<AIWeapons>();
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
     }
 
@@ -27,11 +27,11 @@ public class AIFindWeaponState : AIState
         return AiStateId.FindWeapon;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
         if(_aiWeapon.HasWeapon())
         {
-            agent.stateMachine.ChangeState(AiStateId.CombatState);
+            _agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
     }
 
