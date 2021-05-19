@@ -307,6 +307,7 @@ namespace Harris.Inventories
             for (int i = 0; i < _inventorySize; i++)
             {
                 _slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
+
                 _slots[i].number = slotStrings[i].number;
             }
             if (InventoryUpdated != null)
