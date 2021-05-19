@@ -1,4 +1,5 @@
 using Harris.Inventories;
+using Harris.Saving;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using static Harris.Inventories.Inventory;
 
 namespace TGP.Control
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, ISaveable
     {
         bool _canDisableAlarm = false;
 
@@ -349,6 +350,30 @@ namespace TGP.Control
 #pragma warning restore IDE0051 // Remove unused private members
         {
             _inKillAnimation = false;
+        }
+
+        [System.Serializable]
+        struct SaveRecord
+        {
+            public float cash;
+            public int roaches;
+        }
+
+        public object Save()
+        {
+            SaveRecord saveData;
+            saveData.cash = _currency;
+            saveData.roaches = _roaches;
+
+            return saveData;
+        }
+
+        public void Load(object state)
+        {
+            SaveRecord record = (SaveRecord)state;
+
+            _currency = record.cash;
+            _roaches = record.roaches;
         }
     }
 

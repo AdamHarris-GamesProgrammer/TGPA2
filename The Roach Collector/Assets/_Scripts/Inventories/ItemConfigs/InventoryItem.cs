@@ -45,6 +45,10 @@ namespace Harris.Inventories
                 var itemList = UnityEngine.Resources.LoadAll<InventoryItem>("");
                 foreach (var item in itemList)
                 {
+                    if(item._itemID == null)
+                    {
+                        Debug.LogError(item.Name + " has a null ID");
+                    }
                     if (itemLookupCache.ContainsKey(item._itemID))
                     {
                         Debug.LogError(string.Format("Looks like there's a duplicate InventorySystem ID for objects: {0} and {1}", itemLookupCache[item._itemID], item));
