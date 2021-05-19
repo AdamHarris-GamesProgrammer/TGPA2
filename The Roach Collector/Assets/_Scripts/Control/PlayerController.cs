@@ -374,6 +374,9 @@ namespace TGP.Control
 
             _currency = record.cash;
             _roaches = record.roaches;
+
+            UpdateRoach();
+            UpdateCash();
         }
     }
 
