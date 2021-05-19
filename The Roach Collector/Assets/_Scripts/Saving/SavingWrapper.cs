@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using Harris.Saving;
 
-namespace TGP.Saving
-{
-
-}
 public class SavingWrapper : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Save();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Load();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Save()
     {
-        
+        GetComponent<SavingSystem>().Save(Application.persistentDataPath + "save.sav");
+    }
+
+    public void Load()
+    {
+        GetComponent<SavingSystem>().Load(Application.persistentDataPath + "save.sav");
     }
 }
