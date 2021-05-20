@@ -159,6 +159,12 @@ public class AIAgent : MonoBehaviour
             stateMachine.ChangeState(AiStateId.Melee);
         }
 
+        if(_player.GetComponent<PlayerHealth>().IsDead)
+        {
+            GetComponent<Animator>().SetBool("PlayerDead", true);
+            _aiWeapon.SetFiring(false);
+            _aiWeapon.SetTarget(null);
+        }
     }
 
     public void Aggrevate()
