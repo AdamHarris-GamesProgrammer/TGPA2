@@ -39,7 +39,6 @@ public class WeaponStab : MonoBehaviour
         else
         {
             Parent = collision.collider.GetComponentInParent<AIAgent>().gameObject;
-            
         }
 
 
