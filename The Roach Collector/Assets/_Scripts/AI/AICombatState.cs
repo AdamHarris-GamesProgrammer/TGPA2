@@ -11,24 +11,30 @@ public class AICombatState : AIState
 
     Health _playerHealth;
 
+    AIAgent _agent;
+
     public AICombatState(AIAgent agent)
     {
+        _agent = agent;
         _combatBehaviours = new List<CombatSnippet>();
-        _playerHealth = agent.GetPlayer().GetComponent<Health>();
+        _playerHealth = _agent.GetPlayer().GetComponent<Health>();
 
-        RegisterSnippet(agent, new AdvanceSnippet());
-        RegisterSnippet(agent, new CoverSnippet());
-        RegisterSnippet(agent, new CallForBackupSnippet());
-        RegisterSnippet(agent, new ReloadSnippet());
-        RegisterSnippet(agent, new SetAlarmSnippet());
+        RegisterSnippet(new AdvanceSnippet());
+        RegisterSnippet(new CoverSnippet());
+        RegisterSnippet(new CallForBackupSnippet());
+        RegisterSnippet(new ReloadSnippet());
+        RegisterSnippet(new SetAlarmSnippet());
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
         if (_playerHealth.IsDead)
         {
-            agent.stateMachine.ChangeState(AiStateId.Idle);
+            Debug.Log("Player Dead");
+            _agent.stateMachine.ChangeState(AiStateId.Idle);
         }
+
+        if (_agent.BeingKilled) return;
 
         if (_currentSnippet.IsFinished())
         {
@@ -48,7 +54,7 @@ public class AICombatState : AIState
                 }
             }
 
-            SwitchSnippets(agent, newSnippet);
+            SwitchSnippets(newSnippet);
         }
         else
         {
@@ -56,15 +62,15 @@ public class AICombatState : AIState
         }
     }
 
-    private void SwitchSnippets(AIAgent agent, CombatSnippet newSnippet)
+    private void SwitchSnippets(CombatSnippet newSnippet)
     {
         _currentSnippet = newSnippet;
         _currentSnippet.EnterSnippet();
     }
 
-    private void RegisterSnippet(AIAgent agent, CombatSnippet snippet)
+    private void RegisterSnippet(CombatSnippet snippet)
     {
-        snippet.Initialize(agent);
+        snippet.Initialize(_agent);
         _combatBehaviours.Add(snippet);
     }
 
@@ -73,9 +79,9 @@ public class AICombatState : AIState
         return AiStateId.CombatState;
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
-        Debug.Log("Entered Combat State");
+        //Debug.Log("Entered Combat State");
 
         //Decide starting snippet
         int highestScore = 0;
@@ -90,12 +96,11 @@ public class AICombatState : AIState
                 _currentSnippet = behavior;
             }
         }
-
-        agent.GetComponent<NavMeshAgent>().isStopped = false;
+        _agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
-
+        //Debug.Log("Exiting Combat State");
     }
 }

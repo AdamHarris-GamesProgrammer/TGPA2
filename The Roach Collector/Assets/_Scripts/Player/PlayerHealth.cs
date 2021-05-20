@@ -9,7 +9,6 @@ public class PlayerHealth : Health
 {
     ActiveWeapon _weapon;
     CharacterAiming _aiming;
-    CinemachineFreeLook _camera;
     Animator _animator;
     PlayerHealthEffectController _healthEffectController;
     Equipment _equipment;
@@ -20,7 +19,6 @@ public class PlayerHealth : Health
     {
         _weapon = GetComponent<ActiveWeapon>();
         _aiming = GetComponent<CharacterAiming>();
-        _camera = FindObjectOfType<CinemachineFreeLook>();
         _animator = GetComponent<Animator>();
         _healthEffectController = GetComponent<PlayerHealthEffectController>();
         _equipment = GetComponent<Equipment>();
@@ -69,6 +67,7 @@ public class PlayerHealth : Health
         //Left over damage is now updated to use the armor and the damage to go through
         leftOverDamage = leftOverDamage - armorBlocks + damageToGoThrough;
 
+        Debug.Log(leftOverDamage);
 
         base.TakeDamage(type, leftOverDamage);
     }
@@ -77,7 +76,11 @@ public class PlayerHealth : Health
     {
         _weapon.DropWeapon();
         _aiming.enabled = false;
-        _camera.enabled = false;
+
+        GetComponent<PlayerController>().AimCam.SetActive(false);
+        GetComponent<PlayerController>().FollowCam.SetActive(false);
+
+
         _animator.SetTrigger("isDead");
     }
 

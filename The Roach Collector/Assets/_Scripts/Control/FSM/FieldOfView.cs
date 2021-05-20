@@ -42,6 +42,7 @@ public class FieldOfView : MonoBehaviour
         }
         else
         {
+            _playerGO.GetComponent<PlayerController>().IsDetected = false;
             //Debug.Log("Enemy not in fov");
             _isEnemyinFOV = false;
         }
@@ -61,7 +62,7 @@ public class FieldOfView : MonoBehaviour
     void FindVisibleTargets()
     {
         _visibleTargets.Clear();
-        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
+        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius / 2, _targetMask);
         foreach (Collider target in TargetsInRadius)
         {
             //Debug.Log(target.transform.name);
@@ -74,7 +75,7 @@ public class FieldOfView : MonoBehaviour
 
                 RaycastHit hitInfo;
          
-                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, _targetMask))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius / 2, _targetMask))
                 {
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")

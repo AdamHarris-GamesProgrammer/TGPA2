@@ -1,14 +1,16 @@
 using Harris.Inventories;
+using Harris.Saving;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using static Harris.Inventories.Inventory;
 
 namespace TGP.Control
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, ISaveable
     {
         bool _canDisableAlarm = false;
 
@@ -18,7 +20,11 @@ namespace TGP.Control
 
         public bool InKillAnimation { get { return _inKillAnimation; } }
 
-        public AIAgent AgentInRange { get { return _agentInRange; } set { _agentInRange = value; } }
+        public AIAgent AgentInRange { get { return _agentInRange; }
+            set {
+                _agentInRange = value;
+                gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
+            } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
         AlarmController _alarm = null;
@@ -32,21 +38,77 @@ namespace TGP.Control
         [SerializeField] GameObject _applyingSpeedText = null;
 
 
+        [SerializeField] GameObject _aimCam;
+        [SerializeField] GameObject _followCam;
+
+        [SerializeField] Text _roachText;
+        [SerializeField] Text _cashText;
+
+        public GameObject AimCam { get { return _aimCam; } }
+        public GameObject FollowCam { get { return _followCam; } }
+
         LockedDoor _doorInRange = null;
+
+        bool _isShooting = false;
+        bool _isStanding = true;
+
+        public bool IsShooting { get { return _isShooting; } set { _isShooting = value; } }
+        public bool IsStanding { get { return _isStanding; } set { _isStanding = value; } }
+
+        private float _currency = 0.0f;
+        private int _roaches = 0;
+
+        public void SpendRoach(int amount) {
+            _roaches -= amount;
+            UpdateRoach();
+        }
+
+        public void GainRoach(int amount) {
+            _roaches += amount;
+            UpdateRoach();
+        }
+
+        void UpdateCash(){
+            _cashText.text = _currency.ToString("#0.00");
+        }
+
+        void UpdateRoach() {
+            _roachText.text = _roaches.ToString();
+        }
+
+        public bool HasEnoughRoach(int amount) {
+            return (_roaches - amount) >= 0;
+        }
+
+        public void SpendMoney(float amount) {
+            _currency -= amount;
+            UpdateCash();
+        }
+
+        public void GainMoney(float amount) {
+            _currency += amount;
+            UpdateCash();
+        }
+
+        public bool HasEnoughMoney(float amount) {
+            return (_currency - amount >= 0.0f);
+        }
+
         public LockedDoor DoorInRange
         {
             get { return _doorInRange; }
             set
             {
                 _doorInRange = value;
-                if (value == null) _unlockDoorPrompt.SetActive(false);
-                else _unlockDoorPrompt.SetActive(true);
+                SendMessage("DisplayDoorPrompt", value);
+                
             }
         }
 
         public void ResetStats()
         {
-            for(int i = 0; i < _stats.Length; i++) {
+            for (int i = 0; i < _stats.Length; i++)
+            {
                 _stats[i]._value = 0.0f;
             }
         }
@@ -59,10 +121,6 @@ namespace TGP.Control
         ActionStore _actionSlots;
 
         Animator _animator;
-
-        [SerializeField] Vector3 _assassinOffset = Vector3.back;
-
-        [SerializeField] GameObject _unlockDoorPrompt;
 
         Inventory _playerInventory;
 
@@ -88,9 +146,20 @@ namespace TGP.Control
             }
         }
 
+        public void UnequipStat(StatValues id)
+        {
+            for(int i = 0; i < _stats.Length; i++)
+            {
+                if(_stats[i]._id == id._id)
+                {
+                    _stats[i]._value -= id._value;
+                }
+            }
+        }
+
         public StatValues GetStat(StatID id)
         {
-            foreach(StatValues stat in _stats)
+            foreach (StatValues stat in _stats)
             {
                 if (stat._id == id) return stat;
             }
@@ -135,6 +204,9 @@ namespace TGP.Control
             _itemsToRemoveThisFrame = new List<UsableItem>();
             _chestInventory = GameObject.FindGameObjectWithTag("ChestCanvas");
             _chestInventory.SetActive(false);
+
+            UpdateCash();
+            UpdateRoach();
         }
 
 
@@ -142,8 +214,11 @@ namespace TGP.Control
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
+                //Debug.Log("F is pressed");
+
                 if (_agentInRange != null && !_detected)
                 {
+                    //Debug.Log("Assassinate");
                     if (_agentInRange.GetHealth().IsDead) return;
                     //TODO: Somehow make the animation look better 
 
@@ -157,7 +232,6 @@ namespace TGP.Control
                     _agentInRange.BeingKilled = true;
 
                     _inKillAnimation = true;
-
 
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
 
@@ -218,20 +292,12 @@ namespace TGP.Control
                     _alarm.DisableAlarm();
                 }
             }
+
             InteractWithAssassination();
 
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                InteractWithEquipment();
-
-            }
-            else
-            {
-                InteractWithActionBar();
-            }
+            InteractWithActionBar();
 
             InteractWithLockedDoor();
-
 
             InteractWithUsables();
 
@@ -268,56 +334,49 @@ namespace TGP.Control
 
         }
 
-        private void InteractWithEquipment()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                //Debug.Log("Shift + 1");
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                //Debug.Log("Shift + 2");
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                //Debug.Log("Shift + 3");
-            }
-        }
-
         private void InteractWithActionBar()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                _actionSlots.Use(0, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                _actionSlots.Use(1, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                _actionSlots.Use(2, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                _actionSlots.Use(3, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                _actionSlots.Use(4, this.gameObject);
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-                _actionSlots.Use(5, this.gameObject);
-            }
+            if (Input.GetKeyDown(KeyCode.Alpha1))      _actionSlots.Use(0, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) _actionSlots.Use(1, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) _actionSlots.Use(2, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) _actionSlots.Use(3, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha5)) _actionSlots.Use(4, this.gameObject);
+            else if (Input.GetKeyDown(KeyCode.Alpha6)) _actionSlots.Use(5, this.gameObject);
         }
 
         //Animation event from the StealthAttack animation 
-#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable IDE0051 // Remove unused private members //This is just disabling a warning as OutOfKillAnim is not technically used in code but instead is called in a animation
         void OutOfKillAnim()
 #pragma warning restore IDE0051 // Remove unused private members
         {
             _inKillAnimation = false;
+        }
+
+        [System.Serializable]
+        struct SaveRecord
+        {
+            public float cash;
+            public int roaches;
+        }
+
+        public object Save()
+        {
+            SaveRecord saveData;
+            saveData.cash = _currency;
+            saveData.roaches = _roaches;
+
+            return saveData;
+        }
+
+        public void Load(object state)
+        {
+            SaveRecord record = (SaveRecord)state;
+
+            _currency = record.cash;
+            _roaches = record.roaches;
+
+            UpdateRoach();
+            UpdateCash();
         }
     }
 

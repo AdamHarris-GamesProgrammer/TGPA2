@@ -11,13 +11,14 @@ public enum AiStateId
     Patrol,
     CombatState,
     GotToPlayerLocation,
-    SearchForPlayer
+    SearchForPlayer,
+    Melee
 }
 
 public interface AIState
 {
     AiStateId GetID();
-    void Enter(AIAgent agent);
-    void Update(AIAgent agent);
-    void Exit(AIAgent agent);
+    void Enter();
+    void Update();
+    void Exit();
 }

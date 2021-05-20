@@ -7,63 +7,65 @@ using UnityEngine.UI;
 
 namespace Harris.UI.Inventories
 {
-    /// <summary>
-    /// The UI slot for the player action bar.
-    /// </summary>
     public class ActionSlotUI : MonoBehaviour, IItemHolder, IDragContainer<InventoryItem>
     {
-        // CONFIG DATA
-        [SerializeField] InventoryItemIcon icon = null;
-        [SerializeField] public int index = 0;
-        [SerializeField] Text textObject;
+        [SerializeField] InventoryItemIcon _icon = null;
+        [SerializeField] public int _index = 0;
+        [SerializeField] Text _textObject;
 
-        // CACHE
-        ActionStore store;
+        ActionStore _store;
 
-        // LIFECYCLE METHODS
         private void Awake()
         {
+            //find the player
             var player = GameObject.FindGameObjectWithTag("Player");
             if (!player) return;
-            store = player.GetComponent<ActionStore>();
-            if (!store) return;
-            store.storeUpdated += UpdateIcon;
 
-            textObject.text = string.Format("{0}", index + 1);
+            //find the action store
+            _store = player.GetComponent<ActionStore>();
+            if (!_store) return;
+            _store.storeUpdated += UpdateIcon;
+
+            //setup the Hotkey number above the slot.
+            _textObject.text = string.Format("{0}", _index + 1);
         }
 
-        // PUBLIC
 
-        public void AddItems(InventoryItem item, int number)
-        {
-            store.AddAction(item, index, number);
-        }
-
+        //Returns the item at the index of this action bar
         public InventoryItem GetItem()
         {
-            return store.GetItem(index);
+            return _store.GetItem(_index);
         }
 
+        //Adds an item the slot
+        public void AddItems(InventoryItem item, int number)
+        {
+            _store.AddItem(item, _index, number);
+        }
+
+        //Gets the number of items in this location
         public int GetNumber()
         {
-            return store.GetNumber(index);
+            return _store.GetNumber(_index);
         }
 
+        //Gets the maximum amount of items allowed in this slot
         public int MaxAcceptable(InventoryItem item)
         {
-            return store.MaxAcceptable(item, index);
+            return _store.MaxAcceptable(item, _index);
         }
 
+        //Remove X amount of items from this slot
         public void RemoveItems(int number)
         {
-            store.RemoveItems(index, number);
+            _store.RemoveItems(_index, number);
         }
 
-        // PRIVATE
 
+        //Updates the icon for the slot
         void UpdateIcon()
         {
-            icon.SetItem(GetItem(), GetNumber());
+            _icon.SetItem(GetItem(), GetNumber());
         }
     }
 }
