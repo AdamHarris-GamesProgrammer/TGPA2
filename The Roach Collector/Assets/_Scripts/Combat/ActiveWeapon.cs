@@ -20,6 +20,9 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
+
+    [SerializeField] private GameObject InventoryCanvas = null;
+
     //PlayerUI _PlayerUI = null;
     [SerializeField] public PlayerUI _PlayerUI = null;
     public RaycastWeapon _MeleeWeapon;
@@ -228,7 +231,7 @@ public class ActiveWeapon : MonoBehaviour
     void MeleeLogic()
     {
 
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && !InventoryCanvas.activeSelf)
         {
             _anim.SetTrigger("Stab");
         }
