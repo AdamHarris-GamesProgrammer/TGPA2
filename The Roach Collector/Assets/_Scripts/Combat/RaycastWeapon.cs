@@ -85,7 +85,7 @@ public class RaycastWeapon : MonoBehaviour
             _clipAmmo = _config.ClipSize;
         }
 
-        _timeBetweenShots = 1.0f / _config.FireRate;
+        _timeBetweenShots = 60.0f / _config.FireRate;
     }
 
     public void Update()
