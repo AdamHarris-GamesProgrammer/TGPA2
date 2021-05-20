@@ -34,6 +34,7 @@ public class ActiveWeapon : MonoBehaviour
     [SerializeField] private RaycastWeapon _weapon;
 
     [SerializeField] private bool _isMelee = true;
+    bool _isStabbing = false;
 
     private void Awake()
     {
@@ -233,8 +234,9 @@ public class ActiveWeapon : MonoBehaviour
     void MeleeLogic()
     {
 
-        if(Input.GetButtonDown("Fire1") && !InventoryCanvas.activeSelf)
+        if(Input.GetButtonDown("Fire1") && !InventoryCanvas.activeSelf && _isStabbing == false)
         {
+            _isStabbing = true;
             _anim.SetTrigger("Stab");
         }
 
@@ -245,6 +247,7 @@ public class ActiveWeapon : MonoBehaviour
         else
         {
             GetComponent<WeaponStabCheck>().SetStabbing(false);
+            _isStabbing = false;
         }
 
     }
