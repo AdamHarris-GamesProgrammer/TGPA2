@@ -9,7 +9,9 @@ public class BrickAgent : AIAgent
     FieldOfView _fov;
     [SerializeField]
     AIHealth _brickHealth;
-
+    [SerializeField]
+    GameObject _playerGO;
+    [SerializeField]
     Transform _player;
 
     bool _isAggrevated = true;
@@ -18,20 +20,26 @@ public class BrickAgent : AIAgent
     {
         thisAnim = GetComponent<Animator>();
         _fov = GetComponent<FieldOfView>();
-        
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _player = GameObject.FindGameObjectWithTag("Player").transform;
-        _fov = GetComponent<FieldOfView>();
+
+
+        if(_player == null)
+        {
+            Debug.Log("BRICKAGENT::Player is null");
+        }
+
+        //_fov = GetComponent<FieldOfView>();
 
         stateMachine = new AIStateMachine(this);
-        stateMachine.RegisterState(new AIChasePlayerState(this));
+        stateMachine.RegisterState(new AIBossChase(this));
+        //stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
         stateMachine.RegisterState(new AIIdleState(this));
-        stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
 
         stateMachine.ChangeState(_initialState);
@@ -51,6 +59,7 @@ public class BrickAgent : AIAgent
         {
             Debug.Log("player detected!");
             thisAnim.SetTrigger("isDetected");
+            stateMachine.ChangeState(AiStateId.BossChase);
         }
     }
 

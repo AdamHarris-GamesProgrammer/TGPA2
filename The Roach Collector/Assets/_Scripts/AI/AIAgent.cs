@@ -8,8 +8,6 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-
-
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;

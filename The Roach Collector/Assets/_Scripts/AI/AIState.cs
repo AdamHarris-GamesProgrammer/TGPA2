@@ -13,7 +13,8 @@ public enum AiStateId
     GotToPlayerLocation,
     SearchForPlayer,
     Melee,
-    BrickMelee
+    BrickMelee,
+    BossChase,
 }
 
 public interface AIState

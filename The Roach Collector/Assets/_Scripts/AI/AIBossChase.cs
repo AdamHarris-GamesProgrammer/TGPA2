@@ -1,31 +1,34 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-public class AIChasePlayerState : AIState
+
+public class AIBossChase : AIState
 {
     MeshSockets _sockets;
-    AIWeapons _aiWeapon;
+    //AIWeapons _aiWeapon;
     NavMeshAgent _navAgent;
+    [SerializeField]
     Transform _player;
 
-    AIAgent _agent;
+    BrickAgent _agent;
 
     float _timer = 0.0f;
 
-    public AIChasePlayerState(AIAgent agent)
+    public AIBossChase(BrickAgent agent)
     {
         _sockets = agent.GetComponent<MeshSockets>();
-        _aiWeapon = agent.GetComponent<AIWeapons>();
+        //_aiWeapon = agent.GetComponent<AIWeapons>();
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _player = agent.GetPlayer();
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
         _agent = agent;
-        
     }
 
     public void Enter()
     {
-        _sockets.Attach(_aiWeapon.transform, MeshSockets.SocketID.RightHand);
+        //_sockets.Attach(_aiWeapon.transform, MeshSockets.SocketID.RightHand);
+
     }
 
     public void Exit()
@@ -35,11 +38,17 @@ public class AIChasePlayerState : AIState
 
     public AiStateId GetID()
     {
-        return AiStateId.ChasePlayer;
+        return AiStateId.BossChase;
     }
 
     public void Update()
     {
+        
+        Debug.Log("Boss STate Update");
+        if (_player == null)
+        {
+            Debug.Log("player agent null2");
+        }
         //If the agent is not enabled then we dont update
         if (!_navAgent.enabled) return;
 
@@ -56,7 +65,7 @@ public class AIChasePlayerState : AIState
             _timer = _agent._config._maxTime;
         }
 
-        if(Vector3.Distance(_player.position, _navAgent.transform.position) < _agent._config._attackDistance)
+        if (Vector3.Distance(_player.position, _navAgent.transform.position) < _agent._config._attackDistance)
         {
             _agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
