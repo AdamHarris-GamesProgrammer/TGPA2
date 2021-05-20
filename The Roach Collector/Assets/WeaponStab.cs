@@ -37,7 +37,7 @@ public class WeaponStab : MonoBehaviour
         {
             Parent = Player;
         }
-        else
+        else if(collision.transform.root.name == "Enemies")
         {
             Parent = collision.collider.GetComponentInParent<AIAgent>().gameObject;
         }
