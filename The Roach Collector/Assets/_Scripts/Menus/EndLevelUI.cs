@@ -15,7 +15,7 @@ using Harris.Saving;
 struct LevelData
 {
     public int highscore;
-    public int bestTime;
+    public float bestTime;
     public int highestRank;
     public int roachesCollected;        
 }
@@ -23,6 +23,8 @@ struct LevelData
 //UI for end level
 public class EndLevelUI : MonoBehaviour, ISaveable
 {
+    public LevelStats levelStats;
+
     public string LevelName;
     public Text LevelNameTXT;
     public Text Score;
@@ -37,12 +39,11 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     [SerializeField]private Sprite[] rankSprites = new Sprite [6];
     [SerializeField]private Image rankImage;
     [SerializeField]private int score;
-    [SerializeField]private int time;
+    [SerializeField]private float time;
     [SerializeField]private int rank;
 
-
     private int highscore;
-    private int bestTime;
+    private float bestTime;
     private int highestRank;
     private int roachesCollected; 
 
@@ -50,8 +51,6 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     //loads next level
     public void NextLevel()
     {
-        
-
         SceneManager.LoadScene("Level0" + (currentLevel + 1).ToString());
     }
 
@@ -81,6 +80,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
         //sets UI
         SetLevelName();
+        SetLevelStats();
         SetRoaches();
         CheckRank();
 
@@ -159,6 +159,24 @@ public class EndLevelUI : MonoBehaviour, ISaveable
             rankImage.sprite = rankSprites[0];
             rank = 5;
         }
+    }
+
+    private void SetLevelStats()
+    {
+        //calculate final score
+        levelStats.EndLevelScoreCalc();
+
+        //set score UI
+        score = levelStats.score;
+        Score.text = score.ToString();
+
+        //set time UI
+        time = levelStats.time;
+        int minutes = (int)time / 60; 
+        int seconds = (int)time % 60;
+        int fraction = (int)(time * 100) % 100;
+        Time.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
+
     }
 
     //save level data

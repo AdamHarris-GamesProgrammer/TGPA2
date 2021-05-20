@@ -22,25 +22,25 @@ public class LevelStats : MonoBehaviour
         {
             score += 10000;
         }
-
+        Debug.Log(time%60);
         //time bonus
-        if (time < 1 % 60)
+        if (time < 60)
         {
             score += 50000;
         }
-        else if (time < 2 % 60)
+        else if (time < 120)
         {
             score += 25000;
         }
-        else if (time < 3 % 60)
+        else if (time < 180)
         {
             score += 10000;
         }
-        else if (time < 4 % 60)
+        else if (time < 240)
         {
             score += 5000;
         }
-        else if (time < 5 % 60)
+        else if (time < 300)
         {
             score += 1000;
         }
