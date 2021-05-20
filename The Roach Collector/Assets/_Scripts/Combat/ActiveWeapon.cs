@@ -15,6 +15,8 @@ public class ActiveWeapon : MonoBehaviour
 
     [Header("Weapon Settings")]
     [SerializeField] private Transform _weaponParent = null;
+    [SerializeField] private Transform _weaponParentMelee = null;
+    
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
@@ -86,16 +88,15 @@ public class ActiveWeapon : MonoBehaviour
 
                 }
 
-                //if (_weapon._totalAmmo == 0 && _weapon._clipAmmo == 0 && _isMelee == false)
-                //{
-                //    _isMelee = true;
-                //    RaycastWeapon Melee = Instantiate(_MeleeWeapon);
-                //    Equip(Melee);
-                //}
-
                 if(_weapon.IsMelee())
                 {
+                    Debug.Log(_weapon.name);
                     _isMelee = true;
+                }
+                else
+                {
+                    Debug.Log(_weapon.name);
+                    _isMelee = false;
                 }
             
                 WeaponLogic();
@@ -130,7 +131,14 @@ public class ActiveWeapon : MonoBehaviour
 
         if (newWeapon)
         {
-            _weapon.transform.parent = _weaponParent;
+            if (_weapon.IsMelee())
+            {
+                _weapon.transform.parent = _weaponParentMelee;
+            }
+            else
+            {
+                _weapon.transform.parent = _weaponParent;
+            }
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
 

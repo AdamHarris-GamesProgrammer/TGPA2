@@ -10,6 +10,7 @@ public class WeaponStab : MonoBehaviour
 
     [SerializeField] private WeaponStabCheck _wsCheck;
     [SerializeField] private bool WSC = false;
+    [SerializeField] WeaponConfig MeleeConfig;
 
 
     private void Awake()
@@ -58,7 +59,7 @@ public class WeaponStab : MonoBehaviour
             if (WSC)
             {
                 //Debug.Log(transform.root.name + " STABBED " + collision.transform.root.name);
-                AttackedHealth.TakeDamage(DamageType.MELEE_DAMGE, 100);
+                AttackedHealth.TakeDamage(MeleeConfig.DamageType, MeleeConfig.Damage);
             }
         }
         
