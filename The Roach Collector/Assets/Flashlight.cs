@@ -8,6 +8,7 @@ public class Flashlight : MonoBehaviour
 
     void Awake() {
         _flashlight = GetComponent<Light>();
+        _flashlight.enabled = false;
     }
 
 

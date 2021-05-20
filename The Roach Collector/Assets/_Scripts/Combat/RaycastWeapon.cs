@@ -286,7 +286,7 @@ public class RaycastWeapon : MonoBehaviour
         _ray.origin = start;
         _ray.direction = direction;
 
-        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
+        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask, QueryTriggerInteraction.Ignore))
         {
             //Debug.Log("Hit: " + _hitInfo.transform.name);
 

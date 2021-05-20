@@ -36,6 +36,8 @@ public class AICombatState : AIState
 
         if (_agent.BeingKilled) return;
 
+        if(_currentSnippet == null) return;
+
         if (_currentSnippet.IsFinished())
         {
             int highestScore = 0;
@@ -96,6 +98,9 @@ public class AICombatState : AIState
                 _currentSnippet = behavior;
             }
         }
+
+        _currentSnippet.EnterSnippet();
+
         _agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 

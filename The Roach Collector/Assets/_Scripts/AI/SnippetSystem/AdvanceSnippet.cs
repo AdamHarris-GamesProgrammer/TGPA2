@@ -33,6 +33,23 @@ public class AdvanceSnippet : CombatSnippet
 
         _agent.transform.rotation = look;
 
+         if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+                {
+                    _aiWeapon.SetTarget(null);
+                    _aiWeapon.SetFiring(false);
+                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+                    {
+                        _aiWeapon.GetEquippedWeapon().Reload();
+                    }
+
+                    //Does the AI have any bullets left?
+                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
+                    {
+                        //TODO Switch to melee state here. 
+                    }
+                }
+
+
         if (_navAgent.remainingDistance <= 1.5f)
         {
             _stationaryTimer += Time.deltaTime;
@@ -85,7 +102,7 @@ public class AdvanceSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        //Debug.Log(_agent.transform.name + " Advance Snippet");
+        Debug.Log(_agent.transform.name + " Advance Snippet");
 
         _timer = 0.0f;
 
