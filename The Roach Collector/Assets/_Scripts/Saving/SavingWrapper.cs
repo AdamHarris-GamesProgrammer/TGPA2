@@ -21,17 +21,10 @@ public class SavingWrapper : MonoBehaviour
     public void Save()
     {
         GetComponent<SavingSystem>().Save(Application.persistentDataPath + "save.sav");
-        FindObjectOfType<SavingSystem>().Save("save.dat");
     }
 
     public void Load()
     {
         GetComponent<SavingSystem>().Load(Application.persistentDataPath + "save.sav");
-<<<<<<< Updated upstream
     }
-=======
-        FindObjectOfType<SavingSystem>().Load("save.dat");
-    }
-
->>>>>>> Stashed changes
 }
