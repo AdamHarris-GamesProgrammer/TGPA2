@@ -37,7 +37,7 @@ public class BrickAgent : AIAgent
 
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIBossChase(this));
-        //stateMachine.RegisterState(new AIChasePlayerState(this));
+        stateMachine.RegisterState(new BrickMelee(this));
         stateMachine.RegisterState(new AIDeathState(this));
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AICombatState(this));
@@ -63,4 +63,8 @@ public class BrickAgent : AIAgent
         }
     }
 
+    protected void MeleeAttack()
+    {
+
+    }
 }

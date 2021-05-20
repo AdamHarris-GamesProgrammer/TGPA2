@@ -30,7 +30,7 @@ public class AIStateMachine
 
         if(strate == null)
         {
-            Debug.Log(stateId + " has not been registered to " + _agent.name);
+            //Debug.Log(stateId + " has not been registered to " + _agent.name);
         }
 
         return states[index];

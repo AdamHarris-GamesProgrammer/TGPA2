@@ -44,7 +44,7 @@ public class AIBossChase : AIState
     public void Update()
     {
         
-        Debug.Log("Boss STate Update");
+        //Debug.Log("Boss STate Update");
         if (_player == null)
         {
             Debug.Log("player agent null2");
@@ -67,7 +67,7 @@ public class AIBossChase : AIState
 
         if (Vector3.Distance(_player.position, _navAgent.transform.position) < _agent._config._attackDistance)
         {
-            _agent.stateMachine.ChangeState(AiStateId.CombatState);
+            _agent.stateMachine.ChangeState(AiStateId.BrickMelee);
         }
     }
 }

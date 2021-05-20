@@ -9,12 +9,13 @@ public class BrickMelee : AIState
     NavMeshAgent _navAgent;
     Transform _player;
     Animator thisAnim;
-    private AIAgent _agent;
+    private BrickAgent _agent;
     FieldOfView _FOV;
 
-    public BrickMelee(AIAgent agent)
+    public BrickMelee(BrickAgent agent)
     {
         _player = agent.GetPlayer();
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _playerHealth = agent.GetPlayer().GetComponent<Health>();
         thisAnim = thisAnim.GetComponent<Animator>();
@@ -25,7 +26,7 @@ public class BrickMelee : AIState
 
     public void Enter()
     {
-
+        Debug.Log("Entered Melee state");
         //_agent.destination = _player.transform.position;
     }
 
@@ -41,15 +42,10 @@ public class BrickMelee : AIState
 
     public void Update()
     {
-        if (_FOV.IsEnemyInFOV)
+        Debug.Log("Entered Melee state");
+        if (Vector3.Distance(_player.position, _navAgent.transform.position) < _agent._config._attackDistance)
         {
-            Debug.Log("Player detected");
-            thisAnim.SetTrigger("isDetected");
-
-        }
-        if (!_navAgent.enabled)
-        {
-            return;
+            _agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
         if (_playerHealth.IsDead)
         {
