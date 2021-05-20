@@ -27,8 +27,8 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
     public string LevelName;
     public Text LevelNameTXT;
-    public Text Score;
-    public Text Time;
+    public Text ScoreTxt;
+    public Text TimeTxt;
     public Image RoachToken1;
     public Image RoachToken2;
     public Image RoachToken3;
@@ -74,6 +74,8 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
     void Start()
     {
+        Time.timeScale = 0;
+
         //unlock cursor
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -168,14 +170,14 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
         //set score UI
         score = levelStats.score;
-        Score.text = score.ToString();
+        ScoreTxt.text = score.ToString();
 
         //set time UI
         time = levelStats.time;
         int minutes = (int)time / 60; 
         int seconds = (int)time % 60;
         int fraction = (int)(time * 100) % 100;
-        Time.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
+        TimeTxt.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
 
     }
 

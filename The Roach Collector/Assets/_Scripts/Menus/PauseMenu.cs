@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public Button _MainMenuButton;
+    public Button _HideOutButton;
+    public Button _RespawnButton;
+
     // Start is called before the first frame update
     public void QuitToHideOut()
     {

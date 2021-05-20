@@ -36,7 +36,7 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
             if (isPaused)
