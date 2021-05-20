@@ -5,11 +5,17 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Harris.Saving;
 
+/// <summary>
+/// end level UI system with options scene movement between levels, score and time eval as well as saving score and time 
+/// </summary>
+
+
+//struct for level save data
 [System.Serializable]
 struct LevelData
 {
     public int highscore;
-    public int bestTime;
+    public float bestTime;
     public int highestRank;
     public int roachesCollected;        
 }
@@ -17,6 +23,8 @@ struct LevelData
 //UI for end level
 public class EndLevelUI : MonoBehaviour, ISaveable
 {
+    public LevelStats levelStats;
+
     public string LevelName;
     public Text LevelNameTXT;
     public Text Score;
@@ -31,34 +39,34 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     [SerializeField]private Sprite[] rankSprites = new Sprite [6];
     [SerializeField]private Image rankImage;
     [SerializeField]private int score;
-    [SerializeField]private int time;
+    [SerializeField]private float time;
     [SerializeField]private int rank;
 
-
     private int highscore;
-    private int bestTime;
+    private float bestTime;
     private int highestRank;
     private int roachesCollected; 
 
     
-
+    //loads next level
     public void NextLevel()
     {
-        FindObjectOfType<SavingWrapper>().Save();
-
         SceneManager.LoadScene("Level0" + (currentLevel + 1).ToString());
     }
 
+    //goes to hideout
     public void GoToHideout() 
     {
         SceneManager.LoadScene("HideOut");
     }
 
+    //goes to main menu
     public void MainMenu() 
     {
         SceneManager.LoadScene("MainMenu");
     }
 
+    //reloads load from start
     public void Retry()
     {
         SceneManager.LoadScene("Level" + currentLevel.ToString());
@@ -66,22 +74,27 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
     void Start()
     {
-        //FindObjectOfType<SavingWrapper>().Save();
+        //unlock cursor
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        //sets UI
         SetLevelName();
+        SetLevelStats();
         SetRoaches();
         CheckRank();
-        Debug.Log(score);
-        score+= 1000;
-        //FindObjectOfType<SavingWrapper>().Save();
+
+        //saves level data
+        FindObjectOfType<SavingWrapper>().Save();
     }
 
+    //sets level name
     void SetLevelName()
     {
         LevelNameTXT.text = LevelName; 
     }
 
+    //updates number of icons based on roaches collected
     void SetRoaches()
     {
         switch (roachCount)
@@ -148,6 +161,25 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         }
     }
 
+    private void SetLevelStats()
+    {
+        //calculate final score
+        levelStats.EndLevelScoreCalc();
+
+        //set score UI
+        score = levelStats.score;
+        Score.text = score.ToString();
+
+        //set time UI
+        time = levelStats.time;
+        int minutes = (int)time / 60; 
+        int seconds = (int)time % 60;
+        int fraction = (int)(time * 100) % 100;
+        Time.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
+
+    }
+
+    //save level data
     public object Save()
     {
         
@@ -173,6 +205,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         return data;
     }
 
+    //load level data
     public void Load(object state)
     {
         
