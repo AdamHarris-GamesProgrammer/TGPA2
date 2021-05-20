@@ -27,4 +27,12 @@ public class SavingWrapper : MonoBehaviour
     {
         GetComponent<SavingSystem>().Load(Application.persistentDataPath + "save.sav");
     }
+
+    public void Save() {
+        FindObjectOfType<SavingSystem>().Save("save.dat");
+    }
+
+    public void Load() {
+        FindObjectOfType<SavingSystem>().Load("save.dat");
+    }
 }
