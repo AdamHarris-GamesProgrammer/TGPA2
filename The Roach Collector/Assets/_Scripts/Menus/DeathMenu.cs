@@ -6,22 +6,22 @@ using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
 {
-    private bool isDead;
-    private Health _health;
-    private void Awake()
-    {
-        _health = GetComponent<Health>();
-    }
-    private void Update()
-    {
-        if (_health.IsDead)
-        {
-            SceneManager.LoadScene("DeathScreen");
-        }
-    }
+    public Button _MainMenuButton;    
+    public Button _HideOutButton;    
+    public Button _RespawnButton;    
+
     public void Respawn()
     {
-        SceneManager.LoadScene("_Dev");
-        Debug.Log("Button pressed");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
+    }
+    
+    public void Hideout()
+    {
+        SceneManager.LoadScene("HideOut");
+    }
+    
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

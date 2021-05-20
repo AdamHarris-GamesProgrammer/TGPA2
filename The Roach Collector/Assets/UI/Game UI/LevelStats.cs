@@ -8,6 +8,12 @@ public class LevelStats : MonoBehaviour
     public int kills;
     public float time;
 
+    // On awake
+    void Awake()
+    {
+        //gameObject.SendMessage("AIDead", 250, SendMessageOptions.RequireReceiver);
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -17,8 +23,8 @@ public class LevelStats : MonoBehaviour
     //calculates final score at the end of the level
     public void EndLevelScoreCalc()
     {
-        //no kill bonus
-        if (kills == 0)
+        //no kill bonus (except boss)
+        if (kills == 1)
         {
             score += 10000;
         }
@@ -58,5 +64,11 @@ public class LevelStats : MonoBehaviour
     public int LevelKills
     {
         get { return kills; }
+    }
+
+    public void AIDead(int killScore)
+    {
+        score += killScore;
+        kills++;
     }
 }
