@@ -32,7 +32,7 @@ public class AIAgentConfig : ScriptableObject
 
 
     [Header("Advance Settings")]
-    public float _advanceStateDuration = 1.5f;
+    public float _advanceStateDuration = 40.0f;
     public float _advanceEnterHealthRatio = 0.5f;
 
     [Header("Retreat Settings")]

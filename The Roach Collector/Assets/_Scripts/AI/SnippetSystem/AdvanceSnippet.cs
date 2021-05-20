@@ -141,7 +141,7 @@ public class AdvanceSnippet : CombatSnippet
     public bool IsFinished()
     {
         //Checks if the enemy is low on health or if the state duration is up
-        return (_aiHealth.HealthRatio < 0.5f/* || _timer >= _agent._config._advanceStateDuration*/);
+        return (_aiHealth.IsDead /* || _timer >= _agent._config._advanceStateDuration*/);
 
     }
 
