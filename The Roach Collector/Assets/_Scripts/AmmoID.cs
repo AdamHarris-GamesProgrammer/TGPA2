@@ -8,5 +8,6 @@ public enum AmmoID
     REVOLVER, 
     ASSAULT_RIFLE, 
     SMG, 
-    SHOTGUN
+    SHOTGUN,
+    RIFLE
 }
