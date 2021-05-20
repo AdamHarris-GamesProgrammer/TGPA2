@@ -90,12 +90,10 @@ public class ActiveWeapon : MonoBehaviour
 
                 if(_weapon.IsMelee())
                 {
-                    Debug.Log(_weapon.name);
                     _isMelee = true;
                 }
                 else
                 {
-                    Debug.Log(_weapon.name);
                     _isMelee = false;
                 }
             
