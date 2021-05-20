@@ -30,7 +30,7 @@ public class BrickAgent : AIAgent
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
-        stateMachine.RegisterState(new AIIdleState(this, _FOV));
+        stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
 
@@ -47,7 +47,7 @@ public class BrickAgent : AIAgent
     {
         stateMachine.Update();
         //_CurrentState = stateMachine._currentState;
-        if (_FOV.IsEnemyInFOV())
+        if (_fov.IsEnemyInFOV)
         {
             Debug.Log("player detected!");
             thisAnim.SetTrigger("isDetected");

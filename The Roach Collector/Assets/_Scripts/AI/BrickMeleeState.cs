@@ -6,25 +6,30 @@ using UnityEngine.AI;
 public class BrickMelee : AIState
 {
     Health _playerHealth;
-    NavMeshAgent _agent;
+    NavMeshAgent _navAgent;
     Transform _player;
     Animator thisAnim;
+    private AIAgent _agent;
+    FieldOfView _FOV;
 
     public BrickMelee(AIAgent agent)
     {
         _player = agent.GetPlayer();
-        _agent = _agent.GetComponent<NavMeshAgent>();
+        _navAgent = agent.GetComponent<NavMeshAgent>();
         _playerHealth = agent.GetPlayer().GetComponent<Health>();
         thisAnim = thisAnim.GetComponent<Animator>();
+        _agent = agent;
+        _FOV = _agent.GetComponent<FieldOfView>();
+        
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
 
         //_agent.destination = _player.transform.position;
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
         
     }
@@ -34,21 +39,21 @@ public class BrickMelee : AIState
         return AiStateId.BrickMelee;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
-        if (agent._FOV.IsEnemyInFOV())
+        if (_FOV.IsEnemyInFOV)
         {
             Debug.Log("Player detected");
             thisAnim.SetTrigger("isDetected");
 
         }
-        if (!agent.enabled)
+        if (!_navAgent.enabled)
         {
             return;
         }
-        if (_playerHealth.IsDead())
+        if (_playerHealth.IsDead)
         {
-            agent.stateMachine.ChangeState(AiStateId.Idle);
+            _agent.stateMachine.ChangeState(AiStateId.Idle);
         }
         
     }

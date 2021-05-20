@@ -20,7 +20,7 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fov.IsEnemyInFOV())
+        if (fov.IsEnemyInFOV)
         {
             Debug.Log("player detected!");
             thisAnim.SetTrigger("isDetected");
