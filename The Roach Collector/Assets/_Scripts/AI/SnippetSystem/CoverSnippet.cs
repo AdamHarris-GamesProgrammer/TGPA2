@@ -39,11 +39,6 @@ public class CoverSnippet : CombatSnippet
 
     public void Action()
     {
-        //TODO: Implement AI popping their head over cover
-        //TODO: Implement AI crouching and un-crouching animation
-        //TODO: Make enemy actively decide when to leave cover based on factors(?)
-
-
         if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
         {
             Vector3 direction = _lastKnownLocation.transform.position - _agent.transform.position;
@@ -225,7 +220,7 @@ public class CoverSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        //Debug.Log(_agent.transform.name + " Cover Snippet");
+        Debug.Log(_agent.transform.name + " Cover Snippet");
 
         _aiWeapon.SetTarget(null);
 
@@ -240,7 +235,9 @@ public class CoverSnippet : CombatSnippet
     public int Evaluate()
     {
         int returnScore = 0;
-        
+
+        if(_coversInScene.Length == 0) return 0;    
+
         if(_aiWeapon.GetEquippedWeapon() != null)
         {
             _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload;
@@ -272,7 +269,8 @@ public class CoverSnippet : CombatSnippet
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
-        _coversInScene = GameObject.FindObjectsOfType<CoverController>();
+        _coversInScene = agent.GetComponentInParent<CombatZone>().CoversInZone.ToArray();
+
         _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 
         //Debug.Log(_coversInScene.Length);

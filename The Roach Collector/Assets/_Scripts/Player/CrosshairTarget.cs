@@ -31,7 +31,7 @@ public class CrosshairTarget : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not hitting anything");
+            //Debug.Log("Not hitting anything");
             //Ensures the crosshair remains infront of the player at all angles
             //transform.position = ray.origin + ray.direction * 1000.0f;
         }

@@ -178,7 +178,7 @@ public class RaycastWeapon : MonoBehaviour
 
     Bullet CreateBullet(Vector3 position, Vector3 velocity)
     {
-        Debug.Log(velocity);
+        //Debug.Log(velocity);
         Bullet bullet = new Bullet(0.0f, position, velocity);
 
         bullet._tracer = Instantiate(_tracerEffect, position, Quaternion.identity);
@@ -286,7 +286,7 @@ public class RaycastWeapon : MonoBehaviour
         _ray.origin = start;
         _ray.direction = direction;
 
-        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
+        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask, QueryTriggerInteraction.Ignore))
         {
             //Debug.Log("Hit: " + _hitInfo.transform.name);
 

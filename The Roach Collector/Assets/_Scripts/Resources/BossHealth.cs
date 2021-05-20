@@ -12,7 +12,8 @@ public class BossHealth : AIHealth
     {
         _healthBar.SetHealthBarPercentage(_currentHealth / _maxHealth);
 
-
+        _aiAgent.Aggrevate();
+        
         if (_index == _healthStages.Length) return;
         if(HealthRatio <= _healthStages[_index])
         {

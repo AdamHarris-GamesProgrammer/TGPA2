@@ -20,7 +20,7 @@ public class AdvanceSnippet : CombatSnippet
     float _timer = 0.0f;
 
 
-    float _stationaryDuration = 2.5f;
+    float _stationaryDuration = 5.0f;
     float _stationaryTimer = 0.0f;
 
     public void Action()
@@ -29,11 +29,28 @@ public class AdvanceSnippet : CombatSnippet
 
         Vector3 direction = _agent.GetPlayer().position - _agent.transform.position;
 
-        Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+        Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
 
         _agent.transform.rotation = look;
 
-        if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+         if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+                {
+                    _aiWeapon.SetTarget(null);
+                    _aiWeapon.SetFiring(false);
+                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+                    {
+                        _aiWeapon.GetEquippedWeapon().Reload();
+                    }
+
+                    //Does the AI have any bullets left?
+                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
+                    {
+                        //TODO Switch to melee state here. 
+                    }
+                }
+
+
+        if (_navAgent.remainingDistance <= 1.5f)
         {
             _stationaryTimer += Time.deltaTime;
 
@@ -85,7 +102,7 @@ public class AdvanceSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        //Debug.Log(_agent.transform.name + " Advance Snippet");
+        Debug.Log(_agent.transform.name + " Advance Snippet");
 
         _timer = 0.0f;
 
