@@ -15,6 +15,9 @@ public class PlayerHealth : Health
     Equipment _equipment;
     PlayerController _player;
 
+    [SerializeField] GameObject _CRTCamera;
+    [SerializeField] GameObject _deathScreenUI;
+
 
     protected override void OnStart()
     {
@@ -79,6 +82,8 @@ public class PlayerHealth : Health
         _aiming.enabled = false;
         _camera.enabled = false;
         _animator.SetTrigger("isDead");
+        _CRTCamera.SetActive(true);
+        _deathScreenUI.SetActive(true);
     }
 
     protected override void OnDamage()

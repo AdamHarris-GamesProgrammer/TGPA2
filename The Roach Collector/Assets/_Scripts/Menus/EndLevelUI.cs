@@ -69,7 +69,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     //reloads load from start
     public void Retry()
     {
-        SceneManager.LoadScene("Level" + currentLevel.ToString());
+        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
     }
 
     void Start()
