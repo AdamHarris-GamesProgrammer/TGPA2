@@ -178,6 +178,7 @@ public class RaycastWeapon : MonoBehaviour
 
     Bullet CreateBullet(Vector3 position, Vector3 velocity)
     {
+        Debug.Log(velocity);
         Bullet bullet = new Bullet(0.0f, position, velocity);
 
         bullet._tracer = Instantiate(_tracerEffect, position, Quaternion.identity);

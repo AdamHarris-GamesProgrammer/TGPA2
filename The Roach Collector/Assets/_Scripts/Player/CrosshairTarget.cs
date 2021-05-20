@@ -7,6 +7,8 @@ public class CrosshairTarget : MonoBehaviour
 
     Camera _mainCamera;
 
+    [SerializeField] LayerMask _mask;
+
 
     Ray ray;
     RaycastHit hitInfo;
@@ -23,14 +25,15 @@ public class CrosshairTarget : MonoBehaviour
         ray.origin = _mainCamera.transform.position;
         ray.direction = _mainCamera.transform.forward;
 
-        if(Physics.Raycast(ray, out hitInfo))
+        if(Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hitInfo, 1000.0f, _mask, QueryTriggerInteraction.Ignore))
         {
             transform.position = hitInfo.point;
         }
         else
         {
+            Debug.Log("Not hitting anything");
             //Ensures the crosshair remains infront of the player at all angles
-            transform.position = ray.origin + ray.direction * 1000.0f;
+            //transform.position = ray.origin + ray.direction * 1000.0f;
         }
     }
 }
