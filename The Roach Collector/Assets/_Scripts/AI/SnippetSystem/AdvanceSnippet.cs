@@ -33,28 +33,30 @@ public class AdvanceSnippet : CombatSnippet
 
         _agent.transform.rotation = look;
 
-         if (_aiWeapon.GetEquippedWeapon().NeedToReload)
-                {
-                    _aiWeapon.SetTarget(null);
-                    _aiWeapon.SetFiring(false);
-                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-                    {
-                        _aiWeapon.GetEquippedWeapon().Reload();
-                    }
+        if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+        {
+            Debug.Log("Need to reload");
+            _aiWeapon.SetTarget(null);
+            _aiWeapon.SetFiring(false);
+            if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+            {
+                Debug.Log("Reloading");
+                _aiWeapon.GetEquippedWeapon().Reload();
+            }
 
-                    //Does the AI have any bullets left?
-                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
-                    {
-                        //TODO Switch to melee state here. 
-                    }
-                }
+            //Does the AI have any bullets left?
+            if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
+            {
+                //TODO Switch to melee state here. 
+            }
+        }
 
 
         if (_navAgent.remainingDistance <= 1.5f)
         {
             _stationaryTimer += Time.deltaTime;
 
-            if(_stationaryTimer > _stationaryDuration)
+            if (_stationaryTimer > _stationaryDuration)
             {
                 _stationaryTimer = 0.0f;
                 _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(12.5f));
@@ -76,9 +78,9 @@ public class AdvanceSnippet : CombatSnippet
                     }
                 }
 
-                
+
             }
-            
+
         }
         else
         {
