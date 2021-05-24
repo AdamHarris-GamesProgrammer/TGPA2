@@ -67,7 +67,6 @@ public class BuyItems : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("enabled");
         _playerCash.text = "Your cash: " + _player.Cash.ToString("#0.00");
     }
 
