@@ -23,7 +23,6 @@ public class SetAlarmSnippet : CombatSnippet
 
     AIAgent _agent;
 
-    string _name = "SetAlarmSnippet";
 
     public void Action()
     {
@@ -147,11 +146,6 @@ public class SetAlarmSnippet : CombatSnippet
     public bool IsFinished()
     {
         return !_alarmsLeft || _isFinished;
-    }
-
-    public string GetName()
-    {
-        return _name;
     }
 
 }

@@ -81,7 +81,7 @@ public class ActiveWeapon : MonoBehaviour
             if (_inventory)
             {
 
-                if (!_weapon.IsMelee() && _inventory.HasItem(_weapon.Config.AmmoType))
+                if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
                 {
                     
                     int index = _inventory.FindItem(_weapon.Config.AmmoType);
@@ -92,7 +92,7 @@ public class ActiveWeapon : MonoBehaviour
 
                 }
 
-                if(_weapon.IsMelee())
+                if(_weapon.IsMelee)
                 {
                     //Debug.Log(_weapon.name);
                     _isMelee = true;
@@ -135,7 +135,7 @@ public class ActiveWeapon : MonoBehaviour
 
         if (newWeapon)
         {
-            if (_weapon.IsMelee())
+            if (_weapon.IsMelee)
             {
                 _weapon.transform.parent = _weaponParentMelee;
             }
@@ -151,7 +151,7 @@ public class ActiveWeapon : MonoBehaviour
 
         if (_inventory)
         {
-            if (!_weapon.IsMelee() && _inventory.HasItem(_weapon.Config.AmmoType))
+            if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
             {
                 int index = _inventory.FindItem(_weapon.Config.AmmoType);
 

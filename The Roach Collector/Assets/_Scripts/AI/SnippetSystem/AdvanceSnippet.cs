@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class AdvanceSnippet : CombatSnippet
 {
-    public string Name = "Advance Snippet";
-
     NavMeshAgent _navAgent;
     AIWeapons _aiWeapon;
     AIHealth _aiHealth;
@@ -142,11 +140,6 @@ public class AdvanceSnippet : CombatSnippet
         //Checks if the enemy is low on health or if the state duration is up
         return (_aiHealth.IsDead /* || _timer >= _agent._config._advanceStateDuration*/);
 
-    }
-
-    public string GetName()
-    {
-        return Name;
     }
 
 }

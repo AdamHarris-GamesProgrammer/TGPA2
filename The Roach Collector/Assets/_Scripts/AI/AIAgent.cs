@@ -153,7 +153,7 @@ public class AIAgent : MonoBehaviour
 
         }
 
-        if(_aiWeapon.GetEquippedWeapon().IsMelee() && _usingMelee == false)
+        if(_aiWeapon.GetEquippedWeapon().IsMelee && _usingMelee == false)
         {
             _usingMelee = true;
             stateMachine.ChangeState(AiStateId.Melee);

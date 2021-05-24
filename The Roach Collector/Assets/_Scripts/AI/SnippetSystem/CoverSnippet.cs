@@ -11,9 +11,7 @@ public class CoverSnippet : CombatSnippet
     Animator _anim;
 
 
-    string _name = "CoverSnippet";
-
-    CoverController[] _coversInScene;
+    CoverController[] _coversInZone;
 
     CoverController _currentCover;
 
@@ -167,7 +165,7 @@ public class CoverSnippet : CombatSnippet
         float closestDistance = 10000.0f;
 
         //Cycle through each cover in the array
-        foreach (CoverController cover in _coversInScene)
+        foreach (CoverController cover in _coversInZone)
         {
             if (_currentCover != null && _currentCover == cover) continue;
 
@@ -236,7 +234,7 @@ public class CoverSnippet : CombatSnippet
     {
         int returnScore = 0;
 
-        if(_coversInScene.Length == 0) return 0;    
+        if(_coversInZone.Length == 0) return 0;    
 
         if(_aiWeapon.GetEquippedWeapon() != null)
         {
@@ -259,17 +257,12 @@ public class CoverSnippet : CombatSnippet
         return returnScore;
     }
 
-    public string GetName()
-    {
-        return _name;
-    }
-
     public void Initialize(AIAgent agent)
     {
         _navAgent = agent.GetComponent<NavMeshAgent>();
         _aiHealth = agent.GetComponent<AIHealth>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
-        _coversInScene = agent.GetComponentInParent<CombatZone>().CoversInZone.ToArray();
+        _coversInZone = agent.GetComponentInParent<CombatZone>().CoversInZone.ToArray();
 
         _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 

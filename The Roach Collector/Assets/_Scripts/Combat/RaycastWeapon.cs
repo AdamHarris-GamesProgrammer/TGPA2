@@ -49,10 +49,8 @@ public class RaycastWeapon : MonoBehaviour
     public DamageType DamageType { get { return _type; } }
     public float Damage { get { return _config.Damage * _damageMultiplier; } }
     public float DamageMultiplier { get { return _damageMultiplier; } set { _damageMultiplier = value; } }
-    public bool IsMelee()
-    {
-        return _isMelee;
-    }
+
+    public bool IsMelee { get { return _isMelee; } }
 
     private float _maxLifeTime = 3.0f;
     private float _damageMultiplier = 1.0f;
@@ -99,7 +97,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if(_inventory)
         {
-            if (!IsMelee() && _inventory.HasItem(_config.AmmoType))
+            if (!IsMelee && _inventory.HasItem(_config.AmmoType))
             {
                 int index = _inventory.FindItem(_config.AmmoType);
 
