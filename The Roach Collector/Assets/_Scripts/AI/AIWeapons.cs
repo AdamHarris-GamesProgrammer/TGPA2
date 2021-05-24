@@ -44,6 +44,7 @@ public class AIWeapons : MonoBehaviour
 
     public void SetFiring(bool enabled)
     {
+        Debug.Log("Set firing: " + enabled);
         if (enabled)
         {
             _currentWeapon.StartFiring();
