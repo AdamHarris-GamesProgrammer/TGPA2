@@ -58,6 +58,8 @@ namespace TGP.Control
         private float _currency = 0.0f;
         private int _roaches = 0;
 
+        public float Cash { get { return _currency; } }
+
         public void SpendRoach(int amount) {
             _roaches -= amount;
             UpdateRoach();

@@ -21,6 +21,7 @@ public class BuyItems : MonoBehaviour
 
     [SerializeField] Text _itemNameText;
     [SerializeField] Text _itemDescriptionText;
+    [SerializeField] Text _playerCash;
 
     public List<BuyableItem> Items { get { return _items; } }
 
@@ -60,6 +61,14 @@ public class BuyItems : MonoBehaviour
 
             item.Setup(_items[i]._item.Icon, _items[i]._item.name, _items[i]._price, _items[i]._quantity, i);
         }
+
+        
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("enabled");
+        _playerCash.text = "Your cash: " + _player.Cash.ToString("#0.00");
     }
 
     public void BuyItem()
@@ -74,6 +83,8 @@ public class BuyItems : MonoBehaviour
 
                 _playerInventory.AddToFirstEmptySlot(item._item, item._quantity);
             }
+
+            _playerCash.text = "Your cash: " + _player.Cash.ToString("#0.00");
         }
     }
 
