@@ -170,8 +170,14 @@ public class AIAgent : MonoBehaviour
     public void Aggrevate()
     {
         if (_aiHealth.IsDead) return;
+
+
+        //Move the last known location to the players position when the player shoots. 
+        FindObjectOfType<LastKnownLocation>().transform.position = _player.position;
+
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
+
     }
 
     public void PlayBackupSound()
