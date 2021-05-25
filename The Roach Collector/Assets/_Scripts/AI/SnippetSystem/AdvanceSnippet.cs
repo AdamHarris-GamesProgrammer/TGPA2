@@ -34,7 +34,7 @@ public class AdvanceSnippet : CombatSnippet
         if (_aiWeapon.GetEquippedWeapon().NeedToReload)
         {
             Debug.Log("Need to reload");
-            _aiWeapon.SetTarget(null);
+            
             _aiWeapon.SetFiring(false);
             if (!_aiWeapon.GetEquippedWeapon().IsReloading)
             {
@@ -93,6 +93,11 @@ public class AdvanceSnippet : CombatSnippet
         else
         {
             _aiWeapon.SetFiring(false);
+            if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+            {
+                Debug.Log("Reloading");
+                _aiWeapon.GetEquippedWeapon().Reload();
+            }
         }
     }
 
@@ -104,6 +109,8 @@ public class AdvanceSnippet : CombatSnippet
         _timer = 0.0f;
 
         Vector3 playerPos = _lastKnownLocation.transform.position;
+
+        _aiWeapon.SetTarget(_agent.GetPlayer());
 
         _navAgent.SetDestination(playerPos);
 

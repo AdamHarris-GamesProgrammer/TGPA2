@@ -143,6 +143,8 @@ public class RaycastWeapon : MonoBehaviour
                 _audioSoruce.PlayOneShot(_config.SafetySwitch);
                 Debug.Log("Cock Sound");
                 _audioSoruce.PlayOneShot(_config.CockSound);
+
+                _timeSinceLastShot = 1000.0f;
             }
         }
         
@@ -276,6 +278,7 @@ public class RaycastWeapon : MonoBehaviour
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
+        _isFiring = false;
         _isReloading = true;
 
     }
@@ -350,7 +353,6 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(Vector3 target)
     {
-        Debug.Log("update firing");
         if(_timeSinceLastShot > _timeBetweenShots)
         {
             Debug.Log("passed fire rate");
