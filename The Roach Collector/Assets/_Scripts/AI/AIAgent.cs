@@ -13,10 +13,6 @@ public class AIAgent : MonoBehaviour
     public AIAgentConfig _config;
 
 
-
-    [SerializeField] private int _AiClipBullets = 0;
-    [SerializeField] private int _AiTotalBullets = 0;
-
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
     [SerializeField] private AudioClip _alarmPrompt = null;
@@ -45,7 +41,6 @@ public class AIAgent : MonoBehaviour
     public CombatZone Zone { get { return _owningZone; } }
 
     bool _beingKilled = false;
-    bool _usingMelee = false;
 
     public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
 
@@ -58,7 +53,7 @@ public class AIAgent : MonoBehaviour
     }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] private RaycastWeapon _MeleeWeapon;
+
 
     public Transform GetPlayer()
     {
@@ -125,27 +120,6 @@ public class AIAgent : MonoBehaviour
         if (_aiHealth.IsDead) return;
         stateMachine.Update();
         _currentState = stateMachine._currentState;
-
-        
-        _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
-        _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
-
-        if(_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
-        {
-            _usingMelee = true;
-            Debug.Log("Change Weapon");
-            RaycastWeapon meleeweapon = Instantiate(_MeleeWeapon);
-            _aiWeapon.EquipWeapon(meleeweapon);
-
-            stateMachine.ChangeState(AiStateId.Melee);
-
-        }
-
-        if(_aiWeapon.GetEquippedWeapon().IsMelee && _usingMelee == false)
-        {
-            _usingMelee = true;
-            stateMachine.ChangeState(AiStateId.Melee);
-        }
 
         if(_player.GetComponent<PlayerHealth>().IsDead)
         {
