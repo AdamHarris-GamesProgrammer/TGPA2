@@ -10,6 +10,9 @@ namespace Harris.UI
         [SerializeField] KeyCode _toggleKey = KeyCode.Escape;
         [SerializeField] GameObject _uiContainer = null;
 
+        [SerializeField] AudioClip _openBackpackSound;
+        [SerializeField] AudioClip _closeBackpackSound;
+
         public GameObject UIContainer {  get { return _uiContainer; } }
         public GameObject UIGuideContainer;
 
@@ -39,6 +42,8 @@ namespace Harris.UI
                     Cursor.lockState = CursorLockMode.Locked;
                     //Debug.Log("Show Hide UI cursor");
                     Cursor.visible = false;
+
+                    GetComponentInParent<AudioSource>().PlayOneShot(_closeBackpackSound);
                 }
                 else
                 {
@@ -47,6 +52,8 @@ namespace Harris.UI
                     //confines the cursor to the screen
                     Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
+
+                    GetComponentInParent<AudioSource>().PlayOneShot(_openBackpackSound);
                 }
 
             }
