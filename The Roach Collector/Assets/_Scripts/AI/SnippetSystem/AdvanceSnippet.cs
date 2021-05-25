@@ -72,7 +72,7 @@ public class AdvanceSnippet : CombatSnippet
                 {
                     if (!_aiWeapon.GetEquippedWeapon().IsFiring)
                     {
-                        Debug.Log("Line 76");
+                        //Debug.Log("Line 76");
                         _aiWeapon.SetFiring(true);
                     }
                 }
@@ -87,7 +87,7 @@ public class AdvanceSnippet : CombatSnippet
         if (_aiWeapon.GetEquippedWeapon()._clipAmmo > 0)
         {
             //Start firing
-            Debug.Log("Line 96");
+            //Debug.Log("Line 96");
             _aiWeapon.SetFiring(true);
         }
         else

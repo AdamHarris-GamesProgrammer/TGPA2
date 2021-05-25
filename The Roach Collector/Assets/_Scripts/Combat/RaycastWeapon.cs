@@ -212,7 +212,7 @@ public class RaycastWeapon : MonoBehaviour
         }
         else if (_isReloading)
         {
-
+            Debug.Log("is reloading");
         }
         else
         {
@@ -229,10 +229,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
+        Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
         {
+            Debug.Log("Stop Fire");
             _audioSoruce.PlayOneShot(_config.EndFire);
         }
     }
@@ -337,6 +339,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateWeapon(Vector3 target)
     {
+
         if(_isFiring)
         {
             UpdateFiring(target);

@@ -79,7 +79,6 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
-
         if(_currentWeapon) Destroy(_currentWeapon.gameObject);
 
         _currentWeapon = weapon;
@@ -112,12 +111,8 @@ public class AIWeapons : MonoBehaviour
 
     public RaycastWeapon GetEquippedWeapon()
     {
-        if(_currentWeapon == null)
-        {
-            Debug.Log("Equipped Weapon Is Null");
-        }
+        if(_currentWeapon == null) Debug.Log("Equipped Weapon Is Null");
 
         return _currentWeapon;
     }
-
 }
