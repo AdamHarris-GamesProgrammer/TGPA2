@@ -8,8 +8,6 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-
-
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
@@ -33,10 +31,6 @@ public class AIAgent : MonoBehaviour
 
     bool _canActivateAlarm = false;
     bool _isAggrevated = false;
-
-    List<AIAgent> _agentsInScene;
-    List<AlarmController> _alarmsInScene;
-    List<CoverController> _coversInScene;
 
     CombatZone _owningZone;
 
@@ -75,18 +69,12 @@ public class AIAgent : MonoBehaviour
     {
         _aiHealth = GetComponent<Health>();
         _audioSource = GetComponent<AudioSource>();
-
-        _agentsInScene = new List<AIAgent>();
-        _alarmsInScene = new List<AlarmController>();
-        _coversInScene = new List<CoverController>();
-
         _owningZone = GetComponentInParent<CombatZone>();
-
-        _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
-        _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
-        _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
-
         _defaultMoveSpeed = GetComponent<NavMeshAgent>().speed;
+
+        if (!_aiHealth) Debug.LogError(gameObject.name + " has no derivative of Health Component attached to it");
+        if (!_audioSource) Debug.LogError(gameObject.name + " has no AudioSource component attached to it");
+        if (!_owningZone) Debug.LogError(gameObject.name + " has no CombatZone component in parent GameObject");
     }
 
     // Start is called before the first frame update
