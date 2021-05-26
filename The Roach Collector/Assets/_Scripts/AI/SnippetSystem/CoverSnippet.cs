@@ -37,7 +37,7 @@ public class CoverSnippet : CombatSnippet
 
     public void Action()
     {
-        if (_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        if (_navAgent.remainingDistance < 1.0f)
         {
             Vector3 direction = _lastKnownLocation.transform.position - _agent.transform.position;
 

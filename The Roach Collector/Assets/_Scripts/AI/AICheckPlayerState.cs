@@ -32,10 +32,7 @@ public class AICheckPlayerState : AIState
         {
             _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 
-            if (_lastKnownLocation == null)
-            {
-                Debug.LogError("Last Player Location prefab not placed in scene.");
-            }
+            if (_lastKnownLocation == null) Debug.LogError("Last Player Location prefab not placed in scene.");
 
         }
 

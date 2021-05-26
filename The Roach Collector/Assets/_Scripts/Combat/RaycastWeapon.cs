@@ -214,13 +214,13 @@ public class RaycastWeapon : MonoBehaviour
         }
         else if (_isReloading)
         {
-            Debug.Log("is reloading");
+            //Debug.Log("is reloading");
         }
         else
         {
             if(_timeSinceLastShot > _timeBetweenShots && !_isFiring)
             {
-                Debug.Log("Start Fire");
+                //Debug.Log("Start Fire");
                 _audioSoruce.PlayOneShot(_config.StartFire);
                 _isFiring = true;
             }
@@ -231,12 +231,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        Debug.Log("Stopping fire");
+        //Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
         {
-            Debug.Log("Stop Fire");
+            //Debug.Log("Stop Fire");
             _audioSoruce.PlayOneShot(_config.EndFire);
         }
     }
@@ -274,7 +274,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if (!_isReloading)
         {
-            Debug.Log("Magazine unload sound");
+            //Debug.Log("Magazine unload sound");
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
