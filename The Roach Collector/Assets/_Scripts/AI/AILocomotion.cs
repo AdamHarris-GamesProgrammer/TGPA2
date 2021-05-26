@@ -10,14 +10,11 @@ public class AILocomotion : MonoBehaviour
 
     Animator _animator;
 
-    AudioSource _audioSource;
-
     // Start is called before the first frame update
     void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
-        _audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -25,9 +22,6 @@ public class AILocomotion : MonoBehaviour
     {
         _animator.SetFloat("movementSpeed", _agent.velocity.magnitude);
 
-        if(_agent.velocity.magnitude != 0.0f && !_audioSource.isPlaying) {
-            GetComponent<FootstepSFX>().Footstep();
-        }
     }
 
     public void MoveTo(Vector3 pos)
