@@ -23,7 +23,7 @@ namespace TGP.Control
         public AIAgent AgentInRange { get { return _agentInRange; }
             set {
                 _agentInRange = value;
-                gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
+                if(!_isStanding) gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
             } }
 
         public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
@@ -217,6 +217,7 @@ namespace TGP.Control
             if (Input.GetKeyDown(KeyCode.F))
             {
                 //Debug.Log("F is pressed");
+                if (_isStanding) return;
 
                 if (_agentInRange != null && !_detected)
                 {
@@ -238,6 +239,8 @@ namespace TGP.Control
                     _agentInRange.GetComponent<Animator>().SetTrigger("stealthAssassinate");
 
                     _agentInRange = null;
+
+                    gameObject.SendMessage("DisplayAssassinationPrompt", false);
 
                 }
             }
