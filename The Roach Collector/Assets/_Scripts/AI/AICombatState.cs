@@ -13,6 +13,9 @@ public class AICombatState : AIState
 
     AIAgent _agent;
 
+    float _snippetDuration = 10.0f;
+    float _snippetTimer = 0.0f;
+
     public AICombatState(AIAgent agent)
     {
         _agent = agent;
@@ -38,7 +41,10 @@ public class AICombatState : AIState
 
         if(_currentSnippet == null) return;
 
-        if (_currentSnippet.IsFinished())
+        //Used to sample for better action every 10 seconds.
+        _snippetTimer += Time.deltaTime;
+
+        if (_currentSnippet.IsFinished() || _snippetTimer > _snippetDuration)
         {
             int highestScore = 0;
 
@@ -57,6 +63,8 @@ public class AICombatState : AIState
             }
 
             SwitchSnippets(newSnippet);
+
+            _snippetTimer = 0.0f;
         }
         else
         {

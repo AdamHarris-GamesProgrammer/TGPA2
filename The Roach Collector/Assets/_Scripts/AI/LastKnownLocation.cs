@@ -57,8 +57,10 @@ public class LastKnownLocation : MonoBehaviour
         Vector3 dist = transform.position;
 
         bool successful = false;
-        
+
         //Debug.Log("check player state");
+
+        int iterations = 0;
 
         //Brute force a position in range of the player.
         do
@@ -90,7 +92,7 @@ public class LastKnownLocation : MonoBehaviour
 
             //Debug.Log("Successful: " + successful);
 
-        } while (!successful);
+        } while (!successful && iterations < 5);
 
         return dist;
     }
@@ -102,6 +104,8 @@ public class LastKnownLocation : MonoBehaviour
         bool successful = false;
 
         //Debug.Log("check player state");
+
+        int iterations = 0;
 
         //Brute force a position in range of the player.
         do
@@ -140,7 +144,9 @@ public class LastKnownLocation : MonoBehaviour
 
             //Debug.Log("Successful: " + successful);
 
-        } while (!successful);
+            iterations++;
+
+        } while (!successful && iterations < 5);
 
         return sampledPosition;
     }

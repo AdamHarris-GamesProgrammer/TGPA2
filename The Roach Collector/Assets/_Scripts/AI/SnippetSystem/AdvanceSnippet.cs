@@ -61,7 +61,9 @@ public class AdvanceSnippet : CombatSnippet
             Debug.Log("Close Enough");
 
             //Start Shooting
-            _aiWeapon.SetFiring(true);
+            if (_fov.IsEnemyInFOV) _aiWeapon.SetFiring(true);
+            else _aiWeapon.SetFiring(false);
+
 
             //Adds to our stationary timer
             _stationaryTimer += Time.deltaTime;
@@ -101,8 +103,7 @@ public class AdvanceSnippet : CombatSnippet
 
         _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
 
-        //TODO: Change this so some AI will rush the player
-        _navAgent.stoppingDistance = 5.0f;
+        _navAgent.stoppingDistance = 0.5f;
     }
 
     public int Evaluate()
