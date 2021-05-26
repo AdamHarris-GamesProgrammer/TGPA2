@@ -355,7 +355,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if(_timeSinceLastShot > _timeBetweenShots)
         {
-            Debug.Log("passed fire rate");
+            //Debug.Log("passed fire rate");
 
             _timeSinceLastShot = 0.0f;
             for (int i = 0; i < _config.BulletCount; i++)

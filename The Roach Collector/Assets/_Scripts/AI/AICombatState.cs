@@ -46,23 +46,7 @@ public class AICombatState : AIState
 
         if (_currentSnippet.IsFinished() || _snippetTimer > _snippetDuration)
         {
-            int highestScore = 0;
-
-            CombatSnippet newSnippet = null;
-
-            foreach (CombatSnippet behavior in _combatBehaviours)
-            {
-                int score = behavior.Evaluate();
-
-                //Checks which snippet is optimal 
-                if (score > highestScore)
-                {
-                    highestScore = score;
-                    newSnippet = behavior;
-                }
-            }
-
-            SwitchSnippets(newSnippet);
+            EvaluateSnippets();
 
             _snippetTimer = 0.0f;
         }
@@ -70,6 +54,27 @@ public class AICombatState : AIState
         {
             _currentSnippet.Action();
         }
+    }
+
+    void EvaluateSnippets()
+    {
+        int highestScore = 0;
+
+        CombatSnippet newSnippet = null;
+
+        foreach (CombatSnippet behavior in _combatBehaviours)
+        {
+            int score = behavior.Evaluate();
+
+            //Checks which snippet is optimal 
+            if (score > highestScore)
+            {
+                highestScore = score;
+                newSnippet = behavior;
+            }
+        }
+
+        SwitchSnippets(newSnippet);
     }
 
     private void SwitchSnippets(CombatSnippet newSnippet)
@@ -93,21 +98,7 @@ public class AICombatState : AIState
     {
         //Debug.Log("Entered Combat State");
 
-        //Decide starting snippet
-        int highestScore = 0;
-        foreach (CombatSnippet behavior in _combatBehaviours)
-        {
-            int score = behavior.Evaluate();
-
-            //Checks which snippet is optimal 
-            if (score > highestScore)
-            {
-                highestScore = score;
-                _currentSnippet = behavior;
-            }
-        }
-
-        _currentSnippet.EnterSnippet();
+        EvaluateSnippets();
 
         _agent.GetComponent<NavMeshAgent>().isStopped = false;
     }

@@ -58,7 +58,7 @@ public class AdvanceSnippet : CombatSnippet
         //if we are close to our objective
         if (_navAgent.remainingDistance <= 2.5f)
         {
-            Debug.Log("Close Enough");
+            //Debug.Log("Close Enough");
 
             //Start Shooting
             if (_fov.IsEnemyInFOV) _aiWeapon.SetFiring(true);
@@ -71,7 +71,7 @@ public class AdvanceSnippet : CombatSnippet
             //if the AI has been stationary for longer than the duration
             if (_stationaryTimer > _stationaryDuration)
             {
-                Debug.Log("Stationary timer up");
+                //Debug.Log("Stationary timer up");
 
                 //Reset the timer and generate a new point in range of the player
                 _stationaryTimer = 0.0f;
