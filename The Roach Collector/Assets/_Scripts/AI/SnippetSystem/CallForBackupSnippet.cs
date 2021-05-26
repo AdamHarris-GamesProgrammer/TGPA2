@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CallForBackupSnippet : CombatSnippet
 {
-    List<AIAgent> _enemiesInRange;
+    List<AIAgent> _alliesInZone;
     AIAgent _agent;
 
     bool _hasBackup = false;
@@ -12,7 +12,7 @@ public class CallForBackupSnippet : CombatSnippet
     public void Action()
     {
         
-        foreach(AIAgent enemy in _enemiesInRange)
+        foreach(AIAgent enemy in _alliesInZone)
         {
             //Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
             enemy.Aggrevate();
@@ -33,9 +33,9 @@ public class CallForBackupSnippet : CombatSnippet
 
         int returnScore = 0;
 
-        _enemiesInRange = _agent.Zone.GetAliveEnemies();
+        _alliesInZone = _agent.Zone.GetAliveEnemies();
 
-        if (_enemiesInRange.Count >= 3)
+        if (_alliesInZone.Count >= 3)
         {
             return 80;
         }
@@ -46,7 +46,7 @@ public class CallForBackupSnippet : CombatSnippet
     public void Initialize(AIAgent agent)
     {
         _agent = agent;
-        _enemiesInRange = new List<AIAgent>();
+        _alliesInZone = new List<AIAgent>();
     }
 
     public bool IsFinished()

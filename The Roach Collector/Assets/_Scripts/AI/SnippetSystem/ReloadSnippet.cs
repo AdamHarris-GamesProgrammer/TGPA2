@@ -46,4 +46,5 @@ public class ReloadSnippet : CombatSnippet
         //If we no longer need to reload.
         return !_aiWeapon.GetEquippedWeapon().NeedToReload;
     }
+
 }

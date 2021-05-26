@@ -8,9 +8,16 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
+
+
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
+
+
+
+    [SerializeField] private int _AiClipBullets = 0;
+    [SerializeField] private int _AiTotalBullets = 0;
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
@@ -32,9 +39,19 @@ public class AIAgent : MonoBehaviour
     List<CoverController> _coversInScene;
 
     CombatZone _owningZone;
+
+    [Header("Patrol Settings")]
+    [SerializeField] PatrolRoute _route;
+    [SerializeField] float _movementSpeedInPatrol = 1.5f;
+    [SerializeField] float _waitAtEachPointDuration = 7.5f;
+
+    float _defaultMoveSpeed = 5.4f;
+    public float DefaultMoveSpeed { get { return _defaultMoveSpeed; } }
+
     public CombatZone Zone { get { return _owningZone; } }
 
     bool _beingKilled = false;
+    bool _usingMelee = false;
 
     public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
 
@@ -47,6 +64,7 @@ public class AIAgent : MonoBehaviour
     }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
+    [SerializeField] private RaycastWeapon _MeleeWeapon;
 
     public Transform GetPlayer()
     {
@@ -67,6 +85,8 @@ public class AIAgent : MonoBehaviour
         _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
         _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
         _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
+
+        _defaultMoveSpeed = GetComponent<NavMeshAgent>().speed;
     }
 
     // Start is called before the first frame update
@@ -82,6 +102,12 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AICombatState(this));
         stateMachine.RegisterState(new AISearchForPlayerState(this));
         stateMachine.RegisterState(new AICheckPlayerState(this));
+        stateMachine.RegisterState(new AIMeleeState(this));
+
+        if(_route != null)
+        {
+            stateMachine.RegisterState(new PatrolState(this, _route, _movementSpeedInPatrol, _waitAtEachPointDuration));
+        }
 
         if (_startingWeapon)
         {
@@ -99,20 +125,59 @@ public class AIAgent : MonoBehaviour
 
     }
 
+    public void ReturnToDefaultState()
+    {
+        stateMachine.ChangeState(_initialState);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (_beingKilled) return;
-
+        if (_aiHealth.IsDead) return;
         stateMachine.Update();
         _currentState = stateMachine._currentState;
+
+        
+        _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
+        _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
+
+        if(_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
+        {
+            _usingMelee = true;
+            Debug.Log("Change Weapon");
+            RaycastWeapon meleeweapon = Instantiate(_MeleeWeapon);
+            _aiWeapon.EquipWeapon(meleeweapon);
+
+            stateMachine.ChangeState(AiStateId.Melee);
+
+        }
+
+        if(_aiWeapon.GetEquippedWeapon().IsMelee && _usingMelee == false)
+        {
+            _usingMelee = true;
+            stateMachine.ChangeState(AiStateId.Melee);
+        }
+
+        if(_player.GetComponent<PlayerHealth>().IsDead)
+        {
+            GetComponent<Animator>().SetBool("PlayerDead", true);
+            _aiWeapon.SetFiring(false);
+            _aiWeapon.SetTarget(null);
+        }
     }
 
     public void Aggrevate()
     {
         if (_aiHealth.IsDead) return;
+
+
+        //Move the last known location to the players position when the player shoots. 
+        FindObjectOfType<LastKnownLocation>().transform.position = _player.position;
+
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
+
     }
 
     public void PlayBackupSound()

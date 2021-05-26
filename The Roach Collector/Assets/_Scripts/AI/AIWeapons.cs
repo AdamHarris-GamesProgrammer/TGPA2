@@ -39,14 +39,17 @@ public class AIWeapons : MonoBehaviour
             target += UnityEngine.Random.insideUnitSphere * _inaccuracy;
             _currentWeapon.UpdateWeapon(target);
         }
+
     }
 
     public void SetFiring(bool enabled)
     {
+        //Debug.Log("Set firing: " + enabled);
         if (enabled)
         {
             _currentWeapon.StartFiring();
-        }else
+        }
+        else
         {
             _currentWeapon.StopFiring();
         }
@@ -54,6 +57,12 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
+
+        if(_currentWeapon)
+        {
+            Destroy(_currentWeapon.gameObject);
+        }
+
         _currentWeapon = weapon;
         _currentWeapon.transform.SetParent(transform, false);
         _sockets.Attach(weapon.transform, MeshSockets.SocketID.RightHand);
@@ -71,6 +80,7 @@ public class AIWeapons : MonoBehaviour
             _currentWeapon.transform.SetParent(null);
             _currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             _currentWeapon.gameObject.AddComponent<Rigidbody>();
+            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 10);
             _currentWeapon = null;
             _weaponIK.SetWeaponTransform(null);
         }

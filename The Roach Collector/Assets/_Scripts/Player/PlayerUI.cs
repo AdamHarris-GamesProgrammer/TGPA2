@@ -12,6 +12,11 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] GameObject _assassinationPrompt = null;
 
 
+    [SerializeField] GameObject _pauseUI;
+    private bool isPaused = false;
+
+
+
     private void Awake()
     {
         UpdateAmmoUI(0, 0, 0);
@@ -44,5 +49,23 @@ public class PlayerUI : MonoBehaviour
     public void DisplayAssassinationPrompt(bool val)
     {
         _assassinationPrompt.SetActive(val);
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            if (isPaused)
+            {
+                Time.timeScale = 0;
+                _pauseUI.SetActive(true);
+            }
+            else
+            {
+                Time.timeScale = 1;
+                _pauseUI.SetActive(false);
+            }
+        }
     }
 }

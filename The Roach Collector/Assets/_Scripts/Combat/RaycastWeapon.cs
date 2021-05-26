@@ -25,10 +25,11 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private Transform _raycastOrigin = null;
     [SerializeField] private WeaponConfig _config;
     [SerializeField] private LayerMask _layerMask;
+    [SerializeField] private bool _isMelee = false;
 
     [Header("Ammo Settings")]
-    [SerializeField] private int _clipAmmo = 30;
-    [SerializeField] private int _totalAmmo = 90;
+    public int _clipAmmo = 30;
+    public int _totalAmmo = 90;
     [SerializeField] private DamageType _type;
 
     [Header("VFX Settings")]
@@ -48,6 +49,8 @@ public class RaycastWeapon : MonoBehaviour
     public DamageType DamageType { get { return _type; } }
     public float Damage { get { return _config.Damage * _damageMultiplier; } }
     public float DamageMultiplier { get { return _damageMultiplier; } set { _damageMultiplier = value; } }
+
+    public bool IsMelee { get { return _isMelee; } }
 
     private float _maxLifeTime = 3.0f;
     private float _damageMultiplier = 1.0f;
@@ -94,7 +97,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if(_inventory)
         {
-            if (_inventory.HasItem(_config.AmmoType))
+            if (!IsMelee && _inventory.HasItem(_config.AmmoType))
             {
                 int index = _inventory.FindItem(_config.AmmoType);
 
@@ -116,7 +119,7 @@ public class RaycastWeapon : MonoBehaviour
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
-                //Debug.Log("Bullet load");
+                Debug.Log("Bullet load");
                 _audioSoruce.PlayOneShot(_config.BulletLoad);
 
 
@@ -134,11 +137,11 @@ public class RaycastWeapon : MonoBehaviour
 
                     RemoveAmmoFromInventory(_config.ClipSize);
                 }
-                //Debug.Log("Magazine load");
+                Debug.Log("Magazine load");
                 _audioSoruce.PlayOneShot(_config.MagazineLoad);
-                //Debug.Log("Safety Switch");
+                Debug.Log("Safety Switch");
                 _audioSoruce.PlayOneShot(_config.SafetySwitch);
-                //Debug.Log("Cock Sound");
+                Debug.Log("Cock Sound");
                 _audioSoruce.PlayOneShot(_config.CockSound);
             }
         }
@@ -173,6 +176,7 @@ public class RaycastWeapon : MonoBehaviour
 
     Bullet CreateBullet(Vector3 position, Vector3 velocity)
     {
+        //Debug.Log(velocity);
         Bullet bullet = new Bullet(0.0f, position, velocity);
 
         bullet._tracer = Instantiate(_tracerEffect, position, Quaternion.identity);
@@ -212,13 +216,14 @@ public class RaycastWeapon : MonoBehaviour
         }
         else
         {
-            if(_timeSinceLastShot > _timeBetweenShots)
+            if(_timeSinceLastShot > _timeBetweenShots && !_isFiring)
             {
-                //Debug.Log("Start Fire");
+                Debug.Log("Start Fire");
                 _audioSoruce.PlayOneShot(_config.StartFire);
+                _isFiring = true;
             }
             
-            _isFiring = true;
+            //_isFiring = true;
         }
     }
 
@@ -265,6 +270,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if (!_isReloading)
         {
+            Debug.Log("Magazine unload sound");
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
@@ -280,7 +286,7 @@ public class RaycastWeapon : MonoBehaviour
         _ray.origin = start;
         _ray.direction = direction;
 
-        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask))
+        if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask, QueryTriggerInteraction.Ignore))
         {
             //Debug.Log("Hit: " + _hitInfo.transform.name);
 
@@ -341,8 +347,11 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(Vector3 target)
     {
+        Debug.Log("update firing");
         if(_timeSinceLastShot > _timeBetweenShots)
         {
+            Debug.Log("passed fire rate");
+
             _timeSinceLastShot = 0.0f;
             for (int i = 0; i < _config.BulletCount; i++)
             {

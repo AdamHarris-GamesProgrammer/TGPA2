@@ -17,10 +17,11 @@ public class CharacterAiming : MonoBehaviour
     [SerializeField] GameObject _aimCam;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         _controller = GetComponent<PlayerController>();
         _mainCamera = Camera.main;
+        //Debug.Log("Character Aiming cursor");
         Cursor.visible = false;
         //Cursor.lockState = CursorLockMode.Locked;
     }

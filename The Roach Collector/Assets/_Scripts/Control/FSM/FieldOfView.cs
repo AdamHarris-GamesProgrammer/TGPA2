@@ -49,8 +49,8 @@ public class FieldOfView : MonoBehaviour
 
         if(_hasTimerStarted)
         {
-
-            _detectionTimer += Time.deltaTime;
+            //caps the timer to 5 seconds
+            _detectionTimer = Mathf.Min(_detectionTimer + Time.deltaTime, 5.0f);
         }
         else
         {

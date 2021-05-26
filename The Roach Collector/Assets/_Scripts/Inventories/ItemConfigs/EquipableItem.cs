@@ -2,12 +2,8 @@ using UnityEngine;
 
 namespace Harris.Inventories
 {
-    /// <summary>
-    /// An inventory item that can be equipped to the player. Weapons could be a
-    /// subclass of this.
-    /// </summary>
     [CreateAssetMenu(menuName = ("InventorySystem/Equipable Item"))]
-    public class EquipableItem : InventoryItem
+    public class EquipableItem : SellableItem
     {
         [Header("Equipable Settings")]
         // CONFIG DATA

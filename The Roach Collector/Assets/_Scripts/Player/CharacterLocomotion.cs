@@ -17,6 +17,7 @@ public class CharacterLocomotion : MonoBehaviour
     [SerializeField] private float _airControl = 0.1f;
 
     
+    AudioSource _audioSource;
 
     bool _isJumping;
     bool _isCrouching = false;
@@ -40,6 +41,7 @@ public class CharacterLocomotion : MonoBehaviour
         _animator = GetComponent<Animator>();
         _health = GetComponent<PlayerHealth>();
         _player = GetComponent<PlayerController>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -166,6 +168,9 @@ public class CharacterLocomotion : MonoBehaviour
 
         _controller.Move(stepForward + stepDown);
 
+        if(_input != Vector2.zero && !_audioSource.isPlaying) {
+            GetComponent<FootstepSFX>().Footstep();
+        }
 
         //To remove the one frame glitch check if we are no longer grounded here and then step back up
         if (!_controller.isGrounded)

@@ -23,6 +23,7 @@ public class SetAlarmSnippet : CombatSnippet
 
     AIAgent _agent;
 
+
     public void Action()
     {
         //if (_alarmsInScene[0].IsSet) _isFinished = true;
@@ -146,4 +147,5 @@ public class SetAlarmSnippet : CombatSnippet
     {
         return !_alarmsLeft || _isFinished;
     }
+
 }

@@ -38,14 +38,14 @@ public class AIStateMachine
 
     public void Update()
     {
-        GetState(_currentState)?.Update(_agent);
+        GetState(_currentState)?.Update();
     }
 
     public void ChangeState(AiStateId newState)
     {
         //Debug.Log(newState);
-        GetState(_currentState)?.Exit(_agent);
+        GetState(_currentState)?.Exit();
         _currentState = newState;
-        GetState(_currentState)?.Enter(_agent);
+        GetState(_currentState)?.Enter();
     }
 }

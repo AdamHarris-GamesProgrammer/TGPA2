@@ -33,6 +33,10 @@ namespace Harris.Inventories
             public int number;
         }
 
+        public InventorySlot GetInventorySlot(int index) {
+            return  _slots[index];
+        }
+
 
         public InventorySlot[] GetFilledSlots()
         {
@@ -225,6 +229,17 @@ namespace Harris.Inventories
             return i;
         }
 
+        public int Find(InventoryItem item) {
+            for (int i = 0; i < _slots.Length; i++)
+            {
+                if (object.ReferenceEquals(_slots[i].item, item))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         private int FindSlot(InventoryItem item)
         {
             int i = FindStack(item);
@@ -292,6 +307,7 @@ namespace Harris.Inventories
             for (int i = 0; i < _inventorySize; i++)
             {
                 _slots[i].item = InventoryItem.GetFromID(slotStrings[i].itemID);
+
                 _slots[i].number = slotStrings[i].number;
             }
             if (InventoryUpdated != null)

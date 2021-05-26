@@ -19,7 +19,7 @@ public class AIDeathState : AIState
         _navAgent = agent.GetComponent<NavMeshAgent>();
     }
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
         _healthBar.gameObject.SetActive(false);
         _ragdoll.ActivateRagdoll();
@@ -30,7 +30,7 @@ public class AIDeathState : AIState
         
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
 
     }
@@ -40,7 +40,7 @@ public class AIDeathState : AIState
         return AiStateId.Death;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
     }
 }

@@ -1,14 +1,16 @@
 using Harris.Inventories;
+using Harris.Saving;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 using static Harris.Inventories.Inventory;
 
 namespace TGP.Control
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, ISaveable
     {
         bool _canDisableAlarm = false;
 
@@ -38,6 +40,10 @@ namespace TGP.Control
 
         [SerializeField] GameObject _aimCam;
         [SerializeField] GameObject _followCam;
+
+        [SerializeField] Text _roachText;
+        [SerializeField] Text _cashText;
+
         public GameObject AimCam { get { return _aimCam; } }
         public GameObject FollowCam { get { return _followCam; } }
 
@@ -48,6 +54,47 @@ namespace TGP.Control
 
         public bool IsShooting { get { return _isShooting; } set { _isShooting = value; } }
         public bool IsStanding { get { return _isStanding; } set { _isStanding = value; } }
+
+        private float _currency = 0.0f;
+        private int _roaches = 0;
+
+        public float Cash { get { return _currency; } }
+
+        public void SpendRoach(int amount) {
+            _roaches -= amount;
+            UpdateRoach();
+        }
+
+        public void GainRoach(int amount) {
+            _roaches += amount;
+            UpdateRoach();
+        }
+
+        void UpdateCash(){
+            _cashText.text = _currency.ToString("#0.00");
+        }
+
+        void UpdateRoach() {
+            _roachText.text = _roaches.ToString();
+        }
+
+        public bool HasEnoughRoach(int amount) {
+            return (_roaches - amount) >= 0;
+        }
+
+        public void SpendMoney(float amount) {
+            _currency -= amount;
+            UpdateCash();
+        }
+
+        public void GainMoney(float amount) {
+            _currency += amount;
+            UpdateCash();
+        }
+
+        public bool HasEnoughMoney(float amount) {
+            return (_currency - amount >= 0.0f);
+        }
 
         public LockedDoor DoorInRange
         {
@@ -101,6 +148,17 @@ namespace TGP.Control
             }
         }
 
+        public void UnequipStat(StatValues id)
+        {
+            for(int i = 0; i < _stats.Length; i++)
+            {
+                if(_stats[i]._id == id._id)
+                {
+                    _stats[i]._value -= id._value;
+                }
+            }
+        }
+
         public StatValues GetStat(StatID id)
         {
             foreach (StatValues stat in _stats)
@@ -148,6 +206,9 @@ namespace TGP.Control
             _itemsToRemoveThisFrame = new List<UsableItem>();
             _chestInventory = GameObject.FindGameObjectWithTag("ChestCanvas");
             _chestInventory.SetActive(false);
+
+            UpdateCash();
+            UpdateRoach();
         }
 
 
@@ -291,6 +352,33 @@ namespace TGP.Control
 #pragma warning restore IDE0051 // Remove unused private members
         {
             _inKillAnimation = false;
+        }
+
+        [System.Serializable]
+        struct SaveRecord
+        {
+            public float cash;
+            public int roaches;
+        }
+
+        public object Save()
+        {
+            SaveRecord saveData;
+            saveData.cash = _currency;
+            saveData.roaches = _roaches;
+
+            return saveData;
+        }
+
+        public void Load(object state)
+        {
+            SaveRecord record = (SaveRecord)state;
+
+            _currency = record.cash;
+            _roaches = record.roaches;
+
+            UpdateRoach();
+            UpdateCash();
         }
     }
 

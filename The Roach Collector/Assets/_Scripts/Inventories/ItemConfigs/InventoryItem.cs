@@ -22,6 +22,7 @@ namespace Harris.Inventories
         [SerializeField] Sprite _icon = null;
         [Tooltip("The prefab that should be spawned when this item is dropped.")]
         [SerializeField] Pickup _pickup = null;
+        [SerializeField] Pickup _ammo = null;
         [Tooltip("If true, multiple items of this type can be stacked in the same inventory slot.")]
         [SerializeField] bool _isStackable = false;
 
@@ -45,13 +46,16 @@ namespace Harris.Inventories
                 var itemList = UnityEngine.Resources.LoadAll<InventoryItem>("");
                 foreach (var item in itemList)
                 {
-                    if (itemLookupCache.ContainsKey(item._itemID))
+                    if (item._itemID != null)
                     {
-                        Debug.LogError(string.Format("Looks like there's a duplicate InventorySystem ID for objects: {0} and {1}", itemLookupCache[item._itemID], item));
-                        continue;
-                    }
+                        if (itemLookupCache.ContainsKey(item._itemID))
+                        {
+                            Debug.LogError(string.Format("Looks like there's a duplicate InventorySystem ID for objects: {0} and {1}", itemLookupCache[item._itemID], item));
+                            continue;
+                        }
 
-                    itemLookupCache[item._itemID] = item;
+                        itemLookupCache[item._itemID] = item;
+                    }
                 }
             }
 
@@ -68,12 +72,19 @@ namespace Harris.Inventories
         //Spawns a pickup at a specified position with a specified number of the item dropped.
         public Pickup SpawnPickup(Vector3 position, int number)
         {
-            var pickup = Instantiate(this._pickup);
+            var pickup = Instantiate(_pickup);
             pickup.transform.position = position;
             pickup.Setup(this, number);
             return pickup;
         }
 
+        public Pickup SpawnAmmo(Vector3 position, int number)
+        {
+            var pickup = Instantiate(_ammo);
+            pickup.transform.position = position;
+            pickup.Setup(_ammo.GetItem(), number);
+            return pickup;
+        }
 
 
         //Interface Implementation

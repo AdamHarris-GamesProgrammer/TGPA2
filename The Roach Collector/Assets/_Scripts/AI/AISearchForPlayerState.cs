@@ -14,12 +14,13 @@ public class AISearchForPlayerState : AIState
     int _index = 0;
 
     FieldOfView _fov;
-
+    AIAgent _agent;
 
     Vector3[] _searchLocations = new Vector3[3];
 
     public AISearchForPlayerState(AIAgent agent)
     {
+        _agent = agent;
         _playersKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 
         if(_playersKnownLocation == null)
@@ -33,7 +34,7 @@ public class AISearchForPlayerState : AIState
         
     } 
 
-    public void Enter(AIAgent agent)
+    public void Enter()
     {
         _index = 0;
 
@@ -62,7 +63,7 @@ public class AISearchForPlayerState : AIState
         _navAgent.SetDestination(_searchLocations[_index]);
     }
 
-    public void Exit(AIAgent agent)
+    public void Exit()
     {
 
     }
@@ -72,15 +73,15 @@ public class AISearchForPlayerState : AIState
         return AiStateId.SearchForPlayer;
     }
 
-    public void Update(AIAgent agent)
+    public void Update()
     {
         if (_fov.IsEnemyInFOV)
         {
-            agent.stateMachine.ChangeState(AiStateId.CombatState);
+            _agent.stateMachine.ChangeState(AiStateId.CombatState);
         }
 
 
-        if(_navAgent.pathStatus == NavMeshPathStatus.PathComplete)
+        if(_navAgent.remainingDistance <= 1.5f)
         {
             _timer += Time.deltaTime;
 
@@ -97,7 +98,7 @@ public class AISearchForPlayerState : AIState
                 else
                 {
                     GameObject.FindObjectOfType<PlayerController>().IsDetected = false;
-                    agent.stateMachine.ChangeState(AiStateId.Idle);
+                    _agent.ReturnToDefaultState();
                     //Debug.Log("End Search");
                 }
             }
