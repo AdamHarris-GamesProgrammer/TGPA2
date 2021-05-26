@@ -23,6 +23,7 @@ public class AIWeapons : MonoBehaviour
     [SerializeField] private RaycastWeapon _meleeWeapon;
 
     bool _usingMelee = false;
+    AIHealth _health;
 
 
     public void SetTarget(Transform transform)
@@ -35,10 +36,13 @@ public class AIWeapons : MonoBehaviour
     {
         _sockets = GetComponent<MeshSockets>();
         _weaponIK = GetComponent<WeaponIK>();
+        _health = GetComponent<AIHealth>();
     }
 
     private void Update()
     {
+        if (_health.IsDead) return;
+
         if (!_isWeaponActive) return;
         if(_currentTarget && _currentWeapon)
         {
