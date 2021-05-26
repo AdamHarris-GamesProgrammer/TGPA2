@@ -119,7 +119,7 @@ public class RaycastWeapon : MonoBehaviour
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
-                Debug.Log("Bullet load");
+                //Debug.Log("Bullet load");
                 _audioSoruce.PlayOneShot(_config.BulletLoad);
 
 
@@ -137,12 +137,14 @@ public class RaycastWeapon : MonoBehaviour
 
                     RemoveAmmoFromInventory(_config.ClipSize);
                 }
-                Debug.Log("Magazine load");
+                //Debug.Log("Magazine load");
                 _audioSoruce.PlayOneShot(_config.MagazineLoad);
-                Debug.Log("Safety Switch");
+                //Debug.Log("Safety Switch");
                 _audioSoruce.PlayOneShot(_config.SafetySwitch);
-                Debug.Log("Cock Sound");
+                //Debug.Log("Cock Sound");
                 _audioSoruce.PlayOneShot(_config.CockSound);
+
+                _timeSinceLastShot = 1000.0f;
             }
         }
         
@@ -212,7 +214,7 @@ public class RaycastWeapon : MonoBehaviour
         }
         else if (_isReloading)
         {
-
+            Debug.Log("is reloading");
         }
         else
         {
@@ -229,10 +231,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
+        Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
         {
+            Debug.Log("Stop Fire");
             _audioSoruce.PlayOneShot(_config.EndFire);
         }
     }
@@ -274,6 +278,7 @@ public class RaycastWeapon : MonoBehaviour
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
+        _isFiring = false;
         _isReloading = true;
 
     }
@@ -337,6 +342,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateWeapon(Vector3 target)
     {
+
         if(_isFiring)
         {
             UpdateFiring(target);
@@ -347,7 +353,6 @@ public class RaycastWeapon : MonoBehaviour
 
     public void UpdateFiring(Vector3 target)
     {
-        Debug.Log("update firing");
         if(_timeSinceLastShot > _timeBetweenShots)
         {
             Debug.Log("passed fire rate");

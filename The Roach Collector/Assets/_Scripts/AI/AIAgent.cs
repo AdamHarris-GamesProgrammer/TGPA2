@@ -8,16 +8,10 @@ using TGP.Control;
 
 public class AIAgent : MonoBehaviour
 {
-
-
     public AIStateMachine stateMachine;
     public AiStateId _initialState;
     public AIAgentConfig _config;
 
-
-
-    [SerializeField] private int _AiClipBullets = 0;
-    [SerializeField] private int _AiTotalBullets = 0;
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
@@ -34,10 +28,6 @@ public class AIAgent : MonoBehaviour
     bool _canActivateAlarm = false;
     bool _isAggrevated = false;
 
-    List<AIAgent> _agentsInScene;
-    List<AlarmController> _alarmsInScene;
-    List<CoverController> _coversInScene;
-
     CombatZone _owningZone;
 
     [Header("Patrol Settings")]
@@ -51,7 +41,6 @@ public class AIAgent : MonoBehaviour
     public CombatZone Zone { get { return _owningZone; } }
 
     bool _beingKilled = false;
-    bool _usingMelee = false;
 
     public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
 
@@ -64,7 +53,7 @@ public class AIAgent : MonoBehaviour
     }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
-    [SerializeField] private RaycastWeapon _MeleeWeapon;
+
 
     public Transform GetPlayer()
     {
@@ -75,18 +64,12 @@ public class AIAgent : MonoBehaviour
     {
         _aiHealth = GetComponent<Health>();
         _audioSource = GetComponent<AudioSource>();
-
-        _agentsInScene = new List<AIAgent>();
-        _alarmsInScene = new List<AlarmController>();
-        _coversInScene = new List<CoverController>();
-
         _owningZone = GetComponentInParent<CombatZone>();
-
-        _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
-        _alarmsInScene = GameObject.FindObjectsOfType<AlarmController>().ToList<AlarmController>();
-        _coversInScene = GameObject.FindObjectsOfType<CoverController>().ToList<CoverController>();
-
         _defaultMoveSpeed = GetComponent<NavMeshAgent>().speed;
+
+        if (!_aiHealth) Debug.LogError(gameObject.name + " has no derivative of Health Component attached to it");
+        if (!_audioSource) Debug.LogError(gameObject.name + " has no AudioSource component attached to it");
+        if (!_owningZone) Debug.LogError(gameObject.name + " has no CombatZone component in parent GameObject");
     }
 
     // Start is called before the first frame update
@@ -137,27 +120,6 @@ public class AIAgent : MonoBehaviour
         if (_aiHealth.IsDead) return;
         stateMachine.Update();
         _currentState = stateMachine._currentState;
-
-        
-        _AiClipBullets =_aiWeapon.GetEquippedWeapon()._clipAmmo;
-        _AiTotalBullets = _aiWeapon.GetEquippedWeapon()._totalAmmo;
-
-        if(_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
-        {
-            _usingMelee = true;
-            Debug.Log("Change Weapon");
-            RaycastWeapon meleeweapon = Instantiate(_MeleeWeapon);
-            _aiWeapon.EquipWeapon(meleeweapon);
-
-            stateMachine.ChangeState(AiStateId.Melee);
-
-        }
-
-        if(_aiWeapon.GetEquippedWeapon().IsMelee && _usingMelee == false)
-        {
-            _usingMelee = true;
-            stateMachine.ChangeState(AiStateId.Melee);
-        }
 
         if(_player.GetComponent<PlayerHealth>().IsDead)
         {

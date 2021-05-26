@@ -168,10 +168,6 @@ public class CharacterLocomotion : MonoBehaviour
 
         _controller.Move(stepForward + stepDown);
 
-        if(_input != Vector2.zero && !_audioSource.isPlaying) {
-            GetComponent<FootstepSFX>().Footstep();
-        }
-
         //To remove the one frame glitch check if we are no longer grounded here and then step back up
         if (!_controller.isGrounded)
         {
