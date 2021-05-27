@@ -172,11 +172,11 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         levelStats.EndLevelScoreCalc();
 
         //set score UI
-        score = levelStats.score;
+        score = levelStats.LevelScore;
         ScoreTxt.text = score.ToString();
 
         //set time UI
-        time = levelStats.time;
+        time = levelStats.LevelTime;
         int minutes = (int)time / 60; 
         int seconds = (int)time % 60;
         int fraction = (int)(time * 100) % 100;
