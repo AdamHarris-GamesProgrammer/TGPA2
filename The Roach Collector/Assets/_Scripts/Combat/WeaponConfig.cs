@@ -58,7 +58,7 @@ public class WeaponConfig : EquipableItem
     public DamageType DamageType { get { return _damageType; } }
     public float ReloadDuration { get { return _reloadDuration; } }
 
-    public override void Use(GameObject user)
+    public override void Use(GameObject user, int index)
     {
         if (user.CompareTag("Player"))
         {
