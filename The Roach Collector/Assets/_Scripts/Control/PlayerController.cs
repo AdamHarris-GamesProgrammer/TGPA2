@@ -12,6 +12,8 @@ namespace TGP.Control
 {
     public class PlayerController : MonoBehaviour, ISaveable
     {
+        public bool isDancing = false;
+
         bool _canDisableAlarm = false;
 
         AIAgent _agentInRange = null;
