@@ -80,7 +80,7 @@ public class AICombatState : AIState
     private void SwitchSnippets(CombatSnippet newSnippet)
     {
         _currentSnippet = newSnippet;
-        _currentSnippet.EnterSnippet();
+        if(_currentSnippet != null) _currentSnippet.EnterSnippet();
     }
 
     private void RegisterSnippet(CombatSnippet snippet)

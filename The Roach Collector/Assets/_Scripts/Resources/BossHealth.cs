@@ -7,6 +7,13 @@ public class BossHealth : AIHealth
     [SerializeField] protected float[] _healthStages;
     protected int _index = 0;
 
+    UIHealthBar _healthBar;
+
+
+    void Awake()
+    {
+        _healthBar = GetComponentInChildren<UIHealthBar>();
+    }
 
     protected override void OnDamage()
     {
