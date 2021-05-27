@@ -176,11 +176,12 @@ public class ActiveWeapon : MonoBehaviour
                     _weapon.StartFiring();
                     _controller.IsShooting = true;
                 }
-                if (Input.GetButtonUp("Fire1"))
+                else if (Input.GetButtonUp("Fire1"))
                 {
                     _weapon.StopFiring();
                     _controller.IsShooting = false;
                 }
+
                 if (_weapon.IsFiring)
                 {
                     _weapon.UpdateWeapon(_crosshairTarget.position);
