@@ -22,7 +22,7 @@ public class SoundPerception : MonoBehaviour
         {
             _isHeard = true;
             FindObjectOfType<LastKnownLocation>().transform.position = _contactPoint;
-            //Debug.Log("Detected through sound");
+             Debug.Log("Detected through sound");
         }
         else
         {

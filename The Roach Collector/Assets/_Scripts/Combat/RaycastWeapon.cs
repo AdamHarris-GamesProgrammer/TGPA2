@@ -231,12 +231,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        Debug.Log("Stopping fire");
+        //Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
         {
-            Debug.Log("Stop Fire");
+           // Debug.Log("Stop Fire");
             _audioSoruce.PlayOneShot(_config.EndFire);
         }
     }
