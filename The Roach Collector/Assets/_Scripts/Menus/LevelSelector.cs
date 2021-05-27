@@ -76,8 +76,7 @@ public class LevelSelector : MonoBehaviour
     public void NextLevel()
     {
         levelID = (levelID + 1) % levelCount;
-
-        Debug.Log(levelID);
+        
         UpdateUI();
     }
 
