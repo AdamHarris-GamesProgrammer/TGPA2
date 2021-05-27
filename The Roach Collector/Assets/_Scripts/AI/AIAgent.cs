@@ -117,7 +117,11 @@ public class AIAgent : MonoBehaviour
     void Update()
     {
         if (_beingKilled) return;
-        if (_aiHealth.IsDead) return;
+        if (_aiHealth.IsDead)
+        {
+            stateMachine.ChangeState(AiStateId.Death);
+        }
+
         stateMachine.Update();
         _currentState = stateMachine._currentState;
 

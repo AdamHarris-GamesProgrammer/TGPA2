@@ -5,12 +5,10 @@ using UnityEngine;
 public class AIHealth : Health
 {
     protected AIAgent _aiAgent;
-    protected UIHealthBar _healthBar;
 
     protected override void OnStart()
     {
         _aiAgent = GetComponent<AIAgent>();
-        _healthBar = GetComponentInChildren<UIHealthBar>();
     }
 
     protected override void OnDeath()
@@ -21,8 +19,6 @@ public class AIHealth : Health
 
     protected override void OnDamage()
     {
-        _healthBar.SetHealthBarPercentage(_currentHealth / _maxHealth);
-
         //Aggrevate Enemies on hit.
         _aiAgent.Aggrevate();
     }

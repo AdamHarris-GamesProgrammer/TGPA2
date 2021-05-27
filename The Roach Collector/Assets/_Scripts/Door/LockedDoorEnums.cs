@@ -5,7 +5,7 @@ using UnityEngine;
 public enum LockedDoorID
 {
     ROACH,
-    SCORPION,
+    LIZARD,
     SPIDER,
-    CENTIPEDE
+    SNAKE
 }
