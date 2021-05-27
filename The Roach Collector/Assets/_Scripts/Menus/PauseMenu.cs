@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
 {
     public Button _MainMenuButton;
     public Button _HideOutButton;
-    public Button _RespawnButton;
+    public Button _QuitButton;
 
     private void OnEnable()
     {
