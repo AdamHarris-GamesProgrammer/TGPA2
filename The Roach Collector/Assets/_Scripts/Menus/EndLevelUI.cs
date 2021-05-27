@@ -12,16 +12,16 @@ using Harris.Saving;
 
 //struct for level save data
 [System.Serializable]
-struct LevelData
-{
-    public int highscore;
-    public float bestTime;
-    public int highestRank;
-    public int roachesCollected;        
-}
+//struct LevelData
+//{
+//    public int highscore;
+//    public float bestTime;
+//    public int highestRank;
+//    public int roachesCollected;        
+//}
 
 //UI for end level
-public class EndLevelUI : MonoBehaviour, ISaveable
+public class EndLevelUI : MonoBehaviour//, ISaveable
 {
     public LevelStats levelStats;
 
@@ -172,54 +172,54 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         levelStats.EndLevelScoreCalc();
 
         //set score UI
-        score = levelStats.score;
+        //score = levelStats.score;
         ScoreTxt.text = score.ToString();
 
         //set time UI
-        time = levelStats.time;
-        int minutes = (int)time / 60; 
-        int seconds = (int)time % 60;
-        int fraction = (int)(time * 100) % 100;
-        TimeTxt.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
+        //time = levelStats.time;
+        //int minutes = (int)time / 60; 
+        //int seconds = (int)time % 60;
+        //int fraction = (int)(time * 100) % 100;
+        //TimeTxt.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
 
     }
 
-    //save level data
-    public object Save()
-    {
+    ////save level data
+    //public object Save()
+    //{
         
-        LevelData data = new LevelData();
+    //    LevelData data = new LevelData();
 
-        if (score > highscore)
-        {
-            data.highscore = score;
-        }
-        if (time > bestTime)
-        {
-            data.bestTime = time;
-        }
-        if (roachCount > roachesCollected)
-        {
-            data.roachesCollected = roachCount;
-        }
-        if (rank > highestRank)
-        {
-            data.highestRank = rank;
-        }
+    //    if (score > highscore)
+    //    {
+    //        data.highscore = score;
+    //    }
+    //    if (time > bestTime)
+    //    {
+    //        data.bestTime = time;
+    //    }
+    //    if (roachCount > roachesCollected)
+    //    {
+    //        data.roachesCollected = roachCount;
+    //    }
+    //    if (rank > highestRank)
+    //    {
+    //        data.highestRank = rank;
+    //    }
 
-        return data;
-    }
+    //    return data;
+    //}
 
-    //load level data
-    public void Load(object state)
-    {
+    ////load level data
+    //public void Load(object state)
+    //{
         
-        LevelData data = (LevelData)state;
-        highscore = data.highscore;
-        bestTime = data.bestTime;
-        highestRank = data.highestRank;
-        roachesCollected = data.roachesCollected;
-    }
+    //    LevelData data = (LevelData)state;
+    //    highscore = data.highscore;
+    //    bestTime = data.bestTime;
+    //    highestRank = data.highestRank;
+    //    roachesCollected = data.roachesCollected;
+    //}
 
     
 }

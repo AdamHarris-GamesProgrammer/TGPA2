@@ -6,21 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelector : MonoBehaviour
 {
-    //struct for level save data
-    [System.Serializable]
-    struct LevelData
-    {
-        public int highscore;
-        public float bestTime;
-        public int highestRank;
-        public int roachesCollected;
-    }
+    LevelData levelData;
 
     public int levelID = 0;
     public int levelCount = 5;
     public string[] levelName;
     public float[] levelTimeRecord;
     public int[] levelScore;
+    public int[] levelRank;
+    public int[] levelRoaches;
     public Sprite[] levelImage;
     public Image levelMenuImage;
 
@@ -29,7 +23,9 @@ public class LevelSelector : MonoBehaviour
     public Text LevelNameTXT;
     public Text LevelScoreTXT;
     public Text LevelTimeTXT;
-    //public Text LevelNameTXT;
+
+    [SerializeField] private Sprite[] rankSprites = new Sprite[6];
+    [SerializeField] private Image rankImage;
 
     private void Start()
     {
@@ -68,12 +64,44 @@ public class LevelSelector : MonoBehaviour
         levelMenuImage.sprite = levelSprite;
     }
 
+    void SetRank(int rank)
+    {
+        switch (rank)
+        {
+            //f
+            case 0:
+                rankImage.sprite = rankSprites[5];
+                break;
+            //d
+            case 1:
+                rankImage.sprite = rankSprites[5];
+                break;
+            //c
+            case 2:
+                rankImage.sprite = rankSprites[5];
+                break;
+            //b
+            case 3:
+                rankImage.sprite = rankSprites[5];
+                break;
+            //a
+            case 4:
+                rankImage.sprite = rankSprites[5];
+                break;
+            //s
+            case 5:
+                rankImage.sprite = rankSprites[5];
+                break;
+        }
+    }
+
     void UpdateUI()
     {
         SetLevelName(levelName[levelID]);
         SetLevelTime(levelTimeRecord[levelID]);
         SetLevelScore(levelScore[levelID]);
         SetLevelImage(levelImage[levelID]);
+        SetRank(levelRank[levelID]);
     }
 
     //change to next level
@@ -121,14 +149,13 @@ public class LevelSelector : MonoBehaviour
         }
     }
 
-    //load level data
+    //load level data from 
     public void Load(object state)
     {
-
-        LevelData data = (LevelData)state;
-        levelScore[1] = data.highscore;
-        levelTimeRecord[1] = data.bestTime;
-        //highestRank = data.highestRank;
-        //roachesCollected = data.roachesCollected;
+        LevelDataStruct[] data = (LevelDataStruct[])state;
+        levelScore[levelID] = data[levelID].highscore;
+        levelTimeRecord[levelID] = data[levelID].bestTime;
+        levelRank[levelID] = data[levelID].highestRank;
+        levelRoaches[levelID] = data[levelID].roachesCollected;
     }
 }
