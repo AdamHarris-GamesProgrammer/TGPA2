@@ -74,6 +74,9 @@ public class EndLevelUI : MonoBehaviour, ISaveable
 
     void Start()
     {
+        //Loads level data
+        FindObjectOfType<SavingWrapper>().Load();
+
         Time.timeScale = 0;
 
         //unlock cursor
