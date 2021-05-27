@@ -76,7 +76,7 @@ namespace Harris.Inventories
                 ActionItem action = _dockedItems[index].item as ActionItem;
                 if (action)
                 {
-                   action.Use(user);
+                   action.Use(user, index);
                     if (action.IsConsumable)
                     {
                         RemoveItems(index, 1);
@@ -88,7 +88,7 @@ namespace Harris.Inventories
                 ArmorConfig armor = _dockedItems[index].item as ArmorConfig;
                 if (armor)
                 {
-                    armor.Use(gameObject);
+                    armor.Use(gameObject, index);
                     RemoveItems(index, 1);
                 }
 
@@ -96,7 +96,7 @@ namespace Harris.Inventories
                 WeaponConfig weapon = _dockedItems[index].item as WeaponConfig;
                 if(weapon)
                 {
-                    weapon.Use(gameObject);
+                    weapon.Use(gameObject, index);
                 }
 
             }

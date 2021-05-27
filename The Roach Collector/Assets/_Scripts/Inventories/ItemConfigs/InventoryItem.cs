@@ -64,7 +64,7 @@ namespace Harris.Inventories
         }
 
         //Virtual method for using this item. Not all items need a use function but it's here for when it's needed
-        public virtual void Use(GameObject user)
+        public virtual void Use(GameObject user, int index)
         {
             Debug.Log("Using action: " + this);
         }

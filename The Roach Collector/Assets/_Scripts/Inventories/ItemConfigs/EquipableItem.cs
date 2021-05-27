@@ -12,7 +12,7 @@ namespace Harris.Inventories
 
         // PUBLIC
 
-        public override void Use(GameObject user)
+        public override void Use(GameObject user, int index)
         {
             Equipment equipment = user.GetComponent<Equipment>();
 

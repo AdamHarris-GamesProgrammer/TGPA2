@@ -12,7 +12,7 @@ public class DamageBuffItem : ActionItem
     [SerializeField] float _timeToApply = 2.0f;
     [SerializeField] float _duration = 10.0f;
 
-    public override void Use(GameObject user)
+    public override void Use(GameObject user, int index)
     {
         user.GetComponent<PlayerController>().AddUsable(new DamageResistanceUsable(user, _timeToApply, _duration, _damageBuffAmount));
     }
