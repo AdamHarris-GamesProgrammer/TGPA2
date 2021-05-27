@@ -99,9 +99,11 @@ namespace Harris.Saving
         {
             foreach (SaveableEntity saveable in FindObjectsOfType<SaveableEntity>())
             {
+                
                 string id = saveable.GetUniqueIdentifier();
                 if (state.ContainsKey(id))
                 {
+                    Debug.Log(state[id]);
                     saveable.RestoreState(state[id]);
                 }
             }

@@ -59,8 +59,10 @@ namespace Harris.Saving
             foreach (ISaveable saveable in GetComponents<ISaveable>())
             {
                 string typeString = saveable.GetType().ToString();
+                Debug.Log(typeString);
                 if (stateDict.ContainsKey(typeString))
                 {
+                    Debug.Log(typeString);
                     saveable.Load(stateDict[typeString]);
                 }
             }

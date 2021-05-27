@@ -21,7 +21,7 @@ using Harris.Saving;
 //}
 
 //UI for end level
-public class EndLevelUI : MonoBehaviour//, ISaveable
+public class EndLevelUI : MonoBehaviour, ISaveable
 {
     public LevelStats levelStats;
 
@@ -45,8 +45,11 @@ public class EndLevelUI : MonoBehaviour//, ISaveable
     private int highscore;
     private float bestTime;
     private int highestRank;
-    private int roachesCollected; 
+    private int roachesCollected;
 
+    [SerializeField] int _levelIndex = 0;
+
+    LevelDataStruct[] _levelStats;
     
     //loads next level
     public void NextLevel()
@@ -72,6 +75,12 @@ public class EndLevelUI : MonoBehaviour//, ISaveable
         SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
     }
 
+    void Awake()
+    {
+        //TODO: Change this if we add more levels
+        _levelStats = new LevelDataStruct[2];
+    }
+
     void Start()
     {
         //Loads level data
@@ -91,6 +100,8 @@ public class EndLevelUI : MonoBehaviour//, ISaveable
 
         //saves level data
         FindObjectOfType<SavingWrapper>().Save();
+
+
     }
 
     //sets level name
@@ -184,42 +195,26 @@ public class EndLevelUI : MonoBehaviour//, ISaveable
 
     }
 
-    ////save level data
-    //public object Save()
-    //{
+    //save level data
+    public object Save()
+    {
+        Debug.Log("Save");
+        _levelStats[_levelIndex].bestTime = 100.0f;
+
+
+        //TODO: Check for new highscore etc
+
+        return _levelStats;
         
-    //    LevelData data = new LevelData();
+    }
 
-    //    if (score > highscore)
-    //    {
-    //        data.highscore = score;
-    //    }
-    //    if (time > bestTime)
-    //    {
-    //        data.bestTime = time;
-    //    }
-    //    if (roachCount > roachesCollected)
-    //    {
-    //        data.roachesCollected = roachCount;
-    //    }
-    //    if (rank > highestRank)
-    //    {
-    //        data.highestRank = rank;
-    //    }
+    //load level data
+    public void Load(object state)
+    {
+        _levelStats = (LevelDataStruct[])state;
 
-    //    return data;
-    //}
+        Debug.Log(_levelStats[_levelIndex].bestTime);
+    }
 
-    ////load level data
-    //public void Load(object state)
-    //{
-        
-    //    LevelData data = (LevelData)state;
-    //    highscore = data.highscore;
-    //    bestTime = data.bestTime;
-    //    highestRank = data.highestRank;
-    //    roachesCollected = data.roachesCollected;
-    //}
 
-    
 }

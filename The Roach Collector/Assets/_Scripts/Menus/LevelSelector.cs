@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Harris.Saving;
 
-public class LevelSelector : MonoBehaviour
+public class LevelSelector : MonoBehaviour, ISaveable
 {
-    LevelData levelData;
+    LevelDataStruct levelData;
 
     public int levelID = 0;
-    public int levelCount = 5;
+    //TODO: Change this as level grow
+    public int levelCount = 2;
     public string[] levelName;
     public float[] levelTimeRecord;
     public int[] levelScore;
@@ -27,11 +29,36 @@ public class LevelSelector : MonoBehaviour
     [SerializeField] private Sprite[] rankSprites = new Sprite[6];
     [SerializeField] private Image rankImage;
 
+    public Image RoachToken1;
+    public Image RoachToken2;
+    public Image RoachToken3;
+    public Sprite RoachTokenSprite;
+    public Sprite RoachEmptyTokenSprite;
+
     private void Start()
     {
         //Loads level data
         //FindObjectOfType<SavingWrapper>().Load();
+        
+    }
+
+
+    private void OnEnable()
+    {
+        levelRank = new int[2];
+        levelRoaches = new int[2];
+
+        
+    }
+
+    private void OnLevelLoad()
+    {
+        
         UpdateUI();
+    }
+
+    private void Update()
+    {
     }
 
     //exits menu
@@ -95,6 +122,36 @@ public class LevelSelector : MonoBehaviour
         }
     }
 
+    void SetRoaches(int roachCount)
+    {
+        switch (roachCount)
+        {
+            case 0:
+                RoachToken1.sprite = RoachEmptyTokenSprite;
+                RoachToken2.sprite = RoachEmptyTokenSprite;
+                RoachToken3.sprite = RoachEmptyTokenSprite;
+                break;
+            case 1:
+                RoachToken1.sprite = RoachTokenSprite;
+                RoachToken2.sprite = RoachEmptyTokenSprite;
+                RoachToken3.sprite = RoachEmptyTokenSprite;
+                break;
+            case 2:
+                RoachToken1.sprite = RoachTokenSprite;
+                RoachToken2.sprite = RoachTokenSprite;
+                RoachToken3.sprite = RoachEmptyTokenSprite;
+                break;
+            case 3:
+                RoachToken1.sprite = RoachTokenSprite;
+                RoachToken2.sprite = RoachTokenSprite;
+                RoachToken3.sprite = RoachTokenSprite;
+                break;
+            default:
+                break;
+
+        }
+    }
+
     void UpdateUI()
     {
         SetLevelName(levelName[levelID]);
@@ -102,19 +159,15 @@ public class LevelSelector : MonoBehaviour
         SetLevelScore(levelScore[levelID]);
         SetLevelImage(levelImage[levelID]);
         SetRank(levelRank[levelID]);
+        SetRoaches(levelRoaches[levelID]);
     }
 
     //change to next level
     public void NextLevel()
     {
-        if (levelID < levelCount - 1)
-        {
-            levelID++;
-        }
-        else
-        {
-            levelID = 0;
-        }
+        levelID = (levelID + 1) % levelCount;
+
+        Debug.Log(levelID);
         UpdateUI();
     }
 
@@ -152,10 +205,36 @@ public class LevelSelector : MonoBehaviour
     //load level data from 
     public void Load(object state)
     {
-        LevelDataStruct[] data = (LevelDataStruct[])state;
-        levelScore[levelID] = data[levelID].highscore;
-        levelTimeRecord[levelID] = data[levelID].bestTime;
-        levelRank[levelID] = data[levelID].highestRank;
-        levelRoaches[levelID] = data[levelID].roachesCollected;
+        Debug.Log("Bee");
+        LevelDataStruct[] data = new LevelDataStruct[2];
+        data = (LevelDataStruct[])state;
+        Debug.Log("Boop: " + data.Length);
+        for(int i = 0; i < data.Length; i++)
+        {
+            levelScore[i] = data[i].highscore;
+            levelTimeRecord[i] = data[i].bestTime;
+            Debug.Log(data[i].bestTime);
+            levelRank[i] = data[i].highestRank;
+            levelRoaches[i] = data[i].roachesCollected;
+        }
+
+
+    }
+
+    LevelDataStruct[] data;
+
+    public object Save()
+    {
+        data = new LevelDataStruct[2];
+
+        for(int i = 0; i < 2; i++)
+        {
+            data[i].bestTime = levelTimeRecord[i];
+            data[i].highscore = levelScore[i];
+            data[i].highestRank = levelRank[i];
+            data[i].roachesCollected = levelRoaches[i];
+        }
+
+        return data;
     }
 }

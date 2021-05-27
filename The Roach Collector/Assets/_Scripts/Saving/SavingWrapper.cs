@@ -14,6 +14,7 @@ public class SavingWrapper : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
+            Debug.Log("Boop");
             Load();
         }
     }
