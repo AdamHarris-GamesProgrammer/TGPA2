@@ -21,7 +21,8 @@ public class AIDeathState : AIState
 
     public void Enter()
     {
-        _healthBar.gameObject.SetActive(false);
+        if(_healthBar) _healthBar.gameObject.SetActive(false);
+
         _ragdoll.ActivateRagdoll();
         _aiWeapon.DropWeapon();
 

@@ -82,6 +82,9 @@ public class RaycastWeapon : MonoBehaviour
         if (_inventory)
         {
             _totalAmmo = 0;
+
+            //TODO: Get some form of record here
+            _clipAmmo = 0;
         }
         else
         {
