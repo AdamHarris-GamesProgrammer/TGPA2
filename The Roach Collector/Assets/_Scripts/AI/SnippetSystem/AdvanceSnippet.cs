@@ -21,84 +21,75 @@ public class AdvanceSnippet : CombatSnippet
     float _stationaryDuration = 5.0f;
     float _stationaryTimer = 0.0f;
 
+    private void DecideToReload()
+    {
+        //Check if we need to reload
+        if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+        {
+            //Stop firing
+            _aiWeapon.SetFiring(false);
+
+            //If we are not reloading, then reload the current gun
+            if (!_aiWeapon.GetEquippedWeapon().IsReloading)
+            {
+                _aiWeapon.GetEquippedWeapon().Reload();
+            }
+
+            //If the AI does not have any bullets left, then switch to the melee state
+            if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
+            {
+                _agent.stateMachine.ChangeState(AiStateId.Melee);
+            }
+        }
+    }
+
     public void Action()
     {
         _timer += Time.deltaTime;
 
+        //Look at player.
         Vector3 direction = _agent.GetPlayer().position - _agent.transform.position;
-
         Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
-
         _agent.transform.rotation = look;
 
-        if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+
+        DecideToReload();
+
+        //if we are close to our objective
+        if (_navAgent.remainingDistance <= 2.5f)
         {
-            Debug.Log("Need to reload");
-            
-            _aiWeapon.SetFiring(false);
-            if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-            {
-                Debug.Log("Reloading");
-                _aiWeapon.GetEquippedWeapon().Reload();
-            }
+            //Debug.Log("Close Enough");
 
-            //Does the AI have any bullets left?
-            if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
-            {
-                //TODO Switch to melee state here. 
-            }
-        }
+            //Start Shooting
+            if (_fov.IsEnemyInFOV) _aiWeapon.SetFiring(true);
+            else _aiWeapon.SetFiring(false);
 
 
-        if (_navAgent.remainingDistance <= 1.5f)
-        {
+            //Adds to our stationary timer
             _stationaryTimer += Time.deltaTime;
 
+            //if the AI has been stationary for longer than the duration
             if (_stationaryTimer > _stationaryDuration)
             {
+                //Debug.Log("Stationary timer up");
+
+                //Reset the timer and generate a new point in range of the player
                 _stationaryTimer = 0.0f;
-                _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(12.5f));
+                _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
             }
             else
             {
+                //Sets the player as our target
                 _aiWeapon.SetTarget(_agent.GetPlayer());
-                //Debug.Log("Should shoot");
 
-                if (_aiWeapon.GetEquippedWeapon().NeedToReload)
+                if (!_aiWeapon.GetEquippedWeapon().IsFiring)
                 {
-                    _aiWeapon.GetEquippedWeapon().Reload();
+                    //Debug.Log("Line 76");
                 }
-                else
-                {
-                    if (!_aiWeapon.GetEquippedWeapon().IsFiring)
-                    {
-                        //Debug.Log("Line 76");
-                        _aiWeapon.SetFiring(true);
-                    }
-                }
-
-
-            }
-
-        }
-
-        //TODO: Decide when is the optimal position to shoot. 
-        //TODO: Make the AI decide where to move based on if they can shoot the player from there.
-        if (_aiWeapon.GetEquippedWeapon()._clipAmmo > 0)
-        {
-            //Start firing
-            //Debug.Log("Line 96");
-            _aiWeapon.SetFiring(true);
-        }
-        else
-        {
-            _aiWeapon.SetFiring(false);
-            if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-            {
-                Debug.Log("Reloading");
-                _aiWeapon.GetEquippedWeapon().Reload();
             }
         }
+
+        //TODO: Decide where is the optimal position to shoot. 
     }
 
 
@@ -108,14 +99,11 @@ public class AdvanceSnippet : CombatSnippet
 
         _timer = 0.0f;
 
-        Vector3 playerPos = _lastKnownLocation.transform.position;
-
         _aiWeapon.SetTarget(_agent.GetPlayer());
 
-        _navAgent.SetDestination(playerPos);
+        _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
 
-        //TODO: Change this so some AI will rush the player
-        _navAgent.stoppingDistance = 5.0f;
+        _navAgent.stoppingDistance = 0.5f;
     }
 
     public int Evaluate()
@@ -124,10 +112,7 @@ public class AdvanceSnippet : CombatSnippet
 
         float healthRatio = _aiHealth.HealthRatio;
 
-        if (healthRatio > _agent._config._advanceEnterHealthRatio)
-        {
-            returnScore = 20;
-        }
+        if (healthRatio > _agent._config._advanceEnterHealthRatio) returnScore = 20;
 
         return returnScore;
     }
@@ -146,7 +131,6 @@ public class AdvanceSnippet : CombatSnippet
     {
         //Checks if the enemy is low on health or if the state duration is up
         return (_aiHealth.IsDead /* || _timer >= _agent._config._advanceStateDuration*/);
-
     }
 
 }

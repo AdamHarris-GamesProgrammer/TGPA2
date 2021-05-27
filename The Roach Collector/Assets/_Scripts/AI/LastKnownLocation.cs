@@ -57,8 +57,10 @@ public class LastKnownLocation : MonoBehaviour
         Vector3 dist = transform.position;
 
         bool successful = false;
-        
+
         //Debug.Log("check player state");
+
+        int iterations = 0;
 
         //Brute force a position in range of the player.
         do
@@ -90,9 +92,63 @@ public class LastKnownLocation : MonoBehaviour
 
             //Debug.Log("Successful: " + successful);
 
-        } while (!successful);
+        } while (!successful && iterations < 5);
 
         return dist;
+    }
+
+    public Vector3 GeneratePointInRangeWithRaycast(float distance)
+    {
+        Vector3 sampledPosition = transform.position;
+
+        bool successful = false;
+
+        //Debug.Log("check player state");
+
+        int iterations = 0;
+
+        //Brute force a position in range of the player.
+        do
+        {
+            Vector2 point = Random.insideUnitCircle;
+            float x = point.x;
+            float y = point.y;
+
+            x *= 2.0f;
+            y *= 2.0f;
+
+            x -= 1.0f;
+            y -= 1.0f;
+
+            point.x = x;
+            point.y = y;
+
+            //Debug.Log("Point: " + point);
+
+            Vector3 destination = new Vector3(point.x * _playerRadius / 2, transform.position.y, point.y * _playerRadius / 2);
+
+            //Debug.Log("Destination: " + destination);
+
+            sampledPosition = transform.position + destination;
+
+            //Debug.Log("Final Destination: " + finalDestination);
+
+            RaycastHit hit;
+
+            if(Physics.Raycast(sampledPosition, transform.position - sampledPosition,out hit ,15.0f , ~0, QueryTriggerInteraction.Ignore)) {
+                if (hit.transform.CompareTag("Player"))
+                {
+                    successful = true;
+                }
+            }
+
+            //Debug.Log("Successful: " + successful);
+
+            iterations++;
+
+        } while (!successful && iterations < 5);
+
+        return sampledPosition;
     }
 
     // Update is called once per frame
