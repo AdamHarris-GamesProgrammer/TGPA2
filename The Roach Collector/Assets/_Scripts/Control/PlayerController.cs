@@ -298,6 +298,11 @@ namespace TGP.Control
                 }
             }
 
+            if(Input.GetKeyDown(KeyCode.Y))
+            {
+                _animator.SetTrigger("Dance");
+            }
+
             InteractWithAssassination();
 
             InteractWithActionBar();
