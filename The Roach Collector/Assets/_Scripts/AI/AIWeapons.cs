@@ -105,7 +105,7 @@ public class AIWeapons : MonoBehaviour
             _currentWeapon.transform.SetParent(null);
             _currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             _currentWeapon.gameObject.AddComponent<Rigidbody>();
-            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 10);
+            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 5);
             _currentWeapon = null;
             _weaponIK.SetWeaponTransform(null);
         }
