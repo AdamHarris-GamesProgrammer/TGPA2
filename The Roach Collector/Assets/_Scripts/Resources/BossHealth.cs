@@ -29,6 +29,12 @@ public class BossHealth : AIHealth
         }
     }
 
+    protected override void OnDeath()
+    {
+        base.OnDeath();
+
+        _healthBar.gameObject.SetActive(false);
+    }
 
     protected virtual void NextStage()
     {

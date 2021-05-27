@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class AIDeathState : AIState
 {
-    UIHealthBar _healthBar;
     Ragdoll _ragdoll;
     AIWeapons _aiWeapon;
 
@@ -13,7 +12,6 @@ public class AIDeathState : AIState
 
     public AIDeathState(AIAgent agent)
     {
-        _healthBar = agent.GetComponentInChildren<UIHealthBar>();
         _ragdoll = agent.GetComponent<Ragdoll>();
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _navAgent = agent.GetComponent<NavMeshAgent>();
@@ -21,8 +19,6 @@ public class AIDeathState : AIState
 
     public void Enter()
     {
-        if(_healthBar) _healthBar.gameObject.SetActive(false);
-
         _ragdoll.ActivateRagdoll();
         _aiWeapon.DropWeapon();
 
