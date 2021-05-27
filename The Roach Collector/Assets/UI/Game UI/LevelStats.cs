@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LevelStats : MonoBehaviour
 {
-    public int score;
-    public int kills;
-    public float time;
+    private int score;
+    private int kills;
+    private float time;
+    private int roaches;
 
     // On awake
     void Awake()
@@ -50,6 +51,7 @@ public class LevelStats : MonoBehaviour
         {
             score += 1000;
         }
+        score += 5000 * roaches;
 
     }
 
@@ -70,5 +72,10 @@ public class LevelStats : MonoBehaviour
     {
         score += killScore;
         kills++;
+    }
+
+    public void AddRoach()
+    {
+        roaches++;
     }
 }
