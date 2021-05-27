@@ -44,6 +44,9 @@ public class AIWeapons : MonoBehaviour
         if (_health.IsDead) return;
 
         if (!_isWeaponActive) return;
+
+        if (!_currentWeapon) return;
+
         if(_currentTarget && _currentWeapon)
         {
             Vector3 target = _currentTarget.position + _weaponIK._offset;

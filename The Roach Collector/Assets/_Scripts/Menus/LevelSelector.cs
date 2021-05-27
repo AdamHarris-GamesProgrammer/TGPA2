@@ -6,12 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelector : MonoBehaviour
 {
-    public int levelID = 1;
+    //struct for level save data
+    [System.Serializable]
+    struct LevelData
+    {
+        public int highscore;
+        public float bestTime;
+        public int highestRank;
+        public int roachesCollected;
+    }
+
+    public int levelID = 0;
     public int levelCount = 5;
     public string[] levelName;
-    public string[] levelTimeRecord;
+    public float[] levelTimeRecord;
     public int[] levelScore;
-    public Image[] levelImage;
+    public Sprite[] levelImage;
+    public Image levelMenuImage;
 
     public GameObject LevelMenu;
 
@@ -22,6 +33,8 @@ public class LevelSelector : MonoBehaviour
 
     private void Start()
     {
+        //Loads level data
+        //FindObjectOfType<SavingWrapper>().Load();
         UpdateUI();
     }
 
@@ -38,9 +51,9 @@ public class LevelSelector : MonoBehaviour
     }
 
     //sets record time of level in level menu
-    void SetLevelTime(string levelTime)
+    void SetLevelTime(float levelTime)
     {
-        LevelTimeTXT.text = levelTime;
+        LevelTimeTXT.text = levelTime.ToString();
     }
 
     //sets record score of level in level menu
@@ -50,9 +63,9 @@ public class LevelSelector : MonoBehaviour
     }
 
     //sets image of level in level menu
-    void SetLevelImage()
+    void SetLevelImage(Sprite levelSprite)
     {
-
+        levelMenuImage.sprite = levelSprite;
     }
 
     void UpdateUI()
@@ -60,6 +73,7 @@ public class LevelSelector : MonoBehaviour
         SetLevelName(levelName[levelID]);
         SetLevelTime(levelTimeRecord[levelID]);
         SetLevelScore(levelScore[levelID]);
+        SetLevelImage(levelImage[levelID]);
     }
 
     //change to next level
@@ -71,7 +85,7 @@ public class LevelSelector : MonoBehaviour
         }
         else
         {
-            levelID = 1;
+            levelID = 0;
         }
         UpdateUI();
     }
@@ -79,7 +93,7 @@ public class LevelSelector : MonoBehaviour
     //change to previous level
     public void PreviousLevel()
     {
-        if (levelID > 1)
+        if (levelID > 0)
         {
             levelID--;
         }
@@ -93,6 +107,28 @@ public class LevelSelector : MonoBehaviour
     //starts current selected level
     public void StartLevel()
     {
-        SceneManager.LoadScene("Level" + levelID);
+        switch (levelID)
+        {
+            case 0:
+                SceneManager.LoadScene("Adam Tut");
+                break;
+            case 1:
+                SceneManager.LoadScene("Level02");
+                break;
+            case 2:
+                SceneManager.LoadScene("Level0" + levelID.ToString());
+                break;
+        }
+    }
+
+    //load level data
+    public void Load(object state)
+    {
+
+        LevelData data = (LevelData)state;
+        levelScore[1] = data.highscore;
+        levelTimeRecord[1] = data.bestTime;
+        //highestRank = data.highestRank;
+        //roachesCollected = data.roachesCollected;
     }
 }
