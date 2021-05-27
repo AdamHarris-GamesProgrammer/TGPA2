@@ -7,7 +7,7 @@ public class SoundController : MonoBehaviour
 {
     [SerializeField] float _walkSoundRadius = 2.5f;
     [SerializeField] float _crouchSoundRadius = 1.5f;
-    [SerializeField] float _gunSoundRadius = 20.0f;
+    [SerializeField] float _gunSoundRadius = 25.0f;
 
     PlayerController _player;
     SphereCollider _collider;
@@ -36,7 +36,7 @@ public class SoundController : MonoBehaviour
 
         if (_isShooting)
         {
-            _currentRadius = Mathf.Lerp(_currentRadius, _gunSoundRadius, Time.deltaTime * 5.0f);
+            _currentRadius = Mathf.Lerp(_currentRadius, _gunSoundRadius, Time.deltaTime * 35.0f);
         }
         else if (_isStanding)
         {

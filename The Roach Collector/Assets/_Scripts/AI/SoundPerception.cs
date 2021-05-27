@@ -9,7 +9,7 @@ public class SoundPerception : MonoBehaviour
 
     [SerializeField] float _detectionDuration = 2.0f;
     [SerializeField] float _standingMultiplier = 1.0f;
-    [SerializeField] float _shootingMultiplier = 100.0f;
+    [SerializeField] float _shootingMultiplier = 1000.0f;
     [SerializeField] float _crouchingMultiplier = 0.5f;
 
     float _detectionTimer;
