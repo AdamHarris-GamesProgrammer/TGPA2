@@ -12,6 +12,8 @@ public class FieldOfViewEditor : Editor
     private void OnSceneGUI()
     {
         FieldOfView fov = (FieldOfView)target;
+        if (!fov) return;
+
         Handles.color = Color.green;
         Handles.DrawWireArc(fov.transform.position, Vector3.up, Vector3.forward, 360, fov._viewRadius);
 

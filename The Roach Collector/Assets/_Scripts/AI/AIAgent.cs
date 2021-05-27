@@ -120,6 +120,9 @@ public class AIAgent : MonoBehaviour
         if (_aiHealth.IsDead)
         {
             stateMachine.ChangeState(AiStateId.Death);
+
+            Destroy(GetComponentInChildren<AssassinationTarget>());
+            Destroy(this);
         }
 
         stateMachine.Update();

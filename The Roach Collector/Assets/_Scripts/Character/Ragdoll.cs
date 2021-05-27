@@ -8,6 +8,10 @@ public class Ragdoll : MonoBehaviour
     Rigidbody[] _rigidbodies;
     Animator _animator;
 
+    float _lifeTime = 5.0f;
+    float _timer = 0.0f;
+    bool _active = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +22,25 @@ public class Ragdoll : MonoBehaviour
         _rigidbodies = bodies.ToArray();
 
         DeactivateRagdoll();
+    }
+
+    private void Update()
+    {
+        if (_active)
+        {
+            _timer += Time.deltaTime;
+
+            if(_timer > _lifeTime)
+            {
+                foreach(var rb in _rigidbodies)
+                {
+                    Destroy(rb.GetComponent<CharacterJoint>());
+                    Destroy(rb);
+                }
+
+                Destroy(this);
+            }
+        }
     }
 
     public void DeactivateRagdoll()
@@ -31,6 +54,7 @@ public class Ragdoll : MonoBehaviour
 
     public void ActivateRagdoll()
     {
+        _active = true;
         //Debug.Log("Activating ragdoll");
         _animator.enabled = false;
         foreach (var rb in _rigidbodies)

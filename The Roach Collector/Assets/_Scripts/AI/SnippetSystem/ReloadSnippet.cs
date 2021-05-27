@@ -24,6 +24,9 @@ public class ReloadSnippet : CombatSnippet
 
     public int Evaluate()
     {
+        if (!_aiWeapon) return 0;
+        if (!_aiWeapon.GetEquippedWeapon()) return 0;
+
         int returnScore = 0;
 
 

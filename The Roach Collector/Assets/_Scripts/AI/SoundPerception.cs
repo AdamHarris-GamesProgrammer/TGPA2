@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 public class SoundPerception : MonoBehaviour
@@ -16,13 +17,26 @@ public class SoundPerception : MonoBehaviour
 
     Vector3 _contactPoint;
 
+    AIHealth _aiHealth;
+
+    Transform _player;
+
+
+    void Awake()
+    {
+        _aiHealth = GetComponentInParent<AIHealth>();
+        _player = FindObjectOfType<PlayerController>().transform;
+    }
+
     private void FixedUpdate()
     {
+        if (_aiHealth.IsDead) Destroy(this);
+
         if(_detectionTimer >= _detectionDuration)
         {
             _isHeard = true;
-            FindObjectOfType<LastKnownLocation>().transform.position = _contactPoint;
-             Debug.Log("Detected through sound");
+            FindObjectOfType<LastKnownLocation>().transform.position = _player.position;
+            //Debug.Log("Detected through sound");
         }
         else
         {

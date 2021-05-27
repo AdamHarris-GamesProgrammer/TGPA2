@@ -24,14 +24,22 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] float _detectedValue = 1;
     bool _hasTimerStarted = false;
 
+    Health _aiHealth;
+
     private void Start()
     {
         _playerGO = GameObject.FindGameObjectWithTag("Player");
         _charLocomotion = _playerGO.GetComponent<CharacterLocomotion>();
+        _aiHealth = GetComponent<Health>();
     }
 
     void Update()
     {
+        if (_aiHealth.IsDead)
+        {
+            Destroy(this);
+        }
+
         FindVisibleTargets();
 
         if (_visibleTargets.Count > 0)
