@@ -8,12 +8,18 @@ public class PauseMenu : MonoBehaviour
 {
     public Button _MainMenuButton;
     public Button _HideOutButton;
-    public Button _RespawnButton;
+    public Button _QuitButton;
+
+    private void OnEnable()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 
     // Start is called before the first frame update
     public void QuitToHideOut()
     {
-        SceneManager.LoadScene("HideOut");
+        SceneManager.LoadScene("Hideout");
     }
 
     // Update is called once per frame
