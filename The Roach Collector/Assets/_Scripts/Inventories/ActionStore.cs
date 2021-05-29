@@ -103,6 +103,13 @@ namespace Harris.Inventories
             return false;
         }
 
+        public void WipeActionBar()
+        {
+            int index = 0;
+            _dockedItems.Clear();
+            storeUpdated();
+        }
+
         public void RemoveItems(int index, int number)
         {
             //If we have this index

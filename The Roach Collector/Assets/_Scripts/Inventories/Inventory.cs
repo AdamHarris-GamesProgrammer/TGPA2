@@ -219,6 +219,18 @@ namespace Harris.Inventories
             return true;
         }
 
+        public void WipeInventory()
+        {
+            int index = 0;
+            foreach(InventorySlot slot in _slots)
+            {
+                RemoveFromSlot(index, slot.number);
+
+                index++;
+            }
+        }
+
+
         public int FindItem(InventoryItem item)
         {
             int i = FindStack(item);
