@@ -7,9 +7,9 @@ public class DebugNavMeshAgent : MonoBehaviour
     NavMeshAgent _agent;
 
 
-    public bool _drawVelocity;
-    public bool _drawDesiredVelocity;
-    public bool _drawPath;
+    [SerializeField] bool _drawVelocity;
+    [SerializeField] bool _drawDesiredVelocity;
+    [SerializeField] bool _drawPath;
 
     // Start is called before the first frame update
     void Start()

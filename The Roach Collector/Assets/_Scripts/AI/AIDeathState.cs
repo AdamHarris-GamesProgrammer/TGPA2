@@ -24,20 +24,14 @@ public class AIDeathState : AIState
 
         //Stops the AI from moving to it's target
         _navAgent.isStopped = true;
-        
     }
 
-    public void Exit()
-    {
-
-    }
+    public void Exit() {}
 
     public AiStateId GetID()
     {
         return AiStateId.Death;
     }
 
-    public void Update()
-    {
-    }
+    public void Update() {}
 }

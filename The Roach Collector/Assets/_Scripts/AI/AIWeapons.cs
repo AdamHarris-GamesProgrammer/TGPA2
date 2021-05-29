@@ -15,12 +15,15 @@ public class AIWeapons : MonoBehaviour
     [Header("Accuracy Settings")]
     [SerializeField] float _inaccuracy = 0.0f;
 
+    [Header("Melee Weapon")]
+    [SerializeField] private RaycastWeapon _meleeWeapon;
+
+
     [Header("Damage Settings")]
     [SerializeField] float _damageMultiplier = 0.2f;
-
+    [Header("Debugging")]
     [SerializeField] private int _AiClipBullets = 0;
     [SerializeField] private int _AiTotalBullets = 0;
-    [SerializeField] private RaycastWeapon _meleeWeapon;
 
     bool _usingMelee = false;
     AIHealth _health;

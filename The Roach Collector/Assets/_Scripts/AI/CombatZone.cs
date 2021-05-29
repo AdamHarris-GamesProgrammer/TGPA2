@@ -27,7 +27,7 @@ public class CombatZone : MonoBehaviour
         foreach (AIAgent enemy in _agentInZone)
         {
             //Don't add the enemy if the there dead
-            if (enemy.GetHealth().IsDead) continue;
+            if (enemy.GetHealth.IsDead) continue;
 
             aliveEnemies.Add(enemy);
         }

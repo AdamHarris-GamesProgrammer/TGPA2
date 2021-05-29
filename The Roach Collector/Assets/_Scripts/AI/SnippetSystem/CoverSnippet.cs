@@ -15,8 +15,6 @@ public class CoverSnippet : CombatSnippet
 
     CoverController _currentCover;
 
-    LastKnownLocation _lastKnownLocation;
-
     AIAgent _agent;
 
 
@@ -54,24 +52,13 @@ public class CoverSnippet : CombatSnippet
                     _anim.SetBool("isCrouching", true);
                     _aiWeapon.SetTarget(null);
                     _aiWeapon.SetFiring(false);
-                    if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-                    {
-                        _aiWeapon.GetEquippedWeapon().Reload();
-                    }
-
-                    //Does the AI have any bullets left?
-                    if (_aiWeapon.GetEquippedWeapon().TotalAmmo <= 0)
-                    {
-                        //TODO Switch to melee state here. 
-                    }
+                    if (!_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.GetEquippedWeapon().Reload();
                 }
                 //AI Does not need to reload
                 else
                 {
                     RaycastHit hit;
-                    //TODO: replace 25.0f with some kind of weapon range value
-                    //AI can feasibly shoot the player
-                    if (Physics.Raycast(_agent.transform.position + Vector3.up, _player.position - _agent.transform.position, out hit, 25.0f, _agent.CharacterMask)) 
+                    if (Physics.Raycast(_agent.transform.position + Vector3.up, _player.position - _agent.transform.position, out hit, 35.0f, _agent.CharacterMask)) 
                     {
                         if (hit.collider.CompareTag("Player"))
                         {
@@ -83,10 +70,7 @@ public class CoverSnippet : CombatSnippet
                                 _anim.SetBool("isCrouching", false);
                                 _aiWeapon.SetTarget(_player);
 
-                                if (!_aiWeapon.GetEquippedWeapon().IsFiring)
-                                {
-                                    _aiWeapon.SetFiring(true);
-                                }
+                                if (!_aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(true);
                             }
 
                             _changeCoverTimer = 0.0f;
@@ -118,10 +102,7 @@ public class CoverSnippet : CombatSnippet
 
                         _changeCoverTimer += Time.deltaTime;
 
-                        if(_changeCoverTimer > _changeCoverDuration)
-                        {
-                            SelectCover();
-                        }
+                        if(_changeCoverTimer > _changeCoverDuration) SelectCover();
                     }
                 }
             }
@@ -152,10 +133,7 @@ public class CoverSnippet : CombatSnippet
 
         _changeCoverTimer = 0.0f;
 
-        if (_currentCover)
-        {
-            _currentCover.RemoveUser();
-        }
+        if (_currentCover) _currentCover.RemoveUser();
 
         CoverController closestCover = null;
         float closestDistance = 10000.0f;
@@ -166,11 +144,7 @@ public class CoverSnippet : CombatSnippet
             if (_currentCover != null && _currentCover == cover) continue;
 
             //If the cover is full then don't go to this cover
-            if (cover.IsFull)
-            {
-                //Debug.Log("Cover is full");
-                continue;
-            }
+            if (cover.IsFull) continue;
 
             //Calculate the distance between the agent and the cover
             float distance = Vector3.Distance(_agent.transform.position, cover.transform.position);
@@ -222,8 +196,6 @@ public class CoverSnippet : CombatSnippet
 
         //Debug.Log(_coversInScene.Length);
         SelectCover();
-
-
     }
 
     public int Evaluate()
@@ -232,23 +204,13 @@ public class CoverSnippet : CombatSnippet
 
         if(_coversInZone.Length == 0) return 0;    
 
-        if(_aiWeapon.GetEquippedWeapon() != null)
-        {
-            _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload;
-        }
+        if(_aiWeapon.GetEquippedWeapon()) _needToReload = _aiWeapon.GetEquippedWeapon().NeedToReload;
 
         float healthRatio = _aiHealth.HealthRatio;
 
-        if (healthRatio <= 0.5f && _needToReload)
-        {
-            returnScore = 120;
-        }
-        else if (healthRatio <= 0.5f || _needToReload)
-        {
-            returnScore = 80;
-        }
+        if (healthRatio <= 0.5f && _needToReload) returnScore = 120;
+        else if (healthRatio <= 0.5f || _needToReload) returnScore = 80;
 
-        //Debug.Log("Cover Snippet Returning: " + returnScore);
 
         return returnScore;
     }
@@ -260,10 +222,6 @@ public class CoverSnippet : CombatSnippet
         _aiWeapon = agent.GetComponent<AIWeapons>();
         _coversInZone = agent.GetComponentInParent<CombatZone>().CoversInZone.ToArray();
 
-        _lastKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
-
-        //Debug.Log(_coversInScene.Length);
-
         _anim = agent.GetComponent<Animator>();
         _agent = agent;
     }
@@ -274,10 +232,7 @@ public class CoverSnippet : CombatSnippet
         //If the ais health is above the threshold or the timer is less than 0 then exit the snippet.
         bool result = (_aiHealth.HealthRatio > _agent._config._coverExitHealthThreashold);
 
-        if (result)
-        {
-            _currentCover?.RemoveUser();
-        }
+        if (result) _currentCover?.RemoveUser();
 
         return result;
     }

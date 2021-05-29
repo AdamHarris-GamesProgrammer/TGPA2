@@ -18,20 +18,14 @@ public class AIStateMachine
     {
         int index = (int)state.GetID();
         states[index] = state;
-
     }
 
     public AIState GetState(AiStateId stateId)
     {
         int index = (int)stateId;
 
-
-        AIState strate = states[index];
-
-        if(strate == null)
-        {
-            //Debug.Log(stateId + " has not been registered to " + _agent.name);
-        }
+        AIState state = states[index];
+        if(state == null) Debug.Log(stateId + " has not been registered to " + _agent.name);
 
         return states[index];
     }

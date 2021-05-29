@@ -39,17 +39,11 @@ public class AICheckPlayerState : AIState
         _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(7.5f));
     }
 
-    public void Exit()
-    {
-
-    }
+    public void Exit() {}
 
     public void Update()
     {
-        if (!_arrivedAtPoint && _navAgent.remainingDistance < 1.5f)
-        {
-            _arrivedAtPoint = true;
-        }
+        if (!_arrivedAtPoint && _navAgent.remainingDistance < 1.5f) _arrivedAtPoint = true;
 
         _agent.LookAtLastKnownLocation();
 

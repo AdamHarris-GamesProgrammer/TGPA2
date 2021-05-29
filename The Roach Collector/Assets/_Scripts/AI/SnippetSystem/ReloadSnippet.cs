@@ -30,10 +30,7 @@ public class ReloadSnippet : CombatSnippet
         int returnScore = 0;
 
 
-        if (_aiWeapon.GetEquippedWeapon().NeedToReload)
-        {
-            returnScore = 100;
-        }
+        if (_aiWeapon.GetEquippedWeapon().NeedToReload) returnScore = 100;
 
         return returnScore;
     }

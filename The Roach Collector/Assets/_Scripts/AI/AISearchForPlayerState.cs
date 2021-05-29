@@ -23,10 +23,7 @@ public class AISearchForPlayerState : AIState
         _agent = agent;
         _playersKnownLocation = GameObject.FindObjectOfType<LastKnownLocation>();
 
-        if(_playersKnownLocation == null)
-        {
-            Debug.LogError("Last Player Location prefab not placed in scene.");
-        }
+        if(_playersKnownLocation == null) Debug.LogError("Last Player Location prefab not placed in scene.");
 
         _navAgent = agent.GetComponent<NavMeshAgent>();
 
@@ -40,7 +37,7 @@ public class AISearchForPlayerState : AIState
 
         for (int i = 0; i < 3; i++)
         {
-            bool success = false;
+            bool successful = false;
 
             do
             {
@@ -48,37 +45,23 @@ public class AISearchForPlayerState : AIState
                 pos.y = _playersKnownLocation.transform.position.y;
 
                 NavMeshHit hit;
-                success = NavMesh.SamplePosition(pos, out hit, 25.0f, NavMesh.AllAreas);
+                successful = NavMesh.SamplePosition(pos, out hit, 25.0f, NavMesh.AllAreas);
 
-                if (success)
-                {
-                    _searchLocations[i] = pos;
-                }
+                if (successful) _searchLocations[i] = pos;
 
-            } while (!success);
-
-            
+            } while (!successful);
         }
 
         _navAgent.SetDestination(_searchLocations[_index]);
     }
 
-    public void Exit()
-    {
+    public void Exit() {}
 
-    }
-
-    public AiStateId GetID()
-    {
-        return AiStateId.SearchForPlayer;
-    }
+    public AiStateId GetID() { return AiStateId.SearchForPlayer; }
 
     public void Update()
     {
-        if (_fov.IsEnemyInFOV)
-        {
-            _agent.stateMachine.ChangeState(AiStateId.CombatState);
-        }
+        if (_fov.IsEnemyInFOV) _agent.stateMachine.ChangeState(AiStateId.CombatState);
 
 
         if(_navAgent.remainingDistance <= 1.5f)

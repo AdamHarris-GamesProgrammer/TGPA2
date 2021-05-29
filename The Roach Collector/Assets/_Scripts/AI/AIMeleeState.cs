@@ -17,15 +17,9 @@ public class AIMeleeState : AIState
         _navAgent = _agent.GetComponent<NavMeshAgent>();
     }
 
-    public void Enter()
-    {
-        
-    }
+    public void Enter() {}
 
-    public void Exit()
-    {
-        
-    }
+    public void Exit() {}
 
     public AiStateId GetID()
     {
@@ -39,25 +33,17 @@ public class AIMeleeState : AIState
 
 
         //if the distance between the player and the agent is less than 1.5f
-        if(Vector3.Distance(_agent.GetPlayer().position, _agent.transform.position) < 1.5f)
+        if(_navAgent.remainingDistance < 1.5f)
         {
             //Set Stab Trigger
             _animController.SetTrigger("Stab");
 
 
             //Checks if the stabbing animation is currently playing
-            if (_animController.GetCurrentAnimatorStateInfo(0).IsName("Stabbing")
-                && _animController.GetCurrentAnimatorStateInfo(0).length > _animController.GetCurrentAnimatorStateInfo(0).normalizedTime)
-            {
-                _agent.GetComponent<WeaponStabCheck>().SetStabbing(true);
-            }
-            else
-            {
-                _agent.GetComponent<WeaponStabCheck>().SetStabbing(false);
-            }
+            AnimatorStateInfo state = _animController.GetCurrentAnimatorStateInfo(0);
+            if (state.IsName("Stabbing") && state.length > state.normalizedTime) _agent.GetComponent<WeaponStabCheck>().SetStabbing(true);
+            else _agent.GetComponent<WeaponStabCheck>().SetStabbing(false);
         }
-
-
     }
 
 }

@@ -43,15 +43,12 @@ public class AIAgent : MonoBehaviour
 
     bool _beingKilled = false;
 
-    public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; } }
+    public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; GetComponent<NavMeshAgent>().isStopped = true; } }
 
     public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
 
-    public Health GetHealth()
-    {
-        return _aiHealth;
-    }
+    public Health GetHealth { get { return _aiHealth; } }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
 
@@ -80,10 +77,8 @@ public class AIAgent : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
 
         stateMachine = new AIStateMachine(this);
-        stateMachine.RegisterState(new AIChasePlayerState(this));
         stateMachine.RegisterState(new AIDeathState(this));
         stateMachine.RegisterState(new AIIdleState(this));
-        stateMachine.RegisterState(new AIFindWeaponState(this));
         stateMachine.RegisterState(new AICombatState(this));
         stateMachine.RegisterState(new AISearchForPlayerState(this));
         stateMachine.RegisterState(new AICheckPlayerState(this));
@@ -110,10 +105,7 @@ public class AIAgent : MonoBehaviour
 
     }
 
-    public void ReturnToDefaultState()
-    {
-        stateMachine.ChangeState(_initialState);
-    }
+    public void ReturnToDefaultState() => stateMachine.ChangeState(_initialState);
 
     // Update is called once per frame
     void Update()
@@ -142,9 +134,8 @@ public class AIAgent : MonoBehaviour
     {
         if (_aiHealth.IsDead) return;
 
-
         //Move the last known location to the players position when the player shoots. 
-        FindObjectOfType<LastKnownLocation>().transform.position = _player.position;
+        _lastKnownLocation.transform.position = _player.position;
 
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
@@ -169,25 +160,12 @@ public class AIAgent : MonoBehaviour
        transform.rotation = look;
     }
 
-    public void PlayBackupSound()
-    {
-        //Debug.Log("Play Backup Prompt");
-        _audioSource.PlayOneShot(_backupPrompt);
-    }
+    public void PlayBackupSound() => _audioSource.PlayOneShot(_backupPrompt);
 
-    public void PlayAlarmPrompt()
-    {
-        //Debug.Log("Play Alarm Prompt");
-        _audioSource.PlayOneShot(_alarmPrompt);
-    }
+    public void PlayAlarmPrompt() => _audioSource.PlayOneShot(_alarmPrompt);
 
 
     //Called by Unity Animator in the StealthAttackResponse and BrutalAttackResponse animations
-    void DeathAnimEvent()
-    {
-        Debug.Log("Death event");
-
-        stateMachine.ChangeState(AiStateId.Death);
-    }
+    void DeathAnimEvent() => stateMachine.ChangeState(AiStateId.Death);
 }
 

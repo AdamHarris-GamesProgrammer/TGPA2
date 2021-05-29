@@ -26,16 +26,11 @@ public class AICombatState : AIState
         RegisterSnippet(new CoverSnippet());
         RegisterSnippet(new CallForBackupSnippet());
         RegisterSnippet(new ReloadSnippet());
-        RegisterSnippet(new SetAlarmSnippet());
     }
 
     public void Update()
     {
-        if (_playerHealth.IsDead)
-        {
-            Debug.Log("Player Dead");
-            _agent.stateMachine.ChangeState(AiStateId.Idle);
-        }
+        if (_playerHealth.IsDead) _agent.ReturnToDefaultState();
 
         if (_agent.BeingKilled) return;
 
@@ -50,10 +45,7 @@ public class AICombatState : AIState
 
             _snippetTimer = 0.0f;
         }
-        else
-        {
-            _currentSnippet.Action();
-        }
+        else _currentSnippet.Action();
     }
 
     void EvaluateSnippets()
@@ -103,8 +95,5 @@ public class AICombatState : AIState
         _agent.GetComponent<NavMeshAgent>().isStopped = false;
     }
 
-    public void Exit()
-    {
-        //Debug.Log("Exiting Combat State");
-    }
+    public void Exit() {}
 }

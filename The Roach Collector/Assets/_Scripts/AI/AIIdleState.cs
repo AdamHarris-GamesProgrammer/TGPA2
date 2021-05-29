@@ -25,10 +25,7 @@ public class AIIdleState : AIState
         _agent.GetComponent<NavMeshAgent>().SetDestination(_defaultPosition);
     }
 
-    public void Exit()
-    {
-        _agent.GetComponent<NavMeshAgent>().isStopped = false;
-    }
+    public void Exit() {}
 
     public AiStateId GetID()
     {

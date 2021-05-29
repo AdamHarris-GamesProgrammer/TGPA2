@@ -11,13 +11,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void Action()
     {
-        
-        foreach(AIAgent enemy in _alliesInZone)
-        {
-            //Debug.Log(agent.transform.name + " is aggravating: " + enemy.transform.name);
-            enemy.Aggrevate();
-            
-        }
+        _alliesInZone.ForEach(ally => ally.Aggrevate());
         _hasBackup = true;
     }
 
@@ -35,10 +29,7 @@ public class CallForBackupSnippet : CombatSnippet
 
         _alliesInZone = _agent.Zone.GetAliveEnemies();
 
-        if (_alliesInZone.Count >= 3)
-        {
-            return 80;
-        }
+        if (_alliesInZone.Count >= 3) return 80;
 
         return returnScore;
     }

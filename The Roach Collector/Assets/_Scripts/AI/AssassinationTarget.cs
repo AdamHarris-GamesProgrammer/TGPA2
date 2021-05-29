@@ -31,9 +31,6 @@ public class AssassinationTarget : MonoBehaviour
     //Used for telling the player when they are no longer in range for assassination attack
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _player.GetComponent<PlayerController>().AgentInRange = null;
-        }
+        if (other.CompareTag("Player")) _player.GetComponent<PlayerController>().AgentInRange = null;
     }
 }

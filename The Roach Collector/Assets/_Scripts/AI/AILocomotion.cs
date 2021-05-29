@@ -7,7 +7,6 @@ using UnityEngine.AI;
 public class AILocomotion : MonoBehaviour
 {
     NavMeshAgent _agent;
-
     Animator _animator;
 
     // Start is called before the first frame update
@@ -22,15 +21,5 @@ public class AILocomotion : MonoBehaviour
     {
         _animator.SetFloat("movementSpeed", _agent.velocity.magnitude);
 
-    }
-
-    public void MoveTo(Vector3 pos)
-    {
-        _agent.destination = pos;
-    }
-
-    public void DisableNavAgent()
-    {
-        _agent.enabled = false;
     }
 }

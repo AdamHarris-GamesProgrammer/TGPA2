@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class LastKnownLocation : MonoBehaviour
 {
-    PlayerController _player;
-
     List<AIAgent> _agentsInScene;
 
     [SerializeField] float _playerRadius = 7.5f;
@@ -16,8 +14,7 @@ public class LastKnownLocation : MonoBehaviour
 
     private void Awake()
     {
-        _player = FindObjectOfType<PlayerController>();
-        _agentsInScene = GameObject.FindObjectsOfType<AIAgent>().ToList<AIAgent>();
+        _agentsInScene = FindObjectsOfType<AIAgent>().ToList();
     }
 
     public List<AIAgent> GetEnemiesInRange(float distance, bool includeDead = false)
@@ -39,7 +36,7 @@ public class LastKnownLocation : MonoBehaviour
             foreach (AIAgent enemy in _agentsInScene)
             {
                 //Don't add the enemy if the there dead
-                if (enemy.GetHealth().IsDead) continue;
+                if (enemy.GetHealth.IsDead) continue;
 
                 if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
                 {
@@ -149,11 +146,5 @@ public class LastKnownLocation : MonoBehaviour
         } while (!successful && iterations < 5);
 
         return sampledPosition;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
