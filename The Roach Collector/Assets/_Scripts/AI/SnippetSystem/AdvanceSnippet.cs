@@ -48,9 +48,7 @@ public class AdvanceSnippet : CombatSnippet
         _timer += Time.deltaTime;
 
         //Look at player.
-        Vector3 direction = _agent.GetPlayer().position - _agent.transform.position;
-        Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
-        _agent.transform.rotation = look;
+        _agent.LookAtPlayer();
 
 
         DecideToReload();

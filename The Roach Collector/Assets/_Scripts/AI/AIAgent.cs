@@ -12,6 +12,7 @@ public class AIAgent : MonoBehaviour
     public AiStateId _initialState;
     public AIAgentConfig _config;
 
+    LastKnownLocation _lastKnownLocation;
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
@@ -66,6 +67,7 @@ public class AIAgent : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _owningZone = GetComponentInParent<CombatZone>();
         _defaultMoveSpeed = GetComponent<NavMeshAgent>().speed;
+        _lastKnownLocation = FindObjectOfType<LastKnownLocation>();
 
         if (!_aiHealth) Debug.LogError(gameObject.name + " has no derivative of Health Component attached to it");
         if (!_audioSource) Debug.LogError(gameObject.name + " has no AudioSource component attached to it");
@@ -147,6 +149,24 @@ public class AIAgent : MonoBehaviour
         _isAggrevated = true;
         stateMachine.ChangeState(AiStateId.CombatState);
 
+    }
+
+    public void LookAtPlayer()
+    {
+        Vector3 direction = _player.transform.position - transform.position;
+
+        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+
+        transform.rotation = look;
+    }
+
+    public void LookAtLastKnownLocation()
+    {
+        Vector3 direction = _lastKnownLocation.transform.position - transform.position;
+
+        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+
+       transform.rotation = look;
     }
 
     public void PlayBackupSound()

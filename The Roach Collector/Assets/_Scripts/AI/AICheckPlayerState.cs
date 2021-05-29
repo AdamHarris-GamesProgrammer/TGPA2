@@ -51,11 +51,7 @@ public class AICheckPlayerState : AIState
             _arrivedAtPoint = true;
         }
 
-        Vector3 direction = _lastKnownLocation.transform.position - _agent.transform.position;
-
-        Quaternion look = Quaternion.Slerp(_agent.transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
-
-        _agent.transform.rotation = look;
+        _agent.LookAtLastKnownLocation();
 
         List<AIAgent> agents = _lastKnownLocation.GetEnemiesInRange(7.5f);
 
@@ -67,18 +63,12 @@ public class AICheckPlayerState : AIState
                 _investigateTimer += Time.deltaTime;
 
                 //Timer check
-                if (_investigateTimer > _investigateDuration)
-                {
-                    _selectedAI = _agent;
-                }
+                if (_investigateTimer > _investigateDuration) _selectedAI = _agent;
 
                 
                 if (agents.Count > 3)
                 {
-                    if (_selectedAI == null)
-                    {
-                        _selectedAI = agents[(int)Random.Range(0, agents.Count)];
-                    }
+                    if (_selectedAI == null) _selectedAI = agents[(int)Random.Range(0, agents.Count)];
                 }
             }
             else
@@ -87,27 +77,18 @@ public class AICheckPlayerState : AIState
                 {
                     _navAgent.SetDestination(_lastKnownLocation.transform.position);
 
-                    if(_navAgent.remainingDistance < 2.0f)
-                    {
-                        _selectedAI = null;
-                    }
+                    if(_navAgent.remainingDistance < 2.0f) _selectedAI = null;
                 }
             }
         }
 
         if (_agent.GetComponent<FieldOfView>().IsEnemyInFOV)
         {
-            foreach (AIAgent ally in agents)
-            {
-                ally.stateMachine.ChangeState(AiStateId.CombatState);
-            }
+            agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.CombatState));
         }
         else
         {
-            foreach (AIAgent ally in agents)
-            {
-                ally.stateMachine.ChangeState(AiStateId.SearchForPlayer);
-            }
+            agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.SearchForPlayer));
         }
     }
 

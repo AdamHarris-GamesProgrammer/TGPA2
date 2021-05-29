@@ -10,6 +10,7 @@ public class PatrolState : AIState
     NavMeshAgent _navAgent;
 
     FieldOfView _fov;
+    SoundPerception _soundPerception;
 
     int _index = 0;
 
@@ -22,6 +23,7 @@ public class PatrolState : AIState
         _route = route;
         _navAgent = _agent.GetComponent<NavMeshAgent>();
         _fov = _agent.GetComponent<FieldOfView>();
+        _soundPerception = _agent.GetComponentInChildren<SoundPerception>();
 
         _waitDuration = waitDuration;
         _navAgent.speed = movementSpeed;
@@ -59,7 +61,7 @@ public class PatrolState : AIState
             }
         }
 
-        if(_fov.IsEnemyInFOV)
+        if(_fov.IsEnemyInFOV || _soundPerception.IsHeard)
         {
             _agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);
         }
