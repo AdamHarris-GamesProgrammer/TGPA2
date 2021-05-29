@@ -11,17 +11,15 @@ public class LevelEndPoint : MonoBehaviour
     [SerializeField]private GameObject EndLevelUI;
     [SerializeField]private GameObject InventoryUI;
     [SerializeField]private GameObject Spotlight;
-    [SerializeField]private bool isBossAlive;
+    //[SerializeField]private bool isBossAlive;
 
     //on enter endpoint
     void OnTriggerEnter(Collider levelEndPoint)
     {
-        if (!isBossAlive)
-        {
-            InventoryUI.GetComponent<Canvas>().enabled = false;
-            EndLevelUI.SetActive(true);
-            gameObject.SetActive(false);
-        }
+        
+        InventoryUI.GetComponent<Canvas>().enabled = false;
+        EndLevelUI.SetActive(true);
+        gameObject.SetActive(false);
         
     }
 

@@ -8,6 +8,7 @@ using Harris.Saving;
 public class LevelSelector : MonoBehaviour
 {
     LevelDataStruct levelData;
+    public AudioSource _buttonClick;
 
     //TODO: Change this as level grow
     public int levelCount = 2;
@@ -109,6 +110,12 @@ public class LevelSelector : MonoBehaviour
                 SceneManager.LoadScene("Level0" + levelID.ToString());
                 break;
         }
+    }
+
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
     }
 
     //load level data from 

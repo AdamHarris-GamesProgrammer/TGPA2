@@ -10,14 +10,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
-    public GameObject LevelSelectorMenu;
     public GameObject OptionsMenu;
 
-    private void Awake()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-    }
+    [SerializeField] private AudioSource _buttonClick;
 
     //plays the tutorial level
     public void Play()
@@ -41,5 +36,11 @@ public class MainMenu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
     }
 }
