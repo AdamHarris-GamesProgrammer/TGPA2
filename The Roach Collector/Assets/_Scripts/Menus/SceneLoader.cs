@@ -18,14 +18,6 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadLevelAnim(name));
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            LoadLevel("Hideout");
-        }
-    }
-
     IEnumerator LoadLevelAnim(string name)
     {
         //Plays the animation
