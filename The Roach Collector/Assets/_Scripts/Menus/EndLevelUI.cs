@@ -43,6 +43,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     [SerializeField]private int rank;
 
     [SerializeField]private AudioSource _buttonClick;
+    [SerializeField]bool _isBossAlive = true;
 
     private int highscore;
     private float bestTime;
@@ -173,6 +174,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         }
     }
 
+    //sets level stats 
     private void SetLevelStats()
     {
         //calculate final score
@@ -197,19 +199,19 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         
         LevelData data = new LevelData();
 
-        if (score > highscore)
+        if (score > highscore && _isBossAlive)
         {
             data.highscore = score;
         }
-        if (time > bestTime)
+        if (time > bestTime && _isBossAlive)
         {
             data.bestTime = time;
         }
-        if (roachCount > roachesCollected)
+        if (roachCount > roachesCollected && _isBossAlive)
         {
             data.roachesCollected = roachCount;
         }
-        if (rank > highestRank)
+        if (rank > highestRank && _isBossAlive)
         {
             data.highestRank = rank;
         }
