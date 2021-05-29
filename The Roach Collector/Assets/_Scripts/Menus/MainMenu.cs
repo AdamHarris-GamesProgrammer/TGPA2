@@ -13,6 +13,12 @@ public class MainMenu : MonoBehaviour
     public GameObject LevelSelectorMenu;
     public GameObject OptionsMenu;
 
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     //plays the tutorial level
     public void Play()
     {

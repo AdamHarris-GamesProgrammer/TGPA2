@@ -13,6 +13,10 @@ public class SceneLoader : MonoBehaviour
         _transition = GetComponentInChildren<Animator>();
     }
 
+    void Start()
+    {
+    }
+
     public void LoadLevel(string name)
     {
         StartCoroutine(LoadLevelAnim(name));
@@ -23,13 +27,13 @@ public class SceneLoader : MonoBehaviour
         //Plays the animation
         _transition.SetTrigger("start");
 
+        Time.timeScale = 1.0f;
         //Waits for the animation to be finished (1 second)
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.0f);
 
         //Saves the game
-        Debug.Log("Saving From SceneLoader.cs");
+        //Debug.Log("Saving From SceneLoader.cs");
         FindObjectOfType<SavingWrapper>().Save();
-
         //Loads the new scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(name);
     }
