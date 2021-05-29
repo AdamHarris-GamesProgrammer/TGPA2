@@ -28,9 +28,6 @@ namespace TGP.Control
                 if(!_isStanding) gameObject.SendMessage("DisplayAssassinationPrompt", _agentInRange != null);
             } }
 
-        public bool CanDisableAlarm { get { return _canDisableAlarm; } set { _canDisableAlarm = value; } }
-        AlarmController _alarm = null;
-
         private GameObject _chestInventory;
         public GameObject ChestInventory { get { return _chestInventory; } }
 
@@ -61,6 +58,8 @@ namespace TGP.Control
         private int _roaches = 0;
 
         public float Cash { get { return _currency; } }
+
+        Animator _animator;
 
         public void SpendRoach(int amount) {
             _roaches -= amount;
@@ -120,11 +119,7 @@ namespace TGP.Control
         bool _detected = false;
         public bool IsDetected { get { return _detected; } set { _detected = value; } }
 
-        public AlarmController Alarm { set { _alarm = value; } }
-
         ActionStore _actionSlots;
-
-        Animator _animator;
 
         Inventory _playerInventory;
 
@@ -292,18 +287,7 @@ namespace TGP.Control
 
         private void Update()
         {
-            if (_canDisableAlarm && _alarm)
-            {
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    _alarm.DisableAlarm();
-                }
-            }
-
-            if(Input.GetKeyDown(KeyCode.Y))
-            {
-                _animator.SetTrigger("Dance");
-            }
+            if(Input.GetKeyDown(KeyCode.Y)) _animator.SetTrigger("Dance");
 
             InteractWithAssassination();
 
@@ -329,16 +313,7 @@ namespace TGP.Control
                     {
                         KeycardItem keycard = slot.item as KeycardItem;
 
-                        if (keycard)
-                        {
-                            Debug.Log("Keycard");
-
-                            if (keycard.GetUnlockables() == doorID)
-                            {
-                                _doorInRange.Unlock();
-                            }
-                        }
-
+                        if (keycard) if (keycard.GetUnlockables() == doorID) _doorInRange.Unlock();
                     }
 
                 }
@@ -358,11 +333,8 @@ namespace TGP.Control
 
         //Animation event from the StealthAttack animation 
 #pragma warning disable IDE0051 // Remove unused private members //This is just disabling a warning as OutOfKillAnim is not technically used in code but instead is called in a animation
-        void OutOfKillAnim()
+        void OutOfKillAnim() => _inKillAnimation = false;
 #pragma warning restore IDE0051 // Remove unused private members
-        {
-            _inKillAnimation = false;
-        }
 
         [System.Serializable]
         struct SaveRecord

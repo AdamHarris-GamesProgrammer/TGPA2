@@ -39,7 +39,7 @@ public class CoverSnippet : CombatSnippet
         {
             _agent.LookAtLastKnownLocation();
 
-            Transform _player = _agent.GetPlayer();
+            Transform _player = _agent.GetPlayer;
 
             //AI is not standing
             if (!_isStanding)
@@ -173,7 +173,7 @@ public class CoverSnippet : CombatSnippet
             Transform furthestCoverPoint = _currentCover.GetCoverPoints()[0];
             foreach (Transform coverPoint in _currentCover.GetCoverPoints())
             {
-                float distance = Vector3.Distance(_agent.GetPlayer().position, coverPoint.transform.position);
+                float distance = Vector3.Distance(_agent.GetPlayer.position, coverPoint.transform.position);
 
                 if (distance > furthestCoverPointDistance)
                 {

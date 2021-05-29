@@ -78,7 +78,7 @@ public class AdvanceSnippet : CombatSnippet
             else
             {
                 //Sets the player as our target
-                _aiWeapon.SetTarget(_agent.GetPlayer());
+                _aiWeapon.SetTarget(_agent.GetPlayer);
 
                 if (!_aiWeapon.GetEquippedWeapon().IsFiring)
                 {
@@ -97,7 +97,7 @@ public class AdvanceSnippet : CombatSnippet
 
         _timer = 0.0f;
 
-        _aiWeapon.SetTarget(_agent.GetPlayer());
+        _aiWeapon.SetTarget(_agent.GetPlayer);
 
         _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
 

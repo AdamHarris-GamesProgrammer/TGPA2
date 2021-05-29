@@ -16,7 +16,6 @@ public class AIAgent : MonoBehaviour
 
     AudioSource _audioSource;
     [SerializeField] private AudioClip _backupPrompt = null;
-    [SerializeField] private AudioClip _alarmPrompt = null;
     [SerializeField] private AiStateId _currentState = AiStateId.Idle;
     [SerializeField] private LayerMask _characterMask;
     public LayerMask CharacterMask {  get { return _characterMask; } }
@@ -26,7 +25,6 @@ public class AIAgent : MonoBehaviour
 
     Health _aiHealth;
 
-    bool _canActivateAlarm = false;
     bool _isAggrevated = false;
 
     CombatZone _owningZone;
@@ -45,18 +43,13 @@ public class AIAgent : MonoBehaviour
 
     public bool BeingKilled { get { return _beingKilled; } set { _beingKilled = value; GetComponent<NavMeshAgent>().isStopped = true; } }
 
-    public bool CanActivateAlarm { get { return _canActivateAlarm; } set { _canActivateAlarm = value; } }
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
 
     public Health GetHealth { get { return _aiHealth; } }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
 
-
-    public Transform GetPlayer()
-    {
-        return _player;
-    }
+    public Transform GetPlayer { get { return _player; } }
 
     private void Awake()
     {
@@ -161,9 +154,6 @@ public class AIAgent : MonoBehaviour
     }
 
     public void PlayBackupSound() => _audioSource.PlayOneShot(_backupPrompt);
-
-    public void PlayAlarmPrompt() => _audioSource.PlayOneShot(_alarmPrompt);
-
 
     //Called by Unity Animator in the StealthAttackResponse and BrutalAttackResponse animations
     void DeathAnimEvent() => stateMachine.ChangeState(AiStateId.Death);
