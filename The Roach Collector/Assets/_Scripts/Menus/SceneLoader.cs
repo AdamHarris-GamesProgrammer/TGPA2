@@ -4,9 +4,41 @@ using UnityEngine;
 
 public class SceneLoader : MonoBehaviour
 {
-    public void LoadLevel(string name)
+    Animator _transition;
+
+
+    void Awake()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(name);
+        FindObjectOfType<SavingWrapper>().Load();
+        _transition = GetComponentInChildren<Animator>();
     }
 
+    public void LoadLevel(string name)
+    {
+        StartCoroutine(LoadLevelAnim(name));
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            LoadLevel("Hideout");
+        }
+    }
+
+    IEnumerator LoadLevelAnim(string name)
+    {
+        //Plays the animation
+        _transition.SetTrigger("start");
+
+        //Waits for the animation to be finished (1 second)
+        yield return new WaitForSeconds(1);
+
+        //Saves the game
+        Debug.Log("Saving From SceneLoader.cs");
+        FindObjectOfType<SavingWrapper>().Save();
+
+        //Loads the new scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene(name);
+    }
 }
