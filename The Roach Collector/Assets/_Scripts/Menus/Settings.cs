@@ -15,6 +15,8 @@ public class Settings : MonoBehaviour
 
     public GameObject optionsMenu;
 
+    [SerializeField] private AudioSource _buttonClick;
+
     //when music slider is changed
     public void OnMusicChanged()
     {
@@ -37,5 +39,11 @@ public class Settings : MonoBehaviour
     public void CloseMenu()
     {
         optionsMenu.SetActive(false);
+    }
+
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
     }
 }

@@ -42,12 +42,19 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     [SerializeField]private float time;
     [SerializeField]private int rank;
 
+    [SerializeField]private AudioSource _buttonClick;
+
     private int highscore;
     private float bestTime;
     private int highestRank;
-    private int roachesCollected; 
+    private int roachesCollected;
 
-    
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
+    }
+
     //loads next level
     public void NextLevel()
     {

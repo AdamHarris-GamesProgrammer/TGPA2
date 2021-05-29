@@ -6,9 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class DeathMenu : MonoBehaviour
 {
-    public Button _MainMenuButton;    
-    public Button _HideOutButton;    
-    public Button _RespawnButton;    
+    public AudioSource _buttonClick;
 
     public void Respawn()
     {
@@ -23,5 +21,11 @@ public class DeathMenu : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
     }
 }

@@ -6,10 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public Button _MainMenuButton;
-    public Button _HideOutButton;
-    public Button _QuitButton;
-
+    public AudioSource _buttonClick;
+    //unlocks cursor
     private void OnEnable()
     {
         Cursor.visible = true;
@@ -28,13 +26,15 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void Settings()
-    {
-
-    }
-
+    //exits to main menu
     public void ExitMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    //makes button click sound
+    public void ClickSound()
+    {
+        _buttonClick.Play();
     }
 }
