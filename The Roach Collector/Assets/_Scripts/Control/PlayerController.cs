@@ -219,7 +219,7 @@ namespace TGP.Control
                 if (_agentInRange != null && !_detected)
                 {
                     //Debug.Log("Assassinate");
-                    if (_agentInRange.GetHealth.IsDead) return;
+                    if (_agentInRange.Health.IsDead) return;
                     //TODO: Somehow make the animation look better 
 
 

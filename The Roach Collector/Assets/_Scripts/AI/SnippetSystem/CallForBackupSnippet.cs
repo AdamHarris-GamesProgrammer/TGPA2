@@ -17,7 +17,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void EnterSnippet()
     {
-        Debug.Log(_agent.transform.name + " Backup snippet");
+        //Debug.Log(_agent.transform.name + " Backup snippet");
         _agent.PlayBackupSound();
     }
 

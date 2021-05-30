@@ -45,11 +45,11 @@ public class AIAgent : MonoBehaviour
 
     public bool Aggrevated {  get { return _isAggrevated; } set { _isAggrevated = value; } }
 
-    public Health GetHealth { get { return _aiHealth; } }
+    public Health Health { get { return _aiHealth; } }
 
     [SerializeField] private RaycastWeapon _startingWeapon = null;
 
-    public Transform GetPlayer { get { return _player; } }
+    public Transform Player { get { return _player; } }
 
     private void Awake()
     {
@@ -77,10 +77,7 @@ public class AIAgent : MonoBehaviour
         stateMachine.RegisterState(new AICheckPlayerState(this));
         stateMachine.RegisterState(new AIMeleeState(this));
 
-        if(_route != null)
-        {
-            stateMachine.RegisterState(new PatrolState(this, _route, _movementSpeedInPatrol, _waitAtEachPointDuration));
-        }
+        if(_route) stateMachine.RegisterState(new PatrolState(this, _route, _movementSpeedInPatrol, _waitAtEachPointDuration));
 
         if (_startingWeapon)
         {
@@ -91,10 +88,7 @@ public class AIAgent : MonoBehaviour
         }
         
         stateMachine.ChangeState(_initialState);
-        if(_initialState == AiStateId.CombatState)
-        {
-            Aggrevate();
-        }
+        if(_initialState == AiStateId.CombatState) Aggrevate();
 
     }
 

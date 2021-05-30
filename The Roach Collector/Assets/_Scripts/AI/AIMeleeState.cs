@@ -29,7 +29,7 @@ public class AIMeleeState : AIState
     public void Update()
     {
         //Makes the AI chase the player
-        _navAgent.SetDestination(_agent.GetPlayer.position);
+        _navAgent.SetDestination(_agent.Player.position);
 
 
         //if the distance between the player and the agent is less than 1.5f

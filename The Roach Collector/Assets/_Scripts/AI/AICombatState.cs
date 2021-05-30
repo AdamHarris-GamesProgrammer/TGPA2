@@ -20,7 +20,7 @@ public class AICombatState : AIState
     {
         _agent = agent;
         _combatBehaviours = new List<CombatSnippet>();
-        _playerHealth = _agent.GetPlayer.GetComponent<Health>();
+        _playerHealth = _agent.Player.GetComponent<Health>();
 
         RegisterSnippet(new AdvanceSnippet());
         RegisterSnippet(new CoverSnippet());

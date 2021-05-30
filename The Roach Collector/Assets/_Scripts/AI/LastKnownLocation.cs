@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class LastKnownLocation : MonoBehaviour
 {
+    //Holds all the AI Agents in the scene
     List<AIAgent> _agentsInScene;
 
     [SerializeField] float _playerRadius = 7.5f;
@@ -36,7 +37,7 @@ public class LastKnownLocation : MonoBehaviour
             foreach (AIAgent enemy in _agentsInScene)
             {
                 //Don't add the enemy if the there dead
-                if (enemy.GetHealth.IsDead) continue;
+                if (enemy.Health.IsDead) continue;
 
                 if (Vector3.Distance(transform.position, enemy.transform.position) < distance)
                 {

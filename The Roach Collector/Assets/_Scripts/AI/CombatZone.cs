@@ -16,8 +16,8 @@ public class CombatZone : MonoBehaviour
         _agentInZone = new List<AIAgent>();
         _coversInZone = new List<CoverController>();
 
-        _agentInZone = GetComponentsInChildren<AIAgent>().ToList<AIAgent>();
-        _coversInZone = GetComponentsInChildren<CoverController>().ToList<CoverController>();
+        _agentInZone = GetComponentsInChildren<AIAgent>().ToList();
+        _coversInZone = GetComponentsInChildren<CoverController>().ToList();
     }
 
     public List<AIAgent> GetAliveEnemies()
@@ -27,7 +27,7 @@ public class CombatZone : MonoBehaviour
         foreach (AIAgent enemy in _agentInZone)
         {
             //Don't add the enemy if the there dead
-            if (enemy.GetHealth.IsDead) continue;
+            if (enemy.Health.IsDead) continue;
 
             aliveEnemies.Add(enemy);
         }
