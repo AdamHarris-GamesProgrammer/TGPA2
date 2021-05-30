@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Harris.Saving;
+using System;
 
 public class SavingWrapper : MonoBehaviour
 {
@@ -14,9 +15,18 @@ public class SavingWrapper : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("Boop");
             Load();
         }
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Delete();
+        }
+    }
+
+    private void Delete()
+    {
+        GetComponent<SavingSystem>().Delete(Application.persistentDataPath + "save.sav");
     }
 
     public void Save()

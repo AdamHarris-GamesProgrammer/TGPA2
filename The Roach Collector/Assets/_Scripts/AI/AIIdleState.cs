@@ -20,6 +20,7 @@ public class AIIdleState : AIState
 
     public void Enter()
     {
+        //Stops the AI from firing and sends them to their default positon
         _agent.GetComponent<AIWeapons>().SetTarget(null);
         _agent.GetComponent<AIWeapons>().SetFiring(false);
         _agent.GetComponent<NavMeshAgent>().SetDestination(_defaultPosition);
@@ -38,11 +39,8 @@ public class AIIdleState : AIState
         if(_FOV.IsEnemyInFOV || _soundPerception.IsHeard)
         {
             //Player is in view, change to chase state
-            //Debug.Log("Player in FOV");
             _agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);
         }
-
-
     }
 
 }

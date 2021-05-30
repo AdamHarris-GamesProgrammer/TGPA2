@@ -19,6 +19,7 @@ public class AILocomotion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Sets the animator movement speed based on the magnitude of the Agents velocity
         _animator.SetFloat("movementSpeed", _agent.velocity.magnitude);
 
     }

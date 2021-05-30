@@ -15,8 +15,6 @@ public class SoundPerception : MonoBehaviour
 
     float _detectionTimer;
 
-    Vector3 _contactPoint;
-
     AIHealth _aiHealth;
 
     Transform _player;
@@ -36,50 +34,36 @@ public class SoundPerception : MonoBehaviour
         {
             _isHeard = true;
             FindObjectOfType<LastKnownLocation>().transform.position = _player.position;
-            //Debug.Log("Detected through sound");
         }
-        else
-        {
-            _isHeard = false;
-        }
+        else _isHeard = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerSound"))
-        {
-            _detectionTimer = 0.0f;
-        }
+        //Start the timer
+        if (other.CompareTag("PlayerSound")) _detectionTimer = 0.0f;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("PlayerSound"))
-        {
-            _detectionTimer -= Time.deltaTime;
-        }
+        //Decrement the timer
+        if (other.CompareTag("PlayerSound")) _detectionTimer -= Time.deltaTime;
     }
 
     private void OnTriggerStay(Collider other)
     {
         if(other.CompareTag("PlayerSound"))
         {
+            //Gets the sound controller of the player
             SoundController soundController = other.GetComponent<SoundController>();
 
+            //Adds the appropriate value to the timer based on what the player is doing
             if (soundController.IsShooting) 
-            {
                 _detectionTimer += Time.deltaTime * _shootingMultiplier;
-            }
             else if (soundController.IsStanding)
-            {
                 _detectionTimer += Time.deltaTime * _standingMultiplier;
-            }
             else if (!soundController.IsStanding)
-            {
                 _detectionTimer += Time.deltaTime * _crouchingMultiplier;
-            }
-
-            _contactPoint = other.ClosestPoint(transform.position);
         }
     }
 

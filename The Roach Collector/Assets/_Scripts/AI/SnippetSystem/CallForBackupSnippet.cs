@@ -11,6 +11,7 @@ public class CallForBackupSnippet : CombatSnippet
 
     public void Action()
     {
+        //Aggravates all enemies in the combat zone
         _alliesInZone.ForEach(ally => ally.Aggrevate());
         _hasBackup = true;
     }
@@ -25,13 +26,9 @@ public class CallForBackupSnippet : CombatSnippet
     {
         if (_hasBackup) return 0;
 
-        int returnScore = 0;
+        if (_agent.Zone.GetAliveEnemies().Count >= 3) return 80;
 
-        _alliesInZone = _agent.Zone.GetAliveEnemies();
-
-        if (_alliesInZone.Count >= 3) return 80;
-
-        return returnScore;
+        return 0;
     }
 
     public void Initialize(AIAgent agent)

@@ -45,11 +45,10 @@ public class AIWeapons : MonoBehaviour
     private void Update()
     {
         if (_health.IsDead) return;
-
         if (!_isWeaponActive) return;
-
         if (!_currentWeapon) return;
 
+        //Generates a target to shoot at with a slight bit of added inaccuracy 
         if(_currentTarget && _currentWeapon)
         {
             Vector3 target = _currentTarget.position + _weaponIK._offset;
@@ -57,27 +56,24 @@ public class AIWeapons : MonoBehaviour
             _currentWeapon.UpdateWeapon(target);
         }
 
+        //Stores the current bullets
         _AiClipBullets = _currentWeapon._clipAmmo;
         _AiTotalBullets = _currentWeapon._totalAmmo;
 
+        //Should the AI switch to melee
         if (_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
         {
+            //Melee
             _usingMelee = true;
-            Debug.Log("Change Weapon");
+
+            //Instantiate the weapon
             RaycastWeapon meleeweapon = Instantiate(_meleeWeapon);
+            //Equip the weapon
             EquipWeapon(meleeweapon);
-
+            //Change to melee state
             GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
 
         }
-
-        if (_currentWeapon.IsMelee && _usingMelee == false)
-        {
-            _usingMelee = true;
-            GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
-        }
-
-
     }
 
     public void SetFiring(bool enabled)
@@ -89,8 +85,10 @@ public class AIWeapons : MonoBehaviour
 
     public void EquipWeapon(RaycastWeapon weapon)
     {
+        //Destroys the current weapon if there is one
         if(_currentWeapon) Destroy(_currentWeapon.gameObject);
 
+        //Sets all the details for the current weapon
         _currentWeapon = weapon;
         _currentWeapon.transform.SetParent(transform, false);
         _sockets.Attach(weapon.transform, MeshSockets.SocketID.RightHand);
@@ -103,12 +101,18 @@ public class AIWeapons : MonoBehaviour
 
     public void DropWeapon()
     {
+        //Only runs if we have a weapon to drop
         if(_currentWeapon)
         {
+            //removes the parentness
             _currentWeapon.transform.SetParent(null);
+            //Enables the collider
             _currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
+            //Adds a rigidbody
             _currentWeapon.gameObject.AddComponent<Rigidbody>();
-            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 5);
+            //Spawns ammo for the gun
+            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 10);
+            //Sets the current weapon to null
             _currentWeapon = null;
             _weaponIK.SetWeaponTransform(null);
         }

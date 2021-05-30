@@ -13,6 +13,7 @@ public class AIHealth : Health
 
     protected override void OnDeath()
     {
+        //Adds score to the level stats
         FindObjectOfType<LevelStats>().SendMessage("AIDead", 250);
         _aiAgent?.stateMachine.ChangeState(AiStateId.Death);
     }

@@ -15,9 +15,6 @@ public class AdvanceSnippet : CombatSnippet
 
     LastKnownLocation _lastKnownLocation;
 
-    float _timer = 0.0f;
-
-
     float _stationaryDuration = 5.0f;
     float _stationaryTimer = 0.0f;
 
@@ -45,19 +42,15 @@ public class AdvanceSnippet : CombatSnippet
 
     public void Action()
     {
-        _timer += Time.deltaTime;
-
         //Look at player.
         _agent.LookAtPlayer();
 
-
+        //Check if we need to reload
         DecideToReload();
 
         //if we are close to our objective
         if (_navAgent.remainingDistance <= 2.5f)
         {
-            //Debug.Log("Close Enough");
-
             //Start Shooting
             if (_fov.IsEnemyInFOV) _aiWeapon.SetFiring(true);
             else _aiWeapon.SetFiring(false);
@@ -69,25 +62,16 @@ public class AdvanceSnippet : CombatSnippet
             //if the AI has been stationary for longer than the duration
             if (_stationaryTimer > _stationaryDuration)
             {
-                //Debug.Log("Stationary timer up");
-
                 //Reset the timer and generate a new point in range of the player
                 _stationaryTimer = 0.0f;
                 _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
             }
             else
             {
-                //Sets the player as our target
-                _aiWeapon.SetTarget(_agent.Player);
-
-                if (!_aiWeapon.GetEquippedWeapon().IsFiring)
-                {
-                    //Debug.Log("Line 76");
-                }
+                //If we are not firing, then start firing
+                if (!_aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(true);
             }
         }
-
-        //TODO: Decide where is the optimal position to shoot. 
     }
 
 
@@ -95,24 +79,21 @@ public class AdvanceSnippet : CombatSnippet
     {
         //Debug.Log(_agent.transform.name + " Advance Snippet");
 
-        _timer = 0.0f;
-
+        //Sets the player as our target
         _aiWeapon.SetTarget(_agent.Player);
 
+        //Navigate to a point near the last known location
         _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRangeWithRaycast(12.5f));
 
+        //Set the stopping distance low
         _navAgent.stoppingDistance = 0.5f;
     }
 
     public int Evaluate()
     {
-        int returnScore = 0;
+        if (_aiHealth.HealthRatio > _agent._config._advanceEnterHealthRatio) return 20;
 
-        float healthRatio = _aiHealth.HealthRatio;
-
-        if (healthRatio > _agent._config._advanceEnterHealthRatio) returnScore = 20;
-
-        return returnScore;
+        return 0;
     }
 
     public void Initialize(AIAgent agent)
@@ -128,7 +109,7 @@ public class AdvanceSnippet : CombatSnippet
     public bool IsFinished()
     {
         //Checks if the enemy is low on health or if the state duration is up
-        return (_aiHealth.IsDead /* || _timer >= _agent._config._advanceStateDuration*/);
+        return (_aiHealth.IsDead);
     }
 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu()]
+[CreateAssetMenu(menuName ="AI/Make New AI Config")]
 public class AIAgentConfig : ScriptableObject
 {
     [Header("Navigation Settings")]

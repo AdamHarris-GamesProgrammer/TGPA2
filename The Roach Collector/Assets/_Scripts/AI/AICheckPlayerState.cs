@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class AICheckPlayerState : AIState
 {
-    LastKnownLocation _lastKnownLocation;
+    static LastKnownLocation _lastKnownLocation;
     NavMeshAgent _navAgent;
 
     bool _arrivedAtPoint = false;
@@ -15,6 +15,7 @@ public class AICheckPlayerState : AIState
     float _investigateTimer = 0.0f;
 
     static AIAgent _selectedAI = null;
+
     public AIAgent SelectedAI { get { return _selectedAI; } set { _selectedAI = value; } }
 
     public AICheckPlayerState(AIAgent agent)
@@ -36,6 +37,7 @@ public class AICheckPlayerState : AIState
 
         }
 
+        //Generates a point near the last known location of the player for the AI to stand
         _navAgent.SetDestination(_lastKnownLocation.GeneratePointInRange(7.5f));
     }
 
@@ -43,10 +45,13 @@ public class AICheckPlayerState : AIState
 
     public void Update()
     {
+        //See if we have arrived at the point
         if (!_arrivedAtPoint && _navAgent.remainingDistance < 1.5f) _arrivedAtPoint = true;
 
+        //Look at the last known location
         _agent.LookAtLastKnownLocation();
 
+        //Gets the agents in the nearby area
         List<AIAgent> agents = _lastKnownLocation.GetEnemiesInRange(7.5f);
 
         if (_arrivedAtPoint)
@@ -56,10 +61,10 @@ public class AICheckPlayerState : AIState
             {
                 _investigateTimer += Time.deltaTime;
 
-                //Timer check
+                //Timer check, basically waits for more "allies" to show up before choosing someone to go see the player
                 if (_investigateTimer > _investigateDuration) _selectedAI = _agent;
 
-                
+                //if there are enough allies in the area, then forget the timer and go straight in
                 if (agents.Count > 3)
                 {
                     if (_selectedAI == null) _selectedAI = agents[(int)Random.Range(0, agents.Count)];
@@ -67,23 +72,25 @@ public class AICheckPlayerState : AIState
             }
             else
             {
+                //if this ai is the selected ai
                 if (_selectedAI == _agent)
                 {
+                    //Set the destination
                     _navAgent.SetDestination(_lastKnownLocation.transform.position);
 
-                    if(_navAgent.remainingDistance < 2.0f) _selectedAI = null;
+                    //When we are close enough set searched to true and change to the search state
+                    if (_navAgent.remainingDistance < 2.0f) 
+                    {
+                        _selectedAI = null;
+                        agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.SearchForPlayer));
+                    }
                 }
             }
         }
 
+        //Sees if the player is in the agents FOV, if so then switch all allies to combat state
         if (_agent.GetComponent<FieldOfView>().IsEnemyInFOV)
-        {
             agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.CombatState));
-        }
-        else
-        {
-            agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.SearchForPlayer));
-        }
     }
 
 

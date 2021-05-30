@@ -35,15 +35,20 @@ public class AISearchForPlayerState : AIState
     {
         _index = 0;
 
+        //Fill each search position
         for (int i = 0; i < 3; i++)
         {
             bool successful = false;
 
+            //Loop until a suitable position is found
             do
             {
+                //Generates a position
                 Vector3 pos = Random.insideUnitSphere * 25.0f;
+                pos = _playersKnownLocation.transform.position + pos;
                 pos.y = _playersKnownLocation.transform.position.y;
 
+                //Sample the position
                 NavMeshHit hit;
                 successful = NavMesh.SamplePosition(pos, out hit, 25.0f, NavMesh.AllAreas);
 
@@ -52,7 +57,8 @@ public class AISearchForPlayerState : AIState
             } while (!successful);
         }
 
-        _navAgent.SetDestination(_searchLocations[_index]);
+        //Sends the agent to the first search location
+        _navAgent.SetDestination(_searchLocations[0]);
     }
 
     public void Exit() {}
@@ -61,6 +67,7 @@ public class AISearchForPlayerState : AIState
 
     public void Update()
     {
+        //If the player is in view then switch to combat 
         if (_fov.IsEnemyInFOV) _agent.stateMachine.ChangeState(AiStateId.CombatState);
 
 
@@ -68,21 +75,23 @@ public class AISearchForPlayerState : AIState
         {
             _timer += Time.deltaTime;
 
+            //If the AI have stood still for enough time
             if(_timer > _timeAtEachSearchPoint)
             {
+                //Go to next point
                 _timer = 0.0f;
                 _index++;
 
+                //Sets the next position to go to
                 if(_index < _searchLocations.Length)
                 {
                     _navAgent.SetDestination(_searchLocations[_index]);
-                    //Debug.Log("Next Search point");
                 }
+                //Return to their default state
                 else
                 {
                     GameObject.FindObjectOfType<PlayerController>().IsDetected = false;
                     _agent.ReturnToDefaultState();
-                    //Debug.Log("End Search");
                 }
             }
 

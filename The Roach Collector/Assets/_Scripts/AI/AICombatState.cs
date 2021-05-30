@@ -22,6 +22,7 @@ public class AICombatState : AIState
         _combatBehaviours = new List<CombatSnippet>();
         _playerHealth = _agent.Player.GetComponent<Health>();
 
+        //Registers all our combat snippets to the ai
         RegisterSnippet(new AdvanceSnippet());
         RegisterSnippet(new CoverSnippet());
         RegisterSnippet(new CallForBackupSnippet());
@@ -30,6 +31,7 @@ public class AICombatState : AIState
 
     public void Update()
     {
+        //if the player is dead then return to our default states
         if (_playerHealth.IsDead) _agent.ReturnToDefaultState();
 
         if (_agent.BeingKilled) return;
@@ -38,7 +40,6 @@ public class AICombatState : AIState
 
         //Used to sample for better action every 10 seconds.
         _snippetTimer += Time.deltaTime;
-
         if (_currentSnippet.IsFinished() || _snippetTimer > _snippetDuration)
         {
             EvaluateSnippets();
@@ -50,10 +51,11 @@ public class AICombatState : AIState
 
     void EvaluateSnippets()
     {
+        //Stores the highest score
         int highestScore = 0;
-
         CombatSnippet newSnippet = null;
 
+        //Cycles through each snippet and evaluates them
         foreach (CombatSnippet behavior in _combatBehaviours)
         {
             int score = behavior.Evaluate();
@@ -66,6 +68,7 @@ public class AICombatState : AIState
             }
         }
 
+        //Switches to the new snippet
         SwitchSnippets(newSnippet);
     }
 
@@ -90,6 +93,7 @@ public class AICombatState : AIState
     {
         //Debug.Log("Entered Combat State");
 
+        //Decide the best course of action upon entering this state
         EvaluateSnippets();
 
         _agent.GetComponent<NavMeshAgent>().isStopped = false;

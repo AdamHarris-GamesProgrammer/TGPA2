@@ -9,16 +9,13 @@ public class ReloadSnippet : CombatSnippet
 
     public void Action()
     {
-        //Debug.Log(_agent.transform.name + " is reloading");
-        if (!_aiWeapon.GetEquippedWeapon().IsReloading)
-        {
-            _aiWeapon.GetEquippedWeapon().Reload();
-        }
+        //Check if we need to reload
+        if (!_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.GetEquippedWeapon().Reload();
     }
 
     public void EnterSnippet()
     {
-        Debug.Log(_agent.transform.name + " Reload Snippet");
+        //Debug.Log(_agent.transform.name + " Reload Snippet");
         _aiWeapon.SetFiring(false);
     }
 
@@ -27,12 +24,9 @@ public class ReloadSnippet : CombatSnippet
         if (!_aiWeapon) return 0;
         if (!_aiWeapon.GetEquippedWeapon()) return 0;
 
-        int returnScore = 0;
+        if (_aiWeapon.GetEquippedWeapon().NeedToReload) return 100;
 
-
-        if (_aiWeapon.GetEquippedWeapon().NeedToReload) returnScore = 100;
-
-        return returnScore;
+        return 0;
     }
 
     public void Initialize(AIAgent agent)

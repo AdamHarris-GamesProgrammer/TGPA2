@@ -9,13 +9,15 @@ public class SceneLoader : MonoBehaviour
 
     void Awake()
     {
-        FindObjectOfType<SavingWrapper>().Load();
+        
         _transition = GetComponentInChildren<Animator>();
     }
 
     void Start()
     {
+        FindObjectOfType<SavingWrapper>().Load();
     }
+
 
     public void LoadLevel(string name)
     {

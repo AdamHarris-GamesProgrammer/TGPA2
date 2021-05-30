@@ -221,6 +221,7 @@ namespace Harris.Inventories
 
         public void WipeInventory()
         {
+            Debug.Log("Wipe");
             int index = 0;
             foreach(InventorySlot slot in _slots)
             {
@@ -306,6 +307,7 @@ namespace Harris.Inventories
             {
                 if (_slots[i].item != null)
                 {
+                    Debug.Log(_slots[i].item.Name);
                     slotStrings[i].itemID = _slots[i].item.ItemID;
                     slotStrings[i].number = _slots[i].number;
                 }
@@ -315,6 +317,7 @@ namespace Harris.Inventories
 
         void ISaveable.Load(object state)
         {
+            _slots = new InventorySlot[_inventorySize];
             var slotStrings = (InventorySlotRecord[])state;
             for (int i = 0; i < _inventorySize; i++)
             {
