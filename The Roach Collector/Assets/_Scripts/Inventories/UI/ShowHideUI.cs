@@ -13,6 +13,11 @@ namespace Harris.UI
         [SerializeField] AudioClip _openBackpackSound;
         [SerializeField] AudioClip _closeBackpackSound;
 
+        PlayerHealth _playerHealth;
+
+        bool _isDisabled = false;
+        public bool Disabled { get { return _isDisabled; } set { _isDisabled = value; } }
+
         public GameObject UIContainer {  get { return _uiContainer; } }
         public GameObject UIGuideContainer;
 
@@ -25,6 +30,8 @@ namespace Harris.UI
         // Update is called once per frame
         void Update()
         {
+            if (_isDisabled) return;
+
             if (Input.GetKeyDown(_toggleKey))
             {
                 _uiContainer.SetActive(!_uiContainer.activeSelf);

@@ -18,17 +18,22 @@ public class AdvanceSnippet : CombatSnippet
     float _stationaryDuration = 5.0f;
     float _stationaryTimer = 0.0f;
 
+    float _outOfViewTimer = 0.0f;
+    float _outOfViewDuration = 25.0f;
+
     private void DecideToReload()
     {
         //Check if we need to reload
         if (_aiWeapon.GetEquippedWeapon().NeedToReload)
         {
+
             //Stop firing
             _aiWeapon.SetFiring(false);
 
             //If we are not reloading, then reload the current gun
             if (!_aiWeapon.GetEquippedWeapon().IsReloading)
             {
+                Debug.Log("Reloading");
                 _aiWeapon.GetEquippedWeapon().Reload();
             }
 
@@ -51,11 +56,6 @@ public class AdvanceSnippet : CombatSnippet
         //if we are close to our objective
         if (_navAgent.remainingDistance <= 2.5f)
         {
-            //Start Shooting
-            if (_fov.IsEnemyInFOV) _aiWeapon.SetFiring(true);
-            else _aiWeapon.SetFiring(false);
-
-
             //Adds to our stationary timer
             _stationaryTimer += Time.deltaTime;
 
@@ -69,8 +69,21 @@ public class AdvanceSnippet : CombatSnippet
             else
             {
                 //If we are not firing, then start firing
-                if (!_aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(true);
+                //if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
             }
+        }
+
+        if (!_fov.IsEnemyInFOV)
+        {
+            _outOfViewTimer += Time.deltaTime;
+            if(_outOfViewTimer > 3.0f && _aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(false);
+
+            if (_outOfViewTimer > _outOfViewDuration) _agent.stateMachine.ChangeState(AiStateId.SearchForPlayer);
+        }
+        else
+        {
+            _outOfViewTimer = 0.0f;
+            if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
         }
     }
 

@@ -112,12 +112,15 @@ public class LastKnownLocation : MonoBehaviour
             if (Physics.Raycast(sampledPosition, transform.position - sampledPosition, out hit, distance, ~0, QueryTriggerInteraction.Ignore))
             {
                 //Check if we have hit the player, meaning the AI will be able to see the player from this point
-                if (hit.transform.CompareTag("Player")) successful = true;
+                if (hit.transform.CompareTag("Player"))
+                {
+                    successful = true;
+                }
             }
 
             iterations++;
 
-        } while (!successful && iterations < 5);
+        } while (!successful && iterations < 20);
 
         return sampledPosition;
     }

@@ -221,7 +221,6 @@ namespace Harris.Inventories
 
         public void WipeInventory()
         {
-            Debug.Log("Wipe");
             int index = 0;
             foreach(InventorySlot slot in _slots)
             {

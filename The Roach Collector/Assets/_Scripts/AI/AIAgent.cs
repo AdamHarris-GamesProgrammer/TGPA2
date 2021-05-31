@@ -126,8 +126,10 @@ public class AIAgent : MonoBehaviour
         {
             //Dances, and then stops the AIn from firing and clears the target
             GetComponent<Animator>().SetBool("PlayerDead", true);
-            _aiWeapon.SetFiring(false);
-            _aiWeapon.SetTarget(null);
+            GetComponent<NavMeshAgent>().SetDestination(transform.position);
+
+            _aiWeapon?.SetFiring(false);
+            _aiWeapon?.SetTarget(null);
         }
     }
 
@@ -151,7 +153,7 @@ public class AIAgent : MonoBehaviour
         //Gets the direction to the player
         Vector3 direction = _player.transform.position - transform.position;
         //Calculates the look vector
-        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
         //sets our new rotation
         transform.rotation = look;
     }
@@ -161,7 +163,7 @@ public class AIAgent : MonoBehaviour
         //Gets the direction to the last known location
         Vector3 direction = _lastKnownLocation.transform.position - transform.position;
         //Calculates the look vector
-        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime);
+        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
         //Sets our new rotation
         transform.rotation = look;
     }
