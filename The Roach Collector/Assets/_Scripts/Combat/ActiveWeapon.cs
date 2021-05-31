@@ -7,6 +7,8 @@ using TGP.Control;
 #if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
+
+[RequireComponent(typeof(Inventory))]
 public class ActiveWeapon : MonoBehaviour
 {
 
@@ -16,7 +18,7 @@ public class ActiveWeapon : MonoBehaviour
     [Header("Weapon Settings")]
     [SerializeField] private Transform _weaponParent = null;
     [SerializeField] private Transform _weaponParentMelee = null;
-    
+
     [SerializeField] private Transform _weaponLeftGrip = null;
     [SerializeField] private Transform _weaponRightGrip = null;
     [SerializeField] private RaycastWeapon _startingWeapon = null;
@@ -31,7 +33,7 @@ public class ActiveWeapon : MonoBehaviour
     PlayerController _controller;
 
     Animator _anim;
-    [SerializeField] private RaycastWeapon _weapon;
+    private RaycastWeapon _weapon = null;
 
     [SerializeField] private bool _isMelee = true;
     bool _isStabbing = false;
@@ -58,7 +60,7 @@ public class ActiveWeapon : MonoBehaviour
 
             _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
         }
-        
+
     }
 
     private void Reload()
@@ -75,42 +77,27 @@ public class ActiveWeapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if(_weapon)
+
+        if (_weapon)
         {
-            if (_inventory)
+            if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
             {
 
-                if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
-                {
-                    
-                    int index = _inventory.FindItem(_weapon.Config.AmmoType);
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
-                    _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
+                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
 
-                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
 
-                }
-
-                if(_weapon.IsMelee)
-                {
-                    //Debug.Log(_weapon.name);
-                    _isMelee = true;
-                }
-                else
-                {
-                    //Debug.Log(_weapon.name);
-                    _isMelee = false;
-                }
-            
-                WeaponLogic();
             }
-            
+
+            WeaponLogic();
+
         }
         else
         {
 
-            _PlayerUI.UpdateAmmoUI(0,0,0);
+            _PlayerUI.UpdateAmmoUI(0, 0, 0);
         }
     }
 
@@ -126,9 +113,9 @@ public class ActiveWeapon : MonoBehaviour
     }
     public void Equip(RaycastWeapon newWeapon)
     {
-        if(_weapon)
+        if (_weapon)
         {
-            Destroy(_weapon.gameObject);
+            Destroy(_weapon);
         }
 
         _weapon = newWeapon;
@@ -149,99 +136,98 @@ public class ActiveWeapon : MonoBehaviour
             newWeapon.Setup();
         }
 
-        if (_inventory)
+        if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
         {
-            if (!_weapon.IsMelee && _inventory.HasItem(_weapon.Config.AmmoType))
-            {
-                int index = _inventory.FindItem(_weapon.Config.AmmoType);
+            int index = _inventory.FindItem(_weapon.Config.AmmoType);
 
-                _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
+            _weapon.TotalAmmo = _inventory.GetNumberInSlot(index);
 
-                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
-            }
-            else
-            {
-                _weapon.TotalAmmo = 0;
-                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
-            }
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
         }
+        else
+        {
+            _weapon.TotalAmmo = 0;
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+        }
+
+        _isMelee = _weapon.IsMelee;
     }
 
     void GunLogic()
     {
         if (_weapon.Config.IsAutomatic)
+        {
+            if (Input.GetButtonDown("Fire1"))
             {
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    _weapon.StartFiring();
-                    _controller.IsShooting = true;
-                }
-                else if (Input.GetButtonUp("Fire1"))
-                {
-                    _weapon.StopFiring();
-                    _controller.IsShooting = false;
-                }
-
-                if (_weapon.IsFiring)
-                {
-                    _weapon.UpdateWeapon(_crosshairTarget.position);
-                    _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
-                }
+                _weapon.StartFiring();
+                _controller.IsShooting = true;
             }
-            else
+            else if (Input.GetButtonUp("Fire1"))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    _weapon.StartFiring();
-                    _controller.IsShooting = true;
-                    _weapon.UpdateWeapon(_crosshairTarget.position);
-                }
-                else
-                {
-                    _controller.IsShooting = false;
-                    _weapon.StopFiring();
-                }
+                _weapon.StopFiring();
+                _controller.IsShooting = false;
+            }
+
+            if (_weapon.IsFiring)
+            {
+                _weapon.UpdateWeapon(_crosshairTarget.position);
                 _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
             }
-
-
-            _weapon.UpdateBullets();
-
-            
-
-            if (Input.GetKeyDown(KeyCode.R) && _weapon.TotalAmmo > 0)
+        }
+        else
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                Reload();
-                _controller.IsShooting = false;
-
-            }
-
-            if (_weapon.NeedToReload)
-            {
-                _controller.IsShooting = false;
-            }
-
-            if (_weapon.IsReloading == false)
-            {
-                _anim.SetBool("isReloading", false);
+                _weapon.StartFiring();
+                _controller.IsShooting = true;
+                _weapon.UpdateWeapon(_crosshairTarget.position);
             }
             else
             {
                 _controller.IsShooting = false;
-                _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+                _weapon.StopFiring();
             }
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+        }
+
+
+        _weapon.UpdateBullets();
+
+
+
+        if (Input.GetKeyDown(KeyCode.R) && _weapon.TotalAmmo > 0)
+        {
+            Reload();
+            _controller.IsShooting = false;
+
+        }
+
+        if (_weapon.NeedToReload)
+        {
+            _controller.IsShooting = false;
+        }
+
+        if (_weapon.IsReloading == false)
+        {
+            _anim.SetBool("isReloading", false);
+        }
+        else
+        {
+            _controller.IsShooting = false;
+            _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
+        }
     }
 
     void MeleeLogic()
     {
 
-        if(Input.GetButtonDown("Fire1") && !InventoryCanvas.activeSelf && _isStabbing == false)
+        if (Input.GetButtonDown("Fire1") && !InventoryCanvas.activeSelf && _isStabbing == false)
         {
             _isStabbing = true;
             _anim.SetTrigger("Stab");
         }
 
-        if(_anim.GetCurrentAnimatorStateInfo(0).IsName("Stabbing") && _anim.GetCurrentAnimatorStateInfo(0).length > _anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
+        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("Stabbing") && _anim.GetCurrentAnimatorStateInfo(0).length > _anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
         {
             GetComponent<WeaponStabCheck>().SetStabbing(true);
         }
@@ -255,14 +241,8 @@ public class ActiveWeapon : MonoBehaviour
 
     void WeaponLogic()
     {
-        if(_isMelee)
-        {
-            MeleeLogic();
-        }
-        else
-        {
-            GunLogic();
-        }
+        if (_isMelee) MeleeLogic();
+        else GunLogic();
     }
 
 }
