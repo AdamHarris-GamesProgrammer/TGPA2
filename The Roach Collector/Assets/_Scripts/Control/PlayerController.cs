@@ -104,7 +104,7 @@ namespace TGP.Control
             set
             {
                 _doorInRange = value;
-                SendMessage("DisplayDoorPrompt", value);
+                gameObject.SendMessage("DisplayDoorPrompt", value != null);
             }
         }
 

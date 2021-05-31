@@ -18,12 +18,6 @@ public class LockedDoor : MonoBehaviour
         _player = FindObjectOfType<PlayerController>();
     }
 
-
-    private void Update()
-    {
-        
-    }
-
     public LockedDoorID GetLockID()
     {
         return _id;
@@ -31,24 +25,16 @@ public class LockedDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            _player.DoorInRange = this;
-        }
+        if (other.CompareTag("Player")) _player.DoorInRange = this;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player")) 
-        {
-            _player.DoorInRange = null;
-        }
+        if (other.CompareTag("Player")) _player.DoorInRange = null;
     }
 
     public void Unlock()
     {
-        //TODO: Trigger door opening animation
-        //TODO: Activate meshlinks for AI
         //TODO: Play unlocking sound
 
         _player.DoorInRange = null;
@@ -56,8 +42,8 @@ public class LockedDoor : MonoBehaviour
         Debug.Log("Door Unlocked");
 
         _isUnlocked = true;
-
-        Destroy(gameObject);
+        GetComponent<Animator>().SetTrigger("OpenDoor");
+        Destroy(this);
     }
 }
    

@@ -114,8 +114,8 @@ public class AIWeapons : MonoBehaviour
 
             NavMeshHit hit;
             NavMesh.SamplePosition(transform.position, out hit, 5.0f, ~0);
-            //Spawns ammo for the gun
-            _currentWeapon.Config.SpawnAmmo(hit.position, 10);
+            //Spawns ammo for the gun, if applicable
+            if(!_currentWeapon.IsMelee) _currentWeapon.Config.SpawnAmmo(hit.position, 10);
             //Sets the current weapon to null
             _currentWeapon = null;
             _weaponIK.SetWeaponTransform(null);

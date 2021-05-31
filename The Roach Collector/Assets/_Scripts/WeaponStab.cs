@@ -1,65 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 public class WeaponStab : MonoBehaviour
 {
-    [SerializeField] private Health AttackedHealth;
-    [SerializeField] private GameObject Parent;
-    [SerializeField] private GameObject Player;
+    private Health _attackedHealth;
+    private GameObject _parent;
+    private GameObject _player;
 
-    [SerializeField] private WeaponStabCheck _wsCheck;
-    [SerializeField] private bool WSC = false;
-    [SerializeField] WeaponConfig MeleeConfig;
+    private WeaponStabCheck _wsCheck;
+    private bool _isStabbing = false;
+    [SerializeField] WeaponConfig _meleeConfig;
 
 
     private void Awake()
     {
-        Player =  GameObject.Find("Player");
+        _player =  FindObjectOfType<PlayerController>().gameObject;
 
-        if (transform.root.name == "Enemies")
-        {
-            _wsCheck = GetComponentInParent<AIAgent>().GetComponent<WeaponStabCheck>();
-        }
-        else
-        {
-            _wsCheck = Player.GetComponent<WeaponStabCheck>();
-        }
+        AIAgent agent = GetComponentInParent<AIAgent>();
+        if (agent) _wsCheck = agent.GetComponent<WeaponStabCheck>();
+        else _wsCheck = _player.GetComponent<WeaponStabCheck>();
 
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        WSC = _wsCheck.GetStabbing();
+        _isStabbing = _wsCheck.GetStabbing();
 
-        if (collision.transform.root.name == "Core")
-        {
-            Parent = Player;
-        }
-        else if(collision.transform.root.name == "Enemies")
-        {
-            Parent = collision.collider.GetComponentInParent<AIAgent>().gameObject;
-        }
-
+        AIAgent agent = collision.transform.GetComponentInParent<AIAgent>();
+        if (agent) _parent = agent.gameObject;
+        else _parent = _player;
 
         if (collision.transform.root != transform.root)
         {
-            if (Parent == Player)
-            {
-                AttackedHealth = Parent.GetComponent<PlayerHealth>();
+            if (_parent == _player) _attackedHealth = _parent.GetComponent<PlayerHealth>();
+            else _attackedHealth = _parent.GetComponent<AIHealth>();
 
-            }
-            else
-            {
-                AttackedHealth = Parent.GetComponent<AIHealth>();
-            }
-
-            if (WSC)
-            {
-                //Debug.Log(transform.root.name + " STABBED " + collision.transform.root.name);
-                AttackedHealth.TakeDamage(MeleeConfig.DamageType, MeleeConfig.Damage);
-            }
+            if (_isStabbing) _attackedHealth.TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
         }
         
     }
