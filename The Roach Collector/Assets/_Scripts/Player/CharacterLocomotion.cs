@@ -6,8 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 public class CharacterLocomotion : MonoBehaviour
 {
-    
-
     [Min(0f)][SerializeField] private float _jumpHeight = 0.5f;
     [Min(0f)][SerializeField] private float _gravity = -9.81f;
     [SerializeField] private float _stepDown = 0.1f;
@@ -57,14 +55,8 @@ public class CharacterLocomotion : MonoBehaviour
         }
 
         //Checks we are crouching and sets the bool in the animator
-        if (_isCrouching)
-        {
-            _animator.SetBool("isCrouching", true);
-        }
-        else
-        {
-            _animator.SetBool("isCrouching", false);
-        }
+        if (_isCrouching) _animator.SetBool("isCrouching", true);
+        else _animator.SetBool("isCrouching", false);
 
         //Handles our root motion
         _input.x = Input.GetAxis("Horizontal");
@@ -74,11 +66,11 @@ public class CharacterLocomotion : MonoBehaviour
         _animator.SetFloat("InputX", _input.x);
         _animator.SetFloat("InputY", _input.y);
 
+        if (_input != Vector2.zero)_player.IsStationary = false;
+        else _player.IsStationary = true;
+
         //Checks to see if we are jumping
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
+        if (Input.GetKeyDown(KeyCode.Space)) Jump();
 
         //if we are crouching then we are not standing etc.
         _player.IsStanding = !_isCrouching;
@@ -88,15 +80,9 @@ public class CharacterLocomotion : MonoBehaviour
         if (_health.IsDead) return;
 
         if (_isJumping) //In Air state
-        {
             UpdateInAir();
-
-        }
         else //Is grounded state
-        {
             UpdateOnGround();
-
-        }
     }
 
     private void OnAnimatorMove()
@@ -114,12 +100,10 @@ public class CharacterLocomotion : MonoBehaviour
         Rigidbody body = hit.collider.attachedRigidbody;
 
         // no rigidbody
-        if (body == null || body.isKinematic)
-            return;
+        if (body == null || body.isKinematic) return;
 
         // We dont want to push objects below us
-        if (hit.moveDirection.y < -0.3f)
-            return;
+        if (hit.moveDirection.y < -0.3f) return;
 
         // Calculate push direction from move direction,
         // we only push objects to the sides never up and down
@@ -169,18 +153,12 @@ public class CharacterLocomotion : MonoBehaviour
         _controller.Move(stepForward + stepDown);
 
         //To remove the one frame glitch check if we are no longer grounded here and then step back up
-        if (!_controller.isGrounded)
-        {
-            _controller.Move(Vector3.up * _stepDown);
-        }
+        if (!_controller.isGrounded) _controller.Move(Vector3.up * _stepDown);
 
         _rootMotion = Vector3.zero;
 
         //Stepped off edge
-        if (!_controller.isGrounded)
-        {
-            InheritVelocity(0.0f);
-        }
+        if (!_controller.isGrounded) InheritVelocity(0.0f);
     }
 
     private void InheritVelocity(float jumpVelocity)

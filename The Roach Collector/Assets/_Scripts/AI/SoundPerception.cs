@@ -13,7 +13,8 @@ public class SoundPerception : MonoBehaviour
     [SerializeField] float _shootingMultiplier = 1000.0f;
     [SerializeField] float _crouchingMultiplier = 0.5f;
 
-    float _detectionTimer;
+    [Header("Debug")]
+    [SerializeField]float _detectionTimer;
 
     AIHealth _aiHealth;
 
@@ -60,9 +61,16 @@ public class SoundPerception : MonoBehaviour
             //Adds the appropriate value to the timer based on what the player is doing
             if (soundController.IsShooting) 
                 _detectionTimer += Time.deltaTime * _shootingMultiplier;
-            else if (soundController.IsStanding)
+
+            if (other.GetComponentInParent<PlayerController>().IsStationary)
+            {
+                _detectionTimer = Mathf.Max(_detectionTimer - Time.deltaTime / 2, 0.0f);
+                return;
+            }
+
+             if (soundController.IsStanding)
                 _detectionTimer += Time.deltaTime * _standingMultiplier;
-            else if (!soundController.IsStanding)
+             else if (!soundController.IsStanding)
                 _detectionTimer += Time.deltaTime * _crouchingMultiplier;
         }
     }

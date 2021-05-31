@@ -14,8 +14,6 @@ namespace TGP.Control
     {
         public bool isDancing = false;
 
-        bool _canDisableAlarm = false;
-
         AIAgent _agentInRange = null;
 
         bool _inKillAnimation = false;
@@ -58,6 +56,9 @@ namespace TGP.Control
         private int _roaches = 0;
 
         public float Cash { get { return _currency; } }
+
+        bool _isStationary = false;
+        public bool IsStationary { get { return _isStationary;} set { _isStationary = value; } }
 
         Animator _animator;
 
@@ -104,7 +105,6 @@ namespace TGP.Control
             {
                 _doorInRange = value;
                 SendMessage("DisplayDoorPrompt", value);
-                
             }
         }
 

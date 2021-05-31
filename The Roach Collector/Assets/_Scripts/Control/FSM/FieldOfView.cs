@@ -35,10 +35,7 @@ public class FieldOfView : MonoBehaviour
 
     void Update()
     {
-        if (_aiHealth.IsDead)
-        {
-            Destroy(this);
-        }
+        if (_aiHealth.IsDead) Destroy(this);
 
         FindVisibleTargets();
 
