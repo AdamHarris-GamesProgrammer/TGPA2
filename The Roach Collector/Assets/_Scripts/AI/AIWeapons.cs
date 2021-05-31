@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIWeapons : MonoBehaviour
 {
@@ -110,8 +111,11 @@ public class AIWeapons : MonoBehaviour
             _currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             //Adds a rigidbody
             _currentWeapon.gameObject.AddComponent<Rigidbody>();
+
+            NavMeshHit hit;
+            NavMesh.SamplePosition(transform.position, out hit, 5.0f, ~0);
             //Spawns ammo for the gun
-            _currentWeapon.Config.SpawnAmmo(_currentWeapon.transform.position, 10);
+            _currentWeapon.Config.SpawnAmmo(hit.position, 10);
             //Sets the current weapon to null
             _currentWeapon = null;
             _weaponIK.SetWeaponTransform(null);
