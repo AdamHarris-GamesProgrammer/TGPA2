@@ -52,15 +52,8 @@ public class FieldOfView : MonoBehaviour
             _isEnemyinFOV = false;
         }
 
-        if(_hasTimerStarted)
-        {
-            //caps the timer to 5 seconds
-            _detectionTimer = Mathf.Min(_detectionTimer + Time.deltaTime, 5.0f);
-        }
-        else
-        {
-            _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
-        }
+        if(_hasTimerStarted) _detectionTimer = Mathf.Min(_detectionTimer + Time.deltaTime, 5.0f);
+        else _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
 
     }
     
@@ -85,19 +78,12 @@ public class FieldOfView : MonoBehaviour
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
                     if (hitInfo.collider.tag == "Player")
                     {
-                        if(_charLocomotion.IsCrouching)
-                        {
-                            _detectedValue = _detectedCrouch;
-                        }
-                        else
-                        {
-                            _detectedValue = _detectedStand;
-                        }
+                        if(_charLocomotion.IsCrouching) _detectedValue = _detectedCrouch;
+                        else _detectedValue = _detectedStand;
 
 
                         if(DistanceToTarget <= (_viewRadius / 8))
                         {
-                            //Debug.Log("Player is too close");
                             _visibleTargets.Add(targetTransform);
                             FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
                             return;
@@ -107,7 +93,6 @@ public class FieldOfView : MonoBehaviour
 
                         if (_detectionTimer > _detectedValue)
                         {
-                            //Debug.Log("Player is detected through time");
                             _visibleTargets.Add(targetTransform);
 
                             FindObjectOfType<LastKnownLocation>().transform.position = hitInfo.point;
@@ -127,10 +112,7 @@ public class FieldOfView : MonoBehaviour
 
     public Vector3 DirectionFromAngle(float angleindegrees, bool angleisglobal)
     {
-        if (!angleisglobal)
-        {
-            angleindegrees += transform.eulerAngles.y;
-        }
+        if (!angleisglobal) angleindegrees += transform.eulerAngles.y;
 
         return new Vector3(Mathf.Sin(angleindegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleindegrees * Mathf.Deg2Rad));
     }

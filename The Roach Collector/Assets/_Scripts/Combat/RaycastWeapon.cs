@@ -28,8 +28,8 @@ public class RaycastWeapon : MonoBehaviour
     [SerializeField] private bool _isMelee = false;
 
     [Header("Ammo Settings")]
-    public int _clipAmmo = 30;
-    public int _totalAmmo = 90;
+    [SerializeField] private int _clipAmmo = 30;
+    [SerializeField] private int _totalAmmo = 90;
     [SerializeField] private DamageType _type;
 
     [Header("VFX Settings")]
@@ -200,15 +200,8 @@ public class RaycastWeapon : MonoBehaviour
 
         _weaponRecoil.GenerateRecoil();
 
-        if (_config.IsAutomatic)
-        {
-            Debug.Log("Continuous Fire");
-            _audioSoruce.PlayOneShot(_config.ContinuousFire);
-        }
-        else
-        {
-            _audioSoruce.PlayOneShot(_config.StartFire);
-        }
+        if (_config.IsAutomatic) _audioSoruce.PlayOneShot(_config.ContinuousFire);
+        else _audioSoruce.PlayOneShot(_config.StartFire);
         
     }
 

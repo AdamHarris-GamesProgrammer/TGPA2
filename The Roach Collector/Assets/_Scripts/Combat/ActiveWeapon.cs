@@ -94,11 +94,7 @@ public class ActiveWeapon : MonoBehaviour
             WeaponLogic();
 
         }
-        else
-        {
-
-            _PlayerUI.UpdateAmmoUI(0, 0, 0);
-        }
+        else _PlayerUI.UpdateAmmoUI(0, 0, 0);
     }
 
     public void DropWeapon()
@@ -115,6 +111,15 @@ public class ActiveWeapon : MonoBehaviour
     {
         if (_weapon)
         {
+            if (_inventory.HasItem(_weapon.Config.AmmoType))
+            {
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
+
+                _inventory.AddItemToSlot(index,_weapon.Config.AmmoType, _weapon.ClipAmmo);
+            }
+
+            
+
             Destroy(_weapon);
         }
 
@@ -122,14 +127,9 @@ public class ActiveWeapon : MonoBehaviour
 
         if (newWeapon)
         {
-            if (_weapon.IsMelee)
-            {
-                _weapon.transform.parent = _weaponParentMelee;
-            }
-            else
-            {
-                _weapon.transform.parent = _weaponParent;
-            }
+            if (_weapon.IsMelee) _weapon.transform.parent = _weaponParentMelee;
+            else _weapon.transform.parent = _weaponParent;
+
             _weapon.transform.localPosition = Vector3.zero;
             _weapon.transform.localRotation = Quaternion.identity;
 
