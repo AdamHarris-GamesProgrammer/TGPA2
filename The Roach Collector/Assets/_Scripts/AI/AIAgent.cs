@@ -21,7 +21,7 @@ public class AIAgent : MonoBehaviour
     [SerializeField] float _waitAtEachPointDuration = 7.5f;
 
     [Header("Weapon Settings")]
-    [SerializeField] private RaycastWeapon _startingWeapon = null;
+    [SerializeField] private WeaponConfig _startingWeapon = null;
 
     [Header("Mask Settings")]
     [SerializeField] private LayerMask _characterMask;
@@ -91,7 +91,7 @@ public class AIAgent : MonoBehaviour
         //If we have a starting weapon then instantiate and equip it
         if (_startingWeapon)
         {
-            RaycastWeapon weapon = Instantiate(_startingWeapon);
+            RaycastWeapon weapon = Instantiate(_startingWeapon.Weapon);
 
             _aiWeapon = GetComponent<AIWeapons>();
             _aiWeapon.EquipWeapon(weapon);

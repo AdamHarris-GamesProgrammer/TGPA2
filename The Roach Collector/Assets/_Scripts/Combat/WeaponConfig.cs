@@ -53,7 +53,7 @@ public class WeaponConfig : EquipableItem
     public float BulletDrop { get { return _bulletDrop; } set { _bulletDrop = value; } }
     public float Damage { get { return _damage; } set { _damage = value; } }
     public int ClipSize { get { return _clipSize; } set { _clipSize = value; } }
-
+    public RaycastWeapon Weapon { get { return _weapon; } }
     public bool IsAutomatic { get { return _isAutomatic; } }
     public DamageType DamageType { get { return _damageType; } }
     public float ReloadDuration { get { return _reloadDuration; } }
