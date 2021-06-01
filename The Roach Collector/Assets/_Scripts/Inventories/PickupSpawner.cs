@@ -3,11 +3,18 @@ using Harris.Saving;
 
 namespace Harris.Inventories
 {
-    public class PickupSpawner : MonoBehaviour, ISaveable
+    public class PickupSpawner : MonoBehaviour
     {
+        [System.Serializable]
+        public struct RandomPickupItem
+        {
+            public InventoryItem _item;
+            public int _minAmount;
+            public int _maxAmount;
+        }
+
         // CONFIG DATA
-        [SerializeField] InventoryItem _item = null;
-        [SerializeField] int _number = 1;
+        [SerializeField] RandomPickupItem[] _items;
 
         private void Awake()
         {
@@ -27,7 +34,13 @@ namespace Harris.Inventories
 
         private void SpawnPickup()
         {
-            var spawnedPickup = _item.SpawnPickup(transform.position, _number);
+            int index = Random.Range(0, _items.Length);
+
+            RandomPickupItem pickup = _items[index];
+
+            int amount = Random.Range(pickup._minAmount, pickup._maxAmount);
+
+            var spawnedPickup = pickup._item.SpawnPickup(transform.position, amount);
             spawnedPickup.transform.SetParent(transform);
         }
 
@@ -36,26 +49,6 @@ namespace Harris.Inventories
             if (GetPickup())
             {
                 Destroy(GetPickup().gameObject);
-            }
-        }
-
-        object ISaveable.Save()
-        {
-            return isCollected();
-        }
-
-        void ISaveable.Load(object state)
-        {
-            bool shouldBeCollected = (bool)state;
-
-            if (shouldBeCollected && !isCollected())
-            {
-                DestroyPickup();
-            }
-
-            if (!shouldBeCollected && isCollected())
-            {
-                SpawnPickup();
             }
         }
     }

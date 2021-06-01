@@ -46,33 +46,7 @@ public class PlayerHealth : Health
         }
         amount *= resistance;
 
-        //Armor can block 90% of incoming damage. 10% of damage will always come through
-        //The remaining 90% of damage is then blocked based on how much armor the player has
-        //Armor is in a range of 0 to 100
-
-        //Calculates Armor Protection
-        int armor = _equipment.GetTotalArmor();
-
-        //Gets 10% of the damage
-        float damageToGoThrough = amount / 10.0f;
-
-        //Takes away 10% of damage from the amount
-        float leftOverDamage = amount - damageToGoThrough;
-
-        //Stores how much percent the armor should block
-        float armorBlocks = 0.0f;
-        if (armor > 0)
-        {
-            //Calculates the percentage of damage blocked
-            armorBlocks = (leftOverDamage / 100) * armor;
-        }
-
-        //Left over damage is now updated to use the armor and the damage to go through
-        leftOverDamage = leftOverDamage - armorBlocks + damageToGoThrough;
-
-        Debug.Log(leftOverDamage);
-
-        base.TakeDamage(type, leftOverDamage);
+        base.TakeDamage(type, amount);
     }
 
     protected override void OnDeath()

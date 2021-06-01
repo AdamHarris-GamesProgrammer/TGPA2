@@ -15,24 +15,15 @@ namespace Harris.Inventories
 
         EquipLocation _currentlySelectedLocation = EquipLocation.None;
 
-        private int _totalArmor;
-
-        [SerializeField] private Text _armorText;
-        
-
         public event Action EquipmentUpdated;
 
         private void Awake()
         {
             EquipmentUpdated += UpdateArmor;
-
-            _armorText.text = _totalArmor.ToString();
         }
 
         private void UpdateArmor()
         {
-            int total = 0;
-
             //TODO: Better way of doing this as this couples the player to the equipment
             PlayerController player = GetComponent<PlayerController>();
             //Reset the stats of the player
@@ -43,18 +34,12 @@ namespace Harris.Inventories
                 ArmorConfig armor = GetItemInSlot(location) as ArmorConfig;
                 if (armor != null)
                 {
-                    total += armor.GetArmor();
-
                     foreach(StatValues stat in armor.GetStatValues())
                     {
                         player.EquipStat(stat);
                     }
                 }
             }
-
-            _totalArmor = total;
-
-            _armorText.text = _totalArmor.ToString();
         }
 
 
@@ -72,11 +57,6 @@ namespace Harris.Inventories
             FindObjectOfType<ItemTooltip>().Close();
 
             _currentlySelectedLocation = EquipLocation.None;
-        }
-
-        public int GetTotalArmor()
-        {
-            return _totalArmor;
         }
 
         public void Select(EquipLocation location)
