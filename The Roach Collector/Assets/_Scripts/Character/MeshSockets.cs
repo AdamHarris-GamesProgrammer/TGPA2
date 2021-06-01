@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MeshSockets : MonoBehaviour
 {
+    //Holds the types of sockets used in the game
     public enum SocketID
     {
         Spine,
@@ -11,15 +12,16 @@ public class MeshSockets : MonoBehaviour
         RightShoulder
     }
 
+    //A dictionary of the mesh sockets on the AI
     Dictionary<SocketID, MeshSocket> socketMap = new Dictionary<SocketID, MeshSocket>();
 
-    // Start is called before the first frame update
     void Awake()
     {
         MeshSocket[] sockets = GetComponentsInChildren<MeshSocket>();
 
         foreach(var socket in sockets)
         {
+            //Adds socket to the dictionary
             socketMap.Add(socket.socketID, socket);
             
         }
@@ -27,12 +29,7 @@ public class MeshSockets : MonoBehaviour
 
     public void Attach(Transform objectTransform, SocketID socketId)
     {
+        //Attaches an object to the desired socket
         socketMap[socketId].Attach(objectTransform);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

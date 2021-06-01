@@ -316,7 +316,7 @@ public class RaycastWeapon : MonoBehaviour
                 _fleshHitEffect.Emit(1);
 
 
-                hitbox.OnRaycastHit(this, _ray.direction);
+                hitbox.OnRaycastHit(this);
             }
             else
             {

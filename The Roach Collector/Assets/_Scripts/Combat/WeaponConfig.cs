@@ -21,18 +21,19 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private AmmoItem _ammoItem;
     [SerializeField] private bool _isAutomatic = false;
 
+    [Header("Ammo Pickup")]
     [SerializeField] Pickup _ammo = null;
 
     [Header("Sound Settings")]  
-    [SerializeField] private AudioClip _dryFire = null;         //
-    [SerializeField] private AudioClip _startFire = null;       //
-    [SerializeField] private AudioClip _magazineUnload = null;  //
-    [SerializeField] private AudioClip _magazineLoad = null;    //
+    [SerializeField] private AudioClip _dryFire = null;         
+    [SerializeField] private AudioClip _startFire = null;       
+    [SerializeField] private AudioClip _magazineUnload = null;  
+    [SerializeField] private AudioClip _magazineLoad = null;    
     [SerializeField] private AudioClip _safetySwitch = null;
-    [SerializeField] private AudioClip _bulletLoad = null;      //
+    [SerializeField] private AudioClip _bulletLoad = null;      
     [SerializeField] private AudioClip _cockSound = null;
-    [SerializeField] private AudioClip _endFire = null;         //
-    [SerializeField] private AudioClip _continuousFire = null;  //
+    [SerializeField] private AudioClip _endFire = null;         
+    [SerializeField] private AudioClip _continuousFire = null;  
 
     public AudioClip StartFire { get { return _startFire; } }
     public AudioClip ContinuousFire{get { return _continuousFire; }}
@@ -63,6 +64,7 @@ public class WeaponConfig : EquipableItem
     {
         if (user.CompareTag("Player"))
         {
+            //Instantiate the weapon and equip it 
             RaycastWeapon weapon = Instantiate(_weapon);
             user.GetComponent<ActiveWeapon>().Equip(weapon);
         }
@@ -70,6 +72,7 @@ public class WeaponConfig : EquipableItem
 
     public Pickup SpawnAmmo(Vector3 position, int number)
     {
+        //Instantiate the pickup for the ammo
         var pickup = Instantiate(_ammo);
         pickup.transform.position = position;
         pickup.Setup(_ammo.GetItem(), number);

@@ -12,7 +12,22 @@ namespace TGP.Control
 {
     public class PlayerController : MonoBehaviour, ISaveable
     {
-        public bool isDancing = false;
+        [Header("Applying Text Settings")]
+        [SerializeField] GameObject _applyingHealthText = null;
+        [SerializeField] GameObject _applyingDamageText = null;
+        [SerializeField] GameObject _applyingResistanceText = null;
+        [SerializeField] GameObject _applyingSpeedText = null;
+
+        [Header("Camera Settings")]
+        [SerializeField] GameObject _aimCam;
+        [SerializeField] GameObject _followCam;
+
+        [Header("Text Settings")]
+        [SerializeField] Text _roachText;
+        [SerializeField] Text _cashText;
+
+        bool _isDancing = false;
+        public bool IsDancing { get { return _isDancing; } set { _isDancing = value; } }
 
         AIAgent _agentInRange = null;
 
@@ -29,17 +44,7 @@ namespace TGP.Control
         private GameObject _chestInventory;
         public GameObject ChestInventory { get { return _chestInventory; } }
 
-        [SerializeField] GameObject _applyingHealthText = null;
-        [SerializeField] GameObject _applyingDamageText = null;
-        [SerializeField] GameObject _applyingResistanceText = null;
-        [SerializeField] GameObject _applyingSpeedText = null;
 
-
-        [SerializeField] GameObject _aimCam;
-        [SerializeField] GameObject _followCam;
-
-        [SerializeField] Text _roachText;
-        [SerializeField] Text _cashText;
 
         public GameObject AimCam { get { return _aimCam; } }
         public GameObject FollowCam { get { return _followCam; } }
@@ -213,15 +218,11 @@ namespace TGP.Control
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                //Debug.Log("F is pressed");
                 if (_isStanding) return;
 
                 if (_agentInRange != null && !_detected)
                 {
-                    //Debug.Log("Assassinate");
                     if (_agentInRange.Health.IsDead) return;
-                    //TODO: Somehow make the animation look better 
-
 
                     Vector3 offSetPos = _agentInRange.transform.position - _agentInRange.transform.forward * 1.0f;
 

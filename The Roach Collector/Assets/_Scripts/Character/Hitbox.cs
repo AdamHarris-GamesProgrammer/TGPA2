@@ -6,20 +6,18 @@ public class Hitbox : MonoBehaviour
 {
     private Health _health;
 
+    //The amount of damage a shot to this limb does
     [SerializeField] private float _damageMultiplier = 1.0f;
 
-
-    // Start is called before the first frame update
     void Awake()
     {
+        //Gets this hitboxes owner's health component
         _health = GetComponentInParent<Health>();
     }
 
-    public void OnRaycastHit(RaycastWeapon weapon, Vector3 rayDirection)
+    public void OnRaycastHit(RaycastWeapon weapon)
     {
-        float totalDamage = weapon.Damage * _damageMultiplier;
-        //Debug.Log(_health.gameObject.name + " is taking damage");
-        //Debug.Log(transform.name + " is taking damage " + weapon.GetDamage() + " multiplied by: " + _damageMultiplier + " giving a total of: " + totalDamage);
-        _health.TakeDamage(weapon.DamageType, totalDamage);
+        //Deals damage to the owner
+        _health.TakeDamage(weapon.DamageType, weapon.Damage * _damageMultiplier);
     }
 }
