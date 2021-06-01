@@ -22,7 +22,7 @@ namespace Harris.Inventories
         [SerializeField] Sprite _icon = null;
         [Tooltip("The prefab that should be spawned when this item is dropped.")]
         [SerializeField] Pickup _pickup = null;
-        [SerializeField] Pickup _ammo = null;
+        
         [Tooltip("If true, multiple items of this type can be stacked in the same inventory slot.")]
         [SerializeField] bool _isStackable = false;
 
@@ -78,13 +78,7 @@ namespace Harris.Inventories
             return pickup;
         }
 
-        public Pickup SpawnAmmo(Vector3 position, int number)
-        {
-            var pickup = Instantiate(_ammo);
-            pickup.transform.position = position;
-            pickup.Setup(_ammo.GetItem(), number);
-            return pickup;
-        }
+
 
 
         //Interface Implementation

@@ -9,24 +9,20 @@ public class LaptopScript : MonoBehaviour
     private GameObject activePanel;
 
     // Canvas's
-    public Canvas menuCanvas;
-    public Canvas shopCanvas;
-    public Canvas blackMarketCanvas;
-    public Canvas messageCanvas;
-    public Canvas infoCanvas;
+    [SerializeField] Canvas menuCanvas;
+    [SerializeField] Canvas shopCanvas;
+    [SerializeField] Canvas blackMarketCanvas;
+    [SerializeField] Canvas messageCanvas;
+    [SerializeField] Canvas infoCanvas;
 
-    public GameObject initialPanel;
+    [SerializeField] GameObject initialPanel;
 
 
     //Buttons
-    public Button loginButton;
-    public Button shopButton;
-    public Button blackMarketButton;
-    public Button messageButton;
-    public Button infoButton;
-
-
-    
+    [Header("Buttons")]
+    [SerializeField] Button loginButton;
+    [SerializeField] Button shopButton;
+    [SerializeField] Button infoButton;
 
 
     // Start is called before the first frame update
@@ -46,8 +42,6 @@ public class LaptopScript : MonoBehaviour
     public void LaptopLogin()
     {
         shopButton.gameObject.active = true;
-        blackMarketButton.gameObject.active = true;
-        messageButton.gameObject.active = true;
         infoButton.gameObject.active = true;
         loginButton.gameObject.active = false;
 
