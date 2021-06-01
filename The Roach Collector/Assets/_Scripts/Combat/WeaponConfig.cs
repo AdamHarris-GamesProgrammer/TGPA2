@@ -20,7 +20,8 @@ public class WeaponConfig : EquipableItem
     [SerializeField] private RaycastWeapon _weapon;
     [SerializeField] private AmmoItem _ammoItem;
     [SerializeField] private bool _isAutomatic = false;
-    
+
+    [SerializeField] Pickup _ammo = null;
 
     [Header("Sound Settings")]  
     [SerializeField] private AudioClip _dryFire = null;         //
@@ -65,5 +66,13 @@ public class WeaponConfig : EquipableItem
             RaycastWeapon weapon = Instantiate(_weapon);
             user.GetComponent<ActiveWeapon>().Equip(weapon);
         }
+    }
+
+    public Pickup SpawnAmmo(Vector3 position, int number)
+    {
+        var pickup = Instantiate(_ammo);
+        pickup.transform.position = position;
+        pickup.Setup(_ammo.GetItem(), number);
+        return pickup;
     }
 }
