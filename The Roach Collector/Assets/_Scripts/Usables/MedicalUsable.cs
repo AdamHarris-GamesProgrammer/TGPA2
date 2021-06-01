@@ -49,12 +49,10 @@ public class MedicalUsable : UsableItem
 
                 if (_accumulatedTime >= _timeForFullEffect)
                 {
-                    
-
                     //TODO: Can enemies use these medkits or not?
                     //TODO: if they can this whole system will need to be reworked including the PlayerController/AIAgent classes
 
-                    _user.GetComponent<PlayerController>().RemoveUsable(this);
+                    _user.GetComponent<PlayerUI>().RemoveUsable(this);
                 }
 
             }

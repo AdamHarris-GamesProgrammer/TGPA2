@@ -40,7 +40,7 @@ public class DamageResistanceUsable : UsableItem
             if(_effectTimer > _effectDuration)
             {
                 _user.GetComponent<PlayerController>().UnequipStat(new StatValues(StatID.DAMAGE_RESISTANCE, _effectAmount));
-                _user.GetComponent<PlayerController>().RemoveUsable(this);
+                _user.GetComponent<PlayerUI>().RemoveUsable(this);
             }
         }
     }

@@ -14,6 +14,6 @@ public class DamageBuffItem : ActionItem
 
     public override void Use(GameObject user, int index)
     {
-        user.GetComponent<PlayerController>().AddUsable(new DamageResistanceUsable(user, _timeToApply, _duration, _damageBuffAmount));
+        user.GetComponent<PlayerUI>().AddUsable(new DamageResistanceUsable(user, _timeToApply, _duration, _damageBuffAmount));
     }
 }

@@ -12,12 +12,6 @@ namespace TGP.Control
 {
     public class PlayerController : MonoBehaviour, ISaveable
     {
-        [Header("Applying Text Settings")]
-        [SerializeField] GameObject _applyingHealthText = null;
-        [SerializeField] GameObject _applyingDamageText = null;
-        [SerializeField] GameObject _applyingResistanceText = null;
-        [SerializeField] GameObject _applyingSpeedText = null;
-
         [Header("Camera Settings")]
         [SerializeField] GameObject _aimCam;
         [SerializeField] GameObject _followCam;
@@ -128,8 +122,7 @@ namespace TGP.Control
 
         Inventory _playerInventory;
 
-        List<UsableItem> _usables;
-        List<UsableItem> _itemsToRemoveThisFrame;
+
 
 
         [SerializeField] StatValues[] _stats;
@@ -173,39 +166,16 @@ namespace TGP.Control
 
         //TODO: Implement these into damage calculations, movement calculations etc. 
 
-        public void AddUsable(UsableItem item)
-        {
-            _usables.Add(item);
 
-            switch (item.GetID())
-            {
-                case UsableID.MEDKIT:
-                    _applyingHealthText.SetActive(true);
-                    break;
-                case UsableID.DAMAGE:
-                    _applyingDamageText.SetActive(true);
-                    break;
-                case UsableID.RESISTANCE:
-                    _applyingResistanceText.SetActive(true);
-                    break;
-                case UsableID.SPEED:
-                    _applyingSpeedText.SetActive(true);
-                    break;
-            }
-        }
 
-        public void RemoveUsable(UsableItem item)
-        {
-            _itemsToRemoveThisFrame.Add(item);
-        }
+
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
             _actionSlots = GetComponent<ActionStore>();
             _playerInventory = GetComponent<Inventory>();
-            _usables = new List<UsableItem>();
-            _itemsToRemoveThisFrame = new List<UsableItem>();
+
             _chestInventory = GameObject.FindGameObjectWithTag("ChestCanvas");
             _chestInventory.SetActive(false);
 
@@ -244,47 +214,7 @@ namespace TGP.Control
             }
         }
 
-        private void InteractWithUsables()
-        {
-            foreach (UsableItem item in _usables)
-            {
-                item.Update(Time.deltaTime);
 
-                TimerText _timer = null;
-                switch (item.GetID())
-                {
-                    case UsableID.MEDKIT:
-                        _timer = _applyingHealthText.GetComponentInChildren<TimerText>();
-                        break;
-                    case UsableID.DAMAGE:
-                        _timer = _applyingDamageText.GetComponentInChildren<TimerText>();
-                        break;
-                    case UsableID.RESISTANCE:
-                        _timer = _applyingResistanceText.GetComponentInChildren<TimerText>();
-                        break;
-                    case UsableID.SPEED:
-                        _timer = _applyingSpeedText.GetComponentInChildren<TimerText>();
-                        break;
-                }
-
-                float remainingTime = item.GetApplyTimeRemaining();
-
-                _timer.SetTimer(remainingTime);
-
-                if (remainingTime <= 0.0f)
-                {
-                    _timer.gameObject.transform.parent.gameObject.SetActive(false);
-                }
-
-            }
-
-            foreach (UsableItem item in _itemsToRemoveThisFrame)
-            {
-                _usables.Remove(item);
-            }
-
-            _itemsToRemoveThisFrame.Clear();
-        }
 
         private void Update()
         {
@@ -295,9 +225,6 @@ namespace TGP.Control
             InteractWithActionBar();
 
             InteractWithLockedDoor();
-
-            InteractWithUsables();
-
         }
 
         private void InteractWithLockedDoor()
@@ -316,10 +243,8 @@ namespace TGP.Control
 
                         if (keycard) if (keycard.GetUnlockables() == doorID) _doorInRange.Unlock();
                     }
-
                 }
             }
-
         }
 
         private void InteractWithActionBar()

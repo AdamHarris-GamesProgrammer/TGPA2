@@ -13,6 +13,6 @@ public class MedKitItem : ActionItem
 
     public override void Use(GameObject user, int index)
     {
-        user.GetComponent<PlayerController>().AddUsable(new MedicalUsable(user, _timeToApply, _timeForFullEffect, _healingAmount));
+        user.GetComponent<PlayerUI>().AddUsable(new MedicalUsable(user, _timeToApply, _timeForFullEffect, _healingAmount));
     }
 }
