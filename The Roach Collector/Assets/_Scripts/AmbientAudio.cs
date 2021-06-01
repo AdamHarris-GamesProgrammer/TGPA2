@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AmbientAudio : MonoBehaviour
 {
-    AudioSource _audioSource;
+    [SerializeField] AudioSource _audioSource;
     [SerializeField] AudioClip _ambientSFX;
 
-    void Start()
+    void Awake()
     {
-        _audioSource = GetComponent<AudioSource>();
+        //_audioSource = GetComponent<AudioSource>();
         _audioSource.loop = true;
         _audioSource.Play();
         Debug.Log("Ambient Audio");

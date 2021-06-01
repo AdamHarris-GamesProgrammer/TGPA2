@@ -226,7 +226,7 @@ public class RaycastWeapon : MonoBehaviour
         {
             if(_timeSinceLastShot > _timeBetweenShots && !_isFiring)
             {
-                Debug.Log("Start Fire");
+               // Debug.Log("Start Fire");
                 _audioSoruce.PlayOneShot(_config.StartFire);
                 _isFiring = true;
             }
@@ -237,7 +237,7 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        Debug.Log("Stopping fire");
+        //Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
