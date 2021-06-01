@@ -16,16 +16,18 @@ public class ChestController : MonoBehaviour
 
     void Awake()
     {
+        //Get the players inventory
         _playerInventory = FindObjectOfType<ShowHideUI>().UIContainer;
-
     }
 
     void Update()
     {
         if(_inRange)
         {
+            //Do we want to open the chest
             if(Input.GetKeyDown(KeyCode.E))
             {
+                //Set is open to not is open, inverting the variable
                 _isOpen = !_isOpen;
 
                 Panels(_isOpen);
@@ -37,6 +39,7 @@ public class ChestController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //Get the Chest inventory from the player
             _chestInventory = FindObjectOfType<PlayerController>().ChestInventory;
             _inRange = true;
         }
@@ -46,6 +49,7 @@ public class ChestController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //No longer in range disable the panels
             _inRange = false;
             Panels(false);
         }
@@ -53,10 +57,11 @@ public class ChestController : MonoBehaviour
 
     void Panels(bool val)
     {
+        //Enable/Disable the panels
         _chestInventory.SetActive(val);
         _playerInventory.SetActive(val);
 
-
+        //Handle cursor and timescale issues
         if (!val)
         {
             Time.timeScale = 1;

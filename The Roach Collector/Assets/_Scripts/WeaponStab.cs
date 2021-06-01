@@ -27,18 +27,21 @@ public class WeaponStab : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //are we stabbing?
         _isStabbing = _wsCheck.GetStabbing();
 
+        //See if we are stabbing an agent
         AIAgent agent = collision.transform.GetComponentInParent<AIAgent>();
+
+        //if we are then the parent is the agent
         if (agent) _parent = agent.gameObject;
+        //if not then we are stabbing a player
         else _parent = _player;
 
         if (collision.transform.root != transform.root)
         {
-            if (_parent == _player) _attackedHealth = _parent.GetComponent<PlayerHealth>();
-            else _attackedHealth = _parent.GetComponent<AIHealth>();
-
-            if (_isStabbing) _attackedHealth.TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
+            //Get the health of the attacked object and deal damage
+            if (_isStabbing) _parent.GetComponent<Health>().TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
         }
         
     }

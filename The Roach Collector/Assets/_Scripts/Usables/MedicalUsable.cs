@@ -32,28 +32,28 @@ public class MedicalUsable : UsableItem
 
     public override void Update(float deltaTime)
     {
+        //Increment the apply timer
         _applyTimer += deltaTime;
 
-        //TODO: Add some kind of animation for applying bandages
         
         if(_applyTimer > _applyDuration)
         {
+            //Increment the full effect timer
             _fullEffectTimer += deltaTime;
 
             if(_fullEffectTimer > _timeBetweenHeals)
             {
+                //Reset the full effect timer
                 _fullEffectTimer = 0.0f;
+
+                //Increment the accumulated time
                 _accumulatedTime += _timeBetweenHeals;
 
+                //Heal by the amount of health this second
                 _user.GetComponent<Health>().Heal(_healingAmount / _steps);
 
-                if (_accumulatedTime >= _timeForFullEffect)
-                {
-                    //TODO: Can enemies use these medkits or not?
-                    //TODO: if they can this whole system will need to be reworked including the PlayerController/AIAgent classes
-
-                    _user.GetComponent<PlayerUI>().RemoveUsable(this);
-                }
+                //Remove this usable from the player if possible
+                if (_accumulatedTime >= _timeForFullEffect) _user.GetComponent<PlayerUI>().RemoveUsable(this);
 
             }
         }

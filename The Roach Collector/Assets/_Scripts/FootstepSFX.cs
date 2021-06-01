@@ -12,6 +12,7 @@ public class FootstepSFX : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
+    //Plays the footstep sound, called from animator event
     public void Footstep() {
         _audioSource.PlayOneShot(_footstepSFX);
     }

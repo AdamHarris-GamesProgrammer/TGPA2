@@ -8,6 +8,7 @@ public class EnableObjectOnTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Enables the object when the player is close
         if (other.CompareTag("Player"))
         {
             _objectToShow.SetActive(true);
@@ -16,6 +17,7 @@ public class EnableObjectOnTrigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        //Disables the object when the player is close
         if (other.CompareTag("Player"))
         {
             _objectToShow.SetActive(false);

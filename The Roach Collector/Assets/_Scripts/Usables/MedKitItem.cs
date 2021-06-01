@@ -13,6 +13,7 @@ public class MedKitItem : ActionItem
 
     public override void Use(GameObject user, int index)
     {
+        //Adds this item to the players ui and instantiates the usable object
         user.GetComponent<PlayerUI>().AddUsable(new MedicalUsable(user, _timeToApply, _timeForFullEffect, _healingAmount));
     }
 }

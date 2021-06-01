@@ -15,10 +15,10 @@ public class Flashlight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T)){
-            _flashlight.enabled = !_flashlight.enabled;
-        }    
+        //Enable/Disable the flashlight when T is pressed
+        if(Input.GetKeyDown(KeyCode.T)) _flashlight.enabled = !_flashlight.enabled;
 
+        //Rotates the flashlight based on where you are looking
         _flashlight.transform.forward = Camera.main.transform.forward;
     }
 }
