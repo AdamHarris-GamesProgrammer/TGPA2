@@ -18,6 +18,7 @@ public class HealthScreenEffect : MonoBehaviour
         {
             if(_currentMaterial == null)
             {
+                //Creates a new material based of our shader code
                 _currentMaterial = new Material(_currentShader);
                 _currentMaterial.hideFlags = HideFlags.HideAndDontSave;
             }
@@ -28,10 +29,7 @@ public class HealthScreenEffect : MonoBehaviour
 
     private void Start()
     {
-        if(_currentShader && !_currentShader.isSupported)
-        {
-            enabled = false;
-        }
+        if(_currentShader && !_currentShader.isSupported) enabled = false;
     }
 
 
@@ -39,22 +37,23 @@ public class HealthScreenEffect : MonoBehaviour
     {
         if(_currentShader != null)
         {
+            //Blits the screen with our texture overlay
             material.SetFloat("_LuminosityAmount", _greyScaleAmount);
             Graphics.Blit(source, destination, material);
         }
-        else
-        {
-            Graphics.Blit(source, destination);
-        }
+        //Blit the screen with no texture 
+        else Graphics.Blit(source, destination);
     }
 
     private void Update()
     {
+        //Clamp the greyscale amount
         _greyScaleAmount = Mathf.Clamp(_greyScaleAmount, 0.0f, 1.0f);
     }
 
     private void OnDisable()
     {
+        //Destroy the material asset
         if(_currentMaterial)
         {
             DestroyImmediate(_currentMaterial);

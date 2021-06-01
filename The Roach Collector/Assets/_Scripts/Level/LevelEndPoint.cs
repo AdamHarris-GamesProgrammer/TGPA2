@@ -8,17 +8,17 @@ using UnityEngine;
 /// </summary>
 public class LevelEndPoint : MonoBehaviour
 {
-    [SerializeField]private GameObject EndLevelUI;
-    [SerializeField]private GameObject InventoryUI;
-    [SerializeField]private GameObject Spotlight;
+    [SerializeField]private GameObject _endLevelUI;
+    [SerializeField]private GameObject _inventoryUI;
+    [SerializeField]private GameObject _spotlight;
     //[SerializeField]private bool isBossAlive;
 
     //on enter endpoint
     void OnTriggerEnter(Collider levelEndPoint)
     {
         
-        InventoryUI.GetComponent<Canvas>().enabled = false;
-        EndLevelUI.SetActive(true);
+        _inventoryUI.GetComponent<Canvas>().enabled = false;
+        _endLevelUI.SetActive(true);
         gameObject.SetActive(false);
         
     }
@@ -26,6 +26,6 @@ public class LevelEndPoint : MonoBehaviour
     //sets end level spotlight on
     public void SetSpotlight()
     {
-        Spotlight.SetActive(true);
+        _spotlight.SetActive(true);
     }
 }

@@ -7,7 +7,6 @@ public class PlayerUI : MonoBehaviour
 {
     [SerializeField] Text ammoTxt;
 
-    [SerializeField] GameObject _alarmText = null;
     [SerializeField] GameObject _unlockDoorPrompt = null;
     [SerializeField] GameObject _assassinationPrompt = null;
 
@@ -23,6 +22,7 @@ public class PlayerUI : MonoBehaviour
     List<UsableItem> _usables;
     List<UsableItem> _itemsToRemoveThisFrame;
 
+    //Adds a usable to be removed at the end of this frame
     public void RemoveUsable(UsableItem item)
     {
         _itemsToRemoveThisFrame.Add(item);
@@ -41,11 +41,6 @@ public class PlayerUI : MonoBehaviour
         ammoTxt.text = clip + " / " + (ammoLeft);
         if (ammoLeft > 0) ammoTxt.color = Color.white;
         else ammoTxt.color = Color.red;
-    }
-
-    public void DisplayAlarm(bool val)
-    {
-        _alarmText.SetActive(val);
     }
 
     public void DisplayDoorPrompt(bool val)
@@ -80,6 +75,7 @@ public class PlayerUI : MonoBehaviour
 
     public void AddUsable(UsableItem item)
     {
+        //Sets a applying text to be active
         _usables.Add(item);
 
         switch (item.GetID())
@@ -105,6 +101,7 @@ public class PlayerUI : MonoBehaviour
         {
             item.Update(Time.deltaTime);
 
+            //Used to update the timer
             TimerText _timer = null;
             switch (item.GetID())
             {
@@ -122,17 +119,18 @@ public class PlayerUI : MonoBehaviour
                     break;
             }
 
+            //Get the remaining time
             float remainingTime = item.GetApplyTimeRemaining();
 
+            //Updates the timer
             _timer.SetTimer(remainingTime);
 
-            if (remainingTime <= 0.0f)
-            {
-                _timer.gameObject.transform.parent.gameObject.SetActive(false);
-            }
+            //Disables the object when the time has ran out
+            if (remainingTime <= 0.0f) _timer.gameObject.transform.parent.gameObject.SetActive(false);
 
         }
 
+        //Removes the finished items from the usables list
         foreach (UsableItem item in _itemsToRemoveThisFrame)
         {
             _usables.Remove(item);

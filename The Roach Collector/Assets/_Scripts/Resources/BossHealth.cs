@@ -22,6 +22,7 @@ public class BossHealth : AIHealth
         _aiAgent.Aggrevate();
         
         if (_index == _healthStages.Length) return;
+        //check if we should advance to next stage 
         if(HealthRatio <= _healthStages[_index])
         {
             _index++;
