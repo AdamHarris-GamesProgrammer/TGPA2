@@ -59,13 +59,13 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     //goes to hideout
     public void GoToHideout() 
     {
-        SceneManager.LoadScene("Hideout");
+        FindObjectOfType<SceneLoader>().LoadLevel("Hideout");
     }
 
     //goes to main menu
     public void MainMenu() 
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
     }
 
     //reloads load from start
