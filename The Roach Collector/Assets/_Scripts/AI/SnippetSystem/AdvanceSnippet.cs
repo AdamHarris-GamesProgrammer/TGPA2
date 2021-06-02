@@ -15,7 +15,7 @@ public class AdvanceSnippet : CombatSnippet
 
     LastKnownLocation _lastKnownLocation;
 
-    float _stationaryDuration = 5.0f;
+    float _stationaryDuration = 15.0f;
     float _stationaryTimer = 0.0f;
 
     float _outOfViewTimer = 0.0f;
@@ -70,6 +70,15 @@ public class AdvanceSnippet : CombatSnippet
             {
                 //If we are not firing, then start firing
                 //if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
+
+                if (_fov.IsEnemyInFOV)
+                {
+                    if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
+                }
+                else
+                {
+                    if (_aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(false);
+                }
             }
         }
 
