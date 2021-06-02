@@ -8,16 +8,22 @@ public class DeathMenu : MonoBehaviour
 {
     public AudioSource _buttonClick;
 
-    //resets scene
-    public void Respawn()
+    private void OnEnable()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void OnDisable()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     //goes to hideout scene
     public void Hideout()
     {
-        SceneManager.LoadScene("HideOut");
+        SceneManager.LoadScene("Hideout");
     }
     
     //goes to main menu scene
