@@ -35,7 +35,7 @@ public class BrickAI : AIAgent
 
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIDeathState(this));
-        stateMachine.RegisterState(new AIIdleState(this));
+        stateMachine.RegisterState(new BrickAIIdleState(this));
         stateMachine.RegisterState(new AIMeleeState(this));
 
         if (_startingWeapon)
@@ -78,9 +78,6 @@ public class BrickAI : AIAgent
             _aiWeapon?.SetTarget(null);
         }
     }
-
-    //Changes the AI back to their default state
-    public void ReturnToDefaultState() => stateMachine.ChangeState(_initialState);
 
     public override void Aggrevate()
     {

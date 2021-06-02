@@ -11,7 +11,6 @@ public class BrickHealth : BossHealth
     {
         if(_index == 1)
         {
-            Debug.Log("Second Stage");
             foreach(AIAgent agent in _secondStageAgents)
             {
                 agent.gameObject.SetActive(true);
@@ -20,7 +19,6 @@ public class BrickHealth : BossHealth
         }
         else if (_index == 2)
         {
-            Debug.Log("Third Stage");
             foreach (AIAgent agent in _thirdStageAgents)
             {
                 agent.gameObject.SetActive(true);

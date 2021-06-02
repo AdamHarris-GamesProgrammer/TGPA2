@@ -72,7 +72,7 @@ public class AIWeapons : MonoBehaviour
             //Equip the weapon
             EquipWeapon(meleeweapon);
             //Change to melee state
-            GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
+            if(GetComponent<AIAgent>().Aggrevated) GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
 
         }
     }
@@ -110,7 +110,9 @@ public class AIWeapons : MonoBehaviour
             //Enables the collider
             _currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             //Adds a rigidbody
-            _currentWeapon.gameObject.AddComponent<Rigidbody>();
+            if (_currentWeapon.gameObject.GetComponent<Rigidbody>()) Destroy(_currentWeapon.gameObject);
+                
+                _currentWeapon.gameObject.AddComponent<Rigidbody>();
 
             NavMeshHit hit;
             NavMesh.SamplePosition(transform.position, out hit, 5.0f, ~0);

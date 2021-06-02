@@ -33,7 +33,6 @@ public class PlayerHealth : Health
         //Stops the Character from taking damage if they don't need to.
         if (_isDead) return;
         if (!_canBeHarmed) return;
-
         float resistance = 1.0f;
         switch (type)
         {

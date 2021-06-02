@@ -33,7 +33,7 @@ public class AdvanceSnippet : CombatSnippet
             //If we are not reloading, then reload the current gun
             if (!_aiWeapon.GetEquippedWeapon().IsReloading)
             {
-                Debug.Log("Reloading");
+                //Debug.Log("Reloading");
                 _aiWeapon.GetEquippedWeapon().Reload();
             }
 
@@ -78,11 +78,13 @@ public class AdvanceSnippet : CombatSnippet
             _outOfViewTimer += Time.deltaTime;
             if(_outOfViewTimer > 3.0f && _aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(false);
 
+            //Debug.Log("Advance snippet");
             if (_outOfViewTimer > _outOfViewDuration) _agent.stateMachine.ChangeState(AiStateId.SearchForPlayer);
         }
         else
         {
             _outOfViewTimer = 0.0f;
+            //Debug.Log("Player in FOV");
             if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
         }
     }
