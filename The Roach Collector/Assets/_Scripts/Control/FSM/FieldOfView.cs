@@ -102,7 +102,7 @@ public class FieldOfView : MonoBehaviour
                         else _detectedValue = _detectedStand;
 
                         //if the distance to the target is less than 1/8th of the radius then auto detect them
-                        if(DistanceToTarget <= (_viewRadius / 8))
+                        if(DistanceToTarget <= (_viewRadius / 8) || _playerGO.GetComponent<PlayerController>().InKillAnimation)
                         {
                             _visibleTargets.Add(targetTransform);
                             //Move the last known location 
