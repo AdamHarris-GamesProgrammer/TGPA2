@@ -36,7 +36,7 @@ public class BrickAI : AIAgent
         stateMachine = new AIStateMachine(this);
         stateMachine.RegisterState(new AIDeathState(this));
         stateMachine.RegisterState(new AIIdleState(this));
-        stateMachine.RegisterState(new AICombatState(this));
+        //stateMachine.RegisterState(new AICombatState(this));
         stateMachine.RegisterState(new AISearchForPlayerState(this));
         stateMachine.RegisterState(new AICheckPlayerState(this));
         stateMachine.RegisterState(new AIMeleeState(this));

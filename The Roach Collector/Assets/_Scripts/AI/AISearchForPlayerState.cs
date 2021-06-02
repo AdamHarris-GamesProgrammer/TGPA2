@@ -68,7 +68,7 @@ public class AISearchForPlayerState : AIState
     public void Update()
     {
         //If the player is in view then switch to combat 
-        if (_fov.IsEnemyInFOV) _agent.stateMachine.ChangeState(AiStateId.CombatState);
+        if (_fov.IsEnemyInFOV) _agent.Aggrevate();
 
 
         if(_navAgent.remainingDistance <= 1.5f)

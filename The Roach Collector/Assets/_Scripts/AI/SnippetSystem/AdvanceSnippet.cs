@@ -83,6 +83,7 @@ public class AdvanceSnippet : CombatSnippet
         else
         {
             _outOfViewTimer = 0.0f;
+            Debug.Log("Player in FOV");
             if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
         }
     }
