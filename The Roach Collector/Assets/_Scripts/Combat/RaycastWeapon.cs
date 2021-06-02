@@ -122,7 +122,7 @@ public class RaycastWeapon : MonoBehaviour
                 //Add in the new bullets
                 _totalAmmo += _clipAmmo;
 
-                Debug.Log("Bullet load");
+                //Debug.Log("Bullet load");
                 _audioSoruce.PlayOneShot(_config.BulletLoad);
 
 
@@ -140,11 +140,11 @@ public class RaycastWeapon : MonoBehaviour
 
                     RemoveAmmoFromInventory(_config.ClipSize);
                 }
-                Debug.Log("Magazine load");
+                //Debug.Log("Magazine load");
                 _audioSoruce.PlayOneShot(_config.MagazineLoad);
-                Debug.Log("Safety Switch");
+                //Debug.Log("Safety Switch");
                 _audioSoruce.PlayOneShot(_config.SafetySwitch);
-                Debug.Log("Cock Sound");
+                //Debug.Log("Cock Sound");
                 _audioSoruce.PlayOneShot(_config.CockSound);
 
                 _timeSinceLastShot = 1000.0f;
@@ -181,7 +181,7 @@ public class RaycastWeapon : MonoBehaviour
 
     Bullet CreateBullet(Vector3 position, Vector3 velocity)
     {
-        //Debug.Log(velocity);
+        ////Debug.Log(velocity);
         Bullet bullet = new Bullet(0.0f, position, velocity);
 
         bullet._tracer = Instantiate(_tracerEffect, position, Quaternion.identity);
@@ -213,20 +213,20 @@ public class RaycastWeapon : MonoBehaviour
         {
             if (_timeSinceLastShot > _timeBetweenShots)
             {
-                Debug.Log("Dry Fire");
+                //Debug.Log("Dry Fire");
                 _audioSoruce.PlayOneShot(_config.DryFire);
             }
             Reload();
         }
         else if (_isReloading)
         {
-            //Debug.Log("is reloading");
+            ////Debug.Log("is reloading");
         }
         else
         {
             if(_timeSinceLastShot > _timeBetweenShots && !_isFiring)
             {
-                Debug.Log("Start Fire");
+                //Debug.Log("Start Fire");
                 _audioSoruce.PlayOneShot(_config.StartFire);
                 _isFiring = true;
             }
@@ -237,12 +237,12 @@ public class RaycastWeapon : MonoBehaviour
 
     public void StopFiring()
     {
-        Debug.Log("Stopping fire");
+        //Debug.Log("Stopping fire");
         _isFiring = false;
 
         if(_config.EndFire != null)
         {
-            Debug.Log("Stop Fire");
+            //Debug.Log("Stop Fire");
             _audioSoruce.PlayOneShot(_config.EndFire);
         }
     }
@@ -280,7 +280,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if (!_isReloading)
         {
-            //Debug.Log("Magazine unload sound");
+            ////Debug.Log("Magazine unload sound");
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
@@ -299,7 +299,7 @@ public class RaycastWeapon : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _hitInfo, distance, _layerMask, QueryTriggerInteraction.Ignore))
         {
-            //Debug.Log("Hit: " + _hitInfo.transform.name);
+            ////Debug.Log("Hit: " + _hitInfo.transform.name);
 
             Rigidbody hitRb = _hitInfo.transform.gameObject.GetComponent<Rigidbody>();
             if (hitRb)
@@ -361,7 +361,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if(_timeSinceLastShot > _timeBetweenShots)
         {
-            //Debug.Log("passed fire rate");
+            ////Debug.Log("passed fire rate");
 
             _timeSinceLastShot = 0.0f;
             for (int i = 0; i < _config.BulletCount; i++)

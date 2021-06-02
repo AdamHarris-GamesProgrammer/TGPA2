@@ -133,4 +133,14 @@ public class AIWeapons : MonoBehaviour
 
         return _currentWeapon;
     }
+
+    void Stabbing()
+    {
+        GetComponent<WeaponStabCheck>().SetStabbing(true);
+    }
+
+    void NotStabbing()
+    {
+        GetComponent<WeaponStabCheck>().SetStabbing(false);
+    }
 }

@@ -9,7 +9,7 @@ using TGP.Control;
 public class AIAgent : MonoBehaviour
 {
     [Header("AI Settings")]
-    [SerializeField] AiStateId _initialState;
+    [SerializeField] protected AiStateId _initialState;
     public AIAgentConfig _config;
 
     [Header("Audio Settings")]
@@ -24,30 +24,30 @@ public class AIAgent : MonoBehaviour
     [SerializeField] private WeaponConfig _startingWeapon = null;
 
     [Header("Mask Settings")]
-    [SerializeField] private LayerMask _characterMask;
+    [SerializeField] protected LayerMask _characterMask;
 
     [Header("Debug Settings")]
-    [SerializeField] private AiStateId _currentState = AiStateId.Idle;
+    [SerializeField] protected AiStateId _currentState = AiStateId.Idle;
 
 
     public AIStateMachine stateMachine;
 
-    LastKnownLocation _lastKnownLocation;
+    protected LastKnownLocation _lastKnownLocation;
 
-    AudioSource _audioSource;
+    protected AudioSource _audioSource;
 
     static Transform _player;
-    AIWeapons _aiWeapon;
+    protected AIWeapons _aiWeapon;
 
-    Health _aiHealth;
+    protected Health _aiHealth;
 
-    bool _isAggrevated = false;
+    protected bool _isAggrevated = false;
 
-    CombatZone _owningZone;
-    bool _beingKilled = false;
+    protected CombatZone _owningZone;
+    protected bool _beingKilled = false;
 
 
-    float _defaultMoveSpeed = 5.4f;
+    protected float _defaultMoveSpeed = 5.4f;
 
     public LayerMask CharacterMask { get { return _characterMask; } }
     public float DefaultMoveSpeed { get { return _defaultMoveSpeed; } }
@@ -136,7 +136,7 @@ public class AIAgent : MonoBehaviour
     //Changes the AI back to their default state
     public void ReturnToDefaultState() => stateMachine.ChangeState(_initialState);
 
-    public void Aggrevate()
+    public virtual void Aggrevate()
     {
         if (_aiHealth.IsDead) return;
 
