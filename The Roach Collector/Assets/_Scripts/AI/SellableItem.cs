@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Harris.Inventories;
+
+[CreateAssetMenu(menuName ="InventorySystem/Sellable Item")]
 public class SellableItem : InventoryItem
 {
     [Header("Sellable Settings")]
