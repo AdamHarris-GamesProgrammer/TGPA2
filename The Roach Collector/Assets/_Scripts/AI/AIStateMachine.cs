@@ -26,7 +26,7 @@ public class AIStateMachine
         int index = (int)stateId;
 
         AIState state = states[index];
-        if(state == null) Debug.Log(stateId + " has not been registered to " + _agent.name);
+        //if(state == null) Debug.Log(stateId + " has not been registered to " + _agent.name);
 
         return states[index];
     }

@@ -40,16 +40,6 @@ public class BossHealth : AIHealth
 
     protected virtual void NextStage()
     {
-        //Debug.Log("Progressed to stage: " + _index);
-
-        //Example logic
-        //TankHealth.cs
-        //override NextStage
-        //if _index == 1
-            //Disable cover state
-            //switch to different animation logic?
-        //if _index == 2
-            //Enter charge mode
 
     }
 }
