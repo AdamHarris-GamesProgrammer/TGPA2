@@ -68,6 +68,7 @@ public class AICombatState : AIState
             }
         }
 
+
         //Debug.Log("Switching snippet to: " + newSnippet.ToString());
 
         //Switches to the new snippet
@@ -76,6 +77,7 @@ public class AICombatState : AIState
 
     private void SwitchSnippets(CombatSnippet newSnippet)
     {
+        if (_currentSnippet == newSnippet) return;
         _currentSnippet = newSnippet;
         if(_currentSnippet != null) _currentSnippet.EnterSnippet();
     }
