@@ -67,6 +67,7 @@ public class PlayerUI : MonoBehaviour
             {
                 Time.timeScale = 1;
                 _pauseUI.SetActive(false);
+                
             }
         }
 
