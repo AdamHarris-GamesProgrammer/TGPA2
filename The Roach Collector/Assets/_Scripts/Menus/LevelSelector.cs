@@ -101,10 +101,10 @@ public class LevelSelector : MonoBehaviour
         switch (levelID)
         {
             case 0:
-                SceneManager.LoadScene("Adam Tut");
+                SceneManager.LoadScene("Tutorial");
                 break;
             case 1:
-                SceneManager.LoadScene("Level02");
+                SceneManager.LoadScene("L1 Trailer Park");
                 break;
             case 2:
                 SceneManager.LoadScene("Level0" + levelID.ToString());
