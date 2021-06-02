@@ -9,20 +9,8 @@ namespace Harris.Inventories
     {
         [Tooltip("How far the pickups can be scattered from the dropper.")]
         [SerializeField] float _scatterDistance = 1.0f;
-        [SerializeField] DropLibrary _dropLibrary = null;
-        [SerializeField] int _numberOfDrops = 2;
 
         const int ATTEMPTS = 20;
-
-        public void RandomDrop()
-        {
-            var drops = _dropLibrary.GetRandomDrops();
-
-            foreach (var drop in drops)
-            {
-                DropItem(drop.item, drop.number);
-            }
-        }
 
         protected override Vector3 GetDropLocation()
         {

@@ -10,46 +10,37 @@ public class RoachPickup : MonoBehaviour, ISaveable
     bool _isPickedUp = false;
 
 
-    void Awake()
-    {
-        
-    }
-
     void Update()
     {
         if (_isPickedUp) return;
         if(_isInRange)
         {
+            //Are we trying to pick it up
             if(Input.GetKeyDown(KeyCode.E))
             {
+                //Gain 1 roach
                 FindObjectOfType<PlayerController>().GainRoach(1);
                 
+                //We have now picked up the roach
                 _isPickedUp = true;
 
+                //Disable all child game objects, making the roach invisible
                 foreach(Transform child in transform)
                 {
                     child.gameObject.SetActive(false);
                 }
-
-                //Destroy(gameObject);
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
-        {
-            _isInRange = true;
-        }    
+        if(other.CompareTag("Player")) _isInRange = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
-        {
-            _isInRange = false;
-        }
+        if(other.CompareTag("Player")) _isInRange = false;
     }
 
     public object Save()
@@ -61,13 +52,6 @@ public class RoachPickup : MonoBehaviour, ISaveable
     {
         _isPickedUp = (bool)state;
 
-        if(_isPickedUp)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-
-        }
+        if(_isPickedUp) Destroy(gameObject);
     }
 }

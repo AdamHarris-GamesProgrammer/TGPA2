@@ -34,18 +34,12 @@ public class SoundController : MonoBehaviour
         _isShooting = _player.IsShooting;
         _isStanding = _player.IsStanding;
 
-        if (_isShooting)
-        {
-            _currentRadius = Mathf.Lerp(_currentRadius, _gunSoundRadius, Time.deltaTime * 35.0f);
-        }
-        else if (_isStanding)
-        {
-            _currentRadius = Mathf.Lerp(_currentRadius, _walkSoundRadius, Time.deltaTime);
-        }
-        else if(!_isStanding)
-        {
-            _currentRadius = Mathf.Lerp(_currentRadius, _crouchSoundRadius, Time.deltaTime);
-        }
+        //if shooting then expand the radius rapidly
+        if (_isShooting) _currentRadius = Mathf.Lerp(_currentRadius, _gunSoundRadius, Time.deltaTime * 35.0f);
+        //if standing expand the radius slowly
+        else if (_isStanding) _currentRadius = Mathf.Lerp(_currentRadius, _walkSoundRadius, Time.deltaTime);
+        //if crouching expand/contract the radius slowly
+        else if(!_isStanding) _currentRadius = Mathf.Lerp(_currentRadius, _crouchSoundRadius, Time.deltaTime);
 
         _collider.radius = _currentRadius;
     }

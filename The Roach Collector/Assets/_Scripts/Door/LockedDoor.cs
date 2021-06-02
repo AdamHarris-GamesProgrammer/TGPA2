@@ -25,11 +25,13 @@ public class LockedDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Set the door in range for the player
         if (other.CompareTag("Player")) _player.DoorInRange = this;
     }
 
     private void OnTriggerExit(Collider other)
     {
+        //Remove the door in range for the player
         if (other.CompareTag("Player")) _player.DoorInRange = null;
     }
 
@@ -37,12 +39,14 @@ public class LockedDoor : MonoBehaviour
     {
         //TODO: Play unlocking sound
 
+        //Remove the door in range for the player
         _player.DoorInRange = null;
 
-        Debug.Log("Door Unlocked");
-
+        //Triggers the unlocking
         _isUnlocked = true;
+        //Plays the animation
         GetComponent<Animator>().SetTrigger("OpenDoor");
+        //Destroys component
         Destroy(this);
     }
 }

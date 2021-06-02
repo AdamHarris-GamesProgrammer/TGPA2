@@ -17,7 +17,10 @@ public class SellItemUI : MonoBehaviour
     }
 
     public void Setup(Sprite sprite, string name, SellableItem item, int quantity) {
+        //Set the items icon
         _itemSprite.sprite = sprite;
+
+        //Set the name value and quantity text.
         _itemName.text = name;
         _valueText.text = "Value: " + item.ItemValue.ToString("#0.00");
         _quantityText.text = "Quantity: " + quantity;
@@ -25,7 +28,6 @@ public class SellItemUI : MonoBehaviour
     }
 
     public void SelectItem() {
-        //TODO: Set this as the selected UI piece in the inventory 
         GetComponentInParent<SellItems>().SelectItem(_item);
     }
 }

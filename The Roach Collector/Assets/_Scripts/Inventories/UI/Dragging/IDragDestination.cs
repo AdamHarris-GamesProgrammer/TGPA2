@@ -8,7 +8,6 @@ namespace Harris.Core.UI.Dragging
     /// Components that implement this interfaces can act as the destination for
     /// dragging a `DragItem`.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public interface IDragDestination<T> where T : class
     {
         /// <summary>

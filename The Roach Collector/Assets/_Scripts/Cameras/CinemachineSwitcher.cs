@@ -5,31 +5,21 @@ using Cinemachine;
 
 public class CinemachineSwitcher : MonoBehaviour
 {
-
-    public CinemachineVirtualCamera laptopCam;
-    public CinemachineVirtualCamera followCam;
-    public CinemachineVirtualCamera aimCam;
-
-
-    public BoxCollider collider;
+    [Header("Laptop Camera")]
+    [SerializeField] CinemachineVirtualCamera laptopCam;
+    [Header("Player Cameras")]
+    [SerializeField] CinemachineVirtualCamera followCam;
+    [SerializeField] CinemachineVirtualCamera aimCam;
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player")){
-            Debug.Log("Opening Laptop");
-            SwitchCameraPriority(true);
-        }
-        
-
+        //Switches to laptop camera
+        if(other.CompareTag("Player")) SwitchCameraPriority(true);
     }
    private void  OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player")) {
-            SwitchCameraPriority(false);
-            Debug.Log("Exiting Laptop Collioder");
-        }
-        
-       
+        //Switches to follow camera
+        if(other.CompareTag("Player"))  SwitchCameraPriority(false);
     }
 
     private void SwitchCameraPriority(bool openLaptop)
@@ -43,9 +33,8 @@ public class CinemachineSwitcher : MonoBehaviour
             Cursor.lockState = CursorLockMode.Confined;
             
         }
-        else if(!openLaptop)
+        else
         {
-            //Debug.Log("Laptop Cursor lock");
             Cursor.visible = false;
             followCam.Priority = 1;
             aimCam.Priority = 1;
@@ -53,11 +42,4 @@ public class CinemachineSwitcher : MonoBehaviour
             
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-  
 }

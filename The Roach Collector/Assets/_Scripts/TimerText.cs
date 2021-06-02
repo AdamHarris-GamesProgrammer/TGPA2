@@ -14,6 +14,7 @@ public class TimerText : MonoBehaviour
 
     public void SetTimer(float val)
     {
+        //Sets the text for the timer
         _text.text = val.ToString("0.00");
     }
 }

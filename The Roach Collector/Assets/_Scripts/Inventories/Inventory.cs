@@ -125,6 +125,7 @@ namespace Harris.Inventories
 
         public static Inventory GetPlayerInventory()
         {
+            //Gets the inventory from the player
             var player = GameObject.FindWithTag("Player");
             if (!player) return null;
             return player.GetComponent<Inventory>();
@@ -132,27 +133,32 @@ namespace Harris.Inventories
 
         public bool HasSpaceFor(InventoryItem item)
         {
+            //Checks if we have space for a item
             return FindSlot(item) >= 0;
         }
 
         public int GetSize()
         {
+            //Gets the size of our inventory
             return _slots.Length;
         }
 
         public bool AddToFirstEmptySlot(InventoryItem item, int number)
         {
+            //finds a slot for our item
             int i = FindSlot(item);
 
+            //We dont have a slot
             if (i < 0)
             {
                 return false;
             }
 
+            //Sets the slot to the item
             _slots[i].item = item;
             _slots[i].number += number;
 
-            //Debug.Log(item.GetDisplayName() + " is placed in the " + i + "th slot");
+            //Updates the inventory
             if (InventoryUpdated != null)
             {
                 InventoryUpdated();
@@ -162,35 +168,37 @@ namespace Harris.Inventories
 
         public bool HasItem(InventoryItem item)
         {
+            //Cycles through our inventory and sees if we have an item
             for (int i = 0; i < _slots.Length; i++)
             {
-                if (object.ReferenceEquals(_slots[i].item, item))
-                {
-                    
-                    return true;
-                }
+                if (object.ReferenceEquals(_slots[i].item, item)) return true;
             }
             return false;
         }
 
         public InventoryItem GetItemInSlot(int slot)
         {
+            //Gets an item from a specified index
             return _slots[slot].item;
         }
 
         public int GetNumberInSlot(int slot)
         {
+            //Gets the number of items in the slot specified
             return _slots[slot].number;
         }
 
         public void RemoveFromSlot(int slot, int number)
         {
+            //Removes X amount of items from the slot
             _slots[slot].number -= number;
+            //Removes the item if the number is now less than 0
             if (_slots[slot].number <= 0)
             {
                 _slots[slot].number = 0;
                 _slots[slot].item = null;
             }
+            //Update the inventory
             if (InventoryUpdated != null)
             {
                 InventoryUpdated();
@@ -199,17 +207,23 @@ namespace Harris.Inventories
 
         public bool AddItemToSlot(int slot, InventoryItem item, int number)
         {
+            //if the slot has an item in it 
             if (_slots[slot].item != null)
             {
+                //Add to first empty slot instead (handles logic for items which already belong together)
                 return AddToFirstEmptySlot(item, number); ;
             }
 
+            //Finds the index for the item
             var i = FindStack(item);
+
+            //if we found a slot
             if (i >= 0)
             {
                 slot = i;
             }
 
+            //Set the slot to this item
             _slots[slot].item = item;
             _slots[slot].number += number;
             if (InventoryUpdated != null)
@@ -221,6 +235,7 @@ namespace Harris.Inventories
 
         public void WipeInventory()
         {
+            //Removes all items from the inventory
             int index = 0;
             foreach(InventorySlot slot in _slots)
             {
@@ -233,60 +248,61 @@ namespace Harris.Inventories
 
         public int FindItem(InventoryItem item)
         {
+            //Finds the index of an item
             int i = FindStack(item);
             if (i < 0)
             {
+                //there isnt a stack of this item so return a empty slot
                 i = FindEmptySlot();
             }
             return i;
         }
 
         public int Find(InventoryItem item) {
+            //Find the specified item in the inventory
             for (int i = 0; i < _slots.Length; i++)
             {
-                if (object.ReferenceEquals(_slots[i].item, item))
-                {
-                    return i;
-                }
+                //Check if the references match for the current item and the passed in item
+                if (object.ReferenceEquals(_slots[i].item, item)) return i;
             }
             return -1;
         }
-
+        //Find a slot for the item 
         private int FindSlot(InventoryItem item)
         {
+            //Find the index of the stack
             int i = FindStack(item);
             if (i < 0)
             {
+                //find an empty slot
                 i = FindEmptySlot();
             }
+            //return the index
             return i;
         }
 
+        //Finds an empty slot
         private int FindEmptySlot()
         {
+            //Cycles through the inventory and checks for a null slot
             for (int i = 0; i < _slots.Length; i++)
             {
-                if (_slots[i].item == null)
-                {
-                    return i;
-                }
+                //If the item is null then return this index
+                if (_slots[i].item == null) return i;
             }
             return -1;
         }
 
         private int FindStack(InventoryItem item)
         {
-            if (!item.IsStackable)
-            {
-                return -1;
-            }
+            //if the item is not stackable
+            if (!item.IsStackable) return -1;
 
+            //Cycle through the inventory
             for (int i = 0; i < _slots.Length; i++)
             {
-                if (object.ReferenceEquals(_slots[i].item, item))
-                {
-                    return i;
-                }
+                //if the references match, return i
+                if (object.ReferenceEquals(_slots[i].item, item)) return i;
             }
             return -1;
         }
@@ -295,7 +311,9 @@ namespace Harris.Inventories
         [System.Serializable]
         private struct InventorySlotRecord
         {
+            //Stores the id of the item
             public string itemID;
+            //Stores the amount of that item we have 
             public int number;
         }
     

@@ -230,6 +230,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         roachesCollected = data.roachesCollected;
     }
 
+    //when called sets isBossAlive
     public void SetBossAlive(bool isBossAlive)
     {
         _isBossAlive = isBossAlive;

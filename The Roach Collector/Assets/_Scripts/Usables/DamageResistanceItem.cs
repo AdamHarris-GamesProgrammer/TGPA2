@@ -14,6 +14,7 @@ public class DamageResistanceItem : ActionItem
 
     public override void Use(GameObject user, int index)
     {
-        user.GetComponent<PlayerController>().AddUsable(new DamageResistanceUsable(user, _timeToApply, _duration, _damageResistanceAmount));
+        //Adds this item to the players ui and instantiates the usable object
+        user.GetComponent<PlayerUI>().AddUsable(new DamageResistanceUsable(user, _timeToApply, _duration, _damageResistanceAmount));
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 public class Ragdoll : MonoBehaviour
 {
     Rigidbody[] _rigidbodies;
@@ -17,10 +18,11 @@ public class Ragdoll : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
 
+        //Gets all the rigidbodies in children
         var bodies = new HashSet<Rigidbody>(GetComponentsInChildren<Rigidbody>());
-
+        //Converts to an array
         _rigidbodies = bodies.ToArray();
-
+        //Deativates the ragdoll
         DeactivateRagdoll();
     }
 
@@ -28,16 +30,20 @@ public class Ragdoll : MonoBehaviour
     {
         if (_active)
         {
+            //Adds time to the timer
             _timer += Time.deltaTime;
 
+            //Checks the lifetime
             if(_timer > _lifeTime)
             {
+                //Cycles through each rigidbody and destroys the character joint and the rigidbody (CharacterJoint depends on rigidbody) 
                 foreach(var rb in _rigidbodies)
                 {
                     Destroy(rb.GetComponent<CharacterJoint>());
                     Destroy(rb);
                 }
 
+                //Destroys this component afterwards.
                 Destroy(this);
             }
         }
@@ -46,22 +52,19 @@ public class Ragdoll : MonoBehaviour
     public void DeactivateRagdoll()
     {
         _animator.enabled = true;
-        foreach(var rb in _rigidbodies)
-        {
-            rb.isKinematic = true;
-        }
+        //Makes all the rigidbodies kinematic, stopping them from reacting to gravity
+        System.Array.ForEach(_rigidbodies, rb => rb.isKinematic = true);
     }
 
     public void ActivateRagdoll()
     {
         _active = true;
-        //Debug.Log("Activating ragdoll");
+        //Disables the animator and lets physics take over
         _animator.enabled = false;
         foreach (var rb in _rigidbodies)
         {
-
-
             if (rb.gameObject.CompareTag("Enemy")) continue;
+            //The rigidbody can now react to physics
             rb.isKinematic = false;
         }
     }

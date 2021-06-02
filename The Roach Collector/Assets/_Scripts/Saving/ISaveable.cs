@@ -1,26 +1,11 @@
 namespace Harris.Saving
 {
-    /// <summary>
-    /// Implement in any component that has state to save/restore.
-    /// </summary>
     public interface ISaveable
     {
-        /// <summary>
-        /// Called when saving to capture the state of the component.
-        /// </summary>
-        /// <returns>
-        /// Return a `System.Serializable` object that represents the state of the
-        /// component.
-        /// </returns>
+        //Saves the data associated with a particular component
         object Save();
 
-        /// <summary>
-        /// Called when restoring the state of a scene.
-        /// </summary>
-        /// <param name="state">
-        /// The same `System.Serializable` object that was returned by
-        /// CaptureState when saving.
-        /// </param>
+        //Loads the data associated with a particular component
         void Load(object state);
     }
 }

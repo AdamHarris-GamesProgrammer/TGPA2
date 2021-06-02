@@ -27,7 +27,6 @@ public class PatrolState : AIState
 
         _waitDuration = waitDuration;
         _navAgent.speed = movementSpeed;
-
     }
 
     public void Enter()
@@ -49,18 +48,23 @@ public class PatrolState : AIState
 
     public void Update()
     {
+        //if the distance to the point is small
         if(_navAgent.remainingDistance <= 1.5f)
         {
+            //Start the wait timer
             _waitTimer += Time.deltaTime;
             if(_waitTimer > _waitDuration)
             {
+                //Reset the timer
                 _waitTimer = 0.0f;
 
+                //Move to the next index
                 _index = _route.CycleIndex(_index);
                 _navAgent.SetDestination(_route.GetNextPoint(_index));
             }
         }
 
+        //If player is seen or heard change to go to player location state
         if(_fov.IsEnemyInFOV || _soundPerception.IsHeard)
         {
             _agent.stateMachine.ChangeState(AiStateId.GotToPlayerLocation);

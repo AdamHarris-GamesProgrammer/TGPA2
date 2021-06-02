@@ -27,13 +27,8 @@ public class CrosshairTarget : MonoBehaviour
 
         if(Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hitInfo, 1000.0f, _mask, QueryTriggerInteraction.Ignore))
         {
+            //Moves the position of the target to what we hit
             transform.position = hitInfo.point;
-        }
-        else
-        {
-            //Debug.Log("Not hitting anything");
-            //Ensures the crosshair remains infront of the player at all angles
-            //transform.position = ray.origin + ray.direction * 1000.0f;
         }
     }
 }

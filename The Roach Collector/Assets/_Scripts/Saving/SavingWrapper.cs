@@ -6,23 +6,15 @@ using System;
 
 public class SavingWrapper : MonoBehaviour
 {
+#if UNITY_EDITOR
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Save();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Load();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            Delete();
-        }
+        //Development test keys
+        if (Input.GetKeyDown(KeyCode.O)) Save();
+        if (Input.GetKeyDown(KeyCode.L)) Load();
+        if (Input.GetKeyDown(KeyCode.Delete)) Delete();
     }
+#endif 
 
     private void Delete()
     {

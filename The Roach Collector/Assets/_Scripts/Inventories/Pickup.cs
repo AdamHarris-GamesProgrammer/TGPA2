@@ -18,12 +18,10 @@ namespace Harris.Inventories
 
         public void Setup(InventoryItem item, int number)
         {
-            this._item = item;
-            if (!item.IsStackable)
-            {
-                number = 1;
-            }
-            this._number = number;
+            //Sets up the basic information for a pickup
+            _item = item;
+            if (!item.IsStackable) number = 1;
+            _number = number;
         }
 
         public InventoryItem GetItem()
@@ -38,7 +36,9 @@ namespace Harris.Inventories
 
         public void PickupItem()
         {
+            //Adds the item to the first empty slot
             bool foundSlot = _inventory.AddToFirstEmptySlot(_item, _number);
+            //if we can pickup an item destroy this pickup object
             if (foundSlot)
             {
                 Destroy(gameObject);

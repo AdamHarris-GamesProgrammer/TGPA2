@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class LevelStats : MonoBehaviour
 {
-    private int score;
-    private int kills;
-    private float time;
-    private int roaches;
+    private int _score;
+    private int _kills;
+    private float _time;
+    private int _roaches;
 
     // On awake
     void Awake()
@@ -18,64 +18,73 @@ public class LevelStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime;
+        _time += Time.deltaTime;
     }
 
     //calculates final score at the end of the level
     public void EndLevelScoreCalc()
     {
         //no kill bonus (except boss)
-        if (kills == 1)
+        if (_kills == 1)
         {
-            score += 10000;
+            _score += 10000;
         }
-        Debug.Log(time%60);
+
         //time bonus
-        if (time < 60)
+        if (_time < 60)
         {
-            score += 50000;
+            _score += 50000;
         }
-        else if (time < 120)
+        else if (_time < 120)
         {
-            score += 25000;
+            _score += 25000;
         }
-        else if (time < 180)
+        else if (_time < 180)
         {
-            score += 10000;
+            _score += 10000;
         }
-        else if (time < 240)
+        else if (_time < 240)
         {
-            score += 5000;
+            _score += 5000;
         }
-        else if (time < 300)
+        else if (_time < 300)
         {
-            score += 1000;
+            _score += 1000;
         }
-        score += 5000 * roaches;
+
+        //roach token bonus
+        _score += 5000 * _roaches;
 
     }
 
+    //returns level score
     public int LevelScore
     {
-        get { return score; } 
+        get { return _score; } 
     }
+
+    //returns level time
     public float LevelTime
     {
-        get { return time; }
+        get { return _time; }
     }
+
+    //returns level kills
     public int LevelKills
     {
-        get { return kills; }
+        get { return _kills; }
     }
 
+    //runs each time an enemy in the level is killed
     public void AIDead(int killScore)
     {
-        score += killScore;
-        kills++;
+        _score += killScore;
+        _kills++;
     }
 
+    //add roach when collected
     public void AddRoach()
     {
-        roaches++;
+        _roaches++;
     }
 }

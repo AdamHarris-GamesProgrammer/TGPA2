@@ -17,8 +17,6 @@ public class CoverController : MonoBehaviour
 
     private void Awake()
     {
-        //TODO: Improve this for more complex covers which could have more points
-        //TODO: Dynamic cover points?
         _children[0] = transform.GetChild(0);    
         _children[1] = transform.GetChild(1);    
     }
@@ -31,12 +29,13 @@ public class CoverController : MonoBehaviour
     //No need to keep track of the actual enemy using the cover, just need the total amount using the cover;
     public void AddUser()
     {
+        //Adds a user to this cover
         _currentPopulation++;
-        //Debug.Log("Cover Population: " + _currentPopulation);
     }
 
     public void RemoveUser()
     {
+        //Removes a user from this cover
         _currentPopulation =  (int)Mathf.Clamp(_currentPopulation--, 0.0f, _capacity);
     }
 }

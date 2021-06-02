@@ -44,6 +44,7 @@ public class PlayerHealth : Health
                 resistance -= _player.GetStat(StatID.MELEE_RESISTANCE)._value;
                 break;
         }
+        //Calculates the amount of damage we take after our armors resistance
         amount *= resistance;
 
         base.TakeDamage(type, amount);
@@ -51,14 +52,17 @@ public class PlayerHealth : Health
 
     protected override void OnDeath()
     {
+        //Drops our wepaon
         _weapon.DropWeapon();
         _aiming.enabled = false;
 
+        //Disables our cameras
         GetComponent<PlayerController>().AimCam.SetActive(false);
         GetComponent<PlayerController>().FollowCam.SetActive(false);
 
-
+        //Sets the dying animation trigger
         _animator.SetTrigger("isDead");
+        //Enables the CRT camera and death screen
         _CRTCamera.SetActive(true);
         _deathScreenUI.SetActive(true);
     }

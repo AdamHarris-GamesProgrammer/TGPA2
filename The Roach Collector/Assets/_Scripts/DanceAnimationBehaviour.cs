@@ -11,7 +11,7 @@ public class DanceAnimationBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         PlyrController = animator.gameObject.GetComponent<PlayerController>();
-        PlyrController.isDancing = true;
+        PlyrController.IsDancing = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -23,7 +23,7 @@ public class DanceAnimationBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        PlyrController.isDancing = false;
+        PlyrController.IsDancing = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

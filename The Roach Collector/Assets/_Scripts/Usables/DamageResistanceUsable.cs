@@ -25,22 +25,28 @@ public class DamageResistanceUsable : UsableItem
 
     public override void Update(float deltaTime)
     {
+        //Increment the apply timer
         _applyTimer += deltaTime;
 
         if(_applyTimer > _applyDuration)
         {
+            //if not applied
             if(!_isApplied)
             {
+                //then apply
                 _isApplied = true;
+                //Add the stat to the player
                 _user.GetComponent<PlayerController>().EquipStat(new StatValues(StatID.DAMAGE_RESISTANCE, _effectAmount));
             }
 
+            //Increment the effect timer
             _effectTimer += Time.deltaTime;
 
             if(_effectTimer > _effectDuration)
             {
+                //Unequip the stat from the player
                 _user.GetComponent<PlayerController>().UnequipStat(new StatValues(StatID.DAMAGE_RESISTANCE, _effectAmount));
-                _user.GetComponent<PlayerController>().RemoveUsable(this);
+                _user.GetComponent<PlayerUI>().RemoveUsable(this);
             }
         }
     }

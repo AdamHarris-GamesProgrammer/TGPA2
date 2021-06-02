@@ -9,6 +9,7 @@ public class WeaponRecoil : MonoBehaviour
 
     void Awake()
     {
+        //Get the impulse source component
         _cameraShake = GetComponent<Cinemachine.CinemachineImpulseSource>();
     }
 
@@ -17,6 +18,7 @@ public class WeaponRecoil : MonoBehaviour
     {
         if (!gameObject.transform.IsChildOf(GameObject.FindGameObjectWithTag("Player").transform)) return;
 
+        //Generate the impulse for the recoil
         _cameraShake.GenerateImpulse(Camera.main.transform.forward);
     }
 }
