@@ -21,7 +21,7 @@ public class EnableObjectOnTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _objectToShow.SetActive(false);
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
     }
 }
