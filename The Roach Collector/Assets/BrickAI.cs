@@ -60,6 +60,7 @@ public class BrickAI : AIAgent
             //Change to death state, activates ragdoll and drops weapons
             stateMachine.ChangeState(AiStateId.Death);
 
+            _player.GetComponent<PlayerController>().AgentInRange = null;
             //Destroy the assassination target component and this ai agent component
             Destroy(GetComponentInChildren<AssassinationTarget>());
             Destroy(this);

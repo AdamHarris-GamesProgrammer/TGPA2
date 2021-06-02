@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TGP.Control;
 using UnityEngine;
 
 namespace Harris.UI
@@ -14,6 +15,7 @@ namespace Harris.UI
         [SerializeField] AudioClip _closeBackpackSound;
 
         PlayerHealth _playerHealth;
+        PlayerController _player;
 
         bool _isDisabled = false;
         public bool Disabled { get { return _isDisabled; } set { _isDisabled = value; } }
@@ -25,6 +27,7 @@ namespace Harris.UI
         {
             Cursor.lockState = CursorLockMode.Locked;
             _uiContainer.SetActive(false);
+            _player = FindObjectOfType<PlayerController>();
         }
 
         // Update is called once per frame
@@ -34,8 +37,11 @@ namespace Harris.UI
 
             if (Input.GetKeyDown(_toggleKey))
             {
+                _player.InInventory = !_uiContainer.activeSelf;
                 _uiContainer.SetActive(!_uiContainer.activeSelf);
-                if(UIGuideContainer != null)
+                
+
+                if (UIGuideContainer != null)
                 {
                     UIGuideContainer.SetActive(!_uiContainer.activeSelf);
                 }
