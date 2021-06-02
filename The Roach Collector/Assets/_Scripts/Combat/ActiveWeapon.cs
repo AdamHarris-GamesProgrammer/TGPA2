@@ -31,8 +31,6 @@ public class ActiveWeapon : MonoBehaviour
     Inventory _inventory;
     PlayerController _controller;
 
-    ShowHideUI _showHide;
-
     Animator _anim;
     private RaycastWeapon _weapon = null;
 
@@ -43,7 +41,6 @@ public class ActiveWeapon : MonoBehaviour
     {
         _PlayerUI = GetComponent<PlayerUI>();
         _controller = GetComponent<PlayerController>();
-        _showHide = FindObjectOfType<ShowHideUI>();
     }
 
 
