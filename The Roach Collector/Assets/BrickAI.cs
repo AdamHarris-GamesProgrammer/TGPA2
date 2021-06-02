@@ -38,6 +38,13 @@ public class BrickAI : AIAgent
         stateMachine.RegisterState(new AIIdleState(this));
         stateMachine.RegisterState(new AIMeleeState(this));
 
+        if (_startingWeapon)
+        {
+            RaycastWeapon weapon = Instantiate(_startingWeapon.Weapon);
+
+            _aiWeapon = GetComponent<AIWeapons>();
+            _aiWeapon.EquipWeapon(weapon);
+        }
 
         stateMachine.ChangeState(_initialState);
     }

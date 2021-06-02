@@ -5,10 +5,10 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Stabbing
+    second: Take 001
   - first:
       74: -203655887218126122
-    second: mixamo.com
+    second: Stabbing
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -38,7 +38,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Stabbing
+      name: Take 001
       takeName: Take 001
       internalID: 0
       firstFrame: 1
@@ -67,7 +67,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0.9
     - serializedVersion: 16
-      name: mixamo.com
+      name: Stabbing
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0

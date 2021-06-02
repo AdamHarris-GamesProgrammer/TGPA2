@@ -21,7 +21,7 @@ public class AIAgent : MonoBehaviour
     [SerializeField] float _waitAtEachPointDuration = 7.5f;
 
     [Header("Weapon Settings")]
-    [SerializeField] private WeaponConfig _startingWeapon = null;
+    [SerializeField] protected WeaponConfig _startingWeapon = null;
 
     [Header("Mask Settings")]
     [SerializeField] protected LayerMask _characterMask;

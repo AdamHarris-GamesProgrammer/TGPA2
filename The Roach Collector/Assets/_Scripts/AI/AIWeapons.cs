@@ -80,8 +80,8 @@ public class AIWeapons : MonoBehaviour
     public void SetFiring(bool enabled)
     {
         //Debug.Log("Set firing: " + enabled);
-        if (enabled) _currentWeapon.StartFiring();
-        else _currentWeapon.StopFiring();
+        if (enabled) _currentWeapon?.StartFiring();
+        else _currentWeapon?.StopFiring();
     }
 
     public void EquipWeapon(RaycastWeapon weapon)

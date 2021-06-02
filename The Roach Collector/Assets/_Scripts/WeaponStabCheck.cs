@@ -13,7 +13,6 @@ public class WeaponStabCheck : MonoBehaviour
 
     public bool GetStabbing()
     {
-        Debug.Log("Stabbing: " + _isStabbing);
         return _isStabbing;
     }
 }

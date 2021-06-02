@@ -1,14 +1,14 @@
 fileFormatVersion: 2
 guid: 81c5f52df017b9e439917ec1c889b0f6
 ModelImporter:
-  serializedVersion: 20200
+  serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
     second: Take 001
   - first:
       74: -203655887218126122
-    second: mixamo.com
+    second: StandToCrouch
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -67,7 +67,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 1.8
     - serializedVersion: 16
-      name: mixamo.com
+      name: StandToCrouch
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
@@ -742,7 +742,6 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
-  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
