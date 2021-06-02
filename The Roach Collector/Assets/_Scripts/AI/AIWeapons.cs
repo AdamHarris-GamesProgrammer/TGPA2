@@ -72,7 +72,7 @@ public class AIWeapons : MonoBehaviour
             //Equip the weapon
             EquipWeapon(meleeweapon);
             //Change to melee state
-            GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
+            if(GetComponent<AIAgent>().Aggrevated) GetComponent<AIAgent>().stateMachine.ChangeState(AiStateId.Melee);
 
         }
     }
@@ -136,13 +136,11 @@ public class AIWeapons : MonoBehaviour
 
     void Stabbing()
     {
-        Debug.Log("Stab");
         GetComponent<WeaponStabCheck>().SetStabbing(true);
     }
 
     void NotStabbing()
     {
-        Debug.Log("Not Stab");
         GetComponent<WeaponStabCheck>().SetStabbing(false);
     }
 }

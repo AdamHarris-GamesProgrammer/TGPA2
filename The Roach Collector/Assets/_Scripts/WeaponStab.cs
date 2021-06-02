@@ -33,7 +33,7 @@ public class WeaponStab : MonoBehaviour
         if (_attacked)
         {
             _attackTimer += Time.deltaTime;
-            if(_attackTimer > _attackDuration)
+            if (_attackTimer > _attackDuration)
             {
                 _attackTimer = 0.0f;
                 _attacked = false;
@@ -64,6 +64,7 @@ public class WeaponStab : MonoBehaviour
         {
             _parent = _player;
             _attackedHealth = _player.GetComponent<Health>();
+            if (!collision.gameObject.CompareTag("Player")) return;
         }
 
         //Get the health of the attacked object and deal damage
