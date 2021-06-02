@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Harris.Inventories;
 using TGP.Control;
+using Harris.UI;
 
 #if UNITY_EDITOR
 using UnityEditor.Animations;
@@ -30,6 +31,8 @@ public class ActiveWeapon : MonoBehaviour
     Inventory _inventory;
     PlayerController _controller;
 
+    ShowHideUI _showHide;
+
     Animator _anim;
     private RaycastWeapon _weapon = null;
 
@@ -40,6 +43,7 @@ public class ActiveWeapon : MonoBehaviour
     {
         _PlayerUI = GetComponent<PlayerUI>();
         _controller = GetComponent<PlayerController>();
+        _showHide = FindObjectOfType<ShowHideUI>();
     }
 
 
@@ -167,7 +171,7 @@ public class ActiveWeapon : MonoBehaviour
         if (_weapon.Config.IsAutomatic)
         {
             //Starts and stops firing based on the FIre1 button
-            if (Input.GetButtonDown("Fire1"))
+            if (!_controller.InInventory && Input.GetButtonDown("Fire1"))
             {
                 _weapon.StartFiring();
                 _controller.IsShooting = true;
@@ -188,7 +192,7 @@ public class ActiveWeapon : MonoBehaviour
         else
         {
             //Shoot
-            if (Input.GetButtonDown("Fire1"))
+            if (!_controller.InInventory && Input.GetButtonDown("Fire1"))
             {
                 //Start firing
                 _weapon.StartFiring();
