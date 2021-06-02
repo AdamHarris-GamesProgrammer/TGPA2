@@ -27,6 +27,10 @@ public class BuyItems : MonoBehaviour
     [SerializeField] Text _itemDescriptionText;
     [SerializeField] Text _playerCash;
 
+    //The quantity slider
+    [SerializeField] Slider _quantitySlider;
+    
+
     public List<BuyableItem> Items { get { return _items; } }
 
     Inventory _playerInventory;
@@ -88,15 +92,16 @@ public class BuyItems : MonoBehaviour
         {
             //Get the item
             BuyableItem item = _selectedList[_selectedItem.Index];
+            int quantity = (int)_quantitySlider.value;
 
             //Check the player has enough money
-            if (_player.HasEnoughMoney(item._price))
+            if (_player.HasEnoughMoney(item._price * quantity))
             {
                 //Spend the money
-                _player.SpendMoney(item._price);
+                _player.SpendMoney(item._price * quantity);
 
                 //Add the item to the first empty slot
-                _playerInventory.AddToFirstEmptySlot(item._item, item._quantity);
+                _playerInventory.AddToFirstEmptySlot(item._item, item._quantity * quantity);
             }
 
             _playerCash.text = "Your cash: " + _player.Cash.ToString("#0.00");

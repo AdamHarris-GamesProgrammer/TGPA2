@@ -19,6 +19,9 @@ public class SellItems : MonoBehaviour
 
     List<SellableItem> _sellables;
 
+    //The quantity slider
+    [SerializeField] Slider _quantitySlider;
+
     SellableItem _selectedItem = null;
 
     void Awake()
@@ -85,17 +88,35 @@ public class SellItems : MonoBehaviour
     {
         if (_selectedItem != null)
         {
-            //Give the player money
-            _player.GainMoney(_selectedItem.ItemValue);
+            int quantity = (int)_quantitySlider.value;
+           
 
             //Find the index of the item
             int index = _playerInventoy.Find(_selectedItem);
 
-            //Remove one of that item from the player
-            _playerInventoy.RemoveFromSlot(index, 1);
+            int quantityOfItems = _playerInventoy.GetInventorySlot(index).number;
 
-            //Remove the item from sellables
-            if (_playerInventoy.GetInventorySlot(index).number == 0) _sellables.Remove(_selectedItem);
+            if (quantityOfItems >= quantity)
+            {
+                //Give the player money
+                _player.GainMoney(_selectedItem.ItemValue * quantity);
+                //Remove one of that item from the player
+                _playerInventoy.RemoveFromSlot(index, quantity);
+
+                //Remove the item from sellables
+                if (_playerInventoy.GetInventorySlot(index).number == 0) _sellables.Remove(_selectedItem);
+            }
+            else
+            {
+                int reAdjustSlider = _playerInventoy.GetInventorySlot(index).number;
+                _quantitySlider.maxValue = reAdjustSlider;
+            }
+
+            
+
+            
+
+           
 
             //Load the items
             LoadItems();
