@@ -53,7 +53,7 @@ public class AICombatState : AIState
     {
         //Stores the highest score
         int highestScore = 0;
-        CombatSnippet newSnippet = null;
+        CombatSnippet newSnippet = _combatBehaviours[0];
 
         //Cycles through each snippet and evaluates them
         foreach (CombatSnippet behavior in _combatBehaviours)
@@ -67,6 +67,8 @@ public class AICombatState : AIState
                 newSnippet = behavior;
             }
         }
+
+        //Debug.Log("Switching snippet to: " + newSnippet.ToString());
 
         //Switches to the new snippet
         SwitchSnippets(newSnippet);

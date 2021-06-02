@@ -22,6 +22,7 @@ public class Ragdoll : MonoBehaviour
         var bodies = new HashSet<Rigidbody>(GetComponentsInChildren<Rigidbody>());
         //Converts to an array
         _rigidbodies = bodies.ToArray();
+        if(gameObject.name == "Brick") Debug.Log(_rigidbodies.Length);
         //Deativates the ragdoll
         DeactivateRagdoll();
     }
@@ -39,10 +40,11 @@ public class Ragdoll : MonoBehaviour
                 //Cycles through each rigidbody and destroys the character joint and the rigidbody (CharacterJoint depends on rigidbody) 
                 foreach(var rb in _rigidbodies)
                 {
+                    if (rb == null) continue;
                     Destroy(rb.GetComponent<CharacterJoint>());
                     Destroy(rb);
                 }
-
+                
                 //Destroys this component afterwards.
                 Destroy(this);
             }
@@ -58,11 +60,15 @@ public class Ragdoll : MonoBehaviour
 
     public void ActivateRagdoll()
     {
+        if (_active) return;
         _active = true;
         //Disables the animator and lets physics take over
         _animator.enabled = false;
+        Debug.Log(_rigidbodies.Length);
         foreach (var rb in _rigidbodies)
         {
+            if (rb == null) continue;
+
             if (rb.gameObject.CompareTag("Enemy")) continue;
             //The rigidbody can now react to physics
             rb.isKinematic = false;

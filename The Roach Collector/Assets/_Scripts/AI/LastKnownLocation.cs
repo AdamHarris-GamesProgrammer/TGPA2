@@ -26,6 +26,7 @@ public class LastKnownLocation : MonoBehaviour
         {
             //Don't add the enemy if the there dead
             if (enemy.Health.IsDead) continue;
+            if (enemy.Aggrevated) continue;
 
             //Check if the enemy is within distance and add them to the list if they are
             if (Vector3.Distance(transform.position, enemy.transform.position) < distance) agentsInDistance.Add(enemy);

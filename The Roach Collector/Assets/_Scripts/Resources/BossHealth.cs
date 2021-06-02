@@ -25,7 +25,6 @@ public class BossHealth : AIHealth
         //check if we should advance to next stage 
         if(HealthRatio <= _healthStages[_index])
         {
-            Debug.Log("Next Stage");
             _index++;
             NextStage();
         }
