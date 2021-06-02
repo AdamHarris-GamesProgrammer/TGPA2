@@ -232,15 +232,17 @@ public class ActiveWeapon : MonoBehaviour
             _isStabbing = true;
             _anim.SetTrigger("Stab");
         }
+    }
 
-        //Get the current animator state and check if the stab animation is playing
-        AnimatorStateInfo animatorStateInfo = _anim.GetCurrentAnimatorStateInfo(0);
-        if (animatorStateInfo.IsName("Stabbing") && animatorStateInfo.length > animatorStateInfo.normalizedTime)
-            GetComponent<WeaponStabCheck>().SetStabbing(true);
-        else
-        {
-            GetComponent<WeaponStabCheck>().SetStabbing(false);
-            _isStabbing = false;
-        }
+    void Stabbing()
+    {
+        _isStabbing = true;
+        GetComponent<WeaponStabCheck>().SetStabbing(true);
+    }
+
+    void NotStabbing()
+    {
+        _isStabbing = false;
+        GetComponent<WeaponStabCheck>().SetStabbing(false);
     }
 }

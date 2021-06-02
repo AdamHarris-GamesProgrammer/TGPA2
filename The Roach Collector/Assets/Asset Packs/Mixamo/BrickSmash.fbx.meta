@@ -1,14 +1,11 @@
 fileFormatVersion: 2
-guid: 37e7c288bbece614aaecd9d0d40209d0
+guid: 76c7a3fa8c6fcfc488f602f6ec21f4af
 ModelImporter:
   serializedVersion: 20101
   internalIDToNameTable:
   - first:
-      74: 1827226128182048838
-    second: BrutalResponse
-  - first:
       74: -203655887218126122
-    second: mixamo.com
+    second: BrickSmash
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -24,9 +21,9 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
       copied configuration does not match position in animation file:\n\t'UpperLeg_L'
-      : position error = 10982.578125 mm\n\t'LowerLeg_L' : position error = 39682.527344
-      mm\n\t'Ankle_L' : position error = 37477.734375 mm\n\t'Ball_L' : position error
-      = 11213.839844 mm\n"
+      : position error = 10982.583008 mm\n\t'LowerLeg_L' : position error = 39682.507813
+      mm\n\t'Ankle_L' : position error = 37477.707031 mm\n\t'Ball_L' : position error
+      = 11213.806641 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -42,40 +39,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: BrutalResponse
-      takeName: Take 001
-      internalID: 0
-      firstFrame: 1
-      lastFrame: 24
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: mixamo.com
+      name: BrickSmash
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 148
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
