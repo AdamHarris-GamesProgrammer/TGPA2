@@ -67,7 +67,7 @@ public class FieldOfView : MonoBehaviour
         }
 
         //Add the value to the detection timer
-        if(_hasTimerStarted) _detectionTimer = Mathf.Min(_detectionTimer + Time.deltaTime, 5.0f);
+        if(_hasTimerStarted) _detectionTimer = Mathf.Min(_detectionTimer += Time.deltaTime, 5.0f);
         else _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
 
     }
@@ -80,6 +80,8 @@ public class FieldOfView : MonoBehaviour
         //Find all the colliders in the target layer
         Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
         //Cycle through them all
+
+        bool playerSpotted = false;
         foreach (Collider target in TargetsInRadius)
         {
             Transform targetTransform = target.transform;
@@ -91,9 +93,9 @@ public class FieldOfView : MonoBehaviour
                 float DistanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
 
                 RaycastHit hitInfo;
-         
+
                 //Check if we are visible
-                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, ~0))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, ~0, QueryTriggerInteraction.Ignore))
                 {
                     //Draw a line to them
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
@@ -112,6 +114,7 @@ public class FieldOfView : MonoBehaviour
                             return;
                         }
 
+                        playerSpotted = true;
                         _hasTimerStarted = true;
 
                         if (_detectionTimer > _detectedValue)
@@ -124,12 +127,13 @@ public class FieldOfView : MonoBehaviour
                     else
                     {
                         //Debug.Log(hitInfo.collider.tag);
-                        _hasTimerStarted = false;
+                        if(!playerSpotted) _hasTimerStarted = false;
                     }
                 }
 
             }
         }
+        playerSpotted = false;
 
     }
 
