@@ -68,12 +68,6 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
     }
 
-    //reloads load from start
-    public void Retry()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
-    }
-
     void Start()
     {
         //Loads level data
