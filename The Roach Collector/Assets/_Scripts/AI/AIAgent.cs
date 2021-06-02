@@ -144,6 +144,26 @@ public class AIAgent : MonoBehaviour
         _lastKnownLocation.transform.position = _player.position;
 
         _isAggrevated = true;
+
+        if (stateMachine == null)
+        {
+            stateMachine = new AIStateMachine(this);
+            stateMachine.RegisterState(new AIDeathState(this));
+            stateMachine.RegisterState(new AIIdleState(this));
+            stateMachine.RegisterState(new AICombatState(this));
+            stateMachine.RegisterState(new AISearchForPlayerState(this));
+            stateMachine.RegisterState(new AICheckPlayerState(this));
+            stateMachine.RegisterState(new AIMeleeState(this));
+
+            if (_startingWeapon)
+            {
+                RaycastWeapon weapon = Instantiate(_startingWeapon.Weapon);
+
+                _aiWeapon = GetComponent<AIWeapons>();
+                _aiWeapon.EquipWeapon(weapon);
+            }
+        }
+
         stateMachine.ChangeState(AiStateId.CombatState);
 
     }

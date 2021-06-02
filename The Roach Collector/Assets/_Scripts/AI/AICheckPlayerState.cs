@@ -90,7 +90,7 @@ public class AICheckPlayerState : AIState
 
         //Sees if the player is in the agents FOV, if so then switch all allies to combat state
         if (_agent.GetComponent<FieldOfView>().IsEnemyInFOV)
-            agents.ForEach(ally => ally.stateMachine.ChangeState(AiStateId.CombatState));
+            agents.ForEach(ally => ally.Aggrevate());
     }
 
 

@@ -93,7 +93,7 @@ public class FieldOfView : MonoBehaviour
                 RaycastHit hitInfo;
          
                 //Check if we are visible
-                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, _targetMask))
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, ~0))
                 {
                     //Draw a line to them
                     Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.green);
@@ -123,7 +123,7 @@ public class FieldOfView : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(hitInfo.collider.tag);
+                        //Debug.Log(hitInfo.collider.tag);
                         _hasTimerStarted = false;
                     }
                 }

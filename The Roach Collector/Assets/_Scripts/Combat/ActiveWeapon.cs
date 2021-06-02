@@ -113,20 +113,17 @@ public class ActiveWeapon : MonoBehaviour
         //if we currently have a weapon
         if (_weapon)
         {
-            if (!_weapon.IsMelee)
+            //Check if we have the ammo
+            if (_inventory.HasItem(_weapon.Config.AmmoType))
             {
-                //Check if we have the ammo
-                if (_inventory.HasItem(_weapon.Config.AmmoType))
-                {
-                    //Find the slot that the weapon is in, add the weapon to the inventory
-                    int index = _inventory.FindItem(_weapon.Config.AmmoType);
-                    _inventory.AddItemToSlot(index, _weapon.Config.AmmoType, _weapon.ClipAmmo);
-                }
-                //if we do not have the ammo in our inventory then add it to the first empty slot
-                else _inventory.AddToFirstEmptySlot(_weapon.Config.AmmoType, _weapon.ClipAmmo);
-
-                //Destroy the weapon we have
+                //Find the slot that the weapon is in, add the weapon to the inventory
+                int index = _inventory.FindItem(_weapon.Config.AmmoType);
+                _inventory.AddItemToSlot(index, _weapon.Config.AmmoType, _weapon.ClipAmmo);
             }
+            //if we do not have the ammo in our inventory then add it to the first empty slot
+            else _inventory.AddToFirstEmptySlot(_weapon.Config.AmmoType, _weapon.ClipAmmo);
+
+            //Destroy the weapon we have
             Destroy(_weapon.gameObject);
         }
 

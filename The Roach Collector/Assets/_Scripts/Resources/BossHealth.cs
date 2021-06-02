@@ -25,7 +25,6 @@ public class BossHealth : AIHealth
         //check if we should advance to next stage 
         if(HealthRatio <= _healthStages[_index])
         {
-            Debug.Log("Next Stage");
             _index++;
             NextStage();
         }
@@ -40,16 +39,6 @@ public class BossHealth : AIHealth
 
     protected virtual void NextStage()
     {
-        //Debug.Log("Progressed to stage: " + _index);
-
-        //Example logic
-        //TankHealth.cs
-        //override NextStage
-        //if _index == 1
-            //Disable cover state
-            //switch to different animation logic?
-        //if _index == 2
-            //Enter charge mode
 
     }
 }
