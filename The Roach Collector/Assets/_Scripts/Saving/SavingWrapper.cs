@@ -18,16 +18,16 @@ public class SavingWrapper : MonoBehaviour
 
     private void Delete()
     {
-        GetComponent<SavingSystem>().Delete(Application.persistentDataPath + "save.sav");
+        GetComponent<SavingSystem>().Delete("save.sav");
     }
 
     public void Save()
     {
-        GetComponent<SavingSystem>().Save(Application.persistentDataPath + "save.sav");
+        GetComponent<SavingSystem>().Save("save.sav");
     }
 
     public void Load()
     {
-        GetComponent<SavingSystem>().Load(Application.persistentDataPath + "save.sav");
+        GetComponent<SavingSystem>().Load("save.sav");
     }
 }

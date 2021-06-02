@@ -77,7 +77,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     void Start()
     {
         //Loads level data
-        FindObjectOfType<SavingWrapper>().Load();
+        //FindObjectOfType<SavingWrapper>().Load();
 
         Time.timeScale = 0;
 
@@ -92,7 +92,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         CheckRank();
 
         //saves level data
-        FindObjectOfType<SavingWrapper>().Save();
+        //FindObjectOfType<SavingWrapper>().Save();
     }
 
     //sets level name

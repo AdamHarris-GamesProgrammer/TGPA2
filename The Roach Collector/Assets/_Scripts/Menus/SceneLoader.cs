@@ -34,7 +34,6 @@ public class SceneLoader : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         //Saves the game
-        //Debug.Log("Saving From SceneLoader.cs");
         FindObjectOfType<SavingWrapper>().Save();
         //Loads the new scene
         UnityEngine.SceneManagement.SceneManager.LoadScene(name);

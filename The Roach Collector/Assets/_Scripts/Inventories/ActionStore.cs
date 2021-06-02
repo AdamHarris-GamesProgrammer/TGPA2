@@ -173,6 +173,10 @@ namespace Harris.Inventories
             var state = new Dictionary<int, DockedItemRecord>();
             foreach (var pair in _dockedItems)
             {
+                if (pair.Value.item == null) continue;
+
+                Debug.Log(pair.Value.item.Name);
+
                 var record = new DockedItemRecord();
                 record.itemID = pair.Value.item.ItemID;
                 record.number = pair.Value.number;

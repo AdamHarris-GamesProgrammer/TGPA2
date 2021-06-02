@@ -104,7 +104,7 @@ public class LevelSelector : MonoBehaviour
                 SceneManager.LoadScene("Tutorial");
                 break;
             case 1:
-                SceneManager.LoadScene("L1 Trailer Park");
+                FindObjectOfType<SceneLoader>().LoadLevel("L1 Trailer Park");
                 break;
             case 2:
                 SceneManager.LoadScene("Level0" + levelID.ToString());
