@@ -26,6 +26,7 @@ public class FieldOfView : MonoBehaviour
     bool _hasTimerStarted = false;
 
     private GameObject _playerGO;
+    private PlayerController _playerController;
     CharacterLocomotion _charLocomotion;
 
     //Says if the player is currently in the AI's FOV
@@ -39,6 +40,7 @@ public class FieldOfView : MonoBehaviour
     private void Start()
     {
         _playerGO = GameObject.FindGameObjectWithTag("Player");
+        _playerController = _playerGO.GetComponent<PlayerController>();
         _charLocomotion = _playerGO.GetComponent<CharacterLocomotion>();
         _aiHealth = GetComponent<Health>();
         _lastKnownLocation = FindObjectOfType<LastKnownLocation>();
@@ -101,8 +103,8 @@ public class FieldOfView : MonoBehaviour
                         if(_charLocomotion.IsCrouching) _detectedValue = _detectedCrouch;
                         else _detectedValue = _detectedStand;
 
-                        //if the distance to the target is less than 1/8th of the radius then auto detect them
-                        if(DistanceToTarget <= (_viewRadius / 8))
+                        //if the distance to the target is less than 1/8th of the radius then auto detect them. Also checks if someone is getting executed infront of them and instantly detects them.
+                        if(DistanceToTarget <= (_viewRadius / 8) || _playerController.InKillAnimation)
                         {
                             _visibleTargets.Add(targetTransform);
                             //Move the last known location 

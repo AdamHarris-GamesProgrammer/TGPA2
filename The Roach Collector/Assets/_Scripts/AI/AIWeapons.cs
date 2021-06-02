@@ -80,8 +80,8 @@ public class AIWeapons : MonoBehaviour
     public void SetFiring(bool enabled)
     {
         //Debug.Log("Set firing: " + enabled);
-        if (enabled) _currentWeapon.StartFiring();
-        else _currentWeapon.StopFiring();
+        if (enabled) _currentWeapon?.StartFiring();
+        else _currentWeapon?.StopFiring();
     }
 
     public void EquipWeapon(RaycastWeapon weapon)
@@ -132,5 +132,15 @@ public class AIWeapons : MonoBehaviour
         if(_currentWeapon == null) Debug.Log("Equipped Weapon Is Null");
 
         return _currentWeapon;
+    }
+
+    void Stabbing()
+    {
+        GetComponent<WeaponStabCheck>().SetStabbing(true);
+    }
+
+    void NotStabbing()
+    {
+        GetComponent<WeaponStabCheck>().SetStabbing(false);
     }
 }
