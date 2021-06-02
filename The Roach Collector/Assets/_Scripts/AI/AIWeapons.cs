@@ -136,11 +136,13 @@ public class AIWeapons : MonoBehaviour
 
     void Stabbing()
     {
+        Debug.Log("Stab");
         GetComponent<WeaponStabCheck>().SetStabbing(true);
     }
 
     void NotStabbing()
     {
+        Debug.Log("Not Stab");
         GetComponent<WeaponStabCheck>().SetStabbing(false);
     }
 }

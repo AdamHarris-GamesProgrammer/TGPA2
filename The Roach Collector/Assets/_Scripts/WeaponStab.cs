@@ -14,13 +14,12 @@ public class WeaponStab : MonoBehaviour
     [SerializeField] WeaponConfig _meleeConfig;
 
 
-    private void Awake()
+    private void Start()
     {
-        _player =  FindObjectOfType<PlayerController>().gameObject;
+        _player = FindObjectOfType<PlayerController>().gameObject;
 
-        AIAgent agent = GetComponentInParent<AIAgent>();
-        if (agent) _wsCheck = agent.GetComponent<WeaponStabCheck>();
-        else _wsCheck = _player.GetComponent<WeaponStabCheck>();
+        if (transform.root.name == "Core") _wsCheck = _player.GetComponent<WeaponStabCheck>();
+        else _wsCheck = GetComponentInParent<WeaponStabCheck>();
 
     }
 
@@ -34,15 +33,29 @@ public class WeaponStab : MonoBehaviour
         AIAgent agent = collision.transform.GetComponentInParent<AIAgent>();
 
         //if we are then the parent is the agent
-        if (agent) _parent = agent.gameObject;
-        //if not then we are stabbing a player
-        else _parent = _player;
+        if (agent)
+        {
+            _parent = agent.gameObject;
+            _attackedHealth = _parent.GetComponent<Health>();
+        }
+        else
+        {
+            _parent = _player;
+            _attackedHealth = _player.GetComponent<Health>();
+        }
+
+        Debug.Log(_wsCheck.gameObject.name);
 
         if (collision.transform.root != transform.root)
         {
+            Debug.Log("Boop");
             //Get the health of the attacked object and deal damage
-            if (_isStabbing) _parent.GetComponent<Health>().TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
+            if (_isStabbing)
+            {
+                Debug.Log("Beep");
+                _attackedHealth.TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
+            }
         }
-        
+
     }
 }

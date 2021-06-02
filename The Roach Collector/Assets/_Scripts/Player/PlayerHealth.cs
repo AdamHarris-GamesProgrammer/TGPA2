@@ -33,7 +33,7 @@ public class PlayerHealth : Health
         //Stops the Character from taking damage if they don't need to.
         if (_isDead) return;
         if (!_canBeHarmed) return;
-
+        Debug.Log(amount);
         float resistance = 1.0f;
         switch (type)
         {
@@ -46,6 +46,7 @@ public class PlayerHealth : Health
         }
         //Calculates the amount of damage we take after our armors resistance
         amount *= resistance;
+        Debug.Log(amount);
 
         base.TakeDamage(type, amount);
     }
