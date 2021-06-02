@@ -15,6 +15,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] GameObject _applyingDamageText = null;
     [SerializeField] GameObject _applyingResistanceText = null;
     [SerializeField] GameObject _applyingSpeedText = null;
+    [SerializeField] RaycastWeapon _activeWeapon;
 
     [SerializeField] GameObject _pauseUI;
     private bool isPaused = false;
@@ -41,6 +42,7 @@ public class PlayerUI : MonoBehaviour
         ammoTxt.text = clip + " / " + (ammoLeft);
         if (ammoLeft > 0) ammoTxt.color = Color.white;
         else ammoTxt.color = Color.red;
+        //_activeWeapon.
     }
 
     public void DisplayDoorPrompt(bool val)

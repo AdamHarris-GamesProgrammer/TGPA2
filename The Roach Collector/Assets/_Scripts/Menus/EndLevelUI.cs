@@ -56,16 +56,10 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         _buttonClick.Play();
     }
 
-    //loads next level
-    public void NextLevel()
-    {
-        SceneManager.LoadScene("Level0" + (currentLevel + 1).ToString());
-    }
-
     //goes to hideout
     public void GoToHideout() 
     {
-        SceneManager.LoadScene("HideOut");
+        SceneManager.LoadScene("Hideout");
     }
 
     //goes to main menu
