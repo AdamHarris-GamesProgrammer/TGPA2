@@ -33,7 +33,7 @@ public class AdvanceSnippet : CombatSnippet
             //If we are not reloading, then reload the current gun
             if (!_aiWeapon.GetEquippedWeapon().IsReloading)
             {
-                Debug.Log("Reloading");
+                //Debug.Log("Reloading");
                 _aiWeapon.GetEquippedWeapon().Reload();
             }
 
