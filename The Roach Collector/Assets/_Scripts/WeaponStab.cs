@@ -13,6 +13,11 @@ public class WeaponStab : MonoBehaviour
     private bool _isStabbing = false;
     [SerializeField] WeaponConfig _meleeConfig;
 
+    bool _attacked = false;
+
+    float _attackDuration = 1.5f;
+    float _attackTimer = 0.0f;
+
 
     private void Start()
     {
@@ -23,11 +28,28 @@ public class WeaponStab : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (_attacked)
+        {
+            _attackTimer += Time.deltaTime;
+            if(_attackTimer > _attackDuration)
+            {
+                _attackTimer = 0.0f;
+                _attacked = false;
+            }
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
+
+        if (collision.transform.root == transform.root) return;
+        if (_attacked) return;
+
         //are we stabbing?
         _isStabbing = _wsCheck.GetStabbing();
+
 
         //See if we are stabbing an agent
         AIAgent agent = collision.transform.GetComponentInParent<AIAgent>();
@@ -44,17 +66,11 @@ public class WeaponStab : MonoBehaviour
             _attackedHealth = _player.GetComponent<Health>();
         }
 
-        Debug.Log(_wsCheck.gameObject.name);
-
-        if (collision.transform.root != transform.root)
+        //Get the health of the attacked object and deal damage
+        if (_isStabbing)
         {
-            Debug.Log("Boop");
-            //Get the health of the attacked object and deal damage
-            if (_isStabbing)
-            {
-                Debug.Log("Beep");
-                _attackedHealth.TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
-            }
+            _attacked = true;
+            _attackedHealth.TakeDamage(_meleeConfig.DamageType, _meleeConfig.Damage);
         }
 
     }
