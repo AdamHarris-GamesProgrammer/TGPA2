@@ -17,7 +17,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] GameObject _applyingSpeedText = null;
     [SerializeField] RaycastWeapon _activeWeapon;
 
-    [SerializeField] GameObject _pauseUI;
     private bool isPaused = false;
 
     List<UsableItem> _usables;
@@ -42,7 +41,6 @@ public class PlayerUI : MonoBehaviour
         ammoTxt.text = clip + " / " + (ammoLeft);
         if (ammoLeft > 0) ammoTxt.color = Color.white;
         else ammoTxt.color = Color.red;
-        //_activeWeapon.
     }
 
     public void DisplayDoorPrompt(bool val)
@@ -57,21 +55,6 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isPaused = !isPaused;
-            if (isPaused)
-            {
-                Time.timeScale = 0;
-                _pauseUI.SetActive(true);
-            }
-            else
-            {
-                Time.timeScale = 1;
-                _pauseUI.SetActive(false);
-                
-            }
-        }
 
         InteractWithUsables();
     }

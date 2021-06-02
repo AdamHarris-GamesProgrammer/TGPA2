@@ -14,6 +14,12 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private AudioSource _buttonClick;
 
+    private void Start()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
     //plays the tutorial level
     public void Play()
     {
