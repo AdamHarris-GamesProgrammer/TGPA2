@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BrickWeaponSound : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class BrickWeaponSound : MonoBehaviour
     [SerializeField] AudioSource ASrc;
     [SerializeField] bool PlaySound = false;
     [SerializeField] LayerMask EnvLayer = 8;
+
+    public UnityEvent _OnHit;
+
+
     WeaponStabCheck wsc;
 
     private void Start()
@@ -29,7 +34,10 @@ public class BrickWeaponSound : MonoBehaviour
             if (!PlaySound)
             {
                 ASrc.Play();
+
                 PlaySound = true;
+
+                _OnHit.Invoke();
             }
         }
 
