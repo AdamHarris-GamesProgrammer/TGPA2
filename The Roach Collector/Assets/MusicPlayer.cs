@@ -39,7 +39,7 @@ public class MusicPlayer : MonoBehaviour
     //changes pitch of current track
     public void ChangePitch(float pitch)
     {
-        _track[_currentTrack].pitch = pitch;
+        //_track[_currentTrack].pitch = pitch;
     }
 
     //change volume of current track

@@ -49,8 +49,13 @@ public class PlayerHealth : Health
         base.TakeDamage(type, amount);
     }
 
+   
+
     protected override void OnDeath()
     {
+
+
+        //_audioSource.PlayOneShot(_deathAudioClip);
         //Drops our wepaon
         _weapon.DropWeapon();
         _aiming.enabled = false;

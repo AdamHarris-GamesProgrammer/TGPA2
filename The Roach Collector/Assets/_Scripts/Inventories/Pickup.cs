@@ -9,10 +9,12 @@ namespace Harris.Inventories
 
         Inventory _inventory;
 
+        
 
         private void Awake()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
+           
             _inventory = player.GetComponent<Inventory>();
         }
 
@@ -41,6 +43,9 @@ namespace Harris.Inventories
             //if we can pickup an item destroy this pickup object
             if (foundSlot)
             {
+                PickupAudio pickupAudio = GameObject.FindGameObjectWithTag("PickupSound").GetComponent<PickupAudio>();
+                pickupAudio.PlayPickupSound();
+                
                 Destroy(gameObject);
             }
         }
