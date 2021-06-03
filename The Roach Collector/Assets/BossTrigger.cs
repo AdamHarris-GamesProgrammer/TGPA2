@@ -5,6 +5,7 @@ using UnityEngine;
 public class BossTrigger : MonoBehaviour
 {
     static bool _aggroed = false;
+    [SerializeField] private MusicPlayer _musicPlayer;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +15,10 @@ public class BossTrigger : MonoBehaviour
             {
                 GameObject.FindGameObjectWithTag("Boss").GetComponent<AIAgent>().Aggrevate();
                 _aggroed = true;
+                _musicPlayer.StopMusic();
+                _musicPlayer.Play(2);
+                _musicPlayer._fadeLimit = 0.5f;
+                _musicPlayer._fadeIn = true;
             }
         }
 

@@ -10,16 +10,29 @@ public class MusicPlayer : MonoBehaviour
 {
     [SerializeField] private AudioSource[] _track;
     [SerializeField] private int _currentTrack;
+    [SerializeField] public bool _fadeIn = false;
+    [SerializeField] public bool _fadeOut = false;
 
-    public void Start()
+    [SerializeField] public float _fadeLimit = 0.0f;
+    [SerializeField] public float _fadeRate = 0.002f;
+
+    public void Update()
     {
-       // _track[_currentTrack].Play();
+        if (_fadeIn && _track[_currentTrack].volume < _fadeLimit)
+        {
+            FadeIn(_fadeRate);
+        }
+        else if (_fadeIn && _track[_currentTrack].volume > _fadeLimit)
+        {
+            FadeIn(-_fadeRate);
+        }
     }
 
     //plays chosen track
     public void Play(int trackID)
     {
         _track[trackID].Play();
+        _currentTrack = trackID;
     }
 
     //pauses current track
@@ -50,6 +63,16 @@ public class MusicPlayer : MonoBehaviour
     public void ChangeVolume(float volume)
     {
         _track[_currentTrack].volume = volume;
+    }
+
+    public void FadeIn(float delta)
+    {
+        _track[_currentTrack].volume += delta;
+    }
+
+    public void FadeOut(float delta)
+    {
+        _track[_currentTrack].volume -= delta;
     }
 
 }
