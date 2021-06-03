@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
     public bool IsDead { get { return _isDead; } }
 
     public UnityEvent _OnDie;
-
+    public UnityEvent _OnDamage;
     public void Heal(float amount) {
         Debug.Log("Healing by: " + amount);
         //Stops the health from going above maximum.
@@ -46,6 +46,8 @@ public class Health : MonoBehaviour
         if (_isDead) return;
         if (!_canBeHarmed) return;
 
+        
+
         //Take away the left over damage and get the minimum from damage or 0 and set health to this
         _currentHealth = Mathf.Max(_currentHealth -= amount, 0f);
 
@@ -53,9 +55,10 @@ public class Health : MonoBehaviour
         {
             _isDead = true;
             _OnDie.Invoke();
+            return;
         }
 
-
+        _OnDamage.Invoke();
         OnDamage();
     }
 
