@@ -12,16 +12,12 @@ public class PauseMenu : MonoBehaviour
     //unlocks cursor
     private void OnEnable()
     {
-        _musicPlayer.ChangeVolume(0.25f);
-        _musicPlayer.ChangePitch(0.75f);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     private void OnDisable()
     {
-        _musicPlayer.ChangeVolume(0.5f);
-        _musicPlayer.ChangePitch(1f);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
