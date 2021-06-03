@@ -58,8 +58,12 @@ public class AIWeapons : MonoBehaviour
         }
 
         //Stores the current bullets
-        _AiClipBullets = _currentWeapon.ClipAmmo;
-        _AiTotalBullets = _currentWeapon.TotalAmmo;
+        if(_currentWeapon != null)
+        {
+            _AiClipBullets = _currentWeapon.ClipAmmo;
+            _AiTotalBullets = _currentWeapon.TotalAmmo;
+        }
+        
 
         //Should the AI switch to melee
         if (_AiClipBullets == 0 && _AiTotalBullets == 0 && !_usingMelee)
