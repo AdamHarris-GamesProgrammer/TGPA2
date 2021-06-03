@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// for each level track 0 should be the main level the, 1 for game over and 2 for death screen
+/// </summary>
+
 public class MusicPlayer : MonoBehaviour
 {
     [SerializeField] private AudioSource[] _track;
@@ -9,7 +13,7 @@ public class MusicPlayer : MonoBehaviour
 
     public void Start()
     {
-        _track[_currentTrack].Play();
+       // _track[_currentTrack].Play();
     }
 
     //plays chosen track
