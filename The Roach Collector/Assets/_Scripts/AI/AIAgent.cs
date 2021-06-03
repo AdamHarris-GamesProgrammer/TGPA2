@@ -174,7 +174,7 @@ public class AIAgent : MonoBehaviour
         //Gets the direction to the player
         Vector3 direction = _player.transform.position - transform.position;
         //Calculates the look vector
-        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 5.0f);
+        Quaternion look = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction, Vector3.up), Time.deltaTime * 15.0f);
         //sets our new rotation
         transform.rotation = look;
     }
