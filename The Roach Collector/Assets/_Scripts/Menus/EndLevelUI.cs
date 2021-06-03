@@ -68,10 +68,16 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
     }
 
+    //reloads load from start
+    public void Retry()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
+    }
+
     void Start()
     {
         //Loads level data
-        //FindObjectOfType<SavingWrapper>().Load();
+        FindObjectOfType<SavingWrapper>().Load();
 
         Time.timeScale = 0;
 
@@ -86,7 +92,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         CheckRank();
 
         //saves level data
-        //FindObjectOfType<SavingWrapper>().Save();
+        FindObjectOfType<SavingWrapper>().Save();
     }
 
     //sets level name
@@ -160,7 +166,6 @@ public class EndLevelUI : MonoBehaviour, ISaveable
             rankImage.sprite = rankSprites[0];
             rank = 5;
         }
-        
     }
 
     //sets level stats 
@@ -173,7 +178,6 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         score = levelStats.LevelScore;
         ScoreTxt.text = score.ToString();
 
-
         //set time UI
         time = levelStats.LevelTime;
         int minutes = (int)time / 60; 
@@ -181,14 +185,6 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         int fraction = (int)(time * 100) % 100;
         TimeTxt.text = string.Format("{0:00} : {1:00} : {2:00}", minutes, seconds, fraction);
 
-        //if boss is still alive set score and rank to zero and F
-        if (_isBossAlive)
-        {
-            score = 0;
-            rankImage.sprite = rankSprites[5];
-            rank = 0;
-            ScoreTxt.text = score.ToString();
-        }
     }
 
     //save level data
@@ -197,19 +193,19 @@ public class EndLevelUI : MonoBehaviour, ISaveable
         
         LevelData data = new LevelData();
 
-        if (score > highscore && !_isBossAlive)
+        if (score > highscore && _isBossAlive)
         {
             data.highscore = score;
         }
-        if (time > bestTime && !_isBossAlive)
+        if (time > bestTime && _isBossAlive)
         {
             data.bestTime = time;
         }
-        if (roachCount > roachesCollected && !_isBossAlive)
+        if (roachCount > roachesCollected && _isBossAlive)
         {
             data.roachesCollected = roachCount;
         }
-        if (rank > highestRank && !_isBossAlive)
+        if (rank > highestRank && _isBossAlive)
         {
             data.highestRank = rank;
         }
