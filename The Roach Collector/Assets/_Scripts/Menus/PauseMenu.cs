@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public AudioSource _buttonClick;
+    public MusicPlayer _musicPlayer;
+
     //unlocks cursor
     private void OnEnable()
     {
@@ -38,6 +40,13 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ExitAndSaveMenu()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
     }
 
     //makes button click sound

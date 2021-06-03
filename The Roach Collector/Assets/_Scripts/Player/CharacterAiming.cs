@@ -46,14 +46,12 @@ public class CharacterAiming : MonoBehaviour
         {
             _aimCam.SetActive(true);
             _followCam.SetActive(false);
-            _musicPlayer.ChangePitch(0.5f);
         }
         //Do the opposite as above
         else
         {
             _aimCam.SetActive(false);
             _followCam.SetActive(true);
-            _musicPlayer.ChangePitch(1.0f);
         }
     }
 }

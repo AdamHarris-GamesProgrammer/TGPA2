@@ -16,7 +16,7 @@ public class SavingWrapper : MonoBehaviour
     }
 #endif 
 
-    private void Delete()
+    public void Delete()
     {
         GetComponent<SavingSystem>().Delete("save.sav");
     }

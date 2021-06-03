@@ -7,9 +7,11 @@ using UnityEngine.SceneManagement;
 public class DeathMenu : MonoBehaviour
 {
     public AudioSource _buttonClick;
+    public MusicPlayer _musicPlayer;
 
     private void OnEnable()
     {
+        _musicPlayer.Play(1);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
