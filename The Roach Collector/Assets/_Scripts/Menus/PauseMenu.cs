@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public AudioSource _buttonClick;
-    public MusicPlayer _musicPlayer;
 
     //unlocks cursor
     private void OnEnable()
