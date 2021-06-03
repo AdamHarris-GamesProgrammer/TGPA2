@@ -15,6 +15,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] GameObject _applyingDamageText = null;
     [SerializeField] GameObject _applyingResistanceText = null;
     [SerializeField] GameObject _applyingSpeedText = null;
+    [SerializeField] GameObject _reloadPrompt = null;
     [SerializeField] RaycastWeapon _activeWeapon;
 
     [SerializeField] GameObject _pauseUI;
@@ -40,8 +41,16 @@ public class PlayerUI : MonoBehaviour
     public void UpdateAmmoUI(int clip, int clipSize, int ammoLeft)
     {
         ammoTxt.text = clip + " / " + (ammoLeft);
-        if (ammoLeft > 0) ammoTxt.color = Color.white;
-        else ammoTxt.color = Color.red;
+        if (clip > 0)
+        {
+            if(clipSize != 0) DisplayReloadPrompt(false);
+            ammoTxt.color = Color.white;
+        }
+        else
+        {
+            if (clipSize != 0) DisplayReloadPrompt(true);
+            ammoTxt.color = Color.red;
+        }
     }
 
     public void DisplayDoorPrompt(bool val)
@@ -139,5 +148,10 @@ public class PlayerUI : MonoBehaviour
         }
 
         _itemsToRemoveThisFrame.Clear();
+    }
+
+    public void DisplayReloadPrompt(bool val)
+    {
+        _reloadPrompt.SetActive(val);
     }
 }
