@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TGP.Control;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LastKnownLocation : MonoBehaviour
 {
@@ -108,21 +109,45 @@ public class LastKnownLocation : MonoBehaviour
             //Add the destination to the last known location position
             sampledPosition = transform.position + destination;
 
-            //Generate a raycast from this position to this object 
-            RaycastHit hit;
-            if (Physics.Raycast(sampledPosition, transform.position - sampledPosition, out hit, distance, ~0, QueryTriggerInteraction.Ignore))
-            {
-                //Check if we have hit the player, meaning the AI will be able to see the player from this point
-                if (hit.transform.CompareTag("Player"))
-                {
-                    successful = true;
-                }
-            }
+            ////Generate a raycast from this position to this object 
+            //RaycastHit hit;
+            //if (Physics.Raycast(sampledPosition, transform.position - sampledPosition, out hit, distance, ~0, QueryTriggerInteraction.Ignore))
+            //{
+            //    //Check if we have hit the player, meaning the AI will be able to see the player from this point
+            //    if (hit.transform.CompareTag("Player"))
+            //    {
+            //        successful = true;
+            //    }
+            //}
+
+            NavMeshPath path = new NavMeshPath();
+            successful = NavMesh.CalculatePath(transform.position, sampledPosition, ~0, path);
+
+            if (PathLength(path) < distance * 1.5f) successful = true;
+            else successful = false;
 
             iterations++;
 
         } while (!successful && iterations < 20);
 
         return sampledPosition;
+    }
+
+    float PathLength(NavMeshPath path)
+    {
+        if (path.corners.Length < 2)
+            return 0;
+
+        Vector3 previousCorner = path.corners[0];
+        float lengthSoFar = 0.0F;
+        int i = 1;
+        while (i < path.corners.Length)
+        {
+            Vector3 currentCorner = path.corners[i];
+            lengthSoFar += Vector3.Distance(previousCorner, currentCorner);
+            previousCorner = currentCorner;
+            i++;
+        }
+        return lengthSoFar;
     }
 }
