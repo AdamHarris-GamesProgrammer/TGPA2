@@ -31,6 +31,8 @@ public class ActiveWeapon : MonoBehaviour
     Inventory _inventory;
     PlayerController _controller;
 
+    [SerializeField] ReloadTimer _reloadTimer;
+
     Animator _anim;
     private RaycastWeapon _weapon = null;
 
@@ -66,6 +68,8 @@ public class ActiveWeapon : MonoBehaviour
         if (_weapon.ClipAmmo == _weapon.Config.ClipSize) return;
 
         _weapon.Reload();
+
+        _reloadTimer.gameObject.SetActive(true);
 
         _anim.SetBool("isReloading", true);
         _PlayerUI.UpdateAmmoUI(_weapon.ClipAmmo, _weapon.Config.ClipSize, _weapon.TotalAmmo);
@@ -141,6 +145,8 @@ public class ActiveWeapon : MonoBehaviour
             _weapon.transform.localRotation = Quaternion.identity;
 
             _weapon.Setup();
+
+            _reloadTimer.Duration = _weapon.Config.ReloadDuration;
         }
 
         //if the weapon is not melee and we have the ammo item

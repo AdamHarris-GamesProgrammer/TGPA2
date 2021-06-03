@@ -284,6 +284,8 @@ public class RaycastWeapon : MonoBehaviour
             _audioSoruce.PlayOneShot(_config.MagazineUnload);
 
         }
+        _reloadTimeLeft = _config.ReloadDuration;
+
         _isFiring = false;
         _isReloading = true;
 
