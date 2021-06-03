@@ -22,7 +22,6 @@ public class ReloadTimer : MonoBehaviour
         _timer += Time.deltaTime;
 
         _percentageDone = _timer / _duration;
-        Debug.Log(_percentageDone);
         _outline.fillAmount = _percentageDone;
 
         if (_timer > _duration)
