@@ -26,12 +26,19 @@ public class MedicalUsable : UsableItem
         _healingAmount = healingAmount;
 
         _timeBetweenHeals = _timeForFullEffect / _steps;
-
         _id = UsableID.MEDKIT;
+
+        _user.GetComponent<Animator>().SetBool("Healing", true);
+        
+
     }
 
     public override void Update(float deltaTime)
     {
+        if(_applyTimer < 0.1)
+        {
+        }
+
         //Increment the apply timer
         _applyTimer += deltaTime;
 
@@ -49,13 +56,19 @@ public class MedicalUsable : UsableItem
                 //Increment the accumulated time
                 _accumulatedTime += _timeBetweenHeals;
 
+
                 //Heal by the amount of health this second
                 _user.GetComponent<Health>().Heal(_healingAmount / _steps);
 
                 //Remove this usable from the player if possible
-                if (_accumulatedTime >= _timeForFullEffect) _user.GetComponent<PlayerUI>().RemoveUsable(this);
-
+                if (_accumulatedTime >= _timeForFullEffect)
+                {
+                    _user.GetComponent<PlayerUI>().RemoveUsable(this);
+                }
             }
+
+            //Play healing animation
+            _user.GetComponent<Animator>().SetBool("Healing", false);
         }
     }
 
