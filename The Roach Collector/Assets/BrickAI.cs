@@ -5,13 +5,15 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 using TGP.Control;
-
+using UnityEngine.Events;
 public class BrickAI : AIAgent
 {
     static Transform _player;
 
     public LayerMask CharacterMask { get { return _characterMask; } }
     public Transform Player { get { return _player; } }
+
+    public UnityEvent _OnAggro;
 
     private void Awake()
     {
@@ -75,6 +77,8 @@ public class BrickAI : AIAgent
             GetComponent<Animator>().SetBool("PlayerDead", true);
             GetComponent<NavMeshAgent>().SetDestination(transform.position);
 
+            GetComponentInChildren<WeaponStabCheck>().SetStabbing(false);
+
             _aiWeapon?.SetFiring(false);
             _aiWeapon?.SetTarget(null);
         }
@@ -88,6 +92,8 @@ public class BrickAI : AIAgent
         _lastKnownLocation.transform.position = _player.position;
 
         _isAggrevated = true;
+
+        _OnAggro.Invoke();
 
         stateMachine.ChangeState(AiStateId.Melee);
     }
