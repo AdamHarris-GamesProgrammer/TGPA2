@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TGP.Control;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LockedDoor : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class LockedDoor : MonoBehaviour
     [SerializeField] LockedDoorID _id;
     
     PlayerController _player;
+
+    public UnityEvent _OnOpen;
 
     private void Awake()
     {
@@ -37,7 +40,8 @@ public class LockedDoor : MonoBehaviour
 
     public void Unlock()
     {
-        //TODO: Play unlocking sound
+        _OnOpen.Invoke();
+
 
         //Remove the door in range for the player
         _player.DoorInRange = null;
@@ -45,7 +49,7 @@ public class LockedDoor : MonoBehaviour
         //Triggers the unlocking
         _isUnlocked = true;
         //Plays the animation
-        GetComponent<Animator>().SetTrigger("OpenDoor");
+
         //Destroys component
         Destroy(this);
     }
