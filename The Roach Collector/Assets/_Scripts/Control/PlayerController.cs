@@ -58,6 +58,10 @@ namespace TGP.Control
         public float Cash { get { return _currency; } }
         private int _roaches = 0;
 
+
+        private bool _inInventory = false;
+        public bool InInventory { get { return _inInventory; } set { _inInventory = value; } }
+
         Animator _animator;
 
 

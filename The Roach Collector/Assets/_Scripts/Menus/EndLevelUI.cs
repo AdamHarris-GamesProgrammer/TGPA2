@@ -59,6 +59,7 @@ public class EndLevelUI : MonoBehaviour, ISaveable
     //goes to hideout
     public void GoToHideout() 
     {
+        Debug.Log("Hideout call");
         FindObjectOfType<SceneLoader>().LoadLevel("Hideout");
     }
 
