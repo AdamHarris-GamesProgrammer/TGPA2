@@ -42,6 +42,13 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void ExitAndSaveMenu()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
+    }
+
     //makes button click sound
     public void ClickSound()
     {
