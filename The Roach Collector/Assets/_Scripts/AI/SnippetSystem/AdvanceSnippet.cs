@@ -68,9 +68,6 @@ public class AdvanceSnippet : CombatSnippet
             }
             else
             {
-                //If we are not firing, then start firing
-                //if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
-
                 if (_fov.IsEnemyInFOV)
                 {
                     if (!_aiWeapon.GetEquippedWeapon().IsFiring && !_aiWeapon.GetEquippedWeapon().IsReloading) _aiWeapon.SetFiring(true);
@@ -85,7 +82,7 @@ public class AdvanceSnippet : CombatSnippet
         if (!_fov.IsEnemyInFOV)
         {
             _outOfViewTimer += Time.deltaTime;
-            if(_outOfViewTimer > 3.0f && _aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(false);
+            if(_outOfViewTimer > 10.0f && _aiWeapon.GetEquippedWeapon().IsFiring) _aiWeapon.SetFiring(false);
 
             //Debug.Log("Advance snippet");
             if (_outOfViewTimer > _outOfViewDuration) _agent.stateMachine.ChangeState(AiStateId.SearchForPlayer);
