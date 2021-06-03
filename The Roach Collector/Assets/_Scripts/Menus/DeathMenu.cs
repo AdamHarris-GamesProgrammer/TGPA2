@@ -23,13 +23,13 @@ public class DeathMenu : MonoBehaviour
     //goes to hideout scene
     public void Hideout()
     {
-        SceneManager.LoadScene("Hideout");
+        FindObjectOfType<SceneLoader>().LoadLevel("Hideout");
     }
     
     //goes to main menu scene
     public void MainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        FindObjectOfType<SceneLoader>().LoadLevel("MainMenu");
     }
 
     //makes button click sound
