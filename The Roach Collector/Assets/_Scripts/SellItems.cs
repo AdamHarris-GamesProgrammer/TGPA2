@@ -22,6 +22,9 @@ public class SellItems : MonoBehaviour
     //The quantity slider
     [SerializeField] Slider _quantitySlider;
 
+    [SerializeField] AudioClip _sellSound;
+    AudioSource _audioSource;
+
     SellableItem _selectedItem = null;
 
     void Awake()
@@ -29,6 +32,7 @@ public class SellItems : MonoBehaviour
         _player = GameObject.FindObjectOfType<PlayerController>();
         _playerInventoy = _player.GetComponent<Inventory>();
         _sellables = new List<SellableItem>();
+        _audioSource = GetComponentInParent<AudioSource>();
 
         //Load the items the player can sell
         LoadItems();
@@ -105,6 +109,8 @@ public class SellItems : MonoBehaviour
 
                 //Remove the item from sellables
                 if (_playerInventoy.GetInventorySlot(index).number == 0) _sellables.Remove(_selectedItem);
+
+                _audioSource.PlayOneShot(_sellSound);
             }
             else
             {
@@ -112,11 +118,6 @@ public class SellItems : MonoBehaviour
                 _quantitySlider.maxValue = reAdjustSlider;
             }
 
-            
-
-            
-
-           
 
             //Load the items
             LoadItems();

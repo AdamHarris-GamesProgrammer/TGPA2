@@ -29,7 +29,9 @@ public class BuyItems : MonoBehaviour
 
     //The quantity slider
     [SerializeField] Slider _quantitySlider;
-    
+
+    [SerializeField] AudioClip _buySound;
+    AudioSource _audioSource;
 
     public List<BuyableItem> Items { get { return _items; } }
 
@@ -77,7 +79,7 @@ public class BuyItems : MonoBehaviour
             item.Setup(_items[i]._item.Icon, _items[i]._item.name, _items[i]._price, _items[i]._quantity, i);
         }
 
-        
+        _audioSource = GetComponentInParent<AudioSource>();
     }
 
     private void OnEnable()
@@ -102,6 +104,8 @@ public class BuyItems : MonoBehaviour
 
                 //Add the item to the first empty slot
                 _playerInventory.AddToFirstEmptySlot(item._item, item._quantity * quantity);
+
+                _audioSource.PlayOneShot(_buySound);
             }
 
             _playerCash.text = "Your cash: " + _player.Cash.ToString("#0.00");
