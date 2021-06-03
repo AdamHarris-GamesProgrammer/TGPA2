@@ -8,7 +8,7 @@ public class FieldOfView : MonoBehaviour
     [Header("View Settings")]
     [Min(0f)] public float _viewRadius;
     [Range(0, 360)] public float _viewAngle;
-    
+
     [Header("Target Layer")]
     [SerializeField] LayerMask _targetMask;
 
@@ -19,6 +19,8 @@ public class FieldOfView : MonoBehaviour
 
     [Header("Debug Information")]
     [SerializeField] float _detectionTimer = 0;
+
+    [SerializeField] Collider[] Targets;
 
     [HideInInspector()]
     public List<Transform> _visibleTargets = new List<Transform>();
@@ -54,6 +56,9 @@ public class FieldOfView : MonoBehaviour
         //Is the player in FOV
         FindVisibleTargets();
 
+        //Is dead Enemy in FOV
+        //FindDeadEnemies();
+
         //have we got a visible target
         if (_visibleTargets.Count > 0)
         {
@@ -67,11 +72,46 @@ public class FieldOfView : MonoBehaviour
         }
 
         //Add the value to the detection timer
-        if(_hasTimerStarted) _detectionTimer = Mathf.Min(_detectionTimer += Time.deltaTime, 5.0f);
+        if (_hasTimerStarted) _detectionTimer = Mathf.Min(_detectionTimer += Time.deltaTime, 5.0f);
         else _detectionTimer = Mathf.Max(_detectionTimer -= Time.deltaTime, 0.0f);
 
     }
-    
+
+    void FindDeadEnemies()
+    {
+        //Find all the colliders in the target layer
+        Collider[] TargetsInRadius = Physics.OverlapSphere(transform.position, _viewRadius, _targetMask);
+        Targets = TargetsInRadius;
+        //Cycle through them all
+
+        foreach (Collider target in TargetsInRadius)
+        {
+            Transform targetTransform = target.transform;
+            Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
+
+            //In the FOV 
+            if (Vector3.Angle(transform.forward, targetDirection) < _viewAngle / 2)
+            {
+                float DistanceToTarget = Vector3.Distance(transform.position, targetTransform.position);
+
+                RaycastHit hitInfo;
+
+                //Check if we are visible
+                if (Physics.Raycast((transform.position + Vector3.up), targetDirection, out hitInfo, _viewRadius, ~0, QueryTriggerInteraction.Ignore))
+                {
+                    //Draw a line to them
+                    Debug.DrawRay((transform.position + Vector3.up), (targetDirection * DistanceToTarget), Color.blue);
+
+                    if (hitInfo.collider.GetComponentInParent<Health>().IsDead)
+                    {
+                        Debug.Log("Dead enemy detected");
+                    }
+                }
+
+            }
+        }
+    }
+
     void FindVisibleTargets()
     {
         //Clear the visible targets list
@@ -86,7 +126,7 @@ public class FieldOfView : MonoBehaviour
         {
             Transform targetTransform = target.transform;
             Vector3 targetDirection = (targetTransform.position - transform.position).normalized;
-            
+
             //In the FOV 
             if (Vector3.Angle(transform.forward, targetDirection) < _viewAngle / 2)
             {
@@ -102,11 +142,11 @@ public class FieldOfView : MonoBehaviour
                     if (hitInfo.collider.tag == "Player")
                     {
                         //if the player is crouching then change the detected value to the crouch value
-                        if(_charLocomotion.IsCrouching) _detectedValue = _detectedCrouch;
+                        if (_charLocomotion.IsCrouching) _detectedValue = _detectedCrouch;
                         else _detectedValue = _detectedStand;
 
                         //if the distance to the target is less than 1/8th of the radius then auto detect them. Also checks if someone is getting executed infront of them and instantly detects them.
-                        if(DistanceToTarget <= (_viewRadius / 8) || _playerController.InKillAnimation)
+                        if (DistanceToTarget <= (_viewRadius / 8) || _playerController.InKillAnimation)
                         {
                             _visibleTargets.Add(targetTransform);
                             //Move the last known location 
@@ -124,10 +164,20 @@ public class FieldOfView : MonoBehaviour
                             _lastKnownLocation.transform.position = hitInfo.point;
                         }
                     }
+                    
                     else
                     {
                         //Debug.Log(hitInfo.collider.tag);
-                        if(!playerSpotted) _hasTimerStarted = false;
+                        if (!playerSpotted) _hasTimerStarted = false;
+                    }
+
+                    if (hitInfo.collider.GetComponentInParent<AIAgent>())
+                    {
+                        Debug.Log("Dead Enemy");
+                        if (hitInfo.collider.GetComponentInParent<Health>().IsDead && !GetComponent<AIAgent>().Aggrevated)
+                        {
+                            Debug.Log("Dead enemy detected");
+                        }
                     }
                 }
 
