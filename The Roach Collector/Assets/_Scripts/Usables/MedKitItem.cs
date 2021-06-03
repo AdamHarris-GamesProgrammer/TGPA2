@@ -15,5 +15,6 @@ public class MedKitItem : ActionItem
     {
         //Adds this item to the players ui and instantiates the usable object
         user.GetComponent<PlayerUI>().AddUsable(new MedicalUsable(user, _timeToApply, _timeForFullEffect, _healingAmount));
+
     }
 }
