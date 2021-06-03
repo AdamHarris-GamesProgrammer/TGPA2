@@ -20,6 +20,8 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDisable()
     {
+        _musicPlayer.ChangeVolume(0.5f);
+        _musicPlayer.ChangePitch(1f);
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
