@@ -14,15 +14,15 @@ public class MusicPlayer : MonoBehaviour
     [SerializeField] public bool _fadeOut = false;
 
     [SerializeField] public float _fadeLimit = 0.0f;
-    [SerializeField] public float _fadeRate = 0.002f;
+    [SerializeField] public float _fadeRate = 0.005f;
 
-    public void Update()
+    public void FixedUpdate()
     {
         if (_fadeIn && _track[_currentTrack].volume < _fadeLimit)
         {
             FadeIn(_fadeRate);
         }
-        else if (_fadeIn && _track[_currentTrack].volume > _fadeLimit)
+        else if (_fadeOut && _track[_currentTrack].volume > _fadeLimit)
         {
             FadeIn(-_fadeRate);
         }

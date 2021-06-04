@@ -5,7 +5,12 @@ using UnityEngine;
 public class BossTrigger : MonoBehaviour
 {
     static bool _aggroed = false;
-    [SerializeField] private MusicPlayer _musicPlayer;
+    private MusicPlayer _musicPlayer;
+
+    private void Awake()
+    {
+        _musicPlayer = FindObjectOfType<MusicPlayer>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
