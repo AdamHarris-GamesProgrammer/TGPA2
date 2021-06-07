@@ -135,6 +135,12 @@ namespace Harris.Inventories
             EquipmentUpdated?.Invoke();
         }
 
+        public void WipeEquipment()
+        {
+            _equippedItems = new Dictionary<EquipLocation, EquipableItem>();
+            EquipmentUpdated?.Invoke();
+        }
+
         public IEnumerable<EquipLocation> GetAllPopulatedSlots()
         {
             //Returns the populated slots
