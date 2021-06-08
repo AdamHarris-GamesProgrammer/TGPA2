@@ -20,6 +20,9 @@ public class Ragdoll : MonoBehaviour
 
         //Gets all the rigidbodies in children
         var bodies = new HashSet<Rigidbody>(GetComponentsInChildren<Rigidbody>());
+
+        bodies.Remove(GetComponent<Rigidbody>());
+
         //Converts to an array
         _rigidbodies = bodies.ToArray();
         if(gameObject.name == "Brick") Debug.Log(_rigidbodies.Length);
